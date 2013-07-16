@@ -21,6 +21,7 @@ gem 'jquery-ui-rails'
 gem 'jquery-rails'
 gem 'therubyracer', platforms: :ruby
 gem "twitter-bootstrap-rails"
+gem 'less-rails'
 
 gem 'jbuilder', '~> 1.2'
 
