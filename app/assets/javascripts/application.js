@@ -6,5 +6,7 @@
 //= require marionette
 //= require_tree .
 //= require_tree ./kiwi/templates
+//= require_tree ./kiwi/views
+//= require_tree ./kiwi/models
 //= require_tree ./kiwi/
 //= require ./kiwi/kiwi

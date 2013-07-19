@@ -16,11 +16,10 @@ FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({ layout: '#layout' })
 
 @init = (prefetch) ->  
+  FK.Data.events = new FK.Collections.EventList(prefetch.events)
   FK.App.layout.show(new FK.Views.Layout())
   FK.App.appRouter = new FK.Routers.AppRouter()
   Backbone.history.start() if (!Backbone.History.started)
-
-
 
 
 FK.Controllers.MainController = { 
