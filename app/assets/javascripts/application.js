@@ -4,6 +4,7 @@
 //= require underscore
 //= require backbone
 //= require marionette
+//= require moment.min
 //= require_tree .
 //= require_tree ./kiwi/templates
 //= require_tree ./kiwi/views

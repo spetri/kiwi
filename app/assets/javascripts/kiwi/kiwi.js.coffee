@@ -28,4 +28,16 @@ FK.Controllers.MainController = {
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {
-  }  
+  } 
+
+
+moment.lang('en', {
+    calendar : {
+        lastDay : '[Yesterday at] LT',
+        sameDay : '[Today at] LT',
+        nextDay : '[Tomorrow at] LT',
+        lastWeek : '[last] dddd [at] LT',
+        nextWeek : 'dddd [at] LT',
+        sameElse : 'dddd, MMMM D '
+    }
+});

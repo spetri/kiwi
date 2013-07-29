@@ -11,3 +11,12 @@
  *= require_self
  *= require_tree .
  */
+
+
+.events {
+  list-style: none;
+  li {
+    clear: left;
+    margin-top: 10px;
+  }
+}
