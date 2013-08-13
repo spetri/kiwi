@@ -4,4 +4,4 @@ class FK.Views.TopRanked extends Backbone.Marionette.ItemView
   onBeforeRender: ->
     #TODO: fix the slime
     @model = @collection
-
+    console.log @model
