@@ -6,7 +6,10 @@ class FK.Views.EventForm extends Backbone.Marionette.ItemView
 
   saveClicked: (e) =>
     e.preventDefault()
-    FK.Data.events.create(window.serializeForm(@$el.find('input,select,textarea')))
+    params = window.serializeForm(@$el.find('input,select,textarea'))
+    if params.datetime
+      params.datetime = moment(params.datetime).utc() 
+    FK.Data.events.create(params)
     Backbone.history.navigate('/events/all', trigger: true)
 
   initialize: =>
