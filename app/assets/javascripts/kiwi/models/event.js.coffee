@@ -1,8 +1,10 @@
 class FK.Models.Event extends Backbone.Model
   idAttribute: "_id"
-  default: 
+  defaults: 
     country: 'US'
-    title: ''
+    name: ''
+    user: ''
+    datetime: new Date()
 
 
 class FK.Models.EventBlock extends Backbone.Model

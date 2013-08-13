@@ -4,10 +4,16 @@
   </div>
   <div class="span10">
     <a href="">
-      <%= title %>
+      <%= name %>
     </a>
     <div>
-      <small> added by <%= user %></small>
+      <small> added by <%= user %></small> <a href="#" class="delete">x</a> <br/>
+      <% if(datetime != undefined) { %>
+      datetime: <%= datetime %> <br/>
+      <% } %>
+      <% if(country != undefined) { %>
+      country: <%= country %>
+      <% } %>
     </div>
   </div>
 </div>

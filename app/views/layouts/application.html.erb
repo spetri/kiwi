@@ -11,7 +11,7 @@
 <script type="text/javascript">
   $(function() { 
     init({
-      countries: <%= raw Country.all.to_json() %>,
+      countries: <%= raw Country.all.sort(order: 1).to_json() %>,
       events: []
     });
   });
