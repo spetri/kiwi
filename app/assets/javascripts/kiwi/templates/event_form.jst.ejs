@@ -1,8 +1,22 @@
 <div class="">
-  adsd
-  <form method="POST">
-    <legend>
-      <button class="btn btn-primary">hello</button>
-    </legend>
+  <h3>Add Event!</h3>
+  <form class="well" >
+      <div class="form-group well">
+        <label class="col-lg-3" for="name">1. Name of event</label>
+        <input type="text" name="name" id="name"></input>
+      </div>
+      <div class="form-group well">
+        <label class="col-lg-3" for="location">1. Location</label>
+        <label>
+          <input type="radio" name="location_type" id="" value="international" checked>
+          This event can be experienced by an <b>international</b> audience.
+        </label>
+        <label class="col-offset-3">
+          <input type="radio" name="location_type" id="" value="national" >
+          This event can be experienced in a <b>specific country</b>. 
+        </label>
+
+
+      </div>
   </form>
 </div>

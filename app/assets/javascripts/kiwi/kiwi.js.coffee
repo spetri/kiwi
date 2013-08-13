@@ -11,6 +11,8 @@ window.FK = {
 FK.Template = (file) ->
   JST["kiwi/templates/#{file}"]
 
+FK.Uri = (uri) ->
+  Backbone.history.fragment is uri
 
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({ layout: '#layout' })
@@ -23,11 +25,15 @@ FK.App.addRegions({ layout: '#layout' })
 
 
 FK.Controllers.MainController = { 
+  events: (action) -> 
+    FK.App.vent.trigger('container:load',action)
+
 }
 
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {
+    'events/:action': 'events'
   } 
 
 

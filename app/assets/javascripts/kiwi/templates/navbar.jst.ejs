@@ -8,11 +8,11 @@
     <a href="../" class="navbar-brand">Forekast</a>
     <div class="nav-collapse collapse bs-navbar-collapse">
       <ul class="nav navbar-nav">
-        <li>
-          <a class="all-events" href="#">All Events</a>
+        <li class="<%= FK.Uri('events/all') ? "active" : "" %>">
+          <a class="" href="#/events/all">All Events</a>
         </li>
-        <li>
-          <a class="new-event" href="#">New Event</a>
+        <li class="<%= FK.Uri('events/new') ? "active" : "" %>">
+          <a class="" href="#/events/new">New Event</a>
         </li>
       </ul>
     </div>
