@@ -3,6 +3,7 @@ window.FK = {
   Views:{}
   Models:{}
   Collections:{}
+  Components: {}
   Configs: {}
   Controllers: {}
   Routers: {}

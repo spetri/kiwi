@@ -6,9 +6,8 @@
 //= require marionette
 //= require moment.min
 //= require serialize 
-//= require_tree .
+//= require ./kiwi/kiwi
 //= require_tree ./kiwi/templates
 //= require_tree ./kiwi/views
+//= require_tree ./kiwi/components
 //= require_tree ./kiwi/models
-//= require_tree ./kiwi/
-//= require ./kiwi/kiwi
