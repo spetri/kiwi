@@ -58,9 +58,27 @@
     .image-container {
       width: 100%;
       height: 280px;
-      border: dashed black 1px;
     }
     
+    .image-container {
+      position: relative;
+      overflow: hidden;
+      
+      img { 
+        position: absolute;
+      }
+      
+      .image-trim {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+        border: solid 50px rgba(125, 125, 125, 0.35);
+        z-index: 2;
+      }
+    }
+
     .slider-container {
       margin-top: 15px;
       text-align: center;
@@ -83,7 +101,7 @@
           background-color: white;
           border: solid 1px #cccccc;
           top: -6px;
-          left: 102px;
+          left: 200px;
           cursor: pointer;
         }
       }
