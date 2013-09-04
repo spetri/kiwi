@@ -4,6 +4,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
   events:
     'mousedown .slider': 'startSliding'
     'mousedown .image-container': 'startMoving'
+    'click .close-box': 'close'
 
   ui:
     'image': 'img'
