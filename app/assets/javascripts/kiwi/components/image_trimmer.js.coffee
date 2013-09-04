@@ -30,6 +30,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     e.preventDefault()
 
     newPosition = e.pageX - @ui.track.offset().left - @ui.slider.width() / 2
+    return if @imageOutOfBounds(@adjustedWidth(@sliderFactor(newPosition)), parseInt(@ui.image.css('left')), parseInt(@ui.image.css('top')))
     @ui.slider.css 'left', newPosition if newPosition > 0 and newPosition < @ui.track.width() - @ui.slider.width()
     @sizeImage()
     @refocusImage()
@@ -53,6 +54,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     @image =
       height: @ui.image.height()
       width:  @ui.image.width()
+      wToH: @ui.image.height() / @ui.image.width()
       minWidth: @ui.container.height() / @ui.image.height() * @ui.image.width()
     
     @sizeImage()
@@ -67,16 +69,28 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
       width: @ui.image.width()
       height: @ui.image.height()
  
-  sizeImage: =>
-    @ui.image.width( @image.minWidth + (@image.width - @image.minWidth) * @sliderFactor() )
+  sizeImage: (factor = 0) =>
+    factor = @domSliderFactor() if (factor == 0)
+    @ui.image.width(@adjustedWidth(factor))
 
-  sliderFactor: =>
-    (parseInt(@ui.slider.css('left')) + @ui.slider.width() / 2) / @ui.track.width()
+  sliderFactor: (position) =>
+    (position + @ui.slider.width() / 2) / @ui.track.width()
+
+  domSliderFactor: =>
+    @sliderFactor(parseInt(@ui.slider.css('left')))
+
+  adjustedWidth: (factor) =>
+    @image.minWidth + (@image.width - @image.minWidth) * factor
+
+  imageOutOfBounds: (width, x, y) =>
+    height = width * @image.wToH
+    console.log(width, height, x, y)
+    x > 0 || y > 0 || x + width < @ui.container.width() || y + height < @ui.container.height()
 
   centerImage: =>
     overflowedRight = @ui.image.width() - @ui.container.width()
     overflowedBottom = @ui.image.height() - @ui.container.height()
-    @positionImage -overflowedRight / 2, -overflowedBottom / 2
+    @positionImage -overflowedRight / 2 , -overflowedBottom / 2
 
   refocusImage: =>
     newLeft = @imageStartOffset.left - (@ui.image.width() - @imageStartSize.width) / 2
@@ -85,6 +99,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     @positionImage newLeft, newTop
 
   positionImage: (x, y) =>
+    return if @imageOutOfBounds(@ui.image.width(), x, y)
     @ui.image.css 'left', x
     @ui.image.css 'top', y
 
@@ -93,7 +108,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     $('body').on 'mousemove', @moveImage
     $('body').on 'mouseup', @stopSliding
     $('body').on 'mouseup', @stopMovingImage
-    _.delay @startImage, 50
+    _.delay @startImage, 200
 
   onClose: =>
     $('body').off 'mousemove', @slide
