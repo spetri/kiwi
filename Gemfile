@@ -31,6 +31,7 @@ group :doc do
 end
 
 group :test do
+  gem 'guard'
 end
 
 group :development, :test do

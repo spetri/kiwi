@@ -9,7 +9,7 @@
     <div>
       <small> added by <%= user %></small> <a href="#" class="delete">x</a> <br/>
       <% if(datetime != undefined) { %>
-      datetime: <%= datetime %> <br/>
+      datetime: <%= moment(datetime).calendar() %> <br/>
       <% } %>
       <% if(country != undefined) { %>
       country: <%= country %>
