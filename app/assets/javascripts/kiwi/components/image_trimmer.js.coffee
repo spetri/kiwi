@@ -5,6 +5,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     'mousedown .slider': 'startSliding'
     'mousedown .image-container': 'startMoving'
     'click .close-box': 'close'
+    'click .cancel-button': 'close'
 
   ui:
     'image': 'img'
@@ -87,7 +88,6 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
 
   imageOutOfBounds: (width, x, y) =>
     height = width * @image.wToH
-    console.log(width, height, x, y)
     x > 0 || y > 0 || x + width < @ui.container.width() || y + height < @ui.container.height()
 
   centerImage: =>
