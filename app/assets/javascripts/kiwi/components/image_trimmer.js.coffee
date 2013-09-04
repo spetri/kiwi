@@ -14,12 +14,14 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
 
   startSliding: (e) =>
     e.preventDefault
+    @disableTextSelect()
     @sliding = true
     @saveImageCoords()
 
   startMoving: (e) =>
     e.preventDefault
     @movingImage = true
+    @disableTextSelect()
     @mouseStartOffset =
       left: e.pageX
       top: e.pageY
@@ -38,6 +40,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
   stopSliding: (e) =>
     e.preventDefault()
     @sliding = false
+    @enableTextSelect()
 
   moveImage: (e) =>
     return if ! @movingImage
@@ -102,6 +105,13 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     return if @imageOutOfBounds(@ui.image.width(), x, y)
     @ui.image.css 'left', x
     @ui.image.css 'top', y
+
+  disableTextSelect: =>
+    window.getSelection().empty()
+    $('body').on('selectstart', () => false)
+
+  enableTextSelect: =>
+    $('body').off('selectstart')
 
   onRender: =>
     $('body').on 'mousemove', @slide
