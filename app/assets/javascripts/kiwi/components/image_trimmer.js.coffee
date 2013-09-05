@@ -96,8 +96,8 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     @positionImage -overflowedRight / 2 , -overflowedBottom / 2
 
   refocusImage: =>
-    newLeft = @imageStartOffset.left - (@ui.image.width() - @imageStartSize.width) / 2
-    newTop = @imageStartOffset.top - (@ui.image.height() - @imageStartSize.height) / 2
+    newLeft = @imageStartOffset.left + (@imageStartSize.width - @ui.image.width()) / 2
+    newTop = @imageStartOffset.top + (@imageStartSize.height - @ui.image.height()) / 2
     
     @positionImage newLeft, newTop
 
