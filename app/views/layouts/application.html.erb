@@ -10,10 +10,9 @@
   <div id="layout"></div>
 <script type="text/javascript">
   $(function() { 
-    init({
-      countries: <%= raw Country.all.sort(order: 1).to_json() %>,
-      events: []
-    });
+    FK.App.start(
+      <%= raw Country.all.sort(order: 1).to_json() %>
+    )
   });
 </script>
 </body>

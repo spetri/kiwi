@@ -17,12 +17,12 @@ FK.Uri = (uri) ->
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({ layout: '#layout' })
 
-@init = (prefetch) ->
-  FK.Data.events = new FK.Collections.EventList(prefetch.events)
+FK.App.addInitializer (countries) ->
+  FK.Data.events = new FK.Collections.EventList()
   # TODO: use a proper callback
   FK.Data.events.fetch(
     success: =>
-      FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
+      FK.Data.countries = new FK.Collections.CountryList(countries)
       FK.App.layout.show(new FK.Views.Layout())
       FK.App.appRouter = new FK.Routers.AppRouter()
       Backbone.history.start() if (!Backbone.History.started)
