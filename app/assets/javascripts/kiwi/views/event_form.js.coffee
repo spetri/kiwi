@@ -3,7 +3,7 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
   template: FK.Template('event_form')
 
   regions:
-    'imageTrimmerRegion': '#image-trimmer-region'
+    'imageTrimmerRegion': '#image-region'
 
   events:
     'click .save': 'saveClicked'
@@ -34,5 +34,8 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
 
   onRender: =>
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
-    @imageTrimmerRegion.show(FK.App.ImageTrimmer.View)
+    @imageTrimmerRegion.show(FK.App.ImageTrimmer.here())
     @renderLocation()
+
+  onClose: =>
+    FK.App.ImageTrimmer.stop()

@@ -1,6 +1,6 @@
 FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
-  class ImageTrimmer.ImageTrimmerView extends Backbone.Marionette.ItemView
+  class this.ImageTrimmerView extends Marionette.ItemView
     template: FK.Template('image_trimmer')
   
     events:
@@ -117,6 +117,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     enableTextSelect: =>
       $('body').off('selectstart')
+
+    setSource: (src) =>
+      $('img').attr('src', src)
   
     onRender: =>
       $('body').on 'mousemove', @slide
