@@ -14,13 +14,15 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     'track': '.slider-track'
 
   startSliding: (e) =>
-    e.preventDefault
+    e.preventDefault()
+    $('body').css('cursor', 'pointer')
     @disableTextSelect()
     @sliding = true
     @saveImageCoords()
 
   startMoving: (e) =>
-    e.preventDefault
+    e.preventDefault()
+    $('body').css('cursor', 'move')
     @movingImage = true
     @disableTextSelect()
     @mouseStartOffset =
@@ -52,6 +54,7 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
 
   stopMovingImage: (e) =>
     e.preventDefault()
+    $('body').css('cursor', 'default')
     @movingImage = false
 
   startImage: =>
