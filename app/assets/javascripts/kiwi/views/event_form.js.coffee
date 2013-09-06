@@ -10,7 +10,7 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
     'change input[name=name]': 'validateName'
     'change input[name=location_type]': 'renderLocation'
   
-  renderLocation: (e) => 
+  renderLocation: (e) =>
     if @$el.find('input[name=location_type]:checked').val() is "international"
       @$el.find('select[name=country]').attr('disabled','disabled')
     else
@@ -34,5 +34,5 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
 
   onRender: =>
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
-    @imageTrimmerRegion.show(new FK.Components.ImageTrimmer())
+    @imageTrimmerRegion.show(new FK.App.ImageTrimmer.ImageTrimmerView())
     @renderLocation()
