@@ -6,6 +6,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     this.ViewModel = new this.ImageTrimmerViewModel()
     this.View = new this.ImageTrimmerLayout()
 
+    this.listenTo ImageTrimmer, 'new:image:url', this.imageByUrl
 
   this.addFinalizer () ->
     this.View.close()
@@ -15,9 +16,11 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     this.View = null
     this.ViewModel = null
 
+    this.stopListening()
+
   this.here = () ->
     this.start()
     this.View
 
-  this.loadFromUrl = (url) ->
-    url
+  this.imageByUrl = (url) ->
+    this.trigger 'new:image:ready', url

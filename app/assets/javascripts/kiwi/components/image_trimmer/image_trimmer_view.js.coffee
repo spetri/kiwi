@@ -1,8 +1,11 @@
 FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
-  class this.ImageTrimmerView extends Marionette.ItemView
+  class ImageTrimmer.ImageTrimmerView extends Marionette.ItemView
     template: FK.Template('image_trimmer')
-  
+ 
+    initialize: () ->
+      this.listenTo ImageTrimmer, 'new:image:ready', @startImage
+ 
     events:
       'mousedown .slider': 'startSliding'
       'mousedown .image-container': 'startMoving'
@@ -59,7 +62,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').css('cursor', 'default')
       @movingImage = false
   
-    startImage: =>
+    startImage: (src) =>
+      @$('img').attr 'src', src
       @image =
         height: @ui.image.height()
         width:  @ui.image.width()
@@ -126,7 +130,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').on 'mousemove', @moveImage
       $('body').on 'mouseup', @stopSliding
       $('body').on 'mouseup', @stopMovingImage
-      _.delay @startImage, 200
+      _.delay( () =>
+        @startImage '/assets/stubPhoto.jpg'
+      , 200)
   
     onClose: =>
       $('body').off 'mousemove', @slide
