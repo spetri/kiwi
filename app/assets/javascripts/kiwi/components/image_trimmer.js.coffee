@@ -12,12 +12,12 @@ class FK.Components.ImageTrimmer extends Backbone.Marionette.ItemView
     'track': '.slider-track'
 
   startSliding: (e) =>
-    e.preventDefault
+    e.preventDefault()
     @sliding = true
     @saveImageCoords()
 
   startMoving: (e) =>
-    e.preventDefault
+    e.preventDefault()
     @movingImage = true
     @mouseStartOffset =
       left: e.pageX
