@@ -2,6 +2,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   class ImageTrimmer.ImageTrimmerView extends Marionette.ItemView
     template: FK.Template('image_trimmer')
+    className: 'image-trimmer-dialog'
  
     initialize: () ->
       this.listenTo ImageTrimmer, 'new:image:ready', @startImage
