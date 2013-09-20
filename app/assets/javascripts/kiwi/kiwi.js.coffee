@@ -1,4 +1,4 @@
-window.FK = { 
+window.FK = {
   Data:{}
   Views:{}
   Models:{}
@@ -7,8 +7,9 @@ window.FK = {
   Configs: {}
   Controllers: {}
   Routers: {}
-  Utils: {}                                                                                                                                                                                                                                                                                                                                                                 
+  Utils: {}
 }
+
 FK.Template = (file) ->
   JST["kiwi/templates/#{file}"]
 
@@ -18,7 +19,7 @@ FK.Uri = (uri) ->
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({ layout: '#layout' })
 
-@init = (prefetch) ->  
+@init = (prefetch) ->
   FK.Data.events = new FK.Collections.EventList(prefetch.events)
   # TODO: use a proper callback
   FK.Data.events.fetch(
@@ -29,8 +30,8 @@ FK.App.addRegions({ layout: '#layout' })
       Backbone.history.start() if (!Backbone.History.started)
     )
 
-FK.Controllers.MainController = { 
-  events: (action) -> 
+FK.Controllers.MainController = {
+  events: (action) ->
     FK.App.vent.trigger('container:load',action)
 
   default: ->
@@ -42,7 +43,7 @@ class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   appRoutes: {
     '':               'default'
     'events/:action': 'events'
-  } 
+  }
 
 
 moment.lang('en', {
@@ -56,9 +57,8 @@ moment.lang('en', {
     }
 });
 
-
-class FK.Utils.RenderHelpers 
-  @populate_select_getter: (view, property, collection, label) ->                                                                                                                                                                                                                                                                                                           
+class FK.Utils.RenderHelpers
+  @populate_select_getter: (view, property, collection, label) ->
     view.$el.find("select[name=#{property}]").html(collection.map((item) =>
-      selected = (if (view.model.get(property) is item.get('_id')) then " selected=\"selected\" " else "") 
+      selected = (if (view.model.get(property) is item.get('_id')) then " selected=\"selected\" " else "")
       "<option value=\"#{item.get('_id')}\" #{selected} >#{item.get(label)}</option>").join())

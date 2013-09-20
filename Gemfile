@@ -30,9 +30,10 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-group :test do
-end
-
 group :development, :test do
+  gem 'guard'
   gem 'rspec-rails'
+  gem "jasminerice", :git => 'https://github.com/bradphelan/jasminerice.git'
+  gem 'guard-jasmine'
+  gem 'sinon-rails'
 end
