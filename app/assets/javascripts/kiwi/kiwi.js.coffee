@@ -8,6 +8,7 @@ window.FK = {
   Routers: {}
   Utils: {}
 }
+
 FK.Template = (file) ->
   JST["kiwi/templates/#{file}"]
 
@@ -17,12 +18,12 @@ FK.Uri = (uri) ->
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({ layout: '#layout' })
 
-FK.App.addInitializer (countries) ->
-  FK.Data.events = new FK.Collections.EventList()
+FK.App.addInitializer (prefetch) ->
+  FK.Data.events = new FK.Collections.EventList(prefetch.events)
   # TODO: use a proper callback
   FK.Data.events.fetch(
     success: =>
-      FK.Data.countries = new FK.Collections.CountryList(countries)
+      FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
       FK.App.layout.show(new FK.Views.Layout())
       FK.App.appRouter = new FK.Routers.AppRouter()
       Backbone.history.start() if (!Backbone.History.started)
@@ -53,7 +54,6 @@ moment.lang('en', {
         sameElse : 'dddd, MMMM D '
     }
 })
-
 
 class FK.Utils.RenderHelpers
   @populate_select_getter: (view, property, collection, label) ->

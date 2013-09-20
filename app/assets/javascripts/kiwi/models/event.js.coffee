@@ -4,6 +4,7 @@ class FK.Models.Event extends Backbone.Model
     country: 'US'
     name: ''
     user: ''
+    #TODO: fix me - all events will start with the date that the file was parsed
     datetime: new Date()
 
   url: => this.collection.url
@@ -44,7 +45,7 @@ class FK.Collections.EventList extends Backbone.Collection
 
   asBlocks: =>
     sorted = @sortBy((ev) -> ev.get('datetime')).reverse()
-    new FK.Collections.EventBlockList(_.map(_.groupBy(sorted,(ev) -> 
+    new FK.Collections.EventBlockList(_.map(_.groupBy(sorted,(ev) ->
       moment(ev.get('datetime')).format("YYYY-MM-DD")
     ), (blocks, date) ->
       events: new FK.Collections.EventList(blocks), date: date
