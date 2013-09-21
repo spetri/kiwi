@@ -3,4 +3,6 @@ json.array!(@events) do |event|
   json.set! '_id', event._id.to_s 
   json.set! :date, event.datetime
   json.set! :datetime, event.datetime.utc if event.datetime != nil
+  json.set! :mediumUrl, event.image.url(:medium)
+  json.set! :thumbUrl, event.image.url(:thumb)
 end

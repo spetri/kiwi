@@ -1,6 +1,6 @@
 class FK.Views.Events extends Backbone.Marionette.Layout
   className: "row-fluid"
-  regions: 
+  regions:
     event_block: '#event_blocks'
 
   template: FK.Template('events')

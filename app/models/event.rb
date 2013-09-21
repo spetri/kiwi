@@ -8,6 +8,6 @@ class Event
   field :user, type: String
   field :datetime, type: DateTime
 
-  has_mongoid_attached_file :image, :styles => { :medium => "400x300>", :thumb => "80x60>" }
+  has_mongoid_attached_file :image, :styles => { :medium => "400x300#", :thumb => "80x60#" }
 
 end
