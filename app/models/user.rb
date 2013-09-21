@@ -4,11 +4,17 @@ class User
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable,
+         :omniauthable, :omniauth_providers => [:twitter]
 
   ## Database authenticatable
   field :email,              :type => String, :default => ""
   field :encrypted_password, :type => String, :default => ""
+
+  ## Omniauth
+  field :uid,                :type => Integer
+  field :provider,           :type => String
+  field :name,               :type => String
 
   ## Recoverable
   field :reset_password_token,   :type => String
@@ -39,5 +45,31 @@ class User
   # field :authentication_token, :type => String
   include Mongoid::Timestamps
 
-  
+  def self.from_omniauth(auth)
+     where(auth.slice(:provider, :uid)).find_or_create_by do |user|
+      user.provider = auth.provider
+      user.uid = auth.uid
+      user.name = auth.info.name
+      user.email = auth.info.email
+     end
+  end
+  def self.new_with_session(params, session)
+    if session["devise.user_attributes"]
+      new(session["devise.user_attributes"], without_protection: true) do |user|
+        user.attributes = params
+        user.valid?
+      end
+    else
+      super
+    end    
+  end
+
+  def password_required?
+    super && provider.blank?
+  end
+
+  def email_required?
+    super && provider.blank?
+  end
+
 end

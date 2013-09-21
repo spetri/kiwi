@@ -7,8 +7,9 @@ gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
 
 gem 'bson_ext'
 gem 'devise', '3.1.0.rc2'
-
 gem 'slim-rails'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 
 group :assets do
   gem 'sass-rails',   '~> 4.0.0'
