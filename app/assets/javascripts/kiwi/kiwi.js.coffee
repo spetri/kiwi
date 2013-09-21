@@ -44,6 +44,7 @@ class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {
     '':               'default'
+    '_=_':            'default' # facebook callback route
     'events/:action': 'events'
   }
 
