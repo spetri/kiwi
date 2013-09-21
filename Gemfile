@@ -6,7 +6,7 @@ gem 'rails', '4.0.0'
 gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
 
 gem 'bson_ext'
-gem 'devise'
+gem 'devise', '3.1.0.rc2'
 
 gem 'slim-rails'
 

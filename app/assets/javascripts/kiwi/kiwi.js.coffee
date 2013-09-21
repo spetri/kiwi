@@ -20,6 +20,8 @@ FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({ layout: '#layout' })
 
 @init = (prefetch) ->
+  FK.Links = prefetch.links
+  FK.CurrentUser = new FK.Models.User(prefetch.user)
   FK.Data.events = new FK.Collections.EventList(prefetch.events)
   # TODO: use a proper callback
   FK.Data.events.fetch(
