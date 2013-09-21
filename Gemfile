@@ -24,6 +24,8 @@ gem "twitter-bootstrap-rails", :github => "seyhunak/twitter-bootstrap-rails", :b
 gem 'less-rails'
 
 gem 'jbuilder', '~> 1.2'
+gem 'paperclip', '~> 3.0'
+gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

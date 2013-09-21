@@ -9,23 +9,27 @@ class FK.Models.Event extends Backbone.Model
 
   url: => this.collection.url
 
-  sync: (method, model, options) =>
+  sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
       'update': 'PUT'
 
 
-    if method == "create" or method == "update"
-      httpMethod = methodMap[method]
+    if action == "create" or action == "update"
+      httpMethod = methodMap[action]
       
       xhr = new XMLHttpRequest()
       xhr.open(httpMethod, this.url(), true)
       xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-      xhr.setRequestHeader('Content-Type', 'application/json')
+      
+      formData = new FormData()
 
-      return xhr.send(JSON.stringify({event: model.toJSON()}))
+      _.each model.toJSON(), (v, k) ->
+        formData.append(k, v)
 
-    Backbone.sync(method, model, options)
+      return xhr.send(formData)
+
+    Backbone.sync(action, model, options)
 
 class FK.Models.EventBlock extends Backbone.Model
 

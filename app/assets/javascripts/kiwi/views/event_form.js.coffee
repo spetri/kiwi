@@ -26,6 +26,8 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
     params = window.serializeForm(@$el.find('input,select,textarea'))
     if params.datetime
       params.datetime = moment(params.datetime).utc()
+
+    params.image = $('input[type="file"]')[0].files[0]
     FK.Data.events.create(params)
     Backbone.history.navigate('/events/all', trigger: true)
 
