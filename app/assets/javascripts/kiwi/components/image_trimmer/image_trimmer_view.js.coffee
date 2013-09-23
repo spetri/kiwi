@@ -131,9 +131,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').on 'mousemove', @moveImage
       $('body').on 'mouseup', @stopSliding
       $('body').on 'mouseup', @stopMovingImage
-      _.delay( () =>
-        @startImage '/assets/stubPhoto.jpg'
-      , 200)
   
     onClose: =>
       $('body').off 'mousemove', @slide

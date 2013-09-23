@@ -23,4 +23,5 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     this.View
 
   this.imageByUrl = (url) ->
+    this.View.openImageTrimmerDialog()
     this.trigger 'new:image:ready', url
