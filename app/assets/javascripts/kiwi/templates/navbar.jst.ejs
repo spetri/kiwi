@@ -23,7 +23,11 @@
               <% } %>
             </a> 
             <% } else { %> 
-            <a href="#"><%= name %> (<%= provider %>)</a> 
+            <a href="#"><%= name %>
+              <% if (provider.length > 0) { %>
+                (<%= provider %>)
+                <% } %>
+            </a>
             <% } %>
             | <a href="<%= FK.Links.logout %>">logout</a>
           <% } else {  %>
