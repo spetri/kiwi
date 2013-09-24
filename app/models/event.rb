@@ -8,6 +8,16 @@ class Event
   field :user, type: String
   field :datetime, type: DateTime
 
-  has_mongoid_attached_file :image, :styles => { :medium => "400x300#", :thumb => "80x60#" }
+  field :crop_x, type: Integer
+  field :crop_y, type: Integer
 
+  has_mongoid_attached_file :image, :styles => 
+    {
+      :medium => "400x300#",
+      :thumb => ""
+    },
+    :convert_options =>
+    {
+      :thumb => "-gravity NorthWest -crop 80x60+200+200 +repage"
+    }
 end
