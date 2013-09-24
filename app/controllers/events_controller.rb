@@ -53,6 +53,6 @@ class EventsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
       #TODO: strong params definition
-      params.permit(:details, :user, :datetime, :name, :image)
+      params.permit(:details, :user, :datetime, :name, :image, :crop_x, :crop_y, :height, :width)
     end
 end

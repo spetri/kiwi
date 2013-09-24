@@ -8,6 +8,8 @@ class Event
   field :user, type: String
   field :datetime, type: DateTime
 
+  field :width, type: Integer
+  field :height, type: Integer
   field :crop_x, type: Integer
   field :crop_y, type: Integer
 

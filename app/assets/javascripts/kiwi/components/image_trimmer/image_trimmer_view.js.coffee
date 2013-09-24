@@ -18,6 +18,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       'container': '.image-container'
       'slider': '.slider'
       'track': '.slider-track'
+      'trim': '.image-trim'
   
     startSliding: (e) =>
       e.preventDefault()
@@ -50,6 +51,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       e.preventDefault()
       @sliding = false
       @enableTextSelect()
+      ImageTrimmer.trigger 'new:image:size', @imageSize()
   
     moveImage: (e) =>
       return if ! @movingImage
@@ -62,7 +64,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       e.preventDefault()
       $('body').css('cursor', 'default')
       @movingImage = false
-  
+      ImageTrimmer.trigger 'new:image:coords', @imageCoords()
+ 
     startImage: (src) =>
       @$('img').attr 'src', src
       @image =
@@ -116,6 +119,18 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @ui.image.css 'left', x
       @ui.image.css 'top', y
   
+    imageCoords: () =>
+      {
+        top: @ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width')) - parseInt(@ui.image.css('top'))
+        left: @ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width')) - parseInt(@ui.image.css('left'))
+      }
+
+    imageSize: () =>
+      {
+        height: @ui.container.height() / @domSliderFactor()
+        width: @ui.container.width() / @domSliderFactor()
+      }
+
     disableTextSelect: =>
       window.getSelection().empty()
       $('body').on('selectstart', () => false)
