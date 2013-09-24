@@ -1,5 +1,5 @@
 Kiwi::Application.configure do
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'kiwidev.copysketch.com' }
 
   # Settings specified here will take precedence over those in config/application.rb.
   # In the development environment your application's code is reloaded on
@@ -16,7 +16,7 @@ Kiwi::Application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true 
-  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+  config.action_mailer.smtp_settings = { :address => "localhost", :port => 25 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -28,6 +28,4 @@ Kiwi::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-
-  Paperclip.options[:command_path] = '/usr/bin/'
 end

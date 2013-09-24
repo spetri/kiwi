@@ -14,6 +14,22 @@
         <li class="<%= FK.Uri('events/new') ? "active" : "" %>">
           <a class="" href="#/events/new">New Event</a>
         </li>
+        <li class="identity">
+          <% if(email.length > 0 || name.length > 0) { %>
+            <% if (email.length > 0) { %>
+            <a href="#"><%= email %>
+              <% if (provider.length > 0) { %>
+                (<%= provider %>)
+              <% } %>
+            </a> 
+            <% } else { %> 
+            <a href="#"><%= name %> (<%= provider %>)</a> 
+            <% } %>
+            | <a href="<%= FK.Links.logout %>">logout</a>
+          <% } else {  %>
+            <a href="<%= FK.Links.login %>">login</a> | <a href="<%= FK.Links.register %>">register</a>
+          <% } %>
+        </li>
       </ul>
     </div>
   </div>
