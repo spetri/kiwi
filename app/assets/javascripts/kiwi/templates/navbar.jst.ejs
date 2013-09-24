@@ -18,13 +18,13 @@
           <% if(email.length > 0 || name.length > 0) { %>
             <% if (email.length > 0) { %>
             <a href="#"><%= email %>
-              <% if (provider.length > 0) { %>
+              <% if (provider != undefined && provider.length > 0) { %>
                 (<%= provider %>)
               <% } %>
             </a> 
             <% } else { %> 
             <a href="#"><%= name %>
-              <% if (provider.length > 0) { %>
+              <% if (provider != undefined && provider.length > 0) { %>
                 (<%= provider %>)
                 <% } %>
             </a>
