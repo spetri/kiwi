@@ -1,5 +1,6 @@
 Kiwi::Application.configure do
   config.action_mailer.default_url_options = { :host => 'kiwidev.copysketch.com' }
+  Rails.application.routes.default_url_options[:host] = 'kiwidev.copysketch.com'
 
   # Settings specified here will take precedence over those in config/application.rb.
   # In the development environment your application's code is reloaded on
