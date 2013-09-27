@@ -36,7 +36,8 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
 
   onRender: =>
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
-    @imageTrimmerRegion.show(FK.App.ImageTrimmer.here())
+    @imageTrimmer = FK.App.ImageTrimmer.create()
+    @imageTrimmerRegion.show(@imageTrimmer.view())
     @renderLocation()
 
   onClose: =>

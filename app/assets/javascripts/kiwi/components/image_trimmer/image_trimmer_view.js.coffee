@@ -4,8 +4,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     template: FK.Template('image_trimmer')
     className: 'image-trimmer-dialog'
  
-    initialize: () ->
-      this.listenTo ImageTrimmer, 'new:image:ready', @startImage
+    initialize: (options) ->
+      @controller = options.controller
+      @listenTo @controller, 'new:image:ready', @startImage
  
     events:
       'mousedown .slider': 'startSliding'
@@ -51,7 +52,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       e.preventDefault()
       @sliding = false
       @enableTextSelect()
-      ImageTrimmer.trigger 'new:image:size', @imageSize()
+      @controller.trigger 'new:image:size', @imageSize()
   
     moveImage: (e) =>
       return if ! @movingImage
@@ -64,7 +65,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       e.preventDefault()
       $('body').css('cursor', 'default')
       @movingImage = false
-      ImageTrimmer.trigger 'new:image:coords', @imageCoords()
+      @controller.trigger 'new:image:coords', @imageCoords()
  
     startImage: (src) =>
       @$('img').attr 'src', src

@@ -1,27 +1,31 @@
 FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
-  this.startsWithParent = false
+  Instances = []
+
+  @create = () ->
+    newInstance = new ImageTrimmer.ImageTrimmerController
+    Instances.push newInstance
+    return newInstance
+
+  @addFinalizer () ->
+    _.each Instances, (instance) ->
+      instance.close()
+
+  # Layout?
+  class ImageTrimmer.ImageTrimmerController extends Marionette.Controller
  
-  this.addInitializer () ->
-    this.ViewModel = new this.ImageTrimmerViewModel()
-    this.View = new this.ImageTrimmerLayout()
+    initialize: () ->
+      @View = new ImageTrimmer.ImageTrimmerLayout
+        controller: this
 
-    this.listenTo ImageTrimmer, 'new:image:url', this.imageByUrl
+      @listenTo this, 'new:image:url', @imageByUrl
 
-  this.addFinalizer () ->
-    this.View.close()
-    this.ViewModel.stopListening()
-    this.ViewModel.off()
+    onClose: () =>
+      @View.close()
 
-    this.View = null
-    this.ViewModel = null
+    view: () ->
+      this.View
 
-    this.stopListening()
-
-  this.here = () ->
-    this.start()
-    this.View
-
-  this.imageByUrl = (url) ->
-    this.View.openImageTrimmerDialog()
-    this.trigger 'new:image:ready', url
+    imageByUrl: (url) ->
+      this.View.openImageTrimmerDialog()
+      this.trigger 'new:image:ready', url
