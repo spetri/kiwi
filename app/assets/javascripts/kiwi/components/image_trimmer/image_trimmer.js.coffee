@@ -19,13 +19,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         controller: this
 
       @listenTo this, 'new:image:url', @imageByUrl
-
-    onClose: () =>
-      @View.close()
+      @listenTo @View, 'close', () => @triggerMethod 'close'
 
     view: () ->
-      this.View
+      @View
 
     imageByUrl: (url) ->
-      this.View.openImageTrimmerDialog()
-      this.trigger 'new:image:ready', url
+      @View.openImageTrimmerDialog()
+      @trigger 'new:image:ready', url
+
+    onClose: () ->
+      @View.close()
