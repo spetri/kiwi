@@ -8,8 +8,8 @@ namespace :db do
     end
 
     Event.delete_all
-    Event.create! datetime: DateTime.now, title: "a great event", details:"lorem ipsum", user: "jl"
-    Event.create! datetime: 4.days.ago, title: "a great event", details:"lorem ipsum", user: "jl"
-    Event.create! datetime: 4.days.ago, title: "a great event", details:"lorem ipsum", user: "jl"
+    Event.create! datetime: DateTime.now, name: "a great event", details:"lorem ipsum", user: "jl"
+    Event.create! datetime: 4.days.ago, name: "a great event", details:"lorem ipsum", user: "jl"
+    Event.create! datetime: 4.days.ago, name: "a great event", details:"lorem ipsum", user: "jl"
   end 
 end
