@@ -122,15 +122,21 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     imageCoords: () =>
       {
-        top: (@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top
-        left: (@ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width'))) - @ui.image.offset().left
+        top: ((@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top) * @ratioToOriginalHeight()
+        left: ((@ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width'))) - @ui.image.offset().left) * @ratioToOriginalWidth()
       }
 
     imageSize: () =>
       {
-        width: @ui.trim.outerWidth() - (parseInt(@ui.trim.css('border-left-width')) + parseInt(@ui.trim.css('border-right-width')))
-        height: @ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))
+        width: (@ui.trim.outerWidth() - (parseInt(@ui.trim.css('border-left-width')) + parseInt(@ui.trim.css('border-right-width')))) * @ratioToOriginalWidth()
+        height: (@ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))) * @ratioToOriginalHeight()
       }
+
+    ratioToOriginalHeight: () =>
+      @image.height / parseInt(@ui.image.height())
+
+    ratioToOriginalWidth: () =>
+      @image.width / parseInt(@ui.image.width())
 
     disableTextSelect: =>
       window.getSelection().empty()
