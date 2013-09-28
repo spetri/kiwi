@@ -16,7 +16,12 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new(event_params)
+    @event = Event.new()
+    @event.width = event_params[:width]
+    @event.height = event_params[:height]
+    @event.crop_x = event_params[:crop_x]
+    @event.crop_y = event_params[:crop_y]
+    @event.update_attributes(event_params)
 
     respond_to do |format|
       if @event.save
@@ -53,6 +58,6 @@ class EventsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
       #TODO: strong params definition
-      params.permit(:details, :user, :datetime, :name, :image, :crop_x, :crop_y, :height, :width)
+      params.permit(:details, :user, :datetime, :name, :image, :width, :height, :crop_x, :crop_y)
     end
 end
