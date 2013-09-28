@@ -75,7 +75,12 @@
         width: 100%;
         top: 0px;
         left: 0px;
-        border: solid 50px rgba(125, 125, 125, 0.35);
+        border-style: solid;
+        border-color: rgba(125, 125, 125, 0.35);
+        border-top-width: 50px;
+        border-bottom-width: 50px;
+        border-right-width: 37.5px;
+        border-left-width: 37.5px;
         z-index: 2;
       }
     }

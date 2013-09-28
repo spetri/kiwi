@@ -122,14 +122,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     imageCoords: () =>
       {
-        top: @ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width')) - parseInt(@ui.image.css('top'))
-        left: @ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width')) - parseInt(@ui.image.css('left'))
+        top: (@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top
+        left: (@ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width'))) - @ui.image.offset().left
       }
 
     imageSize: () =>
       {
-        height: @ui.container.height() / @domSliderFactor()
-        width: @ui.container.width() / @domSliderFactor()
+        width: @ui.trim.outerWidth() - (parseInt(@ui.trim.css('border-left-width')) + parseInt(@ui.trim.css('border-right-width')))
+        height: @ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))
       }
 
     disableTextSelect: =>
