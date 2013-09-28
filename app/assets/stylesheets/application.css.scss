@@ -12,7 +12,7 @@
  *= require_tree .
  */
 
-
+/* home */
 .events {
   list-style: none;
   li {
@@ -21,6 +21,23 @@
   }
 }
 
+/* navbar */
+.nav {
+  .identity { 
+   padding-top: 15px;
+   float: right;
+   right: 15px;
+   position: absolute;
+   a { 
+    display: inline;
+    margin: 0;
+    padding: 0;
+   }
+  }
+}
+
+
+/* event management */
 .image-trimmer {
   position: relative;
   width: 300px;

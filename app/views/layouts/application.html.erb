@@ -8,12 +8,21 @@
 </head>
 <body>
   <div id="layout"></div>
-<script type="text/javascript">
-  $(function() { 
-    FK.App.start({
-      countries: <%= raw Country.all.sort(order: 1).to_json() %>
-    })
-  });
-</script>
+  <script type="text/javascript">
+    $(function() { 
+      FK.App.start({
+        countries: <%= raw Country.all.sort(order: 1).to_json() %>,
+        events: [],
+        links:
+          {
+           logout: '<%= destroy_user_session_path %>',
+           login: '<%= new_user_session_path %>',
+           user_edit: '<%= edit_user_registration_path %>',
+           register: '<%= new_user_registration_path %>'
+          },
+        user: <%= user_signed_in? ? raw(current_user.to_json()) : 'null' %>
+      });
+    });
+  </script>
 </body>
 </html>
