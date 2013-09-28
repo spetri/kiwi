@@ -29,6 +29,11 @@ class FK.Models.Event extends Backbone.Model
       _.each model.toJSON(), (v, k) ->
         formData.append(k, v)
 
+      xhr.onload = (event) =>
+        modelOnServer = JSON.parse event.target.response
+        @set modelOnServer
+        @trigger 'created', modelOnServer
+
       return xhr.send(formData)
 
     Backbone.sync(action, model, options)
