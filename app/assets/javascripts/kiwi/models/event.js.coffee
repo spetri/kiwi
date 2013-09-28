@@ -8,7 +8,8 @@ class FK.Models.Event extends Backbone.Model
     datetime: new Date()
     thumbUrl: ''
 
-  url: => this.collection.url
+  url: =>
+    if @isNew() then @collection.url else @collection.url + '/' + @id
 
   sync: (action, model, options) =>
     methodMap =
