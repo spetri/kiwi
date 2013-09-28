@@ -33,6 +33,7 @@ group :doc do
 end
 
 group :development, :test do
+  gem 'debugger'
   gem 'guard'
   gem 'rspec-rails'
   gem "jasminerice", :git => 'https://github.com/bradphelan/jasminerice.git'
