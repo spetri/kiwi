@@ -29,10 +29,13 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
 
     params.image = $('input[type="file"]')[0].files[0]
     FK.Data.events.create(params)
-    Backbone.history.navigate('/events/all', trigger: true)
 
   initialize: =>
     @model = new FK.Models.Event
+    @listenTo FK.Data.events, 'created', @toAllEvents
+
+  toAllEvents: (attrs) =>
+    Backbone.history.navigate('/events/all', trigger: true)
 
   onRender: =>
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')

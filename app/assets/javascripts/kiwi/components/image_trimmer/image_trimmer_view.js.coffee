@@ -101,8 +101,16 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @image.minWidth + (@image.width - @image.minWidth) * factor
   
     imageOutOfBounds: (width, x, y) =>
+      @imageHorizontalOutOfBounds(width, x) || @imageVerticalOutOfBounds(width, y)
+
+    imageHorizontalOutOfBounds: (width, x) =>
+      x = x - parseInt(@ui.trim.css('border-left-width'))
+      x > 0 || x + width < @ui.trim.width()
+
+    imageVerticalOutOfBounds: (width, y) =>
+      y = y - parseInt(@ui.trim.css('border-top-width'))
       height = width * @image.wToH
-      x > 0 || y > 0 || x + width < @ui.container.width() || y + height < @ui.container.height()
+      y > 0 || y + height < @ui.trim.height()
   
     centerImage: =>
       overflowedRight = @ui.image.width() - @ui.container.width()
@@ -116,9 +124,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @positionImage newLeft, newTop
   
     positionImage: (x, y) =>
-      return if @imageOutOfBounds(@ui.image.width(), x, y)
-      @ui.image.css 'left', x
-      @ui.image.css 'top', y
+      @ui.image.css 'left', x if ! @imageHorizontalOutOfBounds(@ui.image.width(), x)
+      @ui.image.css 'top', y if ! @imageVerticalOutOfBounds(@ui.image.width(), y)
   
     imageCoords: () =>
       {

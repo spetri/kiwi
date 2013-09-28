@@ -8,7 +8,8 @@ class FK.Models.Event extends Backbone.Model
     datetime: new Date()
     thumbUrl: ''
 
-  url: => this.collection.url
+  url: =>
+    if @isNew() then @collection.url else @collection.url + '/' + @id
 
   sync: (action, model, options) =>
     methodMap =
@@ -27,6 +28,11 @@ class FK.Models.Event extends Backbone.Model
 
       _.each model.toJSON(), (v, k) ->
         formData.append(k, v)
+
+      xhr.onload = (event) =>
+        modelOnServer = JSON.parse event.target.response
+        @set modelOnServer
+        @trigger 'created', modelOnServer
 
       return xhr.send(formData)
 
