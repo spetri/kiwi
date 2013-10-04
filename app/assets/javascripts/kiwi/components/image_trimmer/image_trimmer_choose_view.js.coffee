@@ -27,7 +27,7 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     initialize: (options) ->
       @controller = options.controller
-      @listenTo @controller, 'new:image:ready', @clearIfSourceNotUrl
+      @listenTo @controller, 'new:image', @clearIfSourceNotUrl
 
     clearIfSourceNotUrl: (url, source) =>
       @$('input.url-input').val('') if source != 'remote'

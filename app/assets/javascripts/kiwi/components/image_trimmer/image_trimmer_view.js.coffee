@@ -7,6 +7,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     initialize: (options) ->
       @controller = options.controller
       @listenTo @controller, 'new:image:ready', @startImage
+      @listenTo @controller, 'new:image:load', @loadRemoteImage
  
     events:
       'mousedown .slider': 'startSliding'
@@ -70,7 +71,11 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @movingImage = false
       $('body').css('cursor', 'default')
       @broadcastImagePosition()
- 
+
+    loadRemoteImage: (url) =>
+      @$('img').attr('src', url).load () =>
+        @controller.trigger 'new:image:ready'
+
     startImage: (src) =>
       @$('img').attr 'src', src
       @image =
