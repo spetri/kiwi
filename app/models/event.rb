@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class Event
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -11,6 +13,7 @@ class Event
   field :height, type: Integer
   field :crop_x, type: Integer
   field :crop_y, type: Integer
+  field :url, type: String
   
 
   has_mongoid_attached_file :image, :styles => 
@@ -19,4 +22,9 @@ class Event
       :medium => "400x300>"
     },
     :processors => [:cropper]
+
+
+  def image_from_url(url)
+    self.image = open(url)
+  end
 end
