@@ -18,26 +18,16 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       reader = new FileReader()
 
       reader.onload = (readFile) =>
-        @controller.trigger 'new:image:url', readFile.target.result, 'upload'
+        @controller.trigger 'new:image', readFile.target.result, 'upload', file
 
       reader.readAsDataURL(file)
 
     loadFileInInput: (e) =>
-      @controller.trigger 'new:image:url', @$('input.url-input').val(), 'remote'
+      @controller.trigger 'new:image', @$('input.url-input').val(), 'remote'
 
     initialize: (options) ->
       @controller = options.controller
-      @listenTo @controller, 'new:image:size', @refreshHiddenImageSizeInputs
-      @listenTo @controller, 'new:image:coords', @refreshHiddenImageCoordsInputs
       @listenTo @controller, 'new:image:ready', @clearIfSourceNotUrl
-
-    refreshHiddenImageSizeInputs: (size) =>
-      @$('[name="width"]').val size.width
-      @$('[name="height"]').val size.height
-
-    refreshHiddenImageCoordsInputs: (coords) =>
-      @$('[name="crop_x"]').val coords.left
-      @$('[name="crop_y"]').val coords.top
 
     clearIfSourceNotUrl: (url, source) =>
       @$('input.url-input').val('') if source != 'remote'

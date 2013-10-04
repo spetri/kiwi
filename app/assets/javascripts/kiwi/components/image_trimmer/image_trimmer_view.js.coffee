@@ -55,7 +55,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       return if ! @sliding
       @sliding = false
       @enableTextSelect()
-      @controller.trigger 'new:image:size', @imageSize()
+      @broadcastImageSize()
   
     moveImage: (e) =>
       return if ! @movingImage
@@ -69,7 +69,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       return if ! @movingImage
       @movingImage = false
       $('body').css('cursor', 'default')
-      @controller.trigger 'new:image:coords', @imageCoords()
+      @broadcastImagePosition()
  
     startImage: (src) =>
       @$('img').attr 'src', src
@@ -81,6 +81,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
      
       @sizeImage()
       @centerImage()
+      @broadcastImageSize()
+      @broadcastImagePosition()
 
     saveImageCoords: =>
       @imageStartOffset =
@@ -131,7 +133,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @ui.image.css 'left', x if ! @imageHorizontalOutOfBounds(@ui.image.width(), x)
       @ui.image.css 'top', y if ! @imageVerticalOutOfBounds(@ui.image.width(), y)
   
-    imageCoords: () =>
+    imagePosition: () =>
       {
         top: ((@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top) * @ratioToOriginalHeight()
         left: ((@ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width'))) - @ui.image.offset().left) * @ratioToOriginalWidth()
@@ -149,6 +151,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     ratioToOriginalWidth: () =>
       @image.width / parseInt(@ui.image.width())
 
+    broadcastImagePosition: () =>
+      @controller.trigger 'change:image:position', @imagePosition()
+
+    broadcastImageSize: () =>
+      @controller.trigger 'change:image:size', @imageSize()
+ 
     disableTextSelect: =>
       window.getSelection().empty()
       $('body').on('selectstart', () => false)

@@ -18,18 +18,38 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @View = new ImageTrimmer.ImageTrimmerLayout
         controller: this
 
-      @listenTo this, 'new:image:url', @imageByUrl
+      @Model = new Backbone.Model()
+
+      @listenTo this, 'new:image', @newImage
+      @listenTo this, 'change:image:position', @catchImagePosition
+      @listenTo this, 'change:image:size', @catchImageSize
       @listenTo @View, 'close', () => @triggerMethod 'close'
 
     view: () ->
       @View
 
-    imageByUrl: (url, source) ->
-      @source = source
+    newImage: (url, source, file) ->
+      @Model.set
+        url: url
+        source: source
+        image: file
       @trigger 'new:image:ready', url, source
 
-    source: () =>
-      @source
+    catchImagePosition: (position) =>
+      @Model.set
+        crop_x: position.left
+        crop_y: position.top
+
+    catchImageSize: (size) =>
+      @Model.set
+        width: size.width
+        height: size.height
+
+    image: () =>
+      image = @Model.toJSON()
+      delete image.image if ! image.image
+      delete image.url if image.image
+      image
 
     onClose: () ->
       @View.close()
