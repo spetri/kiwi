@@ -25,7 +25,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @View
 
     imageByUrl: (url) ->
-      @View.openImageTrimmerDialog()
       @trigger 'new:image:ready', url
 
     onClose: () ->

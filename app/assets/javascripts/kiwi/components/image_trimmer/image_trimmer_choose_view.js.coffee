@@ -5,7 +5,12 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     className: 'image-trimmer-input-container'
 
     events:
+      'click button': 'clickFileUploader'
       'change input[type="file"]': 'startImageTrimmerFromUpload'
+
+    clickFileUploader: (e) =>
+      e.preventDefault()
+      @$('input[type="file"]').click()
 
     startImageTrimmerFromUpload: (evt) =>
       file = evt.target.files[0]
