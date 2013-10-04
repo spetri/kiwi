@@ -7,7 +7,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     initialize: (options) ->
       @controller = options.controller
       @listenTo @controller, 'new:image:ready', @startImage
-      @listenTo @controller, 'new:image:load', @loadRemoteImage
+      @listenTo @controller, 'new:image', @loadRemoteImage
  
     events:
       'mousedown .slider': 'startSliding'
