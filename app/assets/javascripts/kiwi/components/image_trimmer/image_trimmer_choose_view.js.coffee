@@ -7,6 +7,7 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     events:
       'click button': 'clickFileUploader'
       'change input[type="file"]': 'startImageTrimmerFromUpload'
+      'blur .url-input': 'loadFileInInput'
 
     clickFileUploader: (e) =>
       e.preventDefault()
@@ -20,6 +21,9 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         @controller.trigger 'new:image:url', readFile.target.result
 
       reader.readAsDataURL(file)
+
+    loadFileInInput: (e) =>
+      @controller.trigger 'new:image:ready', @$('input.url-input').val()
 
     initialize: (options) ->
       @controller = options.controller
