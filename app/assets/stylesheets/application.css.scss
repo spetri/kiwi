@@ -22,13 +22,37 @@
 }
 
 .image-trimmer {
-  position: relative;
   width: 300px;
+}
+
+.image-trimmer-input-container {
+  position: relative;
+  text-align: right;
+
+  .form-row {
+    margin-bottom: 10px;  
+  }
+
+  .form-guide {
+    margin-right: 32px;
+  }
+
+  input[type=file] {
+    position:absolute;
+    visibility: hidden;
+  }
+
+  .url-input {
+    width: 100%;
+  }
+}
+
+.image-trimmer-dialog {
+  position: relative;
 
   .body {
     background-color: transparent;
     height: 350px;
-    padding: 10px;
     .image-container {
       width: 100%;
       height: 280px;
@@ -93,4 +117,3 @@
     }
   }
 }
-
