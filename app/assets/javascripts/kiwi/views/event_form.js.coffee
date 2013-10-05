@@ -27,7 +27,7 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
     if params.datetime
       params.datetime = moment(params.datetime).utc()
 
-    params.image = $('input[type="file"]')[0].files[0]
+    _.extend params, @imageTrimmer.image()
     FK.Data.events.create(params)
 
   initialize: =>

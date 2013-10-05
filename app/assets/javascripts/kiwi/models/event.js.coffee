@@ -16,7 +16,6 @@ class FK.Models.Event extends Backbone.Model
       'create': 'POST'
       'update': 'PUT'
 
-
     if action == "create" or action == "update"
       httpMethod = methodMap[action]
       
