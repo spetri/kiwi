@@ -19,6 +19,8 @@ FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({ layout: '#layout' })
 
 FK.App.addInitializer (prefetch) ->
+  FK.Links = prefetch.links
+  FK.CurrentUser = new FK.Models.User(prefetch.user)
   FK.Data.events = new FK.Collections.EventList(prefetch.events)
   # TODO: use a proper callback
   FK.Data.events.fetch(
@@ -41,6 +43,7 @@ class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {
     '':               'default'
+    '_=_':            'default' # facebook callback route
     'events/:action': 'events'
   }
 
