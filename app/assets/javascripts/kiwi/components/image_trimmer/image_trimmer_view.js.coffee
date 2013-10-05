@@ -76,8 +76,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @$('img').attr('src', url).load () =>
         @controller.trigger 'new:image:ready'
 
-    startImage: (src) =>
-      @$('img').attr 'src', src
+    startImage: () =>
       @image =
         height: @ui.image.height()
         width:  @ui.image.width()
@@ -169,9 +168,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     enableTextSelect: =>
       $('body').off('selectstart')
 
-    setSource: (src) =>
-      $('img').attr('src', src)
-  
     onRender: =>
       $('body').on 'mousemove', @slide
       $('body').on 'mousemove', @moveImage
