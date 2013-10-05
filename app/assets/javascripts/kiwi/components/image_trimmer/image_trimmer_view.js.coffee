@@ -7,7 +7,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     initialize: (options) ->
       @controller = options.controller
       @listenTo @controller, 'new:image:ready', @startImage
-      @listenTo @controller, 'new:image', @loadRemoteImage
+      @listenTo @controller, 'new:image', @loadImage
  
     events:
       'mousedown .slider': 'startSliding'
@@ -72,21 +72,33 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').css('cursor', 'default')
       @broadcastImagePosition()
 
-    loadRemoteImage: (url) =>
-      @$('img').attr('src', url).load () =>
+    loadImage: (url) =>
+      @ui.image.attr('src', url).load () =>
         @controller.trigger 'new:image:ready'
 
     startImage: () =>
+      @clearCoordinatesOnDom()
       @image =
         height: @ui.image.height()
         width:  @ui.image.width()
         wToH: @ui.image.height() / @ui.image.width()
         minWidth: @ui.container.height() / @ui.image.height() * @ui.image.width()
      
+      @resetSlider()
       @sizeImage()
       @centerImage()
       @broadcastImageSize()
       @broadcastImagePosition()
+
+    clearCoordinatesOnDom: () =>
+      image = @ui.image
+      coordinateAttrs = ['top', 'left', 'width']
+
+      _.each coordinateAttrs, (coordinateAttr) =>
+        image.css coordinateAttr, ''
+
+    resetSlider: =>
+      @ui.slider.css 'left', (@ui.track.width() / 2 - @ui.slider.width() /2)
 
     saveImageCoords: =>
       @imageStartOffset =
