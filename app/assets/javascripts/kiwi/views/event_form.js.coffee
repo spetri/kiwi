@@ -23,6 +23,7 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
        
   saveClicked: (e) =>
     e.preventDefault()
+    
     params = window.serializeForm(@$el.find('input,select,textarea'))
     params.user = FK.CurrentUser.get('name')
     if params.datetime

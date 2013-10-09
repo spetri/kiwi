@@ -16,7 +16,8 @@ class FK.Views.Container extends Backbone.Marionette.Layout
     @[action]()
 
   new: (e) =>
-    @main_body.show(new FK.Views.EventForm()) 
+    if FK.CurrentUser.get('logged_in')
+      @main_body.show(new FK.Views.EventForm()) 
 
   all: (e) =>
     @main_body.show(new FK.Views.Events()) 
