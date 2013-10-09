@@ -21,6 +21,9 @@ FK.App.addRegions({ layout: '#layout' })
 FK.App.addInitializer (prefetch) ->
   FK.Links = prefetch.links
   FK.CurrentUser = new FK.Models.User(prefetch.user)
+  if prefetch.user != null
+    FK.CurrentUser.set(logged_in: true, silent: true)
+
   FK.Data.events = new FK.Collections.EventList(prefetch.events)
   # TODO: use a proper callback
   FK.Data.events.fetch(

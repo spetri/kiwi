@@ -11,9 +11,11 @@
         <li class="<%= FK.Uri('events/all') ? "active" : "" %>">
           <a class="" href="#/events/all">All Events</a>
         </li>
+        <% if(logged_in == true) { %>
         <li class="<%= FK.Uri('events/new') ? "active" : "" %>">
           <a class="" href="#/events/new">New Event</a>
         </li>
+        <% } %>
         <li class="identity">
           <% if(email.length > 0 || name.length > 0) { %>
             <% if (email.length > 0) { %>

@@ -24,6 +24,7 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
   saveClicked: (e) =>
     e.preventDefault()
     params = window.serializeForm(@$el.find('input,select,textarea'))
+    params.user = FK.CurrentUser.get('name')
     if params.datetime
       params.datetime = moment(params.datetime).utc()
 
@@ -41,5 +42,5 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
     @imageTrimmer = FK.App.ImageTrimmer.create()
     @imageTrimmerRegion.show @imageTrimmer.view()
-
+    @$('.current_user').text(FK.CurrentUser.get('name'))
     @renderLocation()
