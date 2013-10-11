@@ -47,7 +47,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
       newPosition = e.pageX - @ui.track.offset().left - @ui.slider.width() / 2
       return if @imageOutOfBounds(@adjustedWidth(@sliderFactor(newPosition)), parseInt(@ui.image.css('left')), parseInt(@ui.image.css('top')))
-      @ui.slider.css 'left', newPosition if newPosition > 0 and newPosition < @ui.track.width() - @ui.slider.width()
+      newPosition = 0 if newPosition < 0
+      newPosition = @ui.track.width() - @ui.slider.width() if newPosition > @ui.track.width() - @ui.slider.width()
+      @ui.slider.css 'left', newPosition
       @sizeImage()
       @refocusImage()
   
