@@ -1,9 +1,18 @@
 FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   Instances = []
+  RegionManagers = []
 
-  @create = () ->
-    newInstance = new ImageTrimmer.ImageTrimmerController
+  @create = (domLocation) ->
+    newInstance = new ImageTrimmer.ImageTrimmerController()
+    regionManager = new Marionette.RegionManager()
+    region = regionManager.addRegion("instance", domLocation)
+    region.show new ImageTrimmer.ImageTrimmerLayout
+      controller: newInstance
+
+    newInstance.on 'close', () =>
+      regionManager.close()
+
     Instances.push newInstance
     return newInstance
 
@@ -11,22 +20,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     _.each Instances, (instance) ->
       instance.close()
 
-  # Layout?
   class ImageTrimmer.ImageTrimmerController extends Marionette.Controller
  
     initialize: () ->
-      @View = new ImageTrimmer.ImageTrimmerLayout
-        controller: this
-
       @Model = new Backbone.Model()
 
       @listenTo this, 'new:image', @newImage
       @listenTo this, 'change:image:position', @catchImagePosition
       @listenTo this, 'change:image:size', @catchImageSize
-      @listenTo @View, 'close', () => @triggerMethod 'close'
-
-    view: () ->
-      @View
 
     newImage: (url, source, file) ->
       @Model.set
@@ -52,6 +53,3 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       delete image.image if ! image.image
       delete image.url if image.image
       image
-
-    onClose: () ->
-      @View.close()

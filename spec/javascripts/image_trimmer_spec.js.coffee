@@ -2,8 +2,8 @@ describe 'Image Trimmer', () ->
 
   beforeEach () ->
     FK.App.ImageTrimmer.start()
-    @imageTrimmer = FK.App.ImageTrimmer.create()
-    $('body').append @imageTrimmer.View.render().el
+    $('body').append $('<div id="testbed"></div>')
+    @imageTrimmer = FK.App.ImageTrimmer.create("#testbed")
 
   afterEach () ->
     FK.App.ImageTrimmer.stop()
