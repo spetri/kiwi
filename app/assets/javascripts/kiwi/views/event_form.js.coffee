@@ -2,9 +2,6 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
   className: "row-fluid"
   template: FK.Template('event_form')
 
-  regions:
-    'imageTrimmerRegion': '#image-region'
-
   events:
     'click .save': 'saveClicked'
     'change input[name=name]': 'validateName'
@@ -41,7 +38,11 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
 
   onRender: =>
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
-    @imageTrimmer = FK.App.ImageTrimmer.create()
-    @imageTrimmerRegion.show @imageTrimmer.view()
     @$('.current_user').text(FK.CurrentUser.get('name'))
     @renderLocation()
+
+  onShow: =>
+    @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
+
+  onClose: =>
+    @imageTrimmer.close()
