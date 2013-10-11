@@ -34,9 +34,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         url: url
         source: source
         image: file
-      
-      if source is 'upload'
-        @trigger 'new:image:ready', url, source
 
     catchImagePosition: (position) =>
       @Model.set

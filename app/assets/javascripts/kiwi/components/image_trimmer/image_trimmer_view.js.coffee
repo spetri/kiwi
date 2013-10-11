@@ -84,8 +84,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         height: @ui.image.height()
         width:  @ui.image.width()
         wToH: @ui.image.height() / @ui.image.width()
-        minWidth: @ui.container.height() / @ui.image.height() * @ui.image.width()
-     
+
+      @image.minWidth = @ui.trim.width()
+      @image.minWidth = @ui.trim.height() / @image.wToH if @ui.trim.height / @image.wToH < @ui.trim.width()
+
       @resetSlider()
       @sizeImage()
       @centerImage()
@@ -100,7 +102,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         image.css coordinateAttr, ''
 
     resetSlider: =>
-      @ui.slider.css 'left', (@ui.track.width() / 2 - @ui.slider.width() /2)
+      @ui.slider.css 'left', '0px'
 
     saveImageCoords: =>
       @imageStartOffset =
@@ -116,7 +118,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @ui.image.width(@adjustedWidth(factor))
   
     sliderFactor: (position) =>
-      (position + @ui.slider.width() / 2) / @ui.track.width()
+      position / @ui.track.width()
   
     domSliderFactor: =>
       @sliderFactor(parseInt(@ui.slider.css('left')))
@@ -137,9 +139,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       y > 0 || y + height < @ui.trim.height()
   
     centerImage: =>
-      overflowedRight = @ui.image.width() - @ui.container.width()
-      overflowedBottom = @ui.image.height() - @ui.container.height()
-      @positionImage -overflowedRight / 2 , -overflowedBottom / 2
+      overflowedRight = @ui.image.width() - @ui.trim.outerWidth()
+      overflowedBottom = @ui.image.height() - @ui.trim.outerHeight()
+      @positionImage Math.floor(-overflowedRight / 2), Math.floor(-overflowedBottom / 2)
   
     refocusImage: =>
       newLeft = @imageStartOffset.left + (@imageStartSize.width - @ui.image.width()) / 2
