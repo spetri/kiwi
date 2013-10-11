@@ -85,8 +85,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         width:  @ui.image.width()
         wToH: @ui.image.height() / @ui.image.width()
 
-      @image.minWidth = @ui.trim.width()
-      @image.minWidth = @ui.trim.height() / @image.wToH if @ui.trim.height / @image.wToH < @ui.trim.width()
+      if @image.wToH < 0.75
+        @image.minWidth = @ui.trim.height() / @image.wToH
+      else
+        @image.minWidth = @ui.trim.width()
 
       @resetSlider()
       @sizeImage()
@@ -135,7 +137,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     imageVerticalOutOfBounds: (width, y) =>
       y = y - parseInt(@ui.trim.css('border-top-width'))
-      height = width * @image.wToH
+      height = Math.ceil width * @image.wToH
       y > 0 || y + height < @ui.trim.height()
   
     centerImage: =>
