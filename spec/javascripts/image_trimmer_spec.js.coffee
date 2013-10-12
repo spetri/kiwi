@@ -13,3 +13,10 @@ describe 'Image Trimmer', () ->
     it 'should close all instances of the image trimmer when the module stops', () ->
       FK.App.ImageTrimmer.stop()
       expect($('body #image-trimmer-region').length).toBe(0)
+
+  describe 'Image loading', () ->
+
+    it 'should be able to show an image in the trimmer from a URL', () ->
+      imageUrl = '/images/stubs/averageSize.jpg'
+      @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+      expect($('img').width()).toBeGreaterThan(0)
