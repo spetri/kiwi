@@ -1,7 +1,6 @@
 FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
-  Instances = []
-  RegionManagers = []
+  Instance = null
 
   @create = (domLocation) ->
     newInstance = new ImageTrimmer.ImageTrimmerController()
@@ -13,12 +12,11 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     newInstance.on 'close', () =>
       regionManager.close()
 
-    Instances.push newInstance
+    Instance = newInstance
     return newInstance
 
   @addFinalizer () ->
-    _.each Instances, (instance) ->
-      instance.close()
+    Instance.close()
 
   class ImageTrimmer.ImageTrimmerController extends Marionette.Controller
  
