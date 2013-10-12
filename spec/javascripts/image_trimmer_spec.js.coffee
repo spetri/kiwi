@@ -17,6 +17,17 @@ describe 'Image Trimmer', () ->
   describe 'Image loading', () ->
 
     it 'should be able to show an image in the trimmer from a URL', () ->
-      imageUrl = '/images/stubs/averageSize.jpg'
-      @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
-      expect($('img').width()).toBeGreaterThan(0)
+      spy = jasmine.createSpy()
+      @imageTrimmer.on 'new:image:ready', spy
+      runs () ->
+        imageUrl = '/images/stubs/averageSize.jpg'
+        @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+      
+      waitsFor () ->
+        spy.callCount > 0
+
+      runs () ->
+        expect($('img').width()).toBeGreaterThan(0)
+
+
+
