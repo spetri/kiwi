@@ -15,6 +15,11 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     startImageTrimmerFromUpload: (evt) =>
       file = evt.target.files[0]
+
+      if ! _.contains ImageTrimmer.validImageTypes(), file.type
+        @controller.trigger 'new:image:bad:type', file.type
+        return
+
       reader = new FileReader()
 
       reader.onload = (readFile) =>
