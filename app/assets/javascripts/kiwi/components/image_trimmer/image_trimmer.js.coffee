@@ -2,6 +2,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   Instance = null
 
+  @addFinalizer () ->
+    Instance.close()
+
   @create = (domLocation) ->
     newInstance = new ImageTrimmer.ImageTrimmerController()
     regionManager = new Marionette.RegionManager()
@@ -23,11 +26,11 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     initialize: () ->
       @Model = new Backbone.Model()
 
-      @listenTo this, 'new:image', @newImage
+      @listenTo this, 'new:image', newImage
       @listenTo this, 'change:image:position', catchImagePosition
       @listenTo this, 'change:image:size', catchImageSize
 
-    newImage: (url, source, file) ->
+    newImage = (url, source, file) ->
       @Model.set
         url: url
         source: source
