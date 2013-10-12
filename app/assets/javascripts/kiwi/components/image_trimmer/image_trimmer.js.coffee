@@ -33,12 +33,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         source: source
         image: file
 
-    catchImagePosition: (position) =>
+    catchImagePosition = (position) =>
       @Model.set
         crop_x: position.left
         crop_y: position.top
 
-    catchImageSize: (size) =>
+    catchImageSize = (size) =>
       @Model.set
         width: size.width
         height: size.height
