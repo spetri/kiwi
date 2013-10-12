@@ -24,8 +24,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @Model = new Backbone.Model()
 
       @listenTo this, 'new:image', @newImage
-      @listenTo this, 'change:image:position', @catchImagePosition
-      @listenTo this, 'change:image:size', @catchImageSize
+      @listenTo this, 'change:image:position', catchImagePosition
+      @listenTo this, 'change:image:size', catchImageSize
 
     newImage: (url, source, file) ->
       @Model.set
@@ -33,12 +33,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         source: source
         image: file
 
-    catchImagePosition = (position) =>
+    catchImagePosition = (position) ->
       @Model.set
         crop_x: position.left
         crop_y: position.top
 
-    catchImageSize = (size) =>
+    catchImageSize = (size) ->
       @Model.set
         width: size.width
         height: size.height
