@@ -65,3 +65,20 @@ describe 'Image Trimmer', () ->
         leftOffset = $('.image-trim').offset().left + parseInt($('.image-trim').css('border-left-width'))
         expect($('img').width()).toBe(trimWidth)
         expect($('img').offset().left).toBe(leftOffset)
+
+    it 'should be able to fit an image that is not 4x3 and having a greater width', () ->
+      spy = jasmine.createSpy()
+      @imageTrimmer.on 'new:image:ready', spy
+      runs () ->
+        imageUrl = '/images/stubs/longImage.jpg'
+        @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+
+      waitsFor () ->
+        spy.callCount > 0
+
+      runs () ->
+        trimHeight = $('.image-trim').height()
+        topOffset = $('.image-trim').offset().top + parseInt($('.image-trim').css('border-top-width'))
+
+        expect($('img').height()).toBe(trimHeight)
+        expect($('img').offset().top).toBe(topOffset)
