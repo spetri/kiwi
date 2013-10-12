@@ -49,3 +49,19 @@ describe 'Image Trimmer', () ->
         expect($('img').height()).toBe(trimHeight)
         expect($('img').offset().left).toBe(leftOffset)
         expect($('img').offset().top).toBe(topOffset)
+
+    it 'should be able to fit an image that is not 4x3 and having a greater height', () ->
+      spy = jasmine.createSpy()
+      @imageTrimmer.on 'new:image:ready', spy
+      runs () ->
+        imageUrl = '/images/stubs/averageSizeRotated.jpg'
+        @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+
+      waitsFor () ->
+        spy.callCount > 0
+
+      runs () ->
+        trimWidth = $('.image-trim').width()
+        leftOffset = $('.image-trim').offset().left + parseInt($('.image-trim').css('border-left-width'))
+        expect($('img').width()).toBe(trimWidth)
+        expect($('img').offset().left).toBe(leftOffset)
