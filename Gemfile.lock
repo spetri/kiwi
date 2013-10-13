@@ -90,6 +90,11 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.4)
+    eco (1.0.0)
+      coffee-script
+      eco-source
+      execjs
+    eco-source (1.1.0.rc.1)
     ejs (1.1.1)
     erubis (2.7.0)
     eventmachine (1.0.3)
@@ -308,6 +313,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   debugger
   devise (= 3.1.0.rc2)
+  eco
   ejs
   guard
   guard-jasmine

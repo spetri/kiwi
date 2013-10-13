@@ -40,8 +40,13 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
     Backbone.history.navigate('/events/all', trigger: true)
 
   onRender: =>
+    @$('.current_user').text(FK.CurrentUser.get('name'))
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
     @imageTrimmer = FK.App.ImageTrimmer.create()
     @imageTrimmerRegion.show @imageTrimmer.view()
-    @$('.current_user').text(FK.CurrentUser.get('name'))
+    
     @renderLocation()
+
+  onShow: =>
+    @datePicker = FK.App.DatePicker.create('#datetime-region')
+
