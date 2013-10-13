@@ -20,7 +20,8 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
       @$el.find('select[name=country]').attr('disabled','disabled')
     else
       @$el.find('select[name=country]').removeAttr('disabled')
-       
+      
+
   saveClicked: (e) =>
     e.preventDefault()
     
@@ -30,6 +31,7 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
       params.datetime = moment(params.datetime).utc()
 
     _.extend params, @imageTrimmer.image()
+    params.datetime = @datePicker.value()
     FK.Data.events.create(params)
 
   initialize: =>
