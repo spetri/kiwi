@@ -20,6 +20,8 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
        
   saveClicked: (e) =>
     e.preventDefault()
+    @$('.save').addClass 'disabled'
+    @$('.save').html 'Hang tight...'
     params = window.serializeForm(@$el.find('input,select,textarea'))
     if params.datetime
       params.datetime = moment(params.datetime).utc()
