@@ -24,4 +24,4 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @model = new Backbone.Model()
 
     value: () =>
-      Instance.model.get('datetime')
+      Instance.model.toJSON()

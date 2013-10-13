@@ -1,48 +1,47 @@
 FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
-  Instances = []
-
-  @create = () ->
-    newInstance = new ImageTrimmer.ImageTrimmerController
-    Instances.push newInstance
-    return newInstance
+  Instance = null
 
   @addFinalizer () ->
-    _.each Instances, (instance) ->
-      instance.close()
+    Instance.close()
 
-  # Layout?
+  @create = (domLocation) ->
+    newInstance = new ImageTrimmer.ImageTrimmerController()
+    regionManager = new Marionette.RegionManager()
+    region = regionManager.addRegion("instance", domLocation)
+    region.show new ImageTrimmer.ImageTrimmerLayout
+      controller: newInstance
+
+    newInstance.on 'close', () =>
+      regionManager.close()
+
+    Instance = newInstance
+    return newInstance
+
+  @validImageTypes = () ->
+    ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/svg', 'image/tiff']
+
   class ImageTrimmer.ImageTrimmerController extends Marionette.Controller
  
     initialize: () ->
-      @View = new ImageTrimmer.ImageTrimmerLayout
-        controller: this
-
       @Model = new Backbone.Model()
 
-      @listenTo this, 'new:image', @newImage
-      @listenTo this, 'change:image:position', @catchImagePosition
-      @listenTo this, 'change:image:size', @catchImageSize
-      @listenTo @View, 'close', () => @triggerMethod 'close'
+      @listenTo this, 'new:image', newImage
+      @listenTo this, 'change:image:position', catchImagePosition
+      @listenTo this, 'change:image:size', catchImageSize
 
-    view: () ->
-      @View
-
-    newImage: (url, source, file) ->
+    newImage = (url, source, file) ->
       @Model.set
         url: url
         source: source
         image: file
-      
-      if source is 'upload'
-        @trigger 'new:image:ready', url, source
 
-    catchImagePosition: (position) =>
+    catchImagePosition = (position) ->
       @Model.set
         crop_x: position.left
         crop_y: position.top
 
-    catchImageSize: (size) =>
+    catchImageSize = (size) ->
       @Model.set
         width: size.width
         height: size.height
@@ -52,6 +51,3 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       delete image.image if ! image.image
       delete image.url if image.image
       image
-
-    onClose: () ->
-      @View.close()

@@ -2,9 +2,6 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
   className: "row-fluid"
   template: FK.Template('event_form')
 
-  regions:
-    'imageTrimmerRegion': '#image-region'
-
   events:
     'click .save': 'saveClicked'
     'change input[name=name]': 'validateName'
@@ -24,14 +21,13 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
 
   saveClicked: (e) =>
     e.preventDefault()
-    
+    @$('.save').addClass 'disabled'
+    @$('.save').html 'Hang tight...'
     params = window.serializeForm(@$el.find('input,select,textarea'))
     params.user = FK.CurrentUser.get('name')
-    if params.datetime
-      params.datetime = moment(params.datetime).utc()
 
     _.extend params, @imageTrimmer.image()
-    params.datetime = @datePicker.value()
+    _.extend params, @datePicker.value()
     FK.Data.events.create(params)
 
   initialize: =>
@@ -44,11 +40,11 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
   onRender: =>
     @$('.current_user').text(FK.CurrentUser.get('name'))
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
-    @imageTrimmer = FK.App.ImageTrimmer.create()
-    @imageTrimmerRegion.show @imageTrimmer.view()
-    
-    @renderLocation()
 
   onShow: =>
-    @datePicker = FK.App.DatePicker.create('#datetime-region')
+    @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
+    @datePicker = FK.App.DatePicker.create '#datetime-region'
 
+  onClose: =>
+    @imageTrimmer.close()
+    @datePicker.close()
