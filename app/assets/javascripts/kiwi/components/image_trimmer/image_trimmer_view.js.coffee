@@ -8,6 +8,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @controller = options.controller
       @listenTo @controller, 'new:image:ready', @startImage
       @listenTo @controller, 'new:image', @loadImage
+      @listenTo @controller, 'new:image:error', @clearImage
  
     events:
       'mousedown .slider': 'startSliding'
@@ -75,8 +76,15 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @broadcastImagePosition()
 
     loadImage: (url) =>
-      @ui.image.attr('src', url).load () =>
-        @controller.trigger 'new:image:ready'
+      @ui.image.attr('src', url)
+        .load(
+          (e) =>
+            @controller.trigger 'new:image:ready'
+            )
+        .error(
+          (e) =>
+            @controller.trigger 'new:image:error'
+            )
 
     startImage: () =>
       @clearCoordinatesOnDom()
@@ -93,6 +101,18 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @resetSlider()
       @sizeImage()
       @centerImage()
+      @broadcastImageSize()
+      @broadcastImagePosition()
+
+    clearImage: () =>
+      @clearCoordinatesOnDom()
+      @ui.image.removeAttr 'src'
+      @image =
+        height: 0
+        width: 0
+        wToH: 0
+        minWidth: 0
+
       @broadcastImageSize()
       @broadcastImagePosition()
 
