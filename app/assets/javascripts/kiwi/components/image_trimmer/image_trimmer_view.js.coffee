@@ -25,7 +25,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     startSliding: (e) =>
       e.preventDefault()
-      return if ! @image
+      return if ! @image || @image.undersized
       $('body').css('cursor', 'pointer')
       @disableTextSelect()
       @sliding = true
@@ -96,6 +96,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         @image.minWidth = @ui.trim.height() / @image.wToH
       else
         @image.minWidth = @ui.trim.width()
+
+      @image.undersized = true if @image.width < @image.minWidth
 
       @resetSlider()
       @sizeImage()
