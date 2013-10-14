@@ -140,7 +140,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @ui.image.width(@adjustedWidth(factor))
   
     sliderFactor: (position) =>
-      position / @ui.track.width()
+      position / (@ui.track.width() - @ui.slider.width())
   
     domSliderFactor: =>
       @sliderFactor(parseInt(@ui.slider.css('left')))
