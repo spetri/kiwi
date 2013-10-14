@@ -22,7 +22,7 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
   saveClicked: (e) =>
     e.preventDefault()
     @$('.save').addClass 'disabled'
-    @$('.save').html 'Hang tight...'
+    @$('.save').html 'Saving...'
     params = window.serializeForm(@$el.find('input,select,textarea'))
     params.user = FK.CurrentUser.get('name')
 
@@ -38,8 +38,9 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
     Backbone.history.navigate('/events/all', trigger: true)
 
   onRender: =>
-    @$('.current_user').text(FK.CurrentUser.get('name'))
     FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
+    @$('.current_user').text(FK.CurrentUser.get('name'))
+    @renderLocation()
 
   onShow: =>
     @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
