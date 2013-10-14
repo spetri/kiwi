@@ -10,11 +10,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     initialize: (options) ->
       @controller = options.controller
 
-    openImageTrimmerDialog: () ->
-      @imageTrimmerRegion.show new ImageTrimmer.ImageTrimmerView
-        controller: @controller
-
     onRender: () ->
       @imageChooseRegion.show new ImageTrimmer.ImageChooseView
         controller: @controller
-      @openImageTrimmerDialog()
+      @imageTrimmerRegion.show new ImageTrimmer.ImageTrimmerView
+        controller: @controller
