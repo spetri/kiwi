@@ -49,7 +49,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       newPosition = e.pageX - @ui.track.offset().left - @ui.slider.width() / 2
       newPosition = 0 if newPosition < 0
       newPosition = @ui.track.width() - @ui.slider.width() if newPosition > @ui.track.width() - @ui.slider.width()
-      return if @imageOutOfBounds(@adjustedWidth(@sliderFactor(newPosition)), parseInt(@ui.image.css('left')), parseInt(@ui.image.css('top')))
       @ui.slider.css 'left', newPosition
       @sizeImage()
       @refocusImage()
@@ -168,9 +167,15 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     refocusImage: =>
       newLeft = @imageStartOffset.left + (@imageStartSize.width - @ui.image.width()) / 2
       newTop = @imageStartOffset.top + (@imageStartSize.height - @ui.image.height()) / 2
-     
-      @positionImage newLeft, newTop
-  
+
+      outFlowWidth = (@ui.trim.width() + parseInt(@ui.trim.css('border-left-width'))) - (@ui.image.width() + newLeft)
+      outFlowHeight = (@ui.trim.height() + parseInt(@ui.trim.css('border-top-width'))) - (@ui.image.height() + newTop)
+
+      outFlowWidth = 0 if outFlowWidth < 0
+      outFlowHeight = 0 if outFlowHeight < 0
+   
+      @positionImage newLeft + outFlowWidth, newTop + outFlowHeight
+
     positionImage: (x, y) =>
       @ui.image.css 'left', x if ! @imageHorizontalOutOfBounds(@ui.image.width(), x)
       @ui.image.css 'top', y if ! @imageVerticalOutOfBounds(@ui.image.width(), y)
