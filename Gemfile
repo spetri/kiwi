@@ -15,6 +15,7 @@ group :assets do
   gem 'sass-rails',   '~> 4.0.0'
   gem 'coffee-rails', '~> 4.0.0'
   gem 'ejs'
+  gem 'eco'
   gem 'uglifier', '>= 1.0.3'
 end
 

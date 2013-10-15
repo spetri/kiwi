@@ -1,0 +1,22 @@
+<input type="text" name="date" />
+<select name="hours">
+  <% for hour in [1..12]: %>
+    <option value="<%= hour %>" ><%= hour %></option>
+  <% end %>
+</select>
+:
+<select name="minutes">
+  <% for min in [0..59]: %>
+    <% if min < 10: %>
+      <option value="0<%= min %>" >0<%= min %></option>
+    <% else: %>
+      <option value="<%= min %>" ><%= min %></option>
+    <% end %>
+  <% end %>
+</select>
+<select name="ampm">
+  <option value="AM" >AM</option>
+  <option value="PM" >PM</option>
+</select>
+<br/>
+<i>DateTime in UTC: <span class="status"></span> </i>

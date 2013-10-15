@@ -13,13 +13,13 @@
         </label>
         <label class="col-offset-3">
           <input type="radio" name="location_type" id="" value="national" >
-          This event can be experienced in a <b>specific country</b>. 
+          This event can be experienced in a <b>specific country</b>.
         </label>
         <select class="col-offset-3" name="country"></select>
       </div>
       <div class="form-group well">
         <label class="col-lg-3" for="location">3. Date and Time</label>
-        Select: <input type="datetime-local" name="datetime" id="" value="" >
+        <div id="datetime-region"></div>
       </div>
       <div class="form-group well">
         <div id="image-region"></div>
