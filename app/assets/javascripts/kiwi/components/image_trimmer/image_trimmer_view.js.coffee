@@ -176,7 +176,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       outFlowWidth = 0 if outFlowWidth < 0
       outFlowHeight = 0 if outFlowHeight < 0
    
-      @positionImage newLeft + outFlowWidth, newTop + outFlowHeight
+      @positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
 
     positionImage: (x, y) =>
       @ui.image.css 'left', x if ! @imageHorizontalOutOfBounds(@ui.image.width(), x)
