@@ -16,7 +16,11 @@ FK.Uri = (uri) ->
   Backbone.history.fragment is uri
 
 FK.App = new Backbone.Marionette.Application()
-FK.App.addRegions({ layout: '#layout' })
+FK.App.addRegions({
+  navbarRegion: '#navbar-region'
+  mainRegion: '#main-region'
+  sidebarRegion: '#sidebar-region'
+})
 
 FK.App.addInitializer (prefetch) ->
   FK.Links = prefetch.links
@@ -29,14 +33,16 @@ FK.App.addInitializer (prefetch) ->
   FK.Data.events.fetch(
     success: =>
       FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
-      FK.App.layout.show(new FK.Views.Layout())
+      layout = new FK.Views.Container()
+      layout.render()
+      FK.App.navbarRegion.show(new FK.Views.Navbar({ model: FK.CurrentUser }))
       FK.App.appRouter = new FK.Routers.AppRouter()
       Backbone.history.start() if (!Backbone.History.started)
     )
 
 FK.Controllers.MainController = {
   events: (action) ->
-    FK.App.vent.trigger('container:load',action)
+    FK.App.vent.trigger('container:' + action)
 
   default: ->
     Backbone.history.navigate('events/all', trigger: true)

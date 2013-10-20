@@ -4,10 +4,7 @@ class FK.Views.Layout extends Backbone.Marionette.Layout
     navbar:    '#navbar'
     container: '#container'
 
-  initialize: => 
-    FK.App.vent.on('container:load',(e) =>
-      @navbar.show(new FK.Views.Navbar(model: FK.CurrentUser))
-    )
+  initialize: =>
 
   onRender: ->
     @container.show(new FK.Views.Container())
