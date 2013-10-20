@@ -2,19 +2,38 @@ FK.App.module "Events.EventForm", (EventForm, Events, Backbone, Marionette, $, _
 
   @addInitializer () ->
     @listenTo FK.App.vent, 'container:new', @show
+    @listenTo EventForm, 'event:create', @createEvent
+    @listenTo FK.Data.events, 'created', @toAllEvents
 
   @show = () ->
     if @view
       @close()
-    
+  
     return if ! FK.CurrentUser.get('logged_in')
 
     @view = new EventForm.FormLayout()
+
+    @view.on 'show', () =>
+      @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
+      @datePicker = FK.App.DatePicker.create '#datetime-region'
+
     FK.App.mainRegion.show @view
+
+  @createEvent = () ->
+    params = @view.value()
+    params.user = FK.CurrentUser.get('name')
+    _.extend params, @imageTrimmer.image()
+    _.extend params, @datePicker.value()
+    FK.Data.events.create(params)
+
+  @toAllEvents = () ->
+    Backbone.history.navigate('/events/all', trigger: true)
 
   @close = () ->
     @view.close()
-    
+    @imageTrimmer.close()
+    @datePicker.close()
+ 
 
   class EventForm.FormLayout extends Backbone.Marionette.Layout
     className: "row-fluid"
@@ -41,29 +60,12 @@ FK.App.module "Events.EventForm", (EventForm, Events, Backbone, Marionette, $, _
       e.preventDefault()
       @$('.save').addClass 'disabled'
       @$('.save').html 'Saving...'
-      params = window.serializeForm(@$el.find('input,select,textarea'))
-      params.user = FK.CurrentUser.get('name')
-
-      _.extend params, @imageTrimmer.image()
-      _.extend params, @datePicker.value()
-      FK.Data.events.create(params)
-
-    initialize: =>
-      @model = new FK.Models.Event
-      @listenTo FK.Data.events, 'created', @toAllEvents
-
-    toAllEvents: (attrs) =>
-      Backbone.history.navigate('/events/all', trigger: true)
+      EventForm.trigger('event:create')
+      
+    value: () ->
+      window.serializeForm(@$el.find('input,select,textarea'))
 
     onRender: =>
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
       @$('.current_user').text(FK.CurrentUser.get('name'))
       @renderLocation()
-
-    onShow: =>
-      @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
-      @datePicker = FK.App.DatePicker.create '#datetime-region'
-
-    onClose: =>
-      @imageTrimmer.close()
-      @datePicker.close()
