@@ -1,8 +1,8 @@
-FK.App.module "Events.EventForm", (EventForm, Events, Backbone, Marionette, $, _) ->
+FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) ->
 
   @addInitializer () ->
-    @listenTo FK.App.vent, 'container:new', @show
-    @listenTo EventForm, 'event:create', @createEvent
+    @listenTo App.vent, 'container:new', @show
+    @listenTo EventForm, 'create', @createEvent
     @listenTo FK.Data.events, 'created', @toAllEvents
 
   @show = () ->
@@ -60,7 +60,7 @@ FK.App.module "Events.EventForm", (EventForm, Events, Backbone, Marionette, $, _
       e.preventDefault()
       @$('.save').addClass 'disabled'
       @$('.save').html 'Saving...'
-      EventForm.trigger('event:create')
+      EventForm.trigger('create')
       
     value: () ->
       window.serializeForm(@$el.find('input,select,textarea'))
