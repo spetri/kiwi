@@ -22,8 +22,9 @@
         <div id="datetime-region"></div>
       </div>
       <div class="form-group well">
-	<label class="col-lg-3"> 4. Picture</label>
-        <div id="image-region"></div>
+	      <label class="col-lg-3"> 4. Picture</label>
+        <div id="image-region" class="col-lg-6"></div>
+        <div class="clearfix"></div>
       </div>
       <div class="form-group well">
         <label class="col-lg-3" for="user">User</label>
