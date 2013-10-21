@@ -25,18 +25,17 @@ FK.App.addRegions({
 FK.App.addInitializer (prefetch) ->
   FK.Links = prefetch.links
   FK.CurrentUser = new FK.Models.User(prefetch.user)
+
   if prefetch.user != null
     FK.CurrentUser.set(logged_in: true, silent: true)
 
+  FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
+
   FK.Data.events = new FK.Collections.EventList(prefetch.events)
-  # TODO: use a proper callback
-  FK.Data.events.fetch(
-    success: =>
-      FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
-      FK.App.navbarRegion.show(new FK.Views.Navbar({ model: FK.CurrentUser }))
-      FK.App.appRouter = new FK.Routers.AppRouter()
-      Backbone.history.start() if (!Backbone.History.started)
-    )
+  FK.Data.events.fetch()
+
+  FK.App.appRouter = new FK.Routers.AppRouter()
+
 
 FK.Controllers.MainController = {
   events: (action) ->
@@ -45,6 +44,9 @@ FK.Controllers.MainController = {
   default: ->
     Backbone.history.navigate('events/all', trigger: true)
 }
+
+FK.App.reqres.setHandler 'currentUser', () ->
+  FK.CurrentUser
 
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
