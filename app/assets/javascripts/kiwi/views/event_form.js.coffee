@@ -6,8 +6,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @listenTo FK.Data.events, 'created', @toAllEvents
 
   @show = () ->
-    if @view
-      @close()
+    @close() if @view
   
     return if ! FK.CurrentUser.get('logged_in')
 
@@ -30,9 +29,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     Backbone.history.navigate('/events/all', trigger: true)
 
   @close = () ->
-    @view.close()
     @imageTrimmer.close()
     @datePicker.close()
+    @view.close()
  
 
   class EventForm.FormLayout extends Backbone.Marionette.Layout

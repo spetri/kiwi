@@ -2,15 +2,16 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   @addInitializer () ->
     @listenTo App.vent, 'container:all', @show
-    @listenTo App.vent, 'start', @show
 
   @show = () ->
-    if @view
-      @close()
+    @close() if @view
 
     @view = new EventList.ListLayout()
     
     App.mainRegion.show @view
+
+  @close = () ->
+    @view.close()
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "row-fluid"
