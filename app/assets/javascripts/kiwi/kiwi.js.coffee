@@ -33,8 +33,6 @@ FK.App.addInitializer (prefetch) ->
   FK.Data.events.fetch(
     success: =>
       FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
-      layout = new FK.Views.Container()
-      layout.render()
       FK.App.navbarRegion.show(new FK.Views.Navbar({ model: FK.CurrentUser }))
       FK.App.appRouter = new FK.Routers.AppRouter()
       Backbone.history.start() if (!Backbone.History.started)
