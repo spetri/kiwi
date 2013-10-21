@@ -24,4 +24,4 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       FK.Data.events.on('all',@render)
 
     onRender: ->
-      @event_block.show(new FK.Views.EventBlocks(collection: FK.Data.events.asBlocks()))
+      @event_block.show(new EventList.EventBlocks(collection: FK.Data.events.asBlocks()))
