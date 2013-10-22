@@ -1,5 +1,7 @@
 FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) ->
 
+  EventComponents = []
+
   @addInitializer () ->
     @listenTo App.vent, 'container:new', @show
     @listenTo EventForm, 'create', @createEvent
@@ -14,24 +16,30 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @view.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
+      EventComponents.push @imageTrimmer
       @datePicker = FK.App.DatePicker.create '#datetime-region'
+      EventComponents.push @datePicker
 
     FK.App.mainRegion.show @view
+    EventComponents.push @view
 
   @createEvent = () ->
-    params = @view.value()
-    params.user = FK.CurrentUser.get('name')
-    _.extend params, @imageTrimmer.image()
-    _.extend params, @datePicker.value()
+    params =
+      user: FK.CurrentUser.get('name')
+
+    _.each EventComponents, (child) ->
+      _.extend params, child.value()
+
     FK.Data.events.create(params)
 
   @toAllEvents = () ->
     Backbone.history.navigate('/events/all', trigger: true)
 
   @close = () ->
-    @imageTrimmer.close()
-    @datePicker.close()
-    @view.close()
+    _.each EventComponents, (child) ->
+      child.close()
+
+    EventComponents = []
  
 
   class EventForm.FormLayout extends Backbone.Marionette.Layout
