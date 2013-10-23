@@ -16,6 +16,8 @@ class Event
   field :url, type: String
   field :is_all_day, type: Boolean
   field :time_format, type: String
+  field :tv_time , type: String
+  field :creation_timezone, type: String
 
 
   has_mongoid_attached_file :image, :styles =>

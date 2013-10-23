@@ -17,7 +17,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       date = @$('input[name=date]').val()
       time = "#{@$('select[name=hours]').val()}:#{@$('select[name=minutes]').val()} #{@$('select[name=ampm]').val()}"
       @model.set(
-        datetime: moment("#{date} #{time}").utc(),
+        datetime: moment("#{date} #{time}"),
         is_all_day: is_all_day,
         time_format: time_format)
 
