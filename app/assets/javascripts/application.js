@@ -5,8 +5,6 @@
 //= require backbone
 //= require marionette
 //= require moment.min
-//= require moment-timezone.min
-//= require moment-tz
 //= require backbone.getters.setters
 //= require serialize
 //= require bootstrap-datepicker

@@ -46,7 +46,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   convert_moment_to_eastern: (moment) ->
     moment.tz('America/New_York')
-    @.time_from_moment(moment) 
+    @.time_from_moment(moment)
 
   time_from_moment: (moment) =>
     hours = if moment.hours() < 9 then "0#{moment.hours() + 1 }" else moment.hours() + 1
@@ -56,6 +56,9 @@ class FK.Models.Event extends Backbone.GSModel
 
   getters:
     time: () ->
+      if @.get('time_format') is 'recurring'
+        @.get('local_time')
+
       if @.get('time_format') is 'tv_show'
         local_time_split = @.get('local_time').split(':')
         eastern_time = parseInt local_time_split[0]
@@ -66,19 +69,29 @@ class FK.Models.Event extends Backbone.GSModel
         central_time = 12 if central_time is 0
 
         return "#{eastern_time}/#{central_time}c"
-      return @.get('datetime')
+      return @.time_from_moment(moment(@.get('datetime')))
+
+    fk_datetime: () ->
+      if @.get('time_format') is 'recurring'
+        #console.log @.get('local_time')
+        #time_split = @.get('local_time').split(':')
+        time_split = @.get('time').split(':')
+        return moment(@.get('datetime').format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
+      @.get('datetime')
 
   setters:
     datetime: (moment_val) ->
+      moment_val = moment(moment_val) if typeof moment_val is "string"
       hour_offset = (- (moment_val.zone() / 60 )) * 100
+      hour_offset = hour_offset + 1 # hours are zero-based for some silly reason
       if (hour_offset < 0)
         hour_offset = "GMT-#{hour_offset}"
       else
         hour_offset = "GMT+#{hour_offset}"
 
       @.set creation_timezone: hour_offset
-      
-      @.set local_time: @.time_from_moment(moment_val) 
+
+      @.set local_time: @.time_from_moment(moment_val)
 
       moment_val.utc()
 
@@ -100,9 +113,9 @@ class FK.Collections.EventList extends Backbone.Collection
     @last()
 
   asBlocks: =>
-    sorted = @sortBy((ev) -> ev.get('datetime')).reverse()
+    sorted = @sortBy((ev) -> ev.get('fk_datetime')).reverse()
     new FK.Collections.EventBlockList(_.map(_.groupBy(sorted,(ev) ->
-      moment(ev.get('datetime')).format("YYYY-MM-DD")
+      moment(ev.get('fk_datetime')).format("YYYY-MM-DD")
     ), (blocks, date) ->
       events: new FK.Collections.EventList(blocks), date: date
     ))

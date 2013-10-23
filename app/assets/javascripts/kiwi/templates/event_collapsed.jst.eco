@@ -1,0 +1,28 @@
+<div class="row-fluid">
+  <div class="span2">
+    <img src="<%= @thumbUrl %>" />
+  </div>
+  <div class="span10">
+    <a href="">
+      <%= @name %>
+    </a>
+    
+    <div>
+      <% if @is_all_day is 'true': %>
+        <em>All Day!</em><br/>
+      <% else: %>
+        Time: <%= @time() %> <br/>
+        Time Format: <%= @time_format %> </br>
+        Local time: <%= @local_time %> </br>
+      <% end %>
+      <small> added by <%= @user %></small> <a href="#" class="delete">x</a> <br/>
+      <% if(@datetime isnt undefined) : %>
+      datetime UTC: <%= moment(@datetime).calendar() %> <br/>
+      my time: <%= moment(@datetime).toDate().toLocaleTimeString() %> <br/>
+      <% end  %>
+      <% if(@country isnt undefined): %>
+      country: <%= @country %>
+      <% end %>
+    </div>
+  </div>
+</div>

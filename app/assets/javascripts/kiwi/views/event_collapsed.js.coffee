@@ -4,6 +4,10 @@ class FK.Views.EventCollapsed extends Backbone.Marionette.ItemView
   events:
     'click .delete': 'deleteClicked'
 
+  templateHelpers: => 
+   time: =>
+    @model.get('time')
+
   deleteClicked: (e) ->
     e.preventDefault()
     @model.destroy()
