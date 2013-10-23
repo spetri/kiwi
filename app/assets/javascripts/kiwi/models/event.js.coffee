@@ -7,6 +7,7 @@ class FK.Models.Event extends Backbone.Model
     #TODO: fix me - all events will start with the date that the file was parsed
     datetime: new Date()
     thumbUrl: ''
+    is_all_day: false
 
   url: =>
     if @isNew() then @collection.url else @collection.url + '/' + @id
@@ -18,11 +19,11 @@ class FK.Models.Event extends Backbone.Model
 
     if action == "create" or action == "update"
       httpMethod = methodMap[action]
-      
+
       xhr = new XMLHttpRequest()
       xhr.open(httpMethod, this.url(), true)
       xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-      
+
       formData = new FormData()
 
       _.each model.toJSON(), (v, k) ->

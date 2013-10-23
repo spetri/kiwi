@@ -17,7 +17,7 @@ class EventsController < ApplicationController
 
   def create
     @event = Event.new()
-    
+
     #Picture cropping parameters need to be ready before the image is added to the model
     #because the paperclip processor will try to use them
     @event.width = event_params[:width]
@@ -29,8 +29,8 @@ class EventsController < ApplicationController
 
     if (! event_params[:image])
       @event.image_from_url(event_params[:url])
-    end 
- 
+    end
+
     respond_to do |format|
       if @event.save
         format.json { render action: 'show', status: :created, location: @event }
@@ -66,6 +66,6 @@ class EventsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
       #TODO: strong params definition
-      params.permit(:details, :user, :datetime, :name, :image, :url, :width, :height, :crop_x, :crop_y)
+      params.permit(:details, :user, :datetime, :name, :image, :url, :width, :height, :crop_x, :crop_y, :is_all_day)
     end
 end

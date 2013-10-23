@@ -14,9 +14,10 @@ class Event
   field :crop_x, type: Integer
   field :crop_y, type: Integer
   field :url, type: String
-  
+  field :is_all_day, type: Boolean
 
-  has_mongoid_attached_file :image, :styles => 
+
+  has_mongoid_attached_file :image, :styles =>
     {
       :thumb => "80x60>",
       :medium => "400x300>"
