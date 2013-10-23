@@ -12,12 +12,14 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @updateModel()
 
     updateModel: =>
-      is_all_day = @$('input[name=is_all_day]:checked').val() is '1'
+      is_all_day  = @$('input[name=is_all_day]:checked').val() is '1'
+      time_format = @$('input[name=time_format]:checked').val()
       date = @$('input[name=date]').val()
       time = "#{@$('select[name=hours]').val()}:#{@$('select[name=minutes]').val()} #{@$('select[name=ampm]').val()}"
-      val = moment("#{date} #{time}")
-      @model.set('datetime', val.utc())
-      @model.set('is_all_day', is_all_day)
+      @model.set(
+        datetime: moment("#{date} #{time}").utc(),
+        is_all_day: is_all_day,
+        time_format: time_format)
 
     initialize: (opts) ->
       @controller = opts.controller

@@ -8,6 +8,7 @@ class FK.Models.Event extends Backbone.Model
     datetime: new Date()
     thumbUrl: ''
     is_all_day: false
+    time_format: ''
 
   url: =>
     if @isNew() then @collection.url else @collection.url + '/' + @id

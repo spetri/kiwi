@@ -15,6 +15,7 @@ class Event
   field :crop_y, type: Integer
   field :url, type: String
   field :is_all_day, type: Boolean
+  field :time_format, type: String
 
 
   has_mongoid_attached_file :image, :styles =>

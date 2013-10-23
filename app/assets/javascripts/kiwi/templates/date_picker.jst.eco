@@ -45,7 +45,7 @@
     <input type="radio" name="time_format" id="" value="recurring" /> Timezone Recurring Event<span style="font-weight: normal"> &dash; An event that happens throughought the day with each timezone &dash; Examples: a midnight movie premier, beginning of a worldwide festival, the exact moment of New Year's Day, etc. </span>
   </label>
   <label class="col-offset-3">
-    <input type="radio" name="time_format" id="" value="none" /> None
+    <input type="radio" name="time_format" id="" value="" checked="checked" /> None
   </label>
 
 <br/>
