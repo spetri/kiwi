@@ -21,6 +21,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     initialize: () =>
       @listenTo App.vent, 'container:all', @refreshHighlightAll
       @listenTo App.vent, 'container:new', @refreshHighlightNew
+      @listenTo App.vent, 'container:show', @refreshHighlight
 
     refreshHighlight: (option) =>
       @$('[data-option]').removeClass('active')
