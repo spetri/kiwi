@@ -6,6 +6,7 @@ describe 'Image Trimmer', () ->
     @imageTrimmer = FK.App.ImageTrimmer.create("#testbed")
 
   afterEach () ->
+    $('body #testbed').remove()
     FK.App.ImageTrimmer.stop()
 
   describe 'Memory management', () ->

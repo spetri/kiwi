@@ -7,6 +7,7 @@ class FK.Models.Event extends Backbone.GSModel
     #TODO: fix me - all events will start with the date that the file was parsed
     datetime: moment()
     thumbUrl: ''
+    mediumUrl: ''
     is_all_day: false
     time_format: ''
     tv_time: ''
