@@ -80,7 +80,8 @@ class EventsController < ApplicationController
                     :time_format,
                     :tv_time,
                     :creation_timezone,
-                    :local_time
+                    :local_time,
+                    :description
                    )
     end
 end
