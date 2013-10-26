@@ -4,6 +4,7 @@ class FK.Models.Event extends Backbone.GSModel
     country: 'US'
     name: ''
     user: ''
+    description: ''
     #TODO: fix me - all events will start with the date that the file was parsed
     datetime: moment()
     thumbUrl: ''

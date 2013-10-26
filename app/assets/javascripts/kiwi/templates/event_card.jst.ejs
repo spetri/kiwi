@@ -2,8 +2,18 @@
   <img src="<%=mediumUrl%>" />
 </div>
 <div class="pull-left">
-  <div class="event-heading-container"><%=name%></div>
-  <div class="event-description-container"></div>
-  <div class="event-tools-container"></div>
+  <div class="event-heading-container">
+    <span class="event-title"><%=name%></span>
+    <span class="event-time-location">()</span></div>
+  <div class="event-description-container">
+    <span class="event-description"><%=description%></span>
+    <span class="event-submitter"><%=user%></span>
+  </div>
+  <div class="event-tools-container">
+    <span class="event-upvotes"></span>
+    <span class="event-tool" data-action="report">Report</span>
+    <span class="event-tool" data-action="set-reminder">Set Reminder</span>
+    <span class="event-tool" data-action="edit">(Edit my event)</span>
+  </div>
   <div class="event-likes-container"></div>
 </div>
