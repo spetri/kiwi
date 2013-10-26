@@ -13,8 +13,8 @@ class FK.Models.Event extends Backbone.GSModel
     time_format: ''
     tv_time: ''
 
-  url: =>
-    if @isNew() then @collection.url else @collection.url + '/' + @id
+  urlRoot:
+    '/events'
 
   sync: (action, model, options) =>
     methodMap =

@@ -4,3 +4,5 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       template: FK.Template('event_card')
       className: 'event-card-container'
 
+      modelEvents:
+        'change': 'render'

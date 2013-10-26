@@ -41,6 +41,12 @@ FK.Controllers.MainController = {
   events: (action) ->
     FK.App.vent.trigger('container:' + action)
 
+  show: (id) ->
+    event = new FK.Models.Event
+      _id: id
+    event.fetch()
+    FK.App.vent.trigger('container:show', event)
+
   default: ->
     Backbone.history.navigate('events/all', trigger: true)
 }
@@ -53,6 +59,7 @@ class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   appRoutes: {
     '':               'default'
     '_=_':            'default' # facebook callback route
+    'events/show/:id':    'show'
     'events/:action': 'events'
   }
 
