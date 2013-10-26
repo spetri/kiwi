@@ -1,3 +1,5 @@
+#= require application
+
 describe "Events.EventPage", () ->
   event = new FK.Models.Event
     name: 'Ball Drop'
