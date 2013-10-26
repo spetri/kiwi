@@ -3,7 +3,6 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
   @addInitializer () ->
     @listenTo App.vent, 'container:show', @show
 
-
   @show = (event) ->
     @close if @view
     
@@ -20,6 +19,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
   class EventPage.EventPageLayout extends Marionette.Layout
     template: FK.Template('event_page')
+    className: 'event-page'
 
     regions:
       eventCardRegion: '.event-card-region'

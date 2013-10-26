@@ -12,6 +12,7 @@ class FK.Models.Event extends Backbone.GSModel
     is_all_day: false
     time_format: ''
     tv_time: ''
+    upvotes: 0
 
   urlRoot:
     '/events'

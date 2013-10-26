@@ -13,8 +13,8 @@ describe "Events.EventPage", () ->
     FK.App.Events.EventPage.stop()
 
   it "should render an event page on show in the main region", () ->
-    expect($('.event-card-container').length).toBe(1)
+    expect($('.event-card').length).toBe(1)
 
   it "should destroy the event page on module close", () ->
     FK.App.Events.EventPage.close()
-    expect($('.event-card-container').length).toBe(0)
+    expect($('.event-card').length).toBe(0)
