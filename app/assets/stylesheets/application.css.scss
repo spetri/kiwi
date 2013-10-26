@@ -137,3 +137,51 @@
     }
   }
 }
+
+.event-card {
+  height: 300px;
+    
+  .event-image-container {
+    height: 100%;
+  }
+
+  .event-info-container {
+    height: 100%;
+  }
+
+  .event-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .event-time-location {
+    font-size: 17px;
+  }
+
+  .event-submitter {
+    font-size: 12px;
+    color: grey;
+  }
+
+  .event-tools-container {
+    position: absolute;
+    bottom: 0px;
+
+    .event-upvotes {
+      color: green;
+      font-weight: bold;
+      margin-right: 34px;
+    }
+
+    .event-tool {
+      color: grey;
+      margin-right: 8px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  .event-likes-container {
+    height: 30px;
+  }
+}

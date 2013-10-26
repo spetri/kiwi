@@ -2,6 +2,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   @addInitializer () ->
     @listenTo App.vent, 'container:all', @show
+    @listenTo EventList, 'clicked:open', @triggerShowEvent
 
   @show = () ->
     @close() if @view
@@ -9,6 +10,10 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @view = new EventList.ListLayout()
     
     App.mainRegion.show @view
+
+  @triggerShowEvent = (event) ->
+    App.vent.trigger 'container:show', event
+
 
   @close = () ->
     @view.close()

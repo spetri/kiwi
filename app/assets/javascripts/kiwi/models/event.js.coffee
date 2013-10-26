@@ -4,15 +4,18 @@ class FK.Models.Event extends Backbone.GSModel
     country: 'US'
     name: ''
     user: ''
+    description: ''
     #TODO: fix me - all events will start with the date that the file was parsed
     datetime: moment()
     thumbUrl: ''
+    mediumUrl: ''
     is_all_day: false
     time_format: ''
     tv_time: ''
+    upvotes: 0
 
-  url: =>
-    if @isNew() then @collection.url else @collection.url + '/' + @id
+  urlRoot:
+    '/events'
 
   sync: (action, model, options) =>
     methodMap =

@@ -3,7 +3,7 @@
     <img src="<%= @thumbUrl %>" />
   </div>
   <div class="span10">
-    <a href="">
+    <a href="" class="event-name">
       <%= @name %>
     </a>
     
