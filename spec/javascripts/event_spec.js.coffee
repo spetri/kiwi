@@ -26,3 +26,11 @@ describe "Event", ->
     
     v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 20:00 GMT+200")
     expect(v.get('time')).toEqual('8/7c')
+
+  describe "when upvoting", ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+
+    it "should be able to increase its upvotes", ->
+      @event.upvoteToggle()
+      expect(@event.upvotes()).toBe(1)

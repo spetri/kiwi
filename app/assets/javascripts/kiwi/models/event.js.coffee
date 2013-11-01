@@ -98,6 +98,12 @@ class FK.Models.Event extends Backbone.GSModel
 
       moment_val.utc()
 
+  upvotes: =>
+    @get 'upvotes'
+
+  upvoteToggle: =>
+    @set 'upvotes', @upvotes() + 1
+
 
 
 class FK.Models.EventBlock extends Backbone.Model
