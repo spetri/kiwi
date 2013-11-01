@@ -34,3 +34,8 @@ describe "Event", ->
     it "should be able to increase its upvotes", ->
       @event.upvoteToggle()
       expect(@event.upvotes()).toBe(1)
+
+    it "should be able to toggle its upvotes", ->
+      @event.upvoteToggle()
+      @event.upvoteToggle()
+      expect(@event.upvotes()).toBe(0)
