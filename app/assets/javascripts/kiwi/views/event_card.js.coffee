@@ -12,11 +12,19 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
+        'change:haveIUpvoted': 'upvotedTooltip'
         'change:mediumUrl': 'render'
 
-      refreshUpvotes: =>
-        @$('.upvote-counter').html @model.upvotes()
+      refreshUpvotes: (event) =>
+        @$('.upvote-counter').html event.upvotes()
+
+      upvotedTooltip: (event) =>
+        if event.userHasUpvoted()
+          @$('.event-upvotes').tooltip
+            title: 'You have upvoted.'
+        else
+          @$('.event-upvotes').tooltip 'destroy'
 
       onRender: =>
-        @refreshUpvotes()
+        @refreshUpvotes(@model)
   
