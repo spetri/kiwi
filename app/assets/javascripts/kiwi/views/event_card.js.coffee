@@ -4,6 +4,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       template: FK.Template('event_card')
       className: 'event-card'
 
+      triggers:
+        'click [data-action="edit"]': 'click:edit'
+
       events:
         'click .event-upvotes': 'upvoteToggle'
 

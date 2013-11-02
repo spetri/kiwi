@@ -9,9 +9,20 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @view = new EventPage.EventPageLayout
       model: event
 
+    @eventCardView = new EventPage.EventCard
+      model: event
+
+    @listenTo @eventCardView, 'click:edit', @triggerEditEvent
+
+    @view.onShow = () =>
+      @view.eventCardRegion.show @eventCardView
+
     Backbone.history.navigate('events/show/' + event.id, trigger : false)
 
     App.mainRegion.show @view
+
+  @triggerEditEvent = (args) ->
+    App.vent.trigger 'container:new', args.model
 
   @close = () ->
     @view.close()
@@ -24,7 +35,3 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     regions:
       eventCardRegion: '.event-card-region'
       eventDisqusRegion: '.event-disqus-region'
-
-    onRender: () ->
-      @eventCardRegion.show new EventPage.EventCard
-        model: @model
