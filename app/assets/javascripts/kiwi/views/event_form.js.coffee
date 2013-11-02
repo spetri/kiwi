@@ -7,12 +7,13 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @listenTo EventForm, 'create', @createEvent
     @listenTo FK.Data.events, 'created', @toAllEvents
 
-  @show = () ->
+  @show = (event) ->
     @close() if @view
   
     return if ! FK.CurrentUser.get('logged_in')
 
-    @view = new EventForm.FormLayout()
+    @view = new EventForm.FormLayout
+      model: event
 
     @view.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
@@ -74,5 +75,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     onRender: =>
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
+      @$('#name').val @model.get('name')
       @$('.current_user').text(FK.CurrentUser.get('name'))
       @renderLocation()
