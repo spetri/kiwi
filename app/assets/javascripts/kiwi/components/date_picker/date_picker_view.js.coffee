@@ -32,8 +32,10 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       selector = @$('input[name=time_format],select[name=hours],select[name=minutes],select[name=ampm],select[name=time_type]')
       if @model.get('is_all_day')
         selector.attr('disabled','disabled')
+        @$('.timedisplay').hide()
       else
         selector.removeAttr('disabled')
+        @$('.timedisplay').show()
 
     updateStatus: =>
       @$('.status').text(moment(@model.get('datetime')).toString())
