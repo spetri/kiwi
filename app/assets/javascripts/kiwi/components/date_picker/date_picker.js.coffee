@@ -21,7 +21,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
 
   class DatePicker.DatePickerController extends Marionette.Controller
     initialize: () ->
-      @model = new Backbone.Model()
+      @model = new FK.Models.Event()
 
     value: () =>
       Instance.model.toJSON()

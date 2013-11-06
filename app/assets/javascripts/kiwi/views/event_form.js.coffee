@@ -11,23 +11,26 @@ class FK.Views.EventForm extends Backbone.Marionette.Layout
     @$el.find(".error").remove()
     if $(e.target).val().length > 79
       $("<div class=\"error\">Event is too long</div>").insertAfter(e.target)
-  
+
   renderLocation: (e) =>
     if @$el.find('input[name=location_type]:checked').val() is "international"
       @$el.find('select[name=country]').attr('disabled','disabled')
     else
       @$el.find('select[name=country]').removeAttr('disabled')
-      
+
 
   saveClicked: (e) =>
     e.preventDefault()
     @$('.save').addClass 'disabled'
     @$('.save').html 'Saving...'
-    params = window.serializeForm(@$el.find('input,select,textarea'))
+    params = window.serializeForm(@$('input,select,textarea'))
+    console.log params
     params.user = FK.CurrentUser.get('name')
 
     _.extend params, @imageTrimmer.image()
+    console.log params
     _.extend params, @datePicker.value()
+    console.log params
     FK.Data.events.create(params)
 
   initialize: =>

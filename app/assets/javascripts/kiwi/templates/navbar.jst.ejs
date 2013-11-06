@@ -6,7 +6,7 @@
       <span class="icon-bar"></span>
     </button>
     <a href="../" class="navbar-brand">Forekast</a>
-    <div class="nav-collapse collapse bs-navbar-collapse">
+    <div class="nav-collapse bs-navbar-collapse">
       <ul class="nav navbar-nav">
         <li class="<%= FK.Uri('events/all') ? "active" : "" %>">
           <a class="" href="#/events/all">All Events</a>
@@ -23,8 +23,8 @@
               <% if (provider != undefined && provider.length > 0) { %>
                 (<%= provider %>)
               <% } %>
-            </a> 
-            <% } else { %> 
+            </a>
+            <% } else { %>
             <a href="#"><%= name %>
               <% if (provider != undefined && provider.length > 0) { %>
                 (<%= provider %>)

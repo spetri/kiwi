@@ -10,6 +10,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
 
     pickerChanged: (e) =>
       @updateModel()
+      @$('.time-display-value').text(@model.get('time'))
 
     updateModel: =>
       is_all_day  = @$('input[name=is_all_day]:checked').val() is '1'
@@ -35,4 +36,4 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         selector.removeAttr('disabled')
 
     updateStatus: =>
-      @$('.status').text(moment(@model.get('datetime'))._d.toString())
+      @$('.status').text(moment(@model.get('datetime')).toString())

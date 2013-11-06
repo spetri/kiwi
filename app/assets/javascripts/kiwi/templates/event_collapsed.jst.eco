@@ -6,7 +6,7 @@
     <a href="">
       <%= @name %>
     </a>
-    
+
     <div>
       <% if @is_all_day is 'true': %>
         <em>All Day!</em><br/>

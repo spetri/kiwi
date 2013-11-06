@@ -47,6 +47,7 @@
 
 <div class="col-offset-3 clearfix">
   <span class="time-display">Time will be displayed</span>
+  <span class="time-display-value"></span>
 <div>
 
 <hr/>
