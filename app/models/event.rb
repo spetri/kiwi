@@ -19,6 +19,7 @@ class Event
   field :tv_time , type: String
   field :creation_timezone, type: String
   field :local_time, type: String
+  field :description, type: String
 
 
   has_mongoid_attached_file :image, :styles =>

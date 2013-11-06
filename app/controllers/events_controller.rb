@@ -27,7 +27,7 @@ class EventsController < ApplicationController
 
     @event.update_attributes(event_params)
 
-    if (! event_params[:image])
+    if (! event_params[:image] && event_params[:url])
       @event.image_from_url(event_params[:url])
     end
 
@@ -80,7 +80,8 @@ class EventsController < ApplicationController
                     :time_format,
                     :tv_time,
                     :creation_timezone,
-                    :local_time
+                    :local_time,
+                    :description
                    )
     end
 end

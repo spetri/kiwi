@@ -1,0 +1,19 @@
+<div class="event-image-container col-lg-6">
+  <img src="<%=mediumUrl%>" />
+</div>
+<div class="event-info-container col-lg-6">
+  <div class="event-heading-container">
+    <span class="event-title"><%=name%></span>
+    <span class="event-time-location">(<%=country%>, <%=datetime%>)</span></div>
+  <div class="event-description-container">
+    <span class="event-description"><%=description%></span>
+    <span class="event-submitter">(Submitted by <%=user%>)</span>
+  </div>
+  <div class="event-tools-container">
+    <span class="event-upvotes"><i class="icon-caret-up"></i> <%=upvotes%> upvotes</span>
+    <span class="event-tool" data-action="report">Report</span>
+    <span class="event-tool" data-action="set-reminder">Set Reminder</span>
+    <span class="event-tool" data-action="edit">(Edit my event)</span>
+    <div class="event-likes-container"></div>
+  </div>
+</div>

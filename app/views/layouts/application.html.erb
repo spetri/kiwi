@@ -7,7 +7,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div id="layout"></div>
+  <div id="navbar-region" class="navbar"></div>
+  <div class="container" id="container">
+    <div id="main-region" class="col-lg-9"></div>
+    <div id="sidebar-region" class="col-lg-3"></div>
+  </div>
   <script type="text/javascript">
     $(function() { 
       FK.App.start({
@@ -22,6 +26,8 @@
           },
         user: <%= user_signed_in? ? raw(current_user.to_json()) : 'null' %>
       });
+      if (!Backbone.History.started)
+        Backbone.history.start()     
     });
   </script>
 </body>

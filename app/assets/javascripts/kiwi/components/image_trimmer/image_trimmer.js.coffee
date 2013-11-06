@@ -46,7 +46,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         width: size.width
         height: size.height
 
-    image: () =>
+    value: () =>
       image = @Model.toJSON()
       delete image.image if ! image.image
       delete image.url if image.image

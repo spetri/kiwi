@@ -4,15 +4,18 @@ class FK.Models.Event extends Backbone.GSModel
     country: 'US'
     name: ''
     user: ''
+    description: ''
     #TODO: fix me - all events will start with the date that the file was parsed
     datetime: moment()
     thumbUrl: ''
+    mediumUrl: ''
     is_all_day: false
     time_format: ''
     tv_time: ''
+    upvotes: 0
 
-  url: =>
-    if @isNew() then @collection.url else @collection.url + '/' + @id
+  urlRoot:
+    '/events'
 
   sync: (action, model, options) =>
     methodMap =
@@ -53,9 +56,10 @@ class FK.Models.Event extends Backbone.GSModel
 
 
   getters:
+    all_day: () ->
     time: () ->
       if @.get('time_format') is 'recurring'
-        @.get('local_time')
+        return @.get('local_time')
 
       if @.get('time_format') is 'tv_show'
         local_time_split = @.get('local_time').split(':')
