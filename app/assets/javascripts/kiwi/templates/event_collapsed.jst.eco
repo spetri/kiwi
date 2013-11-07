@@ -6,19 +6,17 @@
     <a href="" class="event-name">
       <%= @name %>
     </a>
-    
+
     <div>
-      <% if @is_all_day is 'true': %>
+      <% if @all_day(): %>
         <em>All Day!</em><br/>
       <% else: %>
         Time: <%= @time() %> <br/>
         Time Format: <%= @time_format %> </br>
-        Local time: <%= @local_time %> </br>
       <% end %>
       <small> added by <%= @user %></small> <a href="#" class="delete">x</a> <br/>
       <% if(@datetime isnt undefined) : %>
       datetime UTC: <%= moment(@datetime).calendar() %> <br/>
-      my time: <%= moment(@datetime).toDate().toLocaleTimeString() %> <br/>
       <% end  %>
       <% if(@country isnt undefined): %>
       country: <%= @country %>

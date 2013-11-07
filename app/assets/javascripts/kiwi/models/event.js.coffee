@@ -52,16 +52,15 @@ class FK.Models.Event extends Backbone.GSModel
     moment.tz('America/New_York')
     @.time_from_moment(moment)
 
-  time_from_moment: (moment) =>
-    hours = if moment.hours() < 9 then "0#{moment.hours() + 1 }" else moment.hours() + 1
-    minutes = if moment.minutes() < 10 then "0#{moment.minutes()}" else moment.minutes()
-    "#{hours}:#{minutes}"
+  time_from_moment: (moment_val) =>
+    moment_val.zone(moment().zone()).format('H:mm A')
 
 
   getters:
+    all_day: () ->
     time: () ->
       if @.get('time_format') is 'recurring'
-        @.get('local_time')
+        return @.get('local_time')
 
       if @.get('time_format') is 'tv_show'
         local_time_split = @.get('local_time').split(':')
@@ -73,6 +72,7 @@ class FK.Models.Event extends Backbone.GSModel
         central_time = 12 if central_time is 0
 
         return "#{eastern_time}/#{central_time}c"
+
       return @.time_from_moment(moment(@.get('datetime')))
 
     fk_datetime: () ->
@@ -85,19 +85,10 @@ class FK.Models.Event extends Backbone.GSModel
 
   setters:
     datetime: (moment_val) ->
-      moment_val = moment(moment_val) if typeof moment_val is "string"
-      hour_offset = (- (moment_val.zone() / 60 )) * 100
-      hour_offset = hour_offset + 1 # hours are zero-based for some silly reason
-      if (hour_offset < 0)
-        hour_offset = "GMT-#{hour_offset}"
-      else
-        hour_offset = "GMT+#{hour_offset}"
-
-      @.set creation_timezone: hour_offset
-
-      @.set local_time: @.time_from_moment(moment_val)
-
-      moment_val.utc()
+      moment_val = moment(moment_val)
+      @.set('local_time', moment_val.format('H:mm A'))
+      # set the input time to UTC:
+      return moment(moment_val).zone(0)
 
   upvotes: =>
     @get 'upvotes'

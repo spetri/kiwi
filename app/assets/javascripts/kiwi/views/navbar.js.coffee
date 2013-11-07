@@ -8,7 +8,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @view = new Navbar.NavbarView
       model: App.request 'currentUser'
-    
+
     App.navbarRegion.show @view
 
   @close = () ->

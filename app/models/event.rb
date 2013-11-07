@@ -31,6 +31,15 @@ class Event
 
 
   def image_from_url(url)
-    self.image = open(url)
+    if url && File.exist?(url)
+      self.image = open(url)
+    else
+      self.image = self.no_image()
+    end
+  end
+
+
+  def no_image
+    File.open("#{Rails.root}/public/images/thumb/missing.png")
   end
 end

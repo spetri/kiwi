@@ -11,6 +11,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
      time: =>
       @model.get('time')
 
+     all_day: =>
+      return true if @model.get('is_all_day') is '1' or @model.get('is_all_day') is true
+      return false
+
+
     deleteClicked: (e) ->
       e.preventDefault()
       @model.destroy()
