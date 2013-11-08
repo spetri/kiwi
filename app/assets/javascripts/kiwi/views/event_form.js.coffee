@@ -10,10 +10,8 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
   @show = (event) ->
     @close() if @view
   
-    return if ! FK.CurrentUser.get('logged_in')
-
     @view = new EventForm.FormLayout
-      model: event
+      model: event || new FK.Models.Event()
 
     @view.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
@@ -42,6 +40,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     EventComponents = []
  
+  @addFinalizer () =>
+    @close()
+
 
   class EventForm.FormLayout extends Backbone.Marionette.Layout
     className: "row-fluid"

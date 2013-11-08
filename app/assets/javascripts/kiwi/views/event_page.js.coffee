@@ -4,7 +4,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @listenTo App.vent, 'container:show', @show
 
   @show = (event) ->
-    @close if @view
+    @close() if @view
     
     @view = new EventPage.EventPageLayout
       model: event

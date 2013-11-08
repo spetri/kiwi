@@ -1,13 +1,13 @@
 #= require application
 
 describe "Events.EventPage", () ->
-  event = new FK.Models.Event
-    name: 'Ball Drop'
-
   beforeEach () ->
+    @event = new FK.Models.Event
+      name: 'Ball Drop'
+
     loadFixtures 'app_fixture'
     FK.App.Events.EventPage.start()
-    FK.App.Events.EventPage.show event
+    FK.App.Events.EventPage.show @event
 
   afterEach () ->
     FK.App.Events.EventPage.stop()

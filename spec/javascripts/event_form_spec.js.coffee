@@ -15,5 +15,4 @@ describe "Events.EventForm", ->
       FK.App.Events.EventForm.show @event
 
     it "should have the event name shown", () ->
-      debugger
       expect($('#name').val()).toBe(@event.get('name'))
