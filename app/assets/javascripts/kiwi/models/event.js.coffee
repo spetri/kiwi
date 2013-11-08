@@ -38,7 +38,7 @@ class FK.Models.Event extends Backbone.GSModel
       xhr.onload = (event) =>
         modelOnServer = JSON.parse event.target.response
         @set modelOnServer
-        @trigger 'created', modelOnServer
+        @trigger 'saved', modelOnServer
 
       return xhr.send(formData)
 

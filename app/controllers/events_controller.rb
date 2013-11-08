@@ -43,7 +43,7 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
-        format.json { head :no_content }
+        format.json { render action: 'show', status: :ok, location: @event }
       else
         format.json { render json: @event.errors, status: :unprocessable_entity }
       end

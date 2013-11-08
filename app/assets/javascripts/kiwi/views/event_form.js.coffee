@@ -4,14 +4,15 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
   @addInitializer () ->
     @listenTo App.vent, 'container:new', @show
-    @listenTo EventForm, 'create', @createEvent
-    @listenTo FK.Data.events, 'created', @toAllEvents
+    @listenTo EventForm, 'save', @saveEvent
+    @listenTo FK.Data.events, 'saved', @toAllEvents
 
   @show = (event) ->
     @close() if @view
   
+    @event = event || new FK.Models.Event()
     @view = new EventForm.FormLayout
-      model: event || new FK.Models.Event()
+      model: @event
 
     @view.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
@@ -22,14 +23,15 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     FK.App.mainRegion.show @view
     EventComponents.push @view
 
-  @createEvent = () ->
+  @saveEvent = () ->
     params =
       user: FK.CurrentUser.get('name')
 
     _.each EventComponents, (child) ->
       _.extend params, child.value()
 
-    FK.Data.events.create(params)
+    @event.save(params)
+    FK.Data.events.add(@event)
 
   @toAllEvents = () ->
     Backbone.history.navigate('/events/all', trigger: true)
@@ -69,7 +71,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       e.preventDefault()
       @$('.save').addClass 'disabled'
       @$('.save').html 'Saving...'
-      EventForm.trigger('create')
+      EventForm.trigger('save')
       
     modelEvents:
       'change:name': 'refreshName'
