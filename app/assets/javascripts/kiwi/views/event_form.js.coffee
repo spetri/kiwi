@@ -71,11 +71,17 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @$('.save').html 'Saving...'
       EventForm.trigger('create')
       
+    modelEvents:
+      'change:name': 'refreshName'
+    
+    refreshName: (event) ->
+      @$('#name').val event.get('name')
+
     value: () ->
       window.serializeForm(@$el.find('input,select,textarea'))
 
     onRender: =>
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
-      @$('#name').val @model.get('name')
+      @refreshName @model
       @$('.current_user').text(FK.CurrentUser.get('name'))
       @renderLocation()

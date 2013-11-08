@@ -22,7 +22,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     App.mainRegion.show @view
 
   @triggerEditEvent = (args) ->
-    App.vent.trigger 'container:new', args.model
+    event = args.model
+    App.vent.trigger 'container:new', event
+    Backbone.history.navigate('events/edit/' + event.id, trigger : false)
 
   @close = () ->
     @view.close()
