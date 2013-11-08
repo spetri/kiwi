@@ -4,6 +4,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       template: FK.Template('event_card')
       className: 'event-card'
 
+      ui:
+        upvotesIcon: '#upvotes-icon'
+
       triggers:
         'click [data-action="edit"]': 'click:edit'
 
@@ -15,19 +18,21 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
-        'change:haveIUpvoted': 'upvotedTooltip'
+        'change:haveIUpvoted': 'refreshUpvoted'
         'change:mediumUrl': 'render'
 
       refreshUpvotes: (event) =>
         @$('.upvote-counter').html event.upvotes()
 
-      upvotedTooltip: (event) =>
+      refreshUpvoted: (event) =>
         if event.userHasUpvoted()
-          @$('.event-upvotes').tooltip
-            title: 'You have upvoted.'
+          @ui.upvotesIcon.removeClass('icon-caret-up')
+          @ui.upvotesIcon.addClass('icon-ok')
         else
-          @$('.event-upvotes').tooltip 'destroy'
-
+          @ui.upvotesIcon.addClass('icon-caret-up')
+          @ui.upvotesIcon.removeClass('icon-ok')
+      
       onRender: =>
         @refreshUpvotes(@model)
+        @refreshUpvoted(@model)
   
