@@ -13,7 +13,7 @@ class FK.Models.Event extends Backbone.GSModel
     time_format: ''
     tv_time: ''
     upvotes: 0
-    haveIUpvoted: false
+    have_i_upvoted: false
 
   urlRoot:
     '/events'
@@ -94,10 +94,10 @@ class FK.Models.Event extends Backbone.GSModel
     @get 'upvotes'
 
   userHasUpvoted: =>
-    @get 'haveIUpvoted'
+    @get 'have_i_upvoted'
 
   toggleUserUpvoted: =>
-    @set 'haveIUpvoted', not @userHasUpvoted()
+    @set 'have_i_upvoted', not @userHasUpvoted()
 
   upvoteToggle: =>
     if @userHasUpvoted()
@@ -105,6 +105,7 @@ class FK.Models.Event extends Backbone.GSModel
     else
       @set 'upvotes', @upvotes() + 1
     @toggleUserUpvoted()
+    @save()
 
 class FK.Models.EventBlock extends Backbone.Model
 

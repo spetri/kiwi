@@ -18,7 +18,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
-        'change:haveIUpvoted': 'refreshUpvoted'
+        'change:have_i_upvoted': 'refreshUpvoted'
         'change:mediumUrl': 'render'
 
       refreshUpvotes: (event) =>

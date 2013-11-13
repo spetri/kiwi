@@ -20,6 +20,7 @@ class Event
   field :creation_timezone, type: String
   field :local_time, type: String
   field :description, type: String
+  field :upvote_names, type: Array
 
 
   has_mongoid_attached_file :image, :styles =>
@@ -28,7 +29,6 @@ class Event
       :medium => "400x300>"
     },
     :processors => [:cropper]
-
 
   def image_from_url(url)
     if url && File.exist?(url)
@@ -41,5 +41,32 @@ class Event
 
   def no_image
     File.open("#{Rails.root}/public/images/thumb/missing.png")
+  end
+
+  def add_upvote(username)
+    if self.upvote_names.nil?
+      self.upvote_names = Array.new
+    end
+    self.upvote_names.push username
+  end
+
+  def remove_upvote(username)
+    self.upvote_names.delete username
+  end
+
+  def how_many_upvotes
+    if self.upvote_names.nil?
+      return 0
+    else
+      self.upvote_names.length
+    end
+  end
+
+  def have_i_upvoted(username)
+    if self.upvote_names.nil?
+      return false
+    else
+      self.upvote_names.include? username
+    end
   end
 end

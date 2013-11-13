@@ -41,8 +41,17 @@ class EventsController < ApplicationController
   end
 
   def update
+    params = event_params.dup
+    have_i_upvoted = params.delete :have_i_upvoted
+
+    if ( have_i_upvoted == "true" )
+      @event.add_upvote(current_user.email)
+    else
+      @event.remove_upvote(current_user.email)
+    end
+ 
     respond_to do |format|
-      if @event.update(event_params)
+      if @event.update(params)
         format.json { render action: 'show', status: :ok, location: @event }
       else
         format.json { render json: @event.errors, status: :unprocessable_entity }
@@ -81,7 +90,8 @@ class EventsController < ApplicationController
                     :tv_time,
                     :creation_timezone,
                     :local_time,
-                    :description
+                    :description,
+                    :have_i_upvoted
                    )
     end
 end
