@@ -31,8 +31,16 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         else
           @ui.upvotesIcon.addClass('icon-caret-up')
           @ui.upvotesIcon.removeClass('icon-ok')
+
+      refreshUpvoteAllowed: (event) =>
+        if event.get 'upvote_allowed'
+          @$('.event-upvotes').tooltip 'destroy'
+        else
+          @$('.event-upvotes').tooltip
+            title: 'Login to upvote.'
       
       onRender: =>
         @refreshUpvotes(@model)
         @refreshUpvoted(@model)
+        @refreshUpvoteAllowed(@model)
   
