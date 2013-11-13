@@ -33,7 +33,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       _.extend params, child.value()
 
     @event.save(params)
-    FK.Data.events.add(@event)
+    FK.Data.events.add(@event, merge: true)
 
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event

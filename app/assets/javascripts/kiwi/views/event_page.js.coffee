@@ -19,6 +19,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @view.onClose = () =>
       @stop()
 
+    event.on 'change', (event) =>
+      FK.Data.events.add event, merge: true
+
     Backbone.history.navigate('events/show/' + event.id, trigger : false)
 
     App.mainRegion.show @view
