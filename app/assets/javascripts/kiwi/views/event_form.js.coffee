@@ -4,11 +4,11 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
   @addInitializer () ->
     @listenTo App.vent, 'container:new', @show
-    @listenTo EventForm, 'save', @saveEvent
-    @listenTo FK.Data.events, 'saved', @toAllEvents
 
   @show = (event) ->
     @close() if @view
+    @listenTo EventForm, 'save', @saveEvent
+    @listenTo FK.Data.events, 'saved', @toAllEvents
   
     @event = event || new FK.Models.Event()
     @view = new EventForm.FormLayout
@@ -41,6 +41,8 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       child.close()
 
     EventComponents = []
+    @stopListening(FK.Data.events)
+    @stopListening(EventForm)
  
   @addFinalizer () =>
     @close()
