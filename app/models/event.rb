@@ -47,7 +47,9 @@ class Event
     if self.upvote_names.nil?
       self.upvote_names = Array.new
     end
-    self.upvote_names.push username
+    if ! self.upvote_names.include? username
+      self.upvote_names.push username
+    end
   end
 
   def remove_upvote(username)
