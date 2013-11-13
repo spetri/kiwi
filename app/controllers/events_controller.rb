@@ -17,6 +17,8 @@ class EventsController < ApplicationController
 
   def create
     @event = Event.new()
+    params = event_params.dup
+    params.delete :have_i_upvoted
 
     #Picture cropping parameters need to be ready before the image is added to the model
     #because the paperclip processor will try to use them
@@ -25,7 +27,7 @@ class EventsController < ApplicationController
     @event.crop_x = event_params[:crop_x]
     @event.crop_y = event_params[:crop_y]
 
-    @event.update_attributes(event_params)
+    @event.update_attributes(params)
 
     if (! event_params[:image] && event_params[:url])
       @event.image_from_url(event_params[:url])
