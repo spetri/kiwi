@@ -1,11 +1,8 @@
 FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) ->
-  
-  @addInitializer () ->
-    @listenTo App.vent, 'container:show', @show
 
-  @show = (event) ->
-    @close() if @view
+  @startWithParent = false
 
+  @addInitializer (event) ->
     event.upvote_allowed = FK.App.request('currentUser').get('logged_in')
     
     @view = new EventPage.EventPageLayout
@@ -19,6 +16,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @view.onShow = () =>
       @view.eventCardRegion.show @eventCardView
 
+    @view.onClose = () =>
+      @stop()
+
     Backbone.history.navigate('events/show/' + event.id, trigger : false)
 
     App.mainRegion.show @view
@@ -28,8 +28,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     App.vent.trigger 'container:new', event
     Backbone.history.navigate('events/edit/' + event.id, trigger : false)
 
-  @close = () ->
+  @addFinalizer () ->
     @view.close()
+    @stopListening()
 
 
   class EventPage.EventPageLayout extends Marionette.Layout

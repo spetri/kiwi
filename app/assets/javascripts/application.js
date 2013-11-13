@@ -9,6 +9,7 @@
 //= require serialize
 //= require bootstrap-datepicker
 //= require ./kiwi/kiwi
+//= require ./kiwi/events
 //= require_tree ./kiwi/templates
 //= require_tree ./kiwi/views
 //= require_tree ./kiwi/components

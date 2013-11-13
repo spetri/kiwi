@@ -1,16 +1,15 @@
 FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) ->
+  
+  @startWithParent = false
 
   EventComponents = []
 
-  @addInitializer () ->
-    @listenTo App.vent, 'container:new', @show
-
-  @show = (event) ->
-    @close() if @view
+  @addInitializer (event) ->
     @listenTo EventForm, 'save', @saveEvent
-    @listenTo FK.Data.events, 'saved', @toAllEvents
-  
+
     @event = event || new FK.Models.Event()
+    @listenTo @event, 'saved', @toEvent
+
     @view = new EventForm.FormLayout
       model: @event
 
@@ -19,6 +18,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       EventComponents.push @imageTrimmer
       @datePicker = FK.App.DatePicker.create '#datetime-region'
       EventComponents.push @datePicker
+
+    @view.on 'close', () =>
+      @stop()
 
     FK.App.mainRegion.show @view
     EventComponents.push @view
@@ -33,20 +35,15 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @event.save(params)
     FK.Data.events.add(@event)
 
-  @toAllEvents = () ->
-    Backbone.history.navigate('/events/all', trigger: true)
+  @toEvent = (event) ->
+    App.vent.trigger 'container:show', event
 
-  @close = () ->
+  @addFinalizer () =>
     _.each EventComponents, (child) ->
       child.close()
 
     EventComponents = []
-    @stopListening(FK.Data.events)
-    @stopListening(EventForm)
- 
-  @addFinalizer () =>
-    @close()
-
+    @stopListening()
 
   class EventForm.FormLayout extends Backbone.Marionette.Layout
     className: "row-fluid"

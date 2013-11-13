@@ -1,22 +1,22 @@
 FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) ->
 
+  @startWithParent = false
+
   @addInitializer () ->
-    @listenTo App.vent, 'container:all', @show
     @listenTo EventList, 'clicked:open', @triggerShowEvent
-
-  @show = () ->
-    @close() if @view
-
     @view = new EventList.ListLayout()
-    
+
+    @view.onClose = () =>
+      @stop()
+
     App.mainRegion.show @view
 
   @triggerShowEvent = (event) ->
     App.vent.trigger 'container:show', event
 
-
   @close = () ->
     @view.close()
+    @stopListening()
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "row-fluid"
