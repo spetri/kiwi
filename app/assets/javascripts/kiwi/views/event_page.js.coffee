@@ -5,6 +5,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
   @show = (event) ->
     @close() if @view
+
+    event.upvote_allowed = FK.App.request('currentUser').get('logged_in')
     
     @view = new EventPage.EventPageLayout
       model: event

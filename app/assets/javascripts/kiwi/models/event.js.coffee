@@ -100,6 +100,7 @@ class FK.Models.Event extends Backbone.GSModel
     @set 'have_i_upvoted', not @userHasUpvoted()
 
   upvoteToggle: =>
+    return if ! @upvote_allowed
     if @userHasUpvoted()
       @set 'upvotes', @upvotes() - 1
     else
