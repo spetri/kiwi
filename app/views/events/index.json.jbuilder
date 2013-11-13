@@ -5,4 +5,8 @@ json.array!(@events) do |event|
   json.set! :datetime, event.datetime.utc if event.datetime != nil
   json.set! :mediumUrl, event.image.url(:medium)
   json.set! :thumbUrl, event.image.url(:thumb)
+  if user_signed_in?
+    json.set! :have_i_upvoted, event.have_i_upvoted(current_user.email)
+  end
+  json.set! :upvotes, event.how_many_upvotes()
 end
