@@ -6,8 +6,7 @@ describe "Events.EventPage", () ->
       name: 'Ball Drop'
 
     loadFixtures 'app_fixture'
-    FK.App.Events.EventPage.start()
-    FK.App.Events.EventPage.show @event
+    FK.App.Events.EventPage.start @event
 
   afterEach () ->
     FK.App.Events.EventPage.stop()
@@ -15,6 +14,6 @@ describe "Events.EventPage", () ->
   it "should render an event page on show in the main region", () ->
     expect($('.event-card').length).toBe(1)
 
-  it "should destroy the event page on module close", () ->
-    FK.App.Events.EventPage.close()
+  it "should destroy the event page on module stop", () ->
+    FK.App.Events.EventPage.stop()
     expect($('.event-card').length).toBe(0)

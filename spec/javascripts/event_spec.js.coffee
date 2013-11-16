@@ -30,6 +30,11 @@ describe "Event", ->
   describe "when upvoting", ->
     beforeEach ->
       @event = new FK.Models.Event()
+      @event.set 'upvote_allowed', true
+      @xhr = sinon.useFakeXMLHttpRequest()
+
+    afterEach ->
+      @xhr.restore()
 
     it "should be able to increase its upvotes", ->
       @event.upvoteToggle()

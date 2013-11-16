@@ -2,7 +2,6 @@ describe "Events.EventForm", ->
 
   beforeEach () ->
     loadFixtures 'app_fixture'
-    FK.App.Events.EventForm.start()
  
   afterEach () ->
     FK.App.Events.EventForm.stop()
@@ -14,7 +13,7 @@ describe "Events.EventForm", ->
         name: 'Ball drop'
         location_type: 'national'
         country: 'AE'
-      FK.App.Events.EventForm.show @event
+      FK.App.Events.EventForm.start @event
 
     it "should have the event name shown", () ->
       expect($('#name').val()).toBe(@event.get('name'))
