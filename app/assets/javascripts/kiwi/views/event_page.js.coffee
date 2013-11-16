@@ -3,6 +3,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer (event) ->
+    @loadSocialNetworking()
     event.set 'upvote_allowed', FK.App.request('currentUser').get('logged_in')
     
     @view = new EventPage.EventPageLayout
@@ -24,12 +25,30 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
     Backbone.history.navigate('events/show/' + event.id, trigger : false)
 
-    App.mainRegion.show @view
+    $.when( @googleApi, @facebookApi, @twitterApi).then () =>
+      App.mainRegion.show @view
 
   @triggerEditEvent = (args) ->
     event = args.model
     App.vent.trigger 'container:new', event
     Backbone.history.navigate('events/edit/' + event.id, trigger : false)
+
+  @loadSocialNetworking = () ->
+    @googleApi = $.Deferred()
+    @facebookApi = $.Deferred()
+    @twitterApi = $.Deferred()
+    $.getScript('https://apis.google.com/js/plusone.js?onload=onLoadCallback',
+      () =>
+        @googleApi.resolve()
+    )
+    $.getScript('http://platform.twitter.com/widgets.js',
+      () =>
+        @facebookApi.resolve()
+    )
+    $.getScript('//connect.facebook.net/en_US/all.js#xfbml=1',
+      () =>
+        @twitterApi.resolve()
+    )
 
   @addFinalizer () ->
     @view.close()

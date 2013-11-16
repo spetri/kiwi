@@ -43,4 +43,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         @refreshUpvotes(@model)
         @refreshUpvoted(@model)
         @refreshUpvoteAllowed(@model)
-  
+
+      onShow: =>
+        gapi.plusone.go()
+        FB.XFBML.parse()
+        twttr.widgets.load()
