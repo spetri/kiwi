@@ -9,7 +9,7 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
     Events.EventForm.start(event)
 
   @startPage = (event) ->
-    Events.EventPage.start(event)
+    Events.EventPage.start(event, true)
 
   @startList = () ->
     Events.EventList.start()

@@ -14,6 +14,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
 
+    @eventCardView.on 'show', () =>
+      @renderSocialNetworking()
+      
     @view.onShow = () =>
       @view.eventCardRegion.show @eventCardView
 
@@ -25,8 +28,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
     Backbone.history.navigate('events/show/' + event.id, trigger : false)
 
-    $.when( @googleApi, @facebookApi, @twitterApi).then () =>
-      App.mainRegion.show @view
+    App.mainRegion.show @view
 
   @triggerEditEvent = (args) ->
     event = args.model
@@ -49,6 +51,12 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       () =>
         @twitterApi.resolve()
     )
+
+  @renderSocialNetworking = () =>
+    @googleApi.done () => gapi.plusone.go()
+    @facebookApi.done () => FB.XFBML.parse()
+    @twitterApi.done () => twttr.widgets.load()
+ 
 
   @addFinalizer () ->
     @view.close()
