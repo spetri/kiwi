@@ -53,9 +53,10 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     )
 
   @renderSocialNetworking = () =>
-    @googleApi.done () => gapi.plusone.go()
-    @facebookApi.done () => FB.XFBML.parse()
-    @twitterApi.done () => twttr.widgets.load()
+    $.when(@googleApi, @facebookApi, @twitterApi).then =>
+      gapi.plusone.go()
+      FB.XFBML.parse()
+      twttr.widgets.load()
  
 
   @addFinalizer () ->
