@@ -44,6 +44,14 @@ class FK.Models.Event extends Backbone.GSModel
 
     Backbone.sync(action, model, options)
 
+  parse: (resp) ->
+    resp = _.map resp, (value, key) ->
+      value = true if value == "true"
+      value = false if value == "false"
+
+      return key : value
+
+    resp
 
   time_in_eastern: ->
     @.convert_moment_to_eastern moment(@.get('datetime'))
