@@ -4,13 +4,13 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
   @addFinalizer () ->
     Instance.close()
 
-  @create = (domLocation) ->
-    newInstance = new DatePicker.DatePickerController()
+  @create = (domLocation, event) ->
+    newInstance = new DatePicker.DatePickerController
+      model: event
     regionManager = new Marionette.RegionManager()
     region = regionManager.addRegion("instance", domLocation)
     region.show new DatePicker.DatePickerView
-      controller: newInstance
-      model: newInstance.model
+      model: event
 
     newInstance.on 'close', () =>
       regionManager.close()
@@ -20,8 +20,14 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
 
 
   class DatePicker.DatePickerController extends Marionette.Controller
-    initialize: () ->
-      @model = new Backbone.Model()
+    initialize: (options) =>
+      @model = options.model
 
     value: () =>
-      Instance.model.toJSON()
+      # I'm a good citizen, i only return what I partied on
+      {
+        datetime: @model.get('datetime')
+        time_format: @model.get('time_format')
+        local_time: @model.get('local_time')
+        is_all_day: @model.get('is_all_day')
+      }

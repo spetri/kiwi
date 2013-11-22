@@ -22,9 +22,6 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         is_all_day: is_all_day,
         time_format: time_format)
 
-    initialize: (opts) ->
-      @controller = opts.controller
-
     onRender: () ->
       @$('input[name=date]').datepicker()
 

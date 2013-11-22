@@ -16,7 +16,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @view.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
       EventComponents.push @imageTrimmer
-      @datePicker = FK.App.DatePicker.create '#datetime-region'
+      @datePicker = FK.App.DatePicker.create '#datetime-region', @event
       EventComponents.push @datePicker
 
     @view.on 'close', () =>
