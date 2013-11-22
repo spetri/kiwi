@@ -201,10 +201,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @image.width / parseInt(@ui.image.width())
 
     broadcastImagePosition: () =>
-      @controller.trigger 'change:image:position', @imagePosition()
+      @model.setImagePosition @imagePosition()
 
     broadcastImageSize: () =>
-      @controller.trigger 'change:image:size', @imageSize()
+      @model.setImageSize @imageSize()
  
     disableTextSelect: =>
       window.getSelection().empty()
@@ -224,4 +224,3 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').off 'mousemove', @moveImage
       $('body').off 'mouseup', @stopSliding
       $('body').off 'mouseup', @stopMovingImage
-  
