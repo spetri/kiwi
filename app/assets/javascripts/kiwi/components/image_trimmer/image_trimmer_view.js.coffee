@@ -87,17 +87,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     startImage: () =>
       @clearCoordinatesOnDom()
-      @image =
-        height: @ui.image.height()
-        width:  @ui.image.width()
-        wToH: @ui.image.height() / @ui.image.width()
-
-      if @image.wToH < 0.75
-        @image.minWidth = @ui.trim.height() / @image.wToH
-      else
-        @image.minWidth = @ui.trim.width()
-
-      @image.undersized = true if @image.width < @image.minWidth
+      
+      @model.startImage(@ui.image.width(), @ui.image.height(), @ui.trim.width(), @ui.trim.height())
 
       @resetSlider()
       @sizeImage()
@@ -138,16 +129,13 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
    
     sizeImage: (factor = 0) =>
       factor = @domSliderFactor() if (factor == 0)
-      @ui.image.width(@adjustedWidth(factor))
+      @ui.image.width(@model.adjustedWidth(factor))
   
     sliderFactor: (position) =>
       position / (@ui.track.width() - @ui.slider.width())
   
     domSliderFactor: =>
       @sliderFactor(parseInt(@ui.slider.css('left')))
-  
-    adjustedWidth: (factor) =>
-      @image.minWidth + (@image.width - @image.minWidth) * factor
   
     imageOutOfBounds: (width, x, y) =>
       @imageHorizontalOutOfBounds(width, x) || @imageVerticalOutOfBounds(width, y)
@@ -158,7 +146,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     imageVerticalOutOfBounds: (width, y) =>
       y = y - parseInt(@ui.trim.css('border-top-width'))
-      height = Math.ceil width * @image.wToH
+      height = Math.ceil width * @model.get('wToH')
       y > 0 || y + height < @ui.trim.height()
   
     centerImage: =>
@@ -184,21 +172,15 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     imagePosition: () =>
       {
-        top: ((@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top) * @ratioToOriginalHeight()
-        left: ((@ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width'))) - @ui.image.offset().left) * @ratioToOriginalWidth()
+        top: ((@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top) * @model.ratioToOriginalHeight()
+        left: ((@ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width'))) - @ui.image.offset().left) * @model.ratioToOriginalWidth()
       }
 
     imageSize: () =>
       {
-        width: (@ui.trim.outerWidth() - (parseInt(@ui.trim.css('border-left-width')) + parseInt(@ui.trim.css('border-right-width')))) * @ratioToOriginalWidth()
-        height: (@ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))) * @ratioToOriginalHeight()
+        width: (@ui.trim.outerWidth() - (parseInt(@ui.trim.css('border-left-width')) + parseInt(@ui.trim.css('border-right-width')))) * @model.ratioToOriginalWidth()
+        height: (@ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))) * @model.ratioToOriginalHeight()
       }
-
-    ratioToOriginalHeight: () =>
-      @image.height / parseInt(@ui.image.height())
-
-    ratioToOriginalWidth: () =>
-      @image.width / parseInt(@ui.image.width())
 
     broadcastImagePosition: () =>
       @model.setImagePosition @imagePosition()
