@@ -25,7 +25,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     startSliding: (e) =>
       e.preventDefault()
-      return if ! @image || @image.undersized
+      return if ! @model.sizable()
       $('body').css('cursor', 'pointer')
       @disableTextSelect()
       @sliding = true
@@ -33,7 +33,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     startMoving: (e) =>
       e.preventDefault()
-      return if ! @image
+      return if ! @model.movable()
       $('body').css('cursor', 'move')
       @movingImage = true
       @disableTextSelect()
@@ -58,7 +58,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       return if ! @sliding
       @sliding = false
       @enableTextSelect()
-      @broadcastImageSize()
+      $('body').css('cursor', 'default')
+      @saveImageSize()
   
     moveImage: (e) =>
       return if ! @movingImage
@@ -72,7 +73,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       return if ! @movingImage
       @movingImage = false
       $('body').css('cursor', 'default')
-      @broadcastImagePosition()
+      @saveImagePosition()
 
     loadImage: (url) =>
       @ui.image.attr('src', url)
@@ -89,24 +90,21 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @clearCoordinatesOnDom()
       
       @model.startImage(@ui.image.width(), @ui.image.height(), @ui.trim.width(), @ui.trim.height())
+      @model.startTrim(parseInt(@ui.trim.css('border-left-width')), parseInt(@ui.trim.css('border-top-width')))
 
       @resetSlider()
       @sizeImage()
       @centerImage()
-      @broadcastImageSize()
-      @broadcastImagePosition()
+      @saveImagePosition()
+      @saveImageSize()
 
     clearImage: () =>
       @clearCoordinatesOnDom()
       @ui.image.removeAttr 'src'
-      @image =
-        height: 0
-        width: 0
-        wToH: 0
-        minWidth: 0
+      @model.clear()
 
-      @broadcastImageSize()
-      @broadcastImagePosition()
+      @saveImageSize()
+      @saveImagePosition()
 
     clearCoordinatesOnDom: () =>
       image = @ui.image
@@ -125,7 +123,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
       @imageStartSize =
         width: @ui.image.width()
-        height: @ui.image.height()
+       height: @ui.image.height()
    
     sizeImage: (factor = 0) =>
       factor = @domSliderFactor() if (factor == 0)
@@ -136,18 +134,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     domSliderFactor: =>
       @sliderFactor(parseInt(@ui.slider.css('left')))
-  
-    imageOutOfBounds: (width, x, y) =>
-      @imageHorizontalOutOfBounds(width, x) || @imageVerticalOutOfBounds(width, y)
-
-    imageHorizontalOutOfBounds: (width, x) =>
-      x = x - parseInt(@ui.trim.css('border-left-width'))
-      x > 0 || x + width < @ui.trim.width()
-
-    imageVerticalOutOfBounds: (width, y) =>
-      y = y - parseInt(@ui.trim.css('border-top-width'))
-      height = Math.ceil width * @model.get('wToH')
-      y > 0 || y + height < @ui.trim.height()
   
     centerImage: =>
       overflowedRight = @ui.image.width() - @ui.trim.outerWidth()
@@ -167,8 +153,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
 
     positionImage: (x, y) =>
-      @ui.image.css 'left', x if ! @imageHorizontalOutOfBounds(@ui.image.width(), x)
-      @ui.image.css 'top', y if ! @imageVerticalOutOfBounds(@ui.image.width(), y)
+      @ui.image.css 'left', x if ! @model.imageHorizontalOutOfBounds(@ui.image.width(), x)
+      @ui.image.css 'top', y if ! @model.imageVerticalOutOfBounds(@ui.image.width(), y)
   
     imagePosition: () =>
       {
@@ -182,10 +168,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         height: (@ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))) * @model.ratioToOriginalHeight()
       }
 
-    broadcastImagePosition: () =>
+    saveImagePosition: () =>
       @model.setImagePosition @imagePosition()
 
-    broadcastImageSize: () =>
+    saveImageSize: () =>
       @model.setImageSize @imageSize()
  
     disableTextSelect: =>

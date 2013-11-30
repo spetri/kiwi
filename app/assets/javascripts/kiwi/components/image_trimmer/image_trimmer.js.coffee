@@ -53,9 +53,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       ratio: 0.75
       trim_height: 0
       trim_width: 0
+      border_left: 0
+      border_top: 0
 
     startImage: (width, height, trim_width, trim_height) ->
-
       wToH = height / width
 
       if wToH < @get('ratio')
@@ -64,13 +65,31 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         minWidth = trim_width
 
       @set
+        width: width
+        height: height
         original_width: width
         original_height: height
         wToH: wToH
         min_width: minWidth
+        trim_width: trim_width
+        trim_height: trim_height
+
+    startTrim: (borderLeft, borderTop) =>
+      @set
+        border_left: borderLeft
+        border_top: borderTop
+    
+    started: ->
+      @get('original_width') > 0
 
     undersized: ->
       @get('width') < @get('min_width')
+
+    sizable: ->
+      @started() and not @undersized()
+
+    movable: ->
+      @started() and not @undersized()
 
     setImagePosition: (position) ->
       @set
@@ -88,8 +107,17 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         source: source
         image: file
 
+    imageHorizontalOutOfBounds: (width, x) =>
+      x = x - @get('border_left')
+      x > 0 || x + width < @get('trim_width')
+
+    imageVerticalOutOfBounds: (width, y) =>
+      y = y - @get('border_top')
+      height = Math.ceil width * @get('wToH')
+      y > 0 || y + height < @get('trim_height')
+
     adjustedWidth: (factor) =>
-      @get('min_width') + (@get('width') - @get('min_width')) * factor
+      @get('min_width') + (@get('original_width') - @get('min_width')) * factor
 
     ratioToOriginalHeight: ->
       @get('original_height') / @get('height')
