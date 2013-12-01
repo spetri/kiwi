@@ -58,9 +58,13 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     initialize: ->
       @listenTo @, 'change:width', @updateHeightByRatio
+      @listenTo @, 'change:slider_factor', @updateWidthBySliderFactor
 
     updateHeightByRatio: ->
       @set('height', @get('width') * @get('wToH'))
+
+    updateWidthBySliderFactor: ->
+      @set('width', @adjustedWidth())
 
     startImage: (width, height, trim_width, trim_height) ->
       wToH = height / width
@@ -128,11 +132,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     imageVerticalOutOfBounds: (width, y) =>
       y = y - @get('border_top')
       height = Math.ceil width * @get('wToH')
-      console.log(y, height, @get('trim_height'))
       y > 0 || y + height < @get('trim_height')
 
-    adjustedWidth: (factor) =>
-      @get('min_width') + (@get('max_width') - @get('min_width')) * factor
+    adjustedWidth: () =>
+      @get('min_width') + (@get('max_width') - @get('min_width')) * @get('slider_factor')
 
     ratioToOriginalHeight: ->
       @get('max_height') / @get('height')
