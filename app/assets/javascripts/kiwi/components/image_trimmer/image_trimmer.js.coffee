@@ -215,7 +215,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @get('max_width') / @get('width')
 
     setSizeByWidth: (width) ->
-      @set 'slider_factor', width / @get('max_width')
+      modelWidth = @get('max_width') * @get('trim_width') / width
+      @set 'slider_factor', (modelWidth - @get('min_width'))/(@get('max_width') - @get('min_width'))
 
     setPosition: (x, y) ->
       @set

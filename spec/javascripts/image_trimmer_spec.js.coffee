@@ -21,6 +21,20 @@ describe 'Image Trimmer', () ->
       @imageTrimmer.newImage imageUrl, 'remote'
       expect(@imageTrimmer.value().url).toBe(imageUrl)
 
+    it 'shoule be able to set the images width', () ->
+      spy = jasmine.createSpy()
+      @imageTrimmer.on 'new:image:ready', spy
+      runs () ->
+        imageUrl = '/images/stubs/averageSize.jpg'
+        @imageTrimmer.newImage imageUrl, 'remote'
+
+      waitsFor () ->
+        spy.callCount > 0
+
+      runs () ->
+        @imageTrimmer.setWidth 500
+        expect(Math.ceil(@imageTrimmer.value().width)).toBe(500)
+
   describe 'Image loading', () ->
 
     it 'should be able to show an image in the trimmer from a URL', () ->
