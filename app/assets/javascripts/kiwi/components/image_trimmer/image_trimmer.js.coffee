@@ -209,7 +209,13 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @get('max_width') / @get('width')
 
     image: () ->
-      image = @toJSON()
-      delete image.image if ! image.image
-      delete image.url if image.image
+      image =
+        crop_x: @get('crop_x')
+        crop_y: @get('crop_y')
+        width: @get('width')
+        height: @get('height')
+
+      image.image = @get('file') if @get('source') is 'upload'
+      image.url = @get('url') if @get('source') is 'remote'
+
       image

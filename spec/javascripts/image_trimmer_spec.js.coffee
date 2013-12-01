@@ -15,6 +15,12 @@ describe 'Image Trimmer', () ->
       FK.App.ImageTrimmer.stop()
       expect($('body #image-trimmer-region').length).toBe(0)
 
+  describe 'Image setting', () ->
+    it 'should be able to load an image', () ->
+      imageUrl = '/images/stubs/averageSize.jpg'
+      @imageTrimmer.newImage imageUrl, 'remote'
+      expect(@imageTrimmer.value().url).toBe(imageUrl)
+
   describe 'Image loading', () ->
 
     it 'should be able to show an image in the trimmer from a URL', () ->
