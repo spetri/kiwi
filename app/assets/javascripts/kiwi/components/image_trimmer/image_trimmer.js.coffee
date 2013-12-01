@@ -56,6 +56,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       border_left: 0
       border_top: 0
 
+    initialize: ->
+      @listenTo @, 'change:width', @updateHeightByRatio
+
+    updateHeightByRatio: ->
+      @set('height', @get('width') * @get('wToH'))
+
     startImage: (width, height, trim_width, trim_height) ->
       wToH = height / width
 
@@ -67,8 +73,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set
         width: width
         height: height
-        original_width: width
-        original_height: height
+        max_width: width
+        max_height: height
         wToH: wToH
         min_width: minWidth
         trim_width: trim_width
@@ -80,10 +86,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         border_top: borderTop
     
     started: ->
-      @get('original_width') > 0
+      @get('max_width') > 0
 
     undersized: ->
-      @get('width') < @get('min_width')
+      @get('max_width') < @get('min_width')
 
     sizable: ->
       @started() and not @undersized()
@@ -95,6 +101,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set
         crop_x: position.left
         crop_y: position.top
+
+    positionImage: (x, y) ->
+      @set('crop_x', x) if not @imageHorizontalOutOfBounds(@get('width'), x)
+      @set('crop_y', y) if not @imageVerticalOutOfBounds(@get('width'), y)
 
     setImageSize: (size) ->
       @set
@@ -114,16 +124,17 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     imageVerticalOutOfBounds: (width, y) =>
       y = y - @get('border_top')
       height = Math.ceil width * @get('wToH')
+      console.log(y, height, @get('trim_height'))
       y > 0 || y + height < @get('trim_height')
 
     adjustedWidth: (factor) =>
-      @get('min_width') + (@get('original_width') - @get('min_width')) * factor
+      @get('min_width') + (@get('max_width') - @get('min_width')) * factor
 
     ratioToOriginalHeight: ->
-      @get('original_height') / @get('height')
+      @get('max_height') / @get('height')
 
     ratioToOriginalWidth: ->
-      @get('original_width') / @get('width')
+      @get('max_width') / @get('width')
 
 
     image: () ->

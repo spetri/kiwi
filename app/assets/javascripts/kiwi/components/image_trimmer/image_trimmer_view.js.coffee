@@ -25,7 +25,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     startSliding: (e) =>
       e.preventDefault()
-      return if ! @model.sizable()
+      return if not @model.sizable()
       $('body').css('cursor', 'pointer')
       @disableTextSelect()
       @sliding = true
@@ -33,7 +33,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     startMoving: (e) =>
       e.preventDefault()
-      return if ! @model.movable()
+      return if not @model.movable()
       $('body').css('cursor', 'move')
       @movingImage = true
       @disableTextSelect()
@@ -59,21 +59,19 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @sliding = false
       @enableTextSelect()
       $('body').css('cursor', 'default')
-      @saveImageSize()
   
     moveImage: (e) =>
       return if ! @movingImage
       e.preventDefault()
       left = @imageStartOffset.left + e.pageX - @mouseStartOffset.left
       top = @imageStartOffset.top + e.pageY - @mouseStartOffset.top
-      @positionImage left, top
+      @model.positionImage(left, top)
   
     stopMovingImage: (e) =>
       e.preventDefault()
       return if ! @movingImage
       @movingImage = false
       $('body').css('cursor', 'default')
-      @saveImagePosition()
 
     loadImage: (url) =>
       @ui.image.attr('src', url)
@@ -87,7 +85,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
             )
 
     startImage: () =>
-      @clearCoordinatesOnDom()
       
       @model.startImage(@ui.image.width(), @ui.image.height(), @ui.trim.width(), @ui.trim.height())
       @model.startTrim(parseInt(@ui.trim.css('border-left-width')), parseInt(@ui.trim.css('border-top-width')))
@@ -95,23 +92,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @resetSlider()
       @sizeImage()
       @centerImage()
-      @saveImagePosition()
-      @saveImageSize()
 
     clearImage: () =>
-      @clearCoordinatesOnDom()
       @ui.image.removeAttr 'src'
       @model.clear()
-
-      @saveImageSize()
-      @saveImagePosition()
-
-    clearCoordinatesOnDom: () =>
-      image = @ui.image
-      coordinateAttrs = ['top', 'left', 'width']
-
-      _.each coordinateAttrs, (coordinateAttr) =>
-        image.css coordinateAttr, ''
 
     resetSlider: =>
       @ui.slider.css 'left', '0px'
@@ -123,11 +107,11 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
       @imageStartSize =
         width: @ui.image.width()
-       height: @ui.image.height()
+        height: @ui.image.height()
    
     sizeImage: (factor = 0) =>
       factor = @domSliderFactor() if (factor == 0)
-      @ui.image.width(@model.adjustedWidth(factor))
+      @model.set('width', @model.adjustedWidth(factor))
   
     sliderFactor: (position) =>
       position / (@ui.track.width() - @ui.slider.width())
@@ -138,7 +122,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     centerImage: =>
       overflowedRight = @ui.image.width() - @ui.trim.outerWidth()
       overflowedBottom = @ui.image.height() - @ui.trim.outerHeight()
-      @positionImage Math.floor(-overflowedRight / 2), Math.floor(-overflowedBottom / 2)
+      @model.positionImage Math.floor(-overflowedRight / 2), Math.floor(-overflowedBottom / 2)
   
     refocusImage: =>
       newLeft = @imageStartOffset.left + (@imageStartSize.width - @ui.image.width()) / 2
@@ -150,12 +134,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       outFlowWidth = 0 if outFlowWidth < 0
       outFlowHeight = 0 if outFlowHeight < 0
    
-      @positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
+      @model.positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
 
-    positionImage: (x, y) =>
-      @ui.image.css 'left', x if ! @model.imageHorizontalOutOfBounds(@ui.image.width(), x)
-      @ui.image.css 'top', y if ! @model.imageVerticalOutOfBounds(@ui.image.width(), y)
-  
     imagePosition: () =>
       {
         top: ((@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top) * @model.ratioToOriginalHeight()
@@ -168,18 +148,26 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         height: (@ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))) * @model.ratioToOriginalHeight()
       }
 
-    saveImagePosition: () =>
-      @model.setImagePosition @imagePosition()
-
-    saveImageSize: () =>
-      @model.setImageSize @imageSize()
- 
     disableTextSelect: =>
       window.getSelection().empty()
       $('body').on('selectstart', () => false)
   
     enableTextSelect: =>
       $('body').off('selectstart')
+
+    modelEvents:
+      'change:crop_x': 'refreshImagePositionX'
+      'change:crop_y': 'refreshImagePositionY'
+      'change:width': 'refreshImageWidth'
+
+    refreshImagePositionX: (model, x) ->
+      @ui.image.css 'left', x
+
+    refreshImagePositionY: (model, y) ->
+      @ui.image.css 'top', y
+
+    refreshImageWidth: (model, width) ->
+      @ui.image.width width
 
     onRender: =>
       $('body').on 'mousemove', @slide
