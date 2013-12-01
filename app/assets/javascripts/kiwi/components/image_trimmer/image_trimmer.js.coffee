@@ -40,6 +40,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       else if source is 'uploaded'
         @model.newUploadedImage url, file
 
+    setWidth: (width) ->
+      @model.setSizeByWidth(width)
+
+    setPosition: (x, y) ->
+      @model.setPosition(x, y)
+
     value: () =>
       @model.image()
 
@@ -207,6 +213,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     ratioToOriginalWidth: ->
       @get('max_width') / @get('width')
+
+    setSizeByWidth: (width) ->
+      @set 'slider_factor', width / @get('max_width')
+
+    setPosition: (x, y) ->
+      @set
+        crop_x: -x / @ratioToOriginalWidth() + @get('border_left')
+        crop_y: -y / @ratioToOriginalHeight() + @get('border_top')
 
     image: () ->
       image =
