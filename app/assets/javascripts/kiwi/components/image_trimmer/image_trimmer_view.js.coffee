@@ -6,8 +6,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
  
     initialize: (options) ->
       @controller = options.controller
-      @listenTo @controller, 'new:image:ready', @startImage
-      @listenTo @controller, 'new:image', @loadImage
       @listenTo @controller, 'new:image:error', @clearImage
  
     events:
@@ -25,11 +23,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     startSliding: (e) =>
       e.preventDefault()
-      return if not @model.sizable()
+      @model.startSizing()
       $('body').css('cursor', 'pointer')
       @disableTextSelect()
       @sliding = true
-      @saveImageCoords()
   
     startMoving: (e) =>
       e.preventDefault()
@@ -44,12 +41,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       newPosition = e.pageX - @ui.track.offset().left - @ui.slider.width() / 2
       newPosition = 0 if newPosition < 0
       newPosition = @ui.track.width() - @ui.slider.width() if newPosition > @ui.track.width() - @ui.slider.width()
-      @model.set 'slider_factor', @sliderFactor(newPosition)
-      @refocusImage()
+      factor = newPosition / (@ui.track.width() - @ui.slider.width())
+      @model.size factor
+      @model.refocusImage()
 
-    sliderFactor: (position) =>
-      position / (@ui.track.width() - @ui.slider.width())
-  
     stopSliding: (e) =>
       e.preventDefault()
       return if ! @sliding
@@ -80,18 +75,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         width: @ui.image.width()
         height: @ui.image.height()
   
-    refocusImage: =>
-      newLeft = @imageStartOffset.left + (@imageStartSize.width - @ui.image.width()) / 2
-      newTop = @imageStartOffset.top + (@imageStartSize.height - @ui.image.height()) / 2
-
-      outFlowWidth = (@ui.trim.width() + parseInt(@ui.trim.css('border-left-width'))) - (@ui.image.width() + newLeft)
-      outFlowHeight = (@ui.trim.height() + parseInt(@ui.trim.css('border-top-width'))) - (@ui.image.height() + newTop)
-
-      outFlowWidth = 0 if outFlowWidth < 0
-      outFlowHeight = 0 if outFlowHeight < 0
-   
-      @model.positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
-
     disableTextSelect: =>
       window.getSelection().empty()
       $('body').on('selectstart', () => false)

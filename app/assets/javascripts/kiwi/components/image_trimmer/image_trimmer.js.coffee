@@ -136,9 +136,21 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         top: fromY
       )
 
+      @saveImageCoords()
+
+    startSizing: ->
+      return if not @sizable()
+      @saveImageCoords()
+
+    saveImageCoords: () ->
       @set('image_start_offset',
         left: @get('crop_x')
         top: @get('crop_y')
+      )
+  
+      @set('image_start_size',
+        width: @get('width')
+        height: @get('height')
       )
 
     move: (byX, byY) ->
@@ -154,6 +166,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @unset 'moving_start_offset'
       @unset 'image_start_offset'
 
+    size: (factor) ->
+      @set 'slider_factor', factor
+
     centerImage: ->
       overflowedRight = @get('width') - @trimFullWidth()
       overflowedBottom = @get('height') - @trimFullHeight()
@@ -163,6 +178,18 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set('crop_x', x) if not @imageHorizontalOutOfBounds(@get('width'), x)
       @set('crop_y', y) if not @imageVerticalOutOfBounds(@get('width'), y)
 
+    refocusImage: =>
+      newLeft = @get('image_start_offset').left + (@get('image_start_size').width - @get('width')) / 2
+      newTop = @get('image_start_offset').top + (@get('image_start_size').height - @get('height')) / 2
+
+      outFlowWidth = (@get('trim_width') + @get('border_left')) - (@get('width') + newLeft)
+      outFlowHeight = (@get('trim_height') + @get('border_top')) - (@get('height') + newTop)
+
+      outFlowWidth = 0 if outFlowWidth < 0
+      outFlowHeight = 0 if outFlowHeight < 0
+   
+      @positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
+  
     imageHorizontalOutOfBounds: (width, x) =>
       x = x - @get('border_left')
       x > 0 || x + width < @get('trim_width')
