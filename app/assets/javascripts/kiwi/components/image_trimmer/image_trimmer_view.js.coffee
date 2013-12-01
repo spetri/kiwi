@@ -75,17 +75,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @movingImage = false
       $('body').css('cursor', 'default')
 
-    loadImage: (url) =>
-      @ui.image.attr('src', url)
-        .load(
-          (e) =>
-            @controller.trigger 'new:image:ready'
-            )
-        .error(
-          (e) =>
-            @controller.trigger 'new:image:error'
-            )
-
     startImage: () =>
       
       @model.startImage(
@@ -135,6 +124,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       'change:crop_y': 'refreshImagePositionY'
       'change:width': 'refreshImageWidth'
       'change:slider_factor': 'refreshSliderPosition'
+      'change:url': 'loadImage'
 
     refreshImagePositionX: (model, x) ->
       @ui.image.css 'left', x
@@ -147,6 +137,17 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     refreshSliderPosition: (model, slider_factor) ->
       @ui.slider.css 'left', ((@ui.track.width() - @ui.slider.width()) * slider_factor)
+
+    loadImage: (model, url) =>
+      @ui.image.attr('src', url)
+        .load(
+          (e) =>
+            @controller.trigger 'new:image:ready'
+            )
+        .error(
+          (e) =>
+            @controller.trigger 'new:image:error'
+            )
 
     onRender: =>
       $('body').on 'mousemove', @slide

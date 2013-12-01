@@ -55,6 +55,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       trim_width: 0
       border_left: 0
       border_top: 0
+      source: 'none'
 
     initialize: ->
       @listenTo @, 'change:width', @updateHeightByRatio
@@ -65,6 +66,17 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     updateWidthBySliderFactor: ->
       @set('width', @adjustedWidth())
+
+    newUploadedImage: (file, url) ->
+      @set
+        file: file
+        url: url
+        source: 'upload'
+
+    newRemoteImage: (url) ->
+      @set
+        url: url
+        source: 'remote'
 
     startImage: (width, height, trimWidth, trimHeight, borderLeft, borderTop, borderBottom) ->
       wToH = height / width
@@ -94,7 +106,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set 'slider_factor', 0
     
     started: ->
-      @get('max_width') > 0
+      @get('source') != 'none'
 
     undersized: ->
       @get('max_width') < @get('min_width')
