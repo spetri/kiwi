@@ -154,7 +154,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     ratioToOriginalWidth: ->
       @get('max_width') / @get('width')
 
-
     image: () ->
       image = @toJSON()
       delete image.image if ! image.image

@@ -50,8 +50,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       newPosition = 0 if newPosition < 0
       newPosition = @ui.track.width() - @ui.slider.width() if newPosition > @ui.track.width() - @ui.slider.width()
       @model.set 'slider_factor', @sliderFactor(newPosition)
-      @sizeImage()
       @refocusImage()
+
+    sliderFactor: (position) =>
+      position / (@ui.track.width() - @ui.slider.width())
   
     stopSliding: (e) =>
       e.preventDefault()
@@ -108,16 +110,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @imageStartSize =
         width: @ui.image.width()
         height: @ui.image.height()
-   
-    sizeImage: (factor = 0) =>
-      factor = @domSliderFactor() if (factor == 0)
-      @model.set('width', @model.adjustedWidth(factor))
-  
-    sliderFactor: (position) =>
-      position / (@ui.track.width() - @ui.slider.width())
-  
-    domSliderFactor: =>
-      @sliderFactor(parseInt(@ui.slider.css('left')))
   
     refocusImage: =>
       newLeft = @imageStartOffset.left + (@imageStartSize.width - @ui.image.width()) / 2
