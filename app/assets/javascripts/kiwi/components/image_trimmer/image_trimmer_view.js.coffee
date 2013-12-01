@@ -92,10 +92,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         @ui.trim.width(),
         @ui.trim.height(),
         parseInt(@ui.trim.css('border-left-width')),
-        parseInt(@ui.trim.css('border-top-width'))
+        parseInt(@ui.trim.css('border-top-width')),
+        parseInt(@ui.trim.css('border-bottom-width'))
       )
-
-      @centerImage()
 
     clearImage: () =>
       @ui.image.removeAttr 'src'
@@ -119,11 +118,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     domSliderFactor: =>
       @sliderFactor(parseInt(@ui.slider.css('left')))
-  
-    centerImage: =>
-      overflowedRight = @ui.image.width() - @ui.trim.outerWidth()
-      overflowedBottom = @ui.image.height() - @ui.trim.outerHeight()
-      @model.positionImage Math.floor(-overflowedRight / 2), Math.floor(-overflowedBottom / 2)
   
     refocusImage: =>
       newLeft = @imageStartOffset.left + (@imageStartSize.width - @ui.image.width()) / 2

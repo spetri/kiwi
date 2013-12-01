@@ -66,7 +66,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     updateWidthBySliderFactor: ->
       @set('width', @adjustedWidth())
 
-    startImage: (width, height, trimWidth, trimHeight, borderLeft, borderTop) ->
+    startImage: (width, height, trimWidth, trimHeight, borderLeft, borderTop, borderBottom) ->
       wToH = height / width
 
       if wToH < @get('ratio')
@@ -85,7 +85,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         trim_height: trimHeight
         border_left: borderLeft
         border_top: borderTop
+        border_bottom: borderBottom
         slider_factor: 0
+
+      @centerImage()
 
     resetSlider: ->
       @set 'slider_factor', 0
@@ -101,6 +104,17 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     movable: ->
       @started() and not @undersized()
+
+    trimFullWidth: ->
+      @get('border_left') * 2 + @get('trim_width')
+
+    trimFullHeight: ->
+      @get('border_top') + @get('border_bottom') + @get('trim_height')
+
+    centerImage: ->
+      overflowedRight = @get('width') - @trimFullWidth()
+      overflowedBottom = @get('height') - @trimFullHeight()
+      @positionImage Math.floor(-overflowedRight / 2), Math.floor(-overflowedBottom / 2)
 
     setImagePosition: (position) ->
       @set
