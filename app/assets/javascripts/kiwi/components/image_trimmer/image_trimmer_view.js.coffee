@@ -75,18 +75,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @movingImage = false
       $('body').css('cursor', 'default')
 
-    startImage: () =>
-      
-      @model.startImage(
-        @ui.image.width(),
-        @ui.image.height(),
-        @ui.trim.width(),
-        @ui.trim.height(),
-        parseInt(@ui.trim.css('border-left-width')),
-        parseInt(@ui.trim.css('border-top-width')),
-        parseInt(@ui.trim.css('border-bottom-width'))
-      )
-
     clearImage: () =>
       @ui.image.removeAttr 'src'
       @model.clear()
@@ -142,8 +130,16 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @ui.image.attr('src', url)
         .load(
           (e) =>
-            @controller.trigger 'new:image:ready'
+            @model.startImage(
+              @ui.image.width(),
+              @ui.image.height(),
+              @ui.trim.width(),
+              @ui.trim.height(),
+              parseInt(@ui.trim.css('border-left-width')),
+              parseInt(@ui.trim.css('border-top-width')),
+              parseInt(@ui.trim.css('border-bottom-width'))
             )
+        )
         .error(
           (e) =>
             @controller.trigger 'new:image:error'

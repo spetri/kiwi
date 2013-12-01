@@ -31,11 +31,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
  
     initialize: () ->
       @model = new ImageTrimmer.ImageCalculator()
+      
+      @listenTo @model, 'new:image:ready', () => @trigger 'new:image:ready'
 
-      @listenTo this, 'new:image', newImage
-
-    newImage = (url, source, file) ->
-      @model.newImage(url, source, file)
+    newImage: (url, source, file) ->
+      if source is 'remote'
+        @model.newRemoteImage url
+      else if source is 'uploaded'
+        @model.newUploadedImage url, file
 
     value: () =>
       @model.image()
@@ -102,6 +105,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
       @centerImage()
 
+      @trigger('new:image:ready')
+
     resetSlider: ->
       @set 'slider_factor', 0
     
@@ -141,12 +146,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set
         width: size.width
         height: size.height
-
-    newImage: (url, source, file) ->
-      @set
-        url: url
-        source: source
-        image: file
 
     imageHorizontalOutOfBounds: (width, x) =>
       x = x - @get('border_left')

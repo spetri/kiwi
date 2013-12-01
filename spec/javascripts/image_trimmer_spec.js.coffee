@@ -22,7 +22,7 @@ describe 'Image Trimmer', () ->
       @imageTrimmer.on 'new:image:ready', spy
       runs () ->
         imageUrl = '/images/stubs/averageSize.jpg'
-        @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+        @imageTrimmer.newImage imageUrl, 'remote'
 
       waitsFor () ->
         spy.callCount > 0
@@ -35,7 +35,7 @@ describe 'Image Trimmer', () ->
       @imageTrimmer.on 'new:image:ready', spy
       runs () ->
         imageUrl = '/images/stubs/averageSize.jpg'
-        @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+        @imageTrimmer.newImage imageUrl, 'remote'
 
       waitsFor () ->
         spy.callCount > 0
@@ -56,7 +56,7 @@ describe 'Image Trimmer', () ->
       @imageTrimmer.on 'new:image:ready', spy
       runs () ->
         imageUrl = '/images/stubs/averageSizeRotated.jpg'
-        @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+        @imageTrimmer.newImage imageUrl, 'remote'
 
       waitsFor () ->
         spy.callCount > 0
@@ -72,7 +72,7 @@ describe 'Image Trimmer', () ->
       @imageTrimmer.on 'new:image:ready', spy
       runs () ->
         imageUrl = '/images/stubs/longImage.jpg'
-        @imageTrimmer.trigger 'new:image', imageUrl, 'remote'
+        @imageTrimmer.newImage imageUrl, 'remote'
 
       waitsFor () ->
         spy.callCount > 0
