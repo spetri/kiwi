@@ -33,14 +33,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   
     startMoving: (e) =>
       e.preventDefault()
-      return if not @model.movable()
+      @model.startMoving(e.pageX, e.pageY)
       $('body').css('cursor', 'move')
-      @movingImage = true
       @disableTextSelect()
-      @mouseStartOffset =
-        left: e.pageX
-        top: e.pageY
-      @saveImageCoords()
   
     slide: (e) =>
       return if ! @sliding
@@ -63,16 +58,13 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').css('cursor', 'default')
   
     moveImage: (e) =>
-      return if ! @movingImage
       e.preventDefault()
-      left = @imageStartOffset.left + e.pageX - @mouseStartOffset.left
-      top = @imageStartOffset.top + e.pageY - @mouseStartOffset.top
-      @model.positionImage(left, top)
-  
+      @model.move e.pageX, e.pageY
+        
     stopMovingImage: (e) =>
       e.preventDefault()
-      return if ! @movingImage
-      @movingImage = false
+      @model.stopMoving()
+      @enableTextSelect()
       $('body').css('cursor', 'default')
 
     clearImage: () =>

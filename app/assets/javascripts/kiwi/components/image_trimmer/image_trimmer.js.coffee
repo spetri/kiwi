@@ -128,24 +128,40 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     trimFullHeight: ->
       @get('border_top') + @get('border_bottom') + @get('trim_height')
 
+    startMoving: (fromX, fromY) ->
+      return if not @movable()
+
+      @set('moving_start_offset',
+        left: fromX
+        top: fromY
+      )
+
+      @set('image_start_offset',
+        left: @get('crop_x')
+        top: @get('crop_y')
+      )
+
+    move: (byX, byY) ->
+      return if not @moving()
+      left = @get('image_start_offset').left + byX - @get('moving_start_offset').left
+      top = @get('image_start_offset').top + byY - @get('moving_start_offset').top
+      @positionImage(left, top)
+
+    moving: () ->
+      @has('moving_start_offset')
+
+    stopMoving: () ->
+      @unset 'moving_start_offset'
+      @unset 'image_start_offset'
+
     centerImage: ->
       overflowedRight = @get('width') - @trimFullWidth()
       overflowedBottom = @get('height') - @trimFullHeight()
       @positionImage Math.floor(-overflowedRight / 2), Math.floor(-overflowedBottom / 2)
 
-    setImagePosition: (position) ->
-      @set
-        crop_x: position.left
-        crop_y: position.top
-
     positionImage: (x, y) ->
       @set('crop_x', x) if not @imageHorizontalOutOfBounds(@get('width'), x)
       @set('crop_y', y) if not @imageVerticalOutOfBounds(@get('width'), y)
-
-    setImageSize: (size) ->
-      @set
-        width: size.width
-        height: size.height
 
     imageHorizontalOutOfBounds: (width, x) =>
       x = x - @get('border_left')
