@@ -49,7 +49,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       newPosition = e.pageX - @ui.track.offset().left - @ui.slider.width() / 2
       newPosition = 0 if newPosition < 0
       newPosition = @ui.track.width() - @ui.slider.width() if newPosition > @ui.track.width() - @ui.slider.width()
-      @ui.slider.css 'left', newPosition
+      @model.set 'slider_factor', @sliderFactor(newPosition)
       @sizeImage()
       @refocusImage()
   
@@ -89,16 +89,13 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @model.startImage(@ui.image.width(), @ui.image.height(), @ui.trim.width(), @ui.trim.height())
       @model.startTrim(parseInt(@ui.trim.css('border-left-width')), parseInt(@ui.trim.css('border-top-width')))
 
-      @resetSlider()
+      @model.resetSlider()
       @sizeImage()
       @centerImage()
 
     clearImage: () =>
       @ui.image.removeAttr 'src'
       @model.clear()
-
-    resetSlider: =>
-      @ui.slider.css 'left', '0px'
 
     saveImageCoords: =>
       @imageStartOffset =
@@ -136,18 +133,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
    
       @model.positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
 
-    imagePosition: () =>
-      {
-        top: ((@ui.trim.offset().top + parseInt(@ui.trim.css('border-top-width'))) - @ui.image.offset().top) * @model.ratioToOriginalHeight()
-        left: ((@ui.trim.offset().left + parseInt(@ui.trim.css('border-left-width'))) - @ui.image.offset().left) * @model.ratioToOriginalWidth()
-      }
-
-    imageSize: () =>
-      {
-        width: (@ui.trim.outerWidth() - (parseInt(@ui.trim.css('border-left-width')) + parseInt(@ui.trim.css('border-right-width')))) * @model.ratioToOriginalWidth()
-        height: (@ui.trim.outerHeight() - (parseInt(@ui.trim.css('border-top-width')) + parseInt(@ui.trim.css('border-bottom-width')))) * @model.ratioToOriginalHeight()
-      }
-
     disableTextSelect: =>
       window.getSelection().empty()
       $('body').on('selectstart', () => false)
@@ -159,6 +144,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       'change:crop_x': 'refreshImagePositionX'
       'change:crop_y': 'refreshImagePositionY'
       'change:width': 'refreshImageWidth'
+      'change:slider_factor': 'refreshSliderPosition'
 
     refreshImagePositionX: (model, x) ->
       @ui.image.css 'left', x
@@ -168,6 +154,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     refreshImageWidth: (model, width) ->
       @ui.image.width width
+
+    refreshSliderPosition: (model, slider_factor) ->
+      @ui.slider.css 'left', ((@ui.track.width() - @ui.slider.width()) * slider_factor)
 
     onRender: =>
       $('body').on 'mousemove', @slide

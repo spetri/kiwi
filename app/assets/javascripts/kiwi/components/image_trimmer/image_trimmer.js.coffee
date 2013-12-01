@@ -79,11 +79,15 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         min_width: minWidth
         trim_width: trim_width
         trim_height: trim_height
+        slider_factor: 0
 
     startTrim: (borderLeft, borderTop) =>
       @set
         border_left: borderLeft
         border_top: borderTop
+
+    resetSlider: ->
+      @set 'slider_factor', 0
     
     started: ->
       @get('max_width') > 0
