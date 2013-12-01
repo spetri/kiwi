@@ -86,10 +86,15 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     startImage: () =>
       
-      @model.startImage(@ui.image.width(), @ui.image.height(), @ui.trim.width(), @ui.trim.height())
-      @model.startTrim(parseInt(@ui.trim.css('border-left-width')), parseInt(@ui.trim.css('border-top-width')))
+      @model.startImage(
+        @ui.image.width(),
+        @ui.image.height(),
+        @ui.trim.width(),
+        @ui.trim.height(),
+        parseInt(@ui.trim.css('border-left-width')),
+        parseInt(@ui.trim.css('border-top-width'))
+      )
 
-      @model.resetSlider()
       @centerImage()
 
     clearImage: () =>

@@ -66,13 +66,13 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     updateWidthBySliderFactor: ->
       @set('width', @adjustedWidth())
 
-    startImage: (width, height, trim_width, trim_height) ->
+    startImage: (width, height, trimWidth, trimHeight, borderLeft, borderTop) ->
       wToH = height / width
 
       if wToH < @get('ratio')
-        minWidth = trim_height / wToH
+        minWidth = trimHeight / wToH
       else
-        minWidth = trim_width
+        minWidth = trimWidth
 
       @set
         width: width
@@ -81,14 +81,11 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         max_height: height
         wToH: wToH
         min_width: minWidth
-        trim_width: trim_width
-        trim_height: trim_height
-        slider_factor: 0
-
-    startTrim: (borderLeft, borderTop) =>
-      @set
+        trim_width: trimWidth
+        trim_height: trimHeight
         border_left: borderLeft
         border_top: borderTop
+        slider_factor: 0
 
     resetSlider: ->
       @set 'slider_factor', 0
