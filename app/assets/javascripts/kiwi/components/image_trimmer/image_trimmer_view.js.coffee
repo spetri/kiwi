@@ -63,7 +63,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').css('cursor', 'default')
 
     clearImage: () =>
-      @ui.image.removeAttr 'src'
       @model.clear()
 
     saveImageCoords: =>
@@ -102,6 +101,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @ui.slider.css 'left', ((@ui.track.width() - @ui.slider.width()) * slider_factor)
 
     loadImage: (model, url) =>
+      @ui.image.removeAttr 'src' if url is ''
+
       @ui.image.attr('src', url)
         .load(
           (e) =>
