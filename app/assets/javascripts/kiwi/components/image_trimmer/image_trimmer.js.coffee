@@ -210,10 +210,10 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     image: () ->
       image =
-        crop_x: @get('crop_x')
-        crop_y: @get('crop_y')
-        width: @get('width')
-        height: @get('height')
+        crop_x: - (@get('crop_x') - @get('border_left')) * @ratioToOriginalWidth()
+        crop_y: - (@get('crop_y') - @get('border_top')) * @ratioToOriginalHeight()
+        width: @get('trim_width') * @ratioToOriginalWidth()
+        height: @get('trim_height') * @ratioToOriginalHeight()
 
       image.image = @get('file') if @get('source') is 'upload'
       image.url = @get('url') if @get('source') is 'remote'
