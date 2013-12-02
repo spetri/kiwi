@@ -9,12 +9,18 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @event = event || new FK.Models.Event()
     @listenTo @event, 'saved', @toEvent
+    @listenTo @event, 'change:originalUrl', @setImageUrl
+    @listenTo @event, 'change:width', @setImageSize
+    @listenTo @event, 'change:crop_x', @setImagePositionX
+    @listenTo @event, 'change:crop_y', @setImagePositionY
+    
 
     @view = new EventForm.FormLayout
       model: @event
 
     @view.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
+      @imageStartup @event
       EventComponents.push @imageTrimmer
       @datePicker = FK.App.DatePicker.create '#datetime-region', @event
       EventComponents.push @datePicker
@@ -34,6 +40,24 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @event.save(params)
     FK.Data.events.add(@event, merge: true)
+
+  @imageStartup = (event) =>
+    if event.get('originalUrl')
+      @setImageUrl event, event.get('originalUrl')
+      @setImageSize event, event.get('width')
+      @imageTrimmer.setPosition event.get('crop_x'), event.get('crop_y')
+
+  @setImageUrl = (event, url) =>
+    @imageTrimmer.newImage url, 'remote'
+
+  @setImageSize = (event, width) =>
+    @imageTrimmer.setWidth width
+
+  @setImagePositionX = (event, x) =>
+    @imageTrimmer.setPosition x, event.get('crop_y')
+
+  @setImagePositionY = (event, y) =>
+    @imageTrimmer.setPosition event.get('crop_x'), y
 
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event
