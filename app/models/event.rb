@@ -53,7 +53,7 @@ class Event
   end
 
   def remove_upvote(username)
-    if not self.upvotes_notes.nil?
+    if not self.upvote_names.nil?
       self.upvote_names.delete username
     end
   end
