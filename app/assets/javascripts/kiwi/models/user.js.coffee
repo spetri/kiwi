@@ -4,3 +4,4 @@ class FK.Models.User extends Backbone.Model
     email: ''
     provider: ''
     logged_in: false
+    username: 'noname'
