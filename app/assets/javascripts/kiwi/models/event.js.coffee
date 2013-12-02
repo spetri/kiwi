@@ -45,12 +45,7 @@ class FK.Models.Event extends Backbone.GSModel
     Backbone.sync(action, model, options)
 
   parse: (resp) ->
-    resp = _.map resp, (value, key) ->
-      value = true if value == "true"
-      value = false if value == "false"
-
-      return key : value
-
+    resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
     resp
 
   time_in_eastern: ->
