@@ -46,6 +46,17 @@ class EventsController < ApplicationController
     params = event_params.dup
     have_i_upvoted = params.delete :have_i_upvoted
 
+    @event.width = event_params[:width]
+    @event.height = event_params[:height]
+    @event.crop_x = event_params[:crop_x]
+    @event.crop_y = event_params[:crop_y]
+
+    @event.update_attributes(params)
+
+    if (! event_params[:image] && event_params[:url])
+      @event.image_from_url(event_params[:url])
+    end
+
     if ( have_i_upvoted == "true" )
       @event.add_upvote(current_user.email)
     else
