@@ -35,6 +35,24 @@ describe 'Image Trimmer', () ->
         @imageTrimmer.setWidth 500
         expect(Math.ceil(@imageTrimmer.value().width)).toBe(500)
 
+    it 'should be able to set the images width before the image has been initialized', () ->
+      spy = jasmine.createSpy()
+      @imageTrimmer.on 'new:image:ready', spy
+      runs () ->
+        imageUrl = '/images/stubs/averageSize.jpg'
+        @imageTrimmer.setWidth 400
+        @imageTrimmer.setPosition 200, 300
+        @imageTrimmer.newImage imageUrl, 'remote'
+
+      waitsFor () ->
+        spy.callCount > 0
+
+      runs () ->
+        expect(Math.ceil(@imageTrimmer.value().width)).toBe(400)
+        expect(Math.ceil(@imageTrimmer.value().crop_x)).toBe(200)
+        expect(Math.ceil(@imageTrimmer.value().crop_y)).toBe(300)
+
+
     it 'should be able to set the coordinates of an image', () ->
       spy = jasmine.createSpy()
       @imageTrimmer.on 'new:image:ready', spy
