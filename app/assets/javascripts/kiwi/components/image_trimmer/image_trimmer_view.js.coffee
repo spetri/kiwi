@@ -101,31 +101,36 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @ui.slider.css 'left', ((@ui.track.width() - @ui.slider.width()) * slider_factor)
 
     loadImage: (model, url) =>
-      @ui.image.removeAttr 'src' if url is ''
-
+      @clearImageAttrs()
       @ui.image.attr('src', url)
-        .load(
-          (e) =>
-            @model.startImage(
-              @ui.image.width(),
-              @ui.image.height(),
-              @ui.trim.width(),
-              @ui.trim.height(),
-              parseInt(@ui.trim.css('border-left-width')),
-              parseInt(@ui.trim.css('border-top-width')),
-              parseInt(@ui.trim.css('border-bottom-width'))
-            )
-        )
-        .error(
-          (e) =>
-            @controller.trigger 'new:image:error'
-            )
+
+    startImage: =>
+      @model.startImage(
+        @ui.image.width(),
+        @ui.image.height(),
+        @ui.trim.width(),
+        @ui.trim.height(),
+        parseInt(@ui.trim.css('border-left-width')),
+        parseInt(@ui.trim.css('border-top-width')),
+        parseInt(@ui.trim.css('border-bottom-width'))
+      )
+      
+    loadImageError: =>
+      @controller.trigger 'new:image:error'
+
+    clearImageAttrs: () ->
+      @ui.image.removeAttr 'src'
+      @ui.image.removeAttr 'width'
+      @ui.image.removeAttr 'style'
 
     onRender: =>
       $('body').on 'mousemove', @slide
       $('body').on 'mousemove', @moveImage
       $('body').on 'mouseup', @stopSliding
       $('body').on 'mouseup', @stopMovingImage
+
+      @ui.image.load(@startImage)
+      @ui.image.error(@loadImageError)
   
     onClose: =>
       $('body').off 'mousemove', @slide
