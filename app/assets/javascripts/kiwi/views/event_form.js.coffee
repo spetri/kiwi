@@ -9,11 +9,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @event = event || new FK.Models.Event()
     @listenTo @event, 'saved', @toEvent
-    @listenTo @event, 'change:originalUrl', @setImageUrl
-    @listenTo @event, 'change:width', @setImageSize
-    @listenTo @event, 'change:crop_x', @setImagePositionX
-    @listenTo @event, 'change:crop_y', @setImagePositionY
-    
+    @listenTo @event, 'sync', @imageStartUp
 
     @view = new EventForm.FormLayout
       model: @event
@@ -37,6 +33,8 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     _.each EventComponents, (child) ->
       _.extend params, child.value()
+
+    @event.clearImage()
 
     @event.save(params)
     FK.Data.events.add(@event, merge: true)

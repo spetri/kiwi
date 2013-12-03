@@ -14,8 +14,6 @@ describe "Event", ->
     expect(v.get('creation_timezone')).toEqual("GMT+100")
     expect(v.time_in_eastern()).toEqual('10:00')
 
-
-
   it "can detect TV times", =>
     v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 16:00 GMT+200")
     expect(v.time_in_eastern()).toEqual('10:00')
@@ -44,3 +42,22 @@ describe "Event", ->
       @event.upvoteToggle()
       @event.upvoteToggle()
       expect(@event.upvotes()).toBe(0)
+
+  describe "when adding an image", ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+      @event.set 'url', 'http://googlimage.ca'
+      @event.set 'crop_x', 24
+      @event.set 'crop_y', 25
+      @event.set 'width', 200
+      @event.set 'height', 300
+      @event.set 'image', 'FILE'
+
+    it "should be able to clear all image properties", ->
+      @event.clearImage()
+      expect(@event.get('url')).not.toBeDefined()
+      expect(@event.get('crop_x')).not.toBeDefined()
+      expect(@event.get('crop_y')).not.toBeDefined()
+      expect(@event.get('width')).not.toBeDefined()
+      expect(@event.get('height')).not.toBeDefined()
+      expect(@event.get('image')).not.toBeDefined()

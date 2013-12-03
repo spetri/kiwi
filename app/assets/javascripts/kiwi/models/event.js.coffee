@@ -111,6 +111,14 @@ class FK.Models.Event extends Backbone.GSModel
     @toggleUserUpvoted()
     @save()
 
+  clearImage: ->
+    @unset 'url'
+    @unset 'crop_x'
+    @unset 'crop_y'
+    @unset 'width'
+    @unset 'height'
+    @unset 'image'
+
 class FK.Models.EventBlock extends Backbone.Model
 
 class FK.Collections.EventList extends Backbone.Collection
