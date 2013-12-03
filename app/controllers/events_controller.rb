@@ -51,10 +51,8 @@ class EventsController < ApplicationController
     @event.crop_x = event_params[:crop_x]
     @event.crop_y = event_params[:crop_y]
 
-    @event.update_attributes(params)
-
     if (! event_params[:image] && event_params[:url])
-      @event.image_from_url(event_params[:url])
+      @event.update_image_from_url(event_params[:url])
     end
 
     if ( have_i_upvoted == "true" )
@@ -63,6 +61,8 @@ class EventsController < ApplicationController
       @event.remove_upvote(current_user.email)
     end
  
+    @event.update_attributes(params)
+
     respond_to do |format|
       if @event.update(params)
         format.json { render action: 'show', status: :ok, location: @event }

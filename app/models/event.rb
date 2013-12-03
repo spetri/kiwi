@@ -38,6 +38,14 @@ class Event
     end
   end
 
+  def update_image_from_url(url)
+    if url != self.image.url(:original)
+      self.image_from_url(url)
+    else
+      self.image.reprocess!
+    end
+  end
+      
 
   def no_image
     File.open("#{Rails.root}/public/images/thumb/missing.png")
