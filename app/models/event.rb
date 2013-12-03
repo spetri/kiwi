@@ -31,7 +31,7 @@ class Event
     :processors => [:cropper]
 
   def image_from_url(url)
-    if url && File.exist?(url)
+    if url
       self.image = open(url)
     else
       self.image = self.no_image()
