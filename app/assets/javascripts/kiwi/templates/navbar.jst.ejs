@@ -19,16 +19,7 @@
         <li class="identity">
           <% if(email.length > 0 || name.length > 0) { %>
             <% if (email.length > 0) { %>
-            <a href="#"><%= email %>
-              <% if (provider != undefined && provider.length > 0) { %>
-                (<%= provider %>)
-              <% } %>
-            </a>
-            <% } else { %>
-            <a href="#"><%= name %>
-              <% if (provider != undefined && provider.length > 0) { %>
-                (<%= provider %>)
-                <% } %>
+            <a href="/users/edit"><%= username %>
             </a>
             <% } %>
             | <a href="<%= FK.Links.logout %>">logout</a>

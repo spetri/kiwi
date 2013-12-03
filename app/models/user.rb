@@ -8,8 +8,9 @@ class User
          :omniauthable, :omniauth_providers => [:twitter, :facebook]
 
   ## Database authenticatable
-  field :email,              :type => String, :default => ""
-  field :encrypted_password, :type => String, :default => ""
+  field :username,              :type => String, :default => ""
+  field :email,                 :type => String, :default => ""
+  field :encrypted_password,    :type => String, :default => ""
 
   ## Omniauth
   field :uid,                :type => Integer
@@ -30,6 +31,11 @@ class User
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
 
+
+
+  validates :username, uniqueness: true
+  validates :email, uniqueness: true
+
   ## Confirmable
   # field :confirmation_token,   :type => String
   # field :confirmed_at,         :type => Time
@@ -45,14 +51,10 @@ class User
   # field :authentication_token, :type => String
   include Mongoid::Timestamps
 
-  def self.from_omniauth(auth)
-     where(auth.slice(:provider, :uid)).find_or_create_by do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.name = auth.info.name
-      user.email = auth.info.email
-     end
+  def self.omniauth_find(auth)
+    where({:provider => auth[:provider], :uid => auth[:uid] } ).first
   end
+
   def self.new_with_session(params, session)
     if session["devise.user_attributes"]
       new(session["devise.user_attributes"], without_protection: true) do |user|
@@ -61,7 +63,7 @@ class User
       end
     else
       super
-    end    
+    end
   end
 
   def password_required?
