@@ -53,6 +53,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         @model.setPosition(x, y)
       )
 
+    imageIsReady: ->
+      @imageReady.state() is 'resolved'
+
     value: () =>
       @model.image()
 
@@ -222,6 +225,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @get('max_width') / @get('width')
 
     setSizeByWidth: (width) ->
+      width = @get('min_width') if width < @get('min_width')
+      width = @get('max_width') if width > @get('max_width')
       modelWidth = @get('max_width') * @get('trim_width') / width
       @set 'slider_factor', (modelWidth - @get('min_width'))/(@get('max_width') - @get('min_width'))
 

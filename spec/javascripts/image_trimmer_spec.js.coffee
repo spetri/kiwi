@@ -83,6 +83,27 @@ describe 'Image Trimmer', () ->
         expect(@imageTrimmer.value().crop_x).toBe(100)
         expect(@imageTrimmer.value().crop_y).toBe(50)
 
+  describe 'Validation', () ->
+    beforeEach () ->
+      imageUrl = '/images/stubs/averageSize.jpg'
+      @imageTrimmer.newImage imageUrl, 'remote'
+
+    it 'should be able to handle when a width is set to be too small', () ->
+      waitsFor () =>
+        @imageTrimmer.imageIsReady()
+
+      runs () ->
+        @imageTrimmer.setWidth 100
+        expect(Math.ceil(@imageTrimmer.value().width)).toBe @imageTrimmer.model.get('min_width')
+
+    it 'should be able to handle when a width is set to be too large', () ->
+      waitsFor () =>
+        @imageTrimmer.imageIsReady()
+
+      runs () ->
+        @imageTrimmer.setWidth 5000
+        expect(Math.ceil(@imageTrimmer.value().width)).toBe @imageTrimmer.model.get('max_width')
+
   describe 'Image loading', () ->
 
     it 'should be able to show an image in the trimmer from a URL', () ->
