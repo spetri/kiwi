@@ -53,3 +53,4 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @$('input[name=date]').datepicker()
       @updateTimeStatus()
       @updateTime()
+      @updateTimeFormat()
