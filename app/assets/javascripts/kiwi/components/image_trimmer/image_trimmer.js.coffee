@@ -153,7 +153,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @saveImageCoords()
 
     startSizing: ->
-      return if not @sizable()
+      return false if not @sizable()
       @saveImageCoords()
 
     saveImageCoords: () ->
