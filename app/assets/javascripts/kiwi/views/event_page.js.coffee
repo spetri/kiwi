@@ -3,16 +3,18 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer (event) ->
+    @event = event
     @loadSocialNetworking()
-    event.set 'upvote_allowed', FK.App.request('currentUser').get('logged_in')
+    @updateEditAllowed(@event)
+
+    @event.set 'upvote_allowed', FK.App.request('currentUser').get('logged_in')
     
     @view = new EventPage.EventPageLayout
-      model: event
-
     @eventCardView = new EventPage.EventCard
-      model: event
+      model: @event
 
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
+    @listenTo @event, 'change:user', @updateEditAllowed
 
     @eventCardView.on 'show', () =>
       @renderSocialNetworking()
@@ -58,6 +60,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       FB.XFBML.parse()
       twttr.widgets.load()
  
+  @updateEditAllowed = (event) =>
+    event.set('edit_allowed', event.get('user') == FK.App.request('currentUser').get('username'))
 
   @addFinalizer () ->
     @view.close()
