@@ -98,6 +98,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       'change:name': 'refreshName'
       'change:location': 'refreshLocation'
       'change:country': 'refreshLocation'
+      'change:description': 'refreshDescription'
     
     refreshName: (event) ->
       @$('#name').val event.get('name')
@@ -106,6 +107,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @$('[name="location_type"][value="' + event.get('location_type') + '"]').attr('checked', 'checked')
       @$('[name="country"] [value="' + event.get('country') + '"]').attr('selected', 'selected')
 
+    refreshDescription: (event) ->
+      @$('[name="description"]').val(event.get('description'))
+
     value: () ->
       window.serializeForm(@$el.find('input,select,textarea'))
 
@@ -113,5 +117,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
       @refreshName @model
       @refreshLocation @model
+      @refreshDescription @model
       @$('.current_user').text(FK.CurrentUser.get('name'))
       @renderLocation()
