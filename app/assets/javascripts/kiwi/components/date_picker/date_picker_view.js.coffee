@@ -45,7 +45,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @$('.status').text(moment(@model.get('datetime')).toString())
 
     updateTimeFormat: =>
-      @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').attr('checked', 'checked')
+      @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').removeAttr('checked', 'checked')
       @$('[name="time_format"][value="' + @model.get('time_format') + '"]').attr('checked', 'checked')
       @updateTimeDisplay()
       
