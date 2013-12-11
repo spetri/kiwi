@@ -85,12 +85,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set('width', @adjustedWidth())
 
     newUploadedImage: (file, url) ->
+      @clear()
       @set
         file: file
         url: url
         source: 'upload'
 
     newRemoteImage: (url) ->
+      @clear()
       @set
         url: url
         source: 'remote'
