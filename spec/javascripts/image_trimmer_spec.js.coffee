@@ -41,6 +41,7 @@ describe 'Image Trimmer', () ->
       runs () ->
         imageUrl = '/images/stubs/averageSize.jpg'
         @imageTrimmer.newImage imageUrl, 'remote'
+        @imageTrimmer.setWidth 500
         @imageTrimmer.setPosition 200, 300
 
       waitsFor () ->
@@ -79,6 +80,7 @@ describe 'Image Trimmer', () ->
         spy.callCount > 0
 
       runs () ->
+        @imageTrimmer.setWidth 500
         @imageTrimmer.setPosition 100, 50
         expect(@imageTrimmer.value().crop_x).toBe(100)
         expect(@imageTrimmer.value().crop_y).toBe(50)
@@ -103,6 +105,26 @@ describe 'Image Trimmer', () ->
       runs () ->
         @imageTrimmer.setWidth 5000
         expect(Math.ceil(@imageTrimmer.value().width)).toBe @imageTrimmer.model.get('max_width')
+
+    it 'should be able to handle when the x position is set to be too far right', () ->
+      waitsFor () =>
+        @imageTrimmer.imageIsReady()
+
+      runs () ->
+        @imageTrimmer.setWidth 500
+        @imageTrimmer.setPosition 20, 0
+        @imageTrimmer.setPosition -10, 0
+        expect(@imageTrimmer.value().crop_x).toBe(0)
+
+    it 'should be able to handle when the x position is set to be too far left', () ->
+      waitsFor () =>
+        @imageTrimmer.imageIsReady()
+
+      runs () ->
+        @imageTrimmer.setWidth 500
+        @imageTrimmer.setPosition 20, 0
+        @imageTrimmer.setPosition 2000, 0
+        expect(@imageTrimmer.value().crop_x).toBe(524)
 
   describe 'Image loading', () ->
 
