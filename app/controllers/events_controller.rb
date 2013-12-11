@@ -57,9 +57,9 @@ class EventsController < ApplicationController
 
     if ( user_signed_in? )
       if ( have_i_upvoted == "true" )
-        @event.add_upvote(current_user.email)
+        @event.add_upvote(current_user.username)
       else
-        @event.remove_upvote(current_user.email)
+        @event.remove_upvote(current_user.username)
       end
     end
  
