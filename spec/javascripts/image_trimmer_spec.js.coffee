@@ -126,6 +126,27 @@ describe 'Image Trimmer', () ->
         @imageTrimmer.setPosition 2000, 0
         expect(@imageTrimmer.value().crop_x).toBe(524)
 
+    it 'should be able to handle when the y position is set to be too far down', () ->
+      waitsFor () =>
+        @imageTrimmer.imageIsReady()
+
+      runs () ->
+        @imageTrimmer.setWidth 500
+        @imageTrimmer.setPosition 0, 50
+        @imageTrimmer.setPosition 0, -20
+        expect(@imageTrimmer.value().crop_y).toBe(0)
+
+    it 'should be able to handle when the y position is set to be too far up', () ->
+     waitsFor () =>
+        @imageTrimmer.imageIsReady()
+
+      runs () ->
+        @imageTrimmer.setWidth 500
+        @imageTrimmer.setPosition 0, 50
+        @imageTrimmer.setPosition 0, 5000
+        expect(Math.floor(@imageTrimmer.value().crop_y)).toBe(394)
+ 
+
   describe 'Image loading', () ->
 
     it 'should be able to show an image in the trimmer from a URL', () ->

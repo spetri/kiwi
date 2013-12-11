@@ -192,7 +192,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     positionImage: (x, y) ->
       @set 'crop_x', @limitImageHorizontalPosition(@get('width'), x)
-      @set('crop_y', y) if not @imageVerticalOutOfBounds(@get('width'), y)
+      @set 'crop_y', @limitImageVerticalPosition(@get('width'), y)
 
     refocusImage: =>
       newLeft = @get('image_start_offset').left + (@get('image_start_size').width - @get('width')) / 2
@@ -212,10 +212,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       return -width + @get('border_left') + @get('trim_width') if x + width < @get('trim_width')
       x + @get('border_left')
 
-    imageVerticalOutOfBounds: (width, y) =>
+    limitImageVerticalPosition: (width, y) =>
       y = y - @get('border_top')
       height = Math.ceil width * @get('wToH')
-      y > 0 || y + height < @get('trim_height')
+      return @get('border_top') if y > 0
+      return -height + @get('border_top') + @get('trim_height') if y + height < @get('trim_height')
+      y + @get('border_top')
 
     adjustedWidth: () =>
       @get('min_width') + (@get('max_width') - @get('min_width')) * @get('slider_factor')
