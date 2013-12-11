@@ -207,17 +207,15 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
   
     limitImageHorizontalPosition: (width, x) =>
-      x = x - @get('border_left')
-      return @get('border_left') if x > 0
-      return -width + @get('border_left') + @get('trim_width') if x + width < @get('trim_width')
-      x + @get('border_left')
+      return @get('border_left') if x > @get('border_left')
+      return -width + @get('border_left') + @get('trim_width') if x + width < @get('trim_width') + @get('border_left')
+      x
 
     limitImageVerticalPosition: (width, y) =>
-      y = y - @get('border_top')
       height = Math.ceil width * @get('wToH')
-      return @get('border_top') if y > 0
-      return -height + @get('border_top') + @get('trim_height') if y + height < @get('trim_height')
-      y + @get('border_top')
+      return @get('border_top') if y > @get('border_top')
+      return -height + @get('border_top') + @get('trim_height') if y + height < @get('trim_height') + @get('border_top')
+      y
 
     adjustedWidth: () =>
       @get('min_width') + (@get('max_width') - @get('min_width')) * @get('slider_factor')
