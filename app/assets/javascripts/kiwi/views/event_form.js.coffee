@@ -10,22 +10,13 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @event = event || new FK.Models.Event()
     @listenTo @event, 'saved', @toEvent
     @listenTo @event, 'sync', @imageStartUp
+    @listenTo @event, 'change:user', @showAllowedView
 
-    @view = new EventForm.FormLayout
-      model: @event
-
-    @view.on 'show', () =>
-      @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
-      @imageStartup @event
-      EventComponents.push @imageTrimmer
-      @datePicker = FK.App.DatePicker.create '#datetime-region', @event
-      EventComponents.push @datePicker
-
+    @showAllowedView(@event)
+    
     @view.on 'close', () =>
       @stop()
 
-    FK.App.mainRegion.show @view
-    EventComponents.push @view
 
   @saveEvent = () ->
     params =
@@ -38,6 +29,35 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @event.save(params)
     FK.Data.events.add(@event, merge: true)
+
+  @showAllowedView = (event) =>
+    @view.close() if @view
+    if @editAllowed(event)
+      @showEventForm(event)
+    else
+      @showNotYourEvent()
+    FK.App.mainRegion.show @view
+
+  @showEventForm = (event) =>
+    @view = new EventForm.FormLayout
+      model: event
+
+    @view.on 'show', () =>
+      @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
+      @imageStartup @event
+      EventComponents.push @imageTrimmer
+      @datePicker = FK.App.DatePicker.create '#datetime-region', @event
+      EventComponents.push @datePicker
+
+    @view.on 'close', () =>
+      _.each EventComponents, (child) ->
+        child.close()
+
+      EventComponents = []
+    EventComponents.push @view
+
+  @showNotYourEvent = () =>
+    @view = new EventForm.NotYourEventView()
 
   @imageStartup = (event) =>
     if event.get('originalUrl')
@@ -57,14 +77,13 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
   @setImagePositionY = (event, y) =>
     @imageTrimmer.setPosition event.get('crop_x'), y
 
+  @editAllowed = (event) =>
+    event.get('user') == App.request('currentUser').get('username')
+
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event
 
   @addFinalizer () =>
-    _.each EventComponents, (child) ->
-      child.close()
-
-    EventComponents = []
     @stopListening()
 
   class EventForm.FormLayout extends Backbone.Marionette.Layout
