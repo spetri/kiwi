@@ -78,7 +78,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @imageTrimmer.setPosition event.get('crop_x'), y
 
   @editAllowed = (event) =>
-    event.get('user') == App.request('currentUser').get('username')
+    event.get('user') is '' or event.get('user') == App.request('currentUser').get('username')
 
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event
