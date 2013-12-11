@@ -55,10 +55,12 @@ class EventsController < ApplicationController
       @event.update_image_from_url(event_params[:url])
     end
 
-    if ( have_i_upvoted == "true" )
-      @event.add_upvote(current_user.email)
-    else
-      @event.remove_upvote(current_user.email)
+    if ( user_signed_in? )
+      if ( have_i_upvoted == "true" )
+        @event.add_upvote(current_user.email)
+      else
+        @event.remove_upvote(current_user.email)
+      end
     end
  
     @event.update_attributes(params)
