@@ -104,7 +104,9 @@ class EventsController < ApplicationController
                     :creation_timezone,
                     :local_time,
                     :description,
-                    :have_i_upvoted
+                    :have_i_upvoted,
+                    :country,
+                    :location_type
                    )
     end
 end

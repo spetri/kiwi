@@ -21,6 +21,8 @@ class Event
   field :local_time, type: String
   field :description, type: String
   field :upvote_names, type: Array
+  field :country, type: String
+  field :location_type, type: String
 
 
   has_mongoid_attached_file :image, :styles =>
