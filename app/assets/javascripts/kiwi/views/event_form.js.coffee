@@ -29,7 +29,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
   @saveEvent = () ->
     params =
-      user: FK.CurrentUser.get('name')
+      user: App.request('currentUser').get('username')
 
     _.each EventComponents, (child) ->
       _.extend params, child.value()
@@ -118,5 +118,4 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @refreshName @model
       @refreshLocation @model
       @refreshDescription @model
-      @$('.current_user').text(FK.CurrentUser.get('name'))
       @renderLocation()

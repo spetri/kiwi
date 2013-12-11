@@ -30,10 +30,6 @@
         <label class="col-lg-3"> 5. Description</label>
         <textarea name="description" cols="80" rows="3"></textarea>
       </div>
-      <div class="form-group well">
-        <label class="col-lg-3" for="user">User</label>
-        <span class="current_user"></span>
-      </div>
       <button class="save pull-right btn btn-success">Save</button>
       <div class="clearfix"></div>
   </form>
