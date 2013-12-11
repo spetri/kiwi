@@ -61,8 +61,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   class ImageTrimmer.ImageCalculator extends Backbone.Model
     defaults:
-      original_height: 0
-      original_width: 0
       height: 0
       width: 0
       min_width: 0
