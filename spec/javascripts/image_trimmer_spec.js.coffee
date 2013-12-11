@@ -113,7 +113,7 @@ describe 'Image Trimmer', () ->
       runs () ->
         @imageTrimmer.setWidth 500
         @imageTrimmer.setPosition 20, 0
-        @imageTrimmer.setPosition -10, 0
+        @imageTrimmer.setPosition -1, 0
         expect(@imageTrimmer.value().crop_x).toBe(0)
 
     it 'should be able to handle when the x position is set to be too far left', () ->
@@ -123,7 +123,7 @@ describe 'Image Trimmer', () ->
       runs () ->
         @imageTrimmer.setWidth 500
         @imageTrimmer.setPosition 20, 0
-        @imageTrimmer.setPosition 2000, 0
+        @imageTrimmer.setPosition 525, 0
         expect(@imageTrimmer.value().crop_x).toBe(524)
 
     it 'should be able to handle when the y position is set to be too far down', () ->
@@ -133,7 +133,7 @@ describe 'Image Trimmer', () ->
       runs () ->
         @imageTrimmer.setWidth 500
         @imageTrimmer.setPosition 0, 50
-        @imageTrimmer.setPosition 0, -20
+        @imageTrimmer.setPosition 0, -1
         expect(@imageTrimmer.value().crop_y).toBe(0)
 
     it 'should be able to handle when the y position is set to be too far up', () ->
@@ -143,7 +143,7 @@ describe 'Image Trimmer', () ->
       runs () ->
         @imageTrimmer.setWidth 500
         @imageTrimmer.setPosition 0, 50
-        @imageTrimmer.setPosition 0, 5000
+        @imageTrimmer.setPosition 0, 395
         expect(Math.floor(@imageTrimmer.value().crop_y)).toBe(394)
  
 
