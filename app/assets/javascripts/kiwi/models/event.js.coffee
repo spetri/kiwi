@@ -78,6 +78,18 @@ class FK.Models.Event extends Backbone.GSModel
 
       return @.time_from_moment(moment(@.get('datetime')))
 
+    local_hour: ->
+      local_hour = @get('local_time').split(':')[0]
+      local_hour = local_hour - 12 + "" if local_hour > 12
+      local_hour
+
+    local_minute: ->
+      @get('local_time').split(':')[1].split(' ')[0]
+
+    local_ampm: ->
+      @get('local_time').split(':')[1].split(' ')[1]
+      
+
     fk_datetime: () ->
       if @.get('time_format') is 'recurring'
         #console.log @.get('local_time')

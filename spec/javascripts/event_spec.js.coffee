@@ -43,6 +43,31 @@ describe "Event", ->
       @event.upvoteToggle()
       expect(@event.upvotes()).toBe(0)
 
+  describe "when getting the pieces of the local time", ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+      @event.set('local_time', '7:40 PM')
+
+    it "should be able to get the local hour", ->
+      expect(@event.get('local_hour')).toBe('7')
+
+    it "should be able to get the local minutes", ->
+      expect(@event.get('local_minute')).toBe('40')
+
+    it "should be able to get the local ampm", ->
+      expect(@event.get('local_ampm')).toBe('PM')
+
+    describe "when getting the pieces of a 24hr clock local time", ->
+      beforeEach ->
+        @event.set('local_time', '19:25 AM')
+
+      it "should be able to get the local hour", ->
+        expect(@event.get('local_hour')).toBe('7')
+
+      it "should be able to get the local ampm", ->
+        expect(@event.get('local_ampm')).toBe('AM')
+
+
   describe "when adding an image", ->
     beforeEach ->
       @event = new FK.Models.Event()

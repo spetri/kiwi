@@ -5,12 +5,12 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       'change input,select': 'pickerChanged'
 
     modelEvents:
-      'change:datetime':   'updateStatus'
       'change:is_all_day': 'updateTimeStatus'
+      'change:datetime':   'updateTime'
+      'change:time_format':'updateTimeFormat'
 
     pickerChanged: (e) =>
       @updateModel()
-      @$('.time-display-value').text(@model.get('time'))
 
     updateModel: =>
       is_all_day  = @$('input[name=is_all_day]:checked').val() is '1'
@@ -22,17 +22,34 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         is_all_day: is_all_day,
         time_format: time_format)
 
-    onRender: () ->
-      @$('input[name=date]').datepicker()
-
     updateTimeStatus: =>
       selector = @$('input[name=time_format],select[name=hours],select[name=minutes],select[name=ampm],select[name=time_type]')
-      if @model.get('is_all_day')
+      if @model.get('is_all_day') is true
         selector.attr('disabled','disabled')
         @$('.timedisplay').hide()
+        @$('[name="is_all_day"]').attr('checked', 'checked')
       else
         selector.removeAttr('disabled')
         @$('.timedisplay').show()
+        @$('[name="is_all_day"]').removeAttr('checked')
 
-    updateStatus: =>
+    updateTime: =>
+      @updateTimeDisplay()
+      @$('[name="hours"]').val @model.get('local_hour')
+      @$('[name="minutes"]').val @model.get('local_minute')
+      @$('[name="ampm"]').val @model.get('local_ampm')
+      @$('input[name="date"]').datepicker('setValue', @model.get('datetime'))
+
+    updateTimeDisplay: =>
+      @$('.time-display-value').text(@model.get('time'))
       @$('.status').text(moment(@model.get('datetime')).toString())
+
+    updateTimeFormat: =>
+      @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').attr('checked', 'checked')
+      @$('[name="time_format"][value="' + @model.get('time_format') + '"]').attr('checked', 'checked')
+      @updateTimeDisplay()
+      
+    onRender: () ->
+      @$('input[name=date]').datepicker()
+      @updateTimeStatus()
+      @updateTime()
