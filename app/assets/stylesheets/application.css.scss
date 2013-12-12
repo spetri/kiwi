@@ -44,6 +44,14 @@ a.navbar-brand {
   }
 }
 
+#main-region {
+  margin-bottom: 20px;
+}
+
+#sidebar-region {
+  max-width: 430px;
+  margin: 0 auto;
+}
 
 /* event management */
 .image-trimmer {
@@ -150,11 +158,16 @@ a.navbar-brand {
 
   .event-image-container {
     height: 300px;
+    max-width: 430px;
+    margin: 0 auto;
+    text-align: left;
   }
 
   .event-info-container {
     height: 300px;
-    max-width: 400px;
+    max-width: 430px;
+    text-align: left;
+    margin: 0 auto;
   }
 
   .event-heading-container {
