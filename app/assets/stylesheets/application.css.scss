@@ -198,6 +198,14 @@ a.navbar-brand {
     }
   }
 
+  .event-reminders-container {
+    width: 240px; 
+
+    .btn {
+      border: solid #b9b9b9 1px;
+    }
+  }
+
   .popover {
     background-color: #efefef;
 
@@ -210,10 +218,13 @@ a.navbar-brand {
     .popover-title {
       background-color: #efefef;
       border-bottom: 0px;
+      padding-bottom: 0px;
+      font-weight: bold;
     }
 
     .popover-content {
       background-color: #efefef;
+      padding-top: 0px;
     }
   }
 

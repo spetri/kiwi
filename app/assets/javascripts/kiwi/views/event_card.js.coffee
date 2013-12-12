@@ -43,11 +43,13 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
             title: 'Login to upvote.'
 
       renderReminderPopover: () =>
+        @remindersView = new EventPage.EventReminders
+          model: @model
         @$('[data-action="set-reminder"]').popover
           html: true
           placement: 'bottom'
           title: 'Remind me of this event'
-          content: 'reminders...'
+          content: @remindersView.render().el
       
       onRender: =>
         @refreshUpvotes(@model)
