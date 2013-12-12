@@ -27,8 +27,8 @@ class Event
 
   has_mongoid_attached_file :image, :styles =>
     {
-      :thumb => "80x60>",
-      :medium => "400x300>"
+      :thumb => "80x60^",
+      :medium => "400x300^"
     },
     :processors => [:cropper]
 
