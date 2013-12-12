@@ -1,8 +1,13 @@
 FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) ->
 
-    class EventPage.EventCard extends Marionette.ItemView
+    class EventPage.EventCard extends Marionette.Layout
       template: FK.Template('event_card')
       className: 'event-card row'
+
+      regions:
+        reminders:
+          selector: '[data-tool="reminders"] .event-tool-popover'
+          regionType: EventPage.CornerPopover
 
       templateHelpers: () =>
         return prettyDate: () => @model.get('datetime').format('dddd, MMM Do, YYYY, h:mm A z')
@@ -11,7 +16,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         upvotesIcon: '#upvotes-icon'
 
       triggers:
+        'click' : 'click:card'
         'click [data-action="edit"]': 'click:edit'
+        'click [data-tool="reminders"] .event-tool': 'click:reminders'
 
       events:
         'click .event-upvotes': 'upvoteToggle'
@@ -41,21 +48,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         else
           @$('.event-upvotes').tooltip
             title: 'Login to upvote.'
-
-      renderReminderPopover: () =>
-        @remindersView = new EventPage.EventReminders
-          model: @model
-        @$('[data-action="set-reminder"]').popover
-          html: true
-          placement: 'bottom'
-          title: 'Remind me of this event'
-          content: @remindersView.render().el
       
       onRender: =>
         @refreshUpvotes(@model)
         @refreshUpvoted(@model)
         @refreshUpvoteAllowed(@model)
-
-        @renderReminderPopover()
-        
-

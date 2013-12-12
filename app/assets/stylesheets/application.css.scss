@@ -190,11 +190,19 @@ a.navbar-brand {
       }
     }
 
-    .event-tool {
-      color: grey;
-      margin-right: 8px;
-      text-decoration: underline;
-      cursor: pointer;
+    .event-tool-container {
+      display: inline;
+
+      .event-tool-popover {
+        display: inline-block;
+      }
+
+      .event-tool {
+        color: grey;
+        margin-right: 8px;
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
   }
 

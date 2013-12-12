@@ -15,6 +15,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       model: @event
 
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
+    @listenTo @eventCardView, 'click:reminders', @showReminders
+    @listenTo @eventCardView, 'click:card', @closeReminders
     @listenTo @event, 'change:user', @updateEditAllowed
 
     @eventCardView.on 'show', () =>
@@ -37,6 +39,16 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     event = args.model
     App.vent.trigger 'container:new', event
     Backbone.history.navigate('events/edit/' + event.id, trigger : false)
+
+  @showReminders = () ->
+    @remindersView.close() if @remindersView
+    @remindersView = new EventPage.EventReminders
+      model: @event
+
+    @eventCardView.reminders.show @remindersView
+
+  @closeReminders = () ->
+    @remindersView.close() if @remindersView
 
   @loadSocialNetworking = () ->
     @googleApi = $.Deferred()
