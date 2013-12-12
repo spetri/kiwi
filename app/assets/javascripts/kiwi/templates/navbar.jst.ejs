@@ -17,17 +17,22 @@
         <a class="" href="#/events/new">New Event</a>
       </li>
       <% } %>
-      <li class="identity">
-        <% if(email.length > 0 || name.length > 0) { %>
-          <% if (email.length > 0) { %>
-          <a href="/users/edit"><%= username %>
-          </a>
-          <% } %>
-          | <a href="<%= FK.Links.logout %>">logout</a>
-        <% } else {  %>
-          <a href="<%= FK.Links.login %>">login</a> | <a href="<%= FK.Links.register %>">register</a>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <% if(email.length > 0 || name.length > 0) { %>
+        <% if (email.length > 0) { %>
+        <li>
+          <a href="/users/edit"><%= username %></a> 
+        </li>
         <% } %>
-      </li>
+        <li>
+          <a href="<%= FK.Links.logout %>">logout</a>
+        </li>
+      <% } else {  %>
+        <li>
+          <a href="<%= FK.Links.login %>">login</a> | <a href="<%= FK.Links.register %>">register</a>
+        </li>
+      <% } %>
     </ul>
   </div>
 </div>
