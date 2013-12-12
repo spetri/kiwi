@@ -26,7 +26,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @event.clearImage()
 
-    @event.save(params)
+    @event.save(params, { silent: true })
     FK.Data.events.add(@event, merge: true)
 
   @showAllowedView = (event) =>
