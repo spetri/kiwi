@@ -198,6 +198,25 @@ a.navbar-brand {
     }
   }
 
+  .popover {
+    background-color: #efefef;
+
+    &.bottom .arrow {
+      &:after {
+        border-bottom-color: #efefef;
+      }
+    }
+
+    .popover-title {
+      background-color: #efefef;
+      border-bottom: 0px;
+    }
+
+    .popover-content {
+      background-color: #efefef;
+    }
+  }
+
   .event-likes-container {
     padding-top: 10px;
     height: 35px;
