@@ -17,7 +17,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @view.on 'close', () =>
       @stop()
 
-
   @saveEvent = () ->
     params =
       user: App.request('currentUser').get('username')
