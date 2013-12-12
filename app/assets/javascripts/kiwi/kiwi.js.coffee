@@ -60,6 +60,9 @@ FK.Controllers.MainController = {
 FK.App.reqres.setHandler 'currentUser', () ->
   FK.CurrentUser
 
+FK.App.reqres.setHandler 'countryName', (countryCode) ->
+  FK.Data.countries.get(countryCode).get('en_name').trim()
+
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {

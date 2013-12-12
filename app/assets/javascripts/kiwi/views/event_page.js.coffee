@@ -7,7 +7,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @loadSocialNetworking()
     @updateEditAllowed(@event)
 
-    @event.set 'upvote_allowed', FK.App.request('currentUser').get('logged_in')
+    @event.set 'upvote_allowed', App.request('currentUser').get('logged_in')
+    @event.set 'country_full_name', App.request('countryName', @event.get('country'))
     
     @view = new EventPage.EventPageLayout
     @eventCardView = new EventPage.EventCard
