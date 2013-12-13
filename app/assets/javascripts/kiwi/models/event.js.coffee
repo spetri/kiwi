@@ -21,7 +21,7 @@ class FK.Models.Event extends Backbone.GSModel
     '/events'
 
   initialize: () =>
-    @reminder = new FK.Collections.Reminders()
+    @reminders = new FK.Collections.Reminders()
 
   sync: (action, model, options) =>
     methodMap =
@@ -135,6 +135,20 @@ class FK.Models.Event extends Backbone.GSModel
     @unset 'width'
     @unset 'height'
     @unset 'image'
+
+  addReminder: (user, timeToEvent) ->
+    reminder = new FK.Models.Reminder
+      user: user
+      time_to_event: timeToEvent
+      event: @get('_id')
+    @reminders.add reminder
+    reminder
+
+  removeReminder: (user, timeToEvent) ->
+    @reminders.removeReminder user, timeToEvent, @get('_id')
+
+  reminderTimes: () ->
+    @reminders.times()
 
 class FK.Models.EventBlock extends Backbone.Model
 
