@@ -208,10 +208,6 @@ a.navbar-brand {
 
   .event-reminders-container {
     width: 240px; 
-
-    .btn {
-      border: solid #b9b9b9 1px;
-    }
   }
 
   .popover {
@@ -233,6 +229,10 @@ a.navbar-brand {
     .popover-content {
       background-color: #efefef;
       padding-top: 0px;
+    }
+
+    .btn {
+      border: solid #b9b9b9 1px;
     }
   }
 
