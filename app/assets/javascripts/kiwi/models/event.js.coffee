@@ -14,6 +14,8 @@ class FK.Models.Event extends Backbone.GSModel
     tv_time: ''
     upvotes: 0
     have_i_upvoted: false
+    country_full_name: ''
+    edit_allowed: false
 
   urlRoot:
     '/events'
