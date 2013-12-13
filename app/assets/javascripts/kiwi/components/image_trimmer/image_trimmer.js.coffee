@@ -35,9 +35,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @listenTo @model, 'new:image:ready', () => @trigger 'new:image:ready'
       @listenTo @model, 'new:image:ready', () => @imageReady.resolve()
 
-      @imageReady = $.Deferred()
-
     newImage: (url, source, file) ->
+      @imageReady = $.Deferred()
+      
       if source is 'remote'
         @model.newRemoteImage url
       else if source is 'uploaded'
@@ -60,7 +60,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @model.image()
 
   class ImageTrimmer.ImageCalculator extends Backbone.Model
-    defaults:
+    defaults: () =>
       height: 0
       width: 0
       min_width: 0
@@ -85,17 +85,21 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set('width', @adjustedWidth())
 
     newUploadedImage: (file, url) ->
-      @clear()
+      @reset()
       @set
         file: file
         url: url
         source: 'upload'
 
     newRemoteImage: (url) ->
-      @clear()
+      @reset()
       @set
         url: url
         source: 'remote'
+
+    reset: () ->
+      @clear()
+      this.set this.defaults()
 
     startImage: (width, height, trimWidth, trimHeight, borderLeft, borderTop, borderBottom) ->
       wToH = height / width
