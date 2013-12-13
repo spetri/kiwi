@@ -20,6 +20,9 @@ class FK.Models.Event extends Backbone.GSModel
   urlRoot:
     '/events'
 
+  initialize: () =>
+    @reminder = new FK.Collections.Reminders()
+
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
