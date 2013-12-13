@@ -16,7 +16,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         upvotesIcon: '#upvotes-icon'
 
       triggers:
-        'click' : 'click:card'
+        'click': 'click:card'
         'click [data-action="edit"]': 'click:edit'
         'click [data-tool="reminders"] .event-tool': 'click:reminders'
 

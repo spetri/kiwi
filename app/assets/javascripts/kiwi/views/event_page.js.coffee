@@ -15,7 +15,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       model: @event
 
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
-    @listenTo @eventCardView, 'click:reminders', @showReminders
+    @listenTo @eventCardView, 'click:reminders', @toggleShowReminders
     @listenTo @eventCardView, 'click:card', @closeReminders
     @listenTo @event, 'change:user', @updateEditAllowed
 
@@ -40,8 +40,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     App.vent.trigger 'container:new', event
     Backbone.history.navigate('events/edit/' + event.id, trigger : false)
 
-  @showReminders = () ->
-    @remindersView.close() if @remindersView
+  @toggleShowReminders = () ->
+    return @closeReminders() if @remindersView and not @remindersView.isClosed
+
     @remindersView = new EventPage.EventReminders
       model: @event
 

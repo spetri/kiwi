@@ -16,7 +16,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       popover.css('left', parseInt(popover.css('left')) + 111)
       popover.find('.arrow').css('left', '9%')
 
-      view.once 'close', @onClose
+      view.once 'close', @destroyPopover
+      popover.click (e) => e.stopPropagation()
 
-    onClose: () =>
+    destroyPopover: () =>
       @$el.popover('destroy')
