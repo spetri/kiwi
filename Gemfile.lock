@@ -63,6 +63,7 @@ GEM
       timers (~> 1.1.0)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
+    chronic (0.10.2)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.3)
@@ -302,6 +303,9 @@ GEM
       json (>= 1.8.0)
     warden (1.2.3)
       rack (>= 1.0)
+    whenever (0.8.4)
+      activesupport (>= 2.3.4)
+      chronic (>= 0.6.3)
 
 PLATFORMS
   ruby
@@ -336,3 +340,4 @@ DEPENDENCIES
   therubyracer
   twitter-bootstrap-rails!
   uglifier (>= 1.0.3)
+  whenever

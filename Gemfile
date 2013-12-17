@@ -11,6 +11,8 @@ gem 'slim-rails'
 gem 'omniauth-facebook', '1.4.0'
 gem 'omniauth-twitter'
 
+gem 'whenever'
+
 group :assets do
   gem 'sass-rails',   '~> 4.0.0'
   gem 'coffee-rails', '~> 4.0.0'

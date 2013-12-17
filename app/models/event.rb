@@ -23,7 +23,7 @@ class Event
   field :upvote_names, type: Array
   field :country, type: String
   field :location_type, type: String
-
+  has_many :reminders
 
   has_mongoid_attached_file :image, :styles =>
     {
