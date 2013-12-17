@@ -10,6 +10,14 @@ GIT
       railties (>= 3.1)
 
 GIT
+  remote: git://github.com/sporkrb/spork-rails.git
+  revision: 0dd45e59d3237b4c8f9efc215b46d9c07072a95e
+  specs:
+    spork-rails (4.0.0)
+      rails (>= 3.0.0, < 5)
+      spork (>= 1.0rc0)
+
+GIT
   remote: https://github.com/bradphelan/jasminerice.git
   revision: 091349c27343bfa728b8e5745675f9ddbb7d9699
   specs:
@@ -79,6 +87,7 @@ GEM
     columnize (0.3.6)
     commonjs (0.2.7)
     daemons (1.1.9)
+    database_cleaner (1.2.0)
     debugger (1.6.2)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -101,6 +110,11 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.2)
+    factory_girl (4.3.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.3.0)
+      factory_girl (~> 4.3.0)
+      railties (>= 3.0.0)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
     ffi (1.9.3)
@@ -117,6 +131,13 @@ GEM
       multi_json
       thor
       tilt
+    guard-rspec (4.2.0)
+      guard (>= 2.1.1)
+      rspec (>= 2.14, < 4.0)
+    guard-spork (1.5.1)
+      childprocess (>= 0.2.3)
+      guard (>= 1.1)
+      spork (>= 0.8.4)
     haml (4.0.3)
       tilt
     hashie (2.0.5)
@@ -269,6 +290,7 @@ GEM
       railties (>= 3.0, < 4.1)
       slim (~> 2.0)
     slop (3.4.6)
+    spork (1.0.0rc4)
     sprockets (2.10.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -313,12 +335,16 @@ PLATFORMS
 DEPENDENCIES
   bson_ext
   coffee-rails (~> 4.0.0)
+  database_cleaner
   debugger
   devise (= 3.1.0.rc2)
   eco
   ejs
+  factory_girl_rails
   guard
   guard-jasmine
+  guard-rspec
+  guard-spork
   jasminerice!
   jbuilder (~> 1.2)
   jquery-rails
@@ -337,6 +363,7 @@ DEPENDENCIES
   sdoc
   sinon-rails
   slim-rails
+  spork-rails!
   therubyracer
   twitter-bootstrap-rails!
   uglifier (>= 1.0.3)

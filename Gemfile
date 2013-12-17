@@ -39,10 +39,15 @@ end
 group :development, :test do
   gem 'debugger'
   gem 'guard'
+  gem 'guard-spork'
+  gem 'spork-rails', :github => 'sporkrb/spork-rails'
+  gem 'guard-rspec'
   gem 'rspec-rails'
   gem 'mongoid-rspec'
   gem "jasminerice", :git => 'https://github.com/bradphelan/jasminerice.git'
   gem 'guard-jasmine'
   gem 'sinon-rails'
   gem 'mailcatcher'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
 end

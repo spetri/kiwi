@@ -1,5 +1,9 @@
 require 'spec_helper'
 
 describe Event do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "should work" do 
+    e = Event.new name: "foobar"
+    e.save!
+    Event.all.size.should == 1
+  end
 end
