@@ -91,23 +91,24 @@ describe "Event", ->
     beforeEach ->
       @event = new FK.Models.Event()
       @event.set '_id', '1234asdf'
-      @event.addReminder('grayden', '15m')
+      @event.set 'current_user', 'grayden'
+      @event.addReminder('15m')
     
     it 'should be able to add a reminder', ->
       expect(@event.reminders.length).toBe(1)
 
     it 'should return the reminder created with the event id on it', ->
-      reminder = @event.addReminder('grayden', '15m')
+      reminder = @event.addReminder('15m')
       expect(reminder.get('user')).toBe('grayden')
       expect(reminder.get('time_to_event')).toBe('15m')
       expect(reminder.get('event')).toBe(@event.id)
 
     it 'should be able to get a list of the reminder times in the event', ->
-      @event.addReminder('grayden', '1h')
-      @event.addReminder('grayden', '24h')
+      @event.addReminder('1h')
+      @event.addReminder('24h')
 
       expect(@event.reminderTimes()).toEqual(['15m', '1h', '24h'])
 
     it 'should be able to remove a reminder', ->
-      @event.removeReminder 'grayden', '15m'
+      @event.removeReminder '15m'
       expect(@event.reminderTimes().length).toBe(0)

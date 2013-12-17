@@ -8,6 +8,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @updateEditAllowed(@event)
 
     @event.set 'upvote_allowed', App.request('currentUser').get('logged_in')
+    @event.set 'current_user', App.request('currentUser').get('username')
     @event.set 'country_full_name', App.request('countryName', @event.get('country'))
     
     @view = new EventPage.EventPageLayout
