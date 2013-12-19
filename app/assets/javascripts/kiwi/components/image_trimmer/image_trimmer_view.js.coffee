@@ -75,7 +75,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         height: @ui.image.height()
   
     disableTextSelect: =>
-      window.getSelection().empty()
       $('body').on('selectstart', () => false)
   
     enableTextSelect: =>
