@@ -34,6 +34,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       
       @listenTo @model, 'new:image:ready', () => @trigger 'new:image:ready'
       @listenTo @model, 'new:image:ready', () => @imageReady.resolve()
+      @imageReady = $.Deferred()
 
     newImage: (url, source, file) ->
       @imageReady = $.Deferred()
