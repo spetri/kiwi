@@ -1,13 +1,8 @@
 FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) ->
 
-    class EventPage.EventCard extends Marionette.Layout
+    class EventPage.EventCard extends Marionette.ItemView
       template: FK.Template('event_card')
       className: 'event-card row'
-
-      regions:
-        reminders:
-          selector: '[data-tool="reminders"] .event-tool-popover'
-          regionType: EventPage.CornerPopover
 
       templateHelpers: () =>
         return prettyDate: () => @model.get('datetime').format('dddd, MMM Do, YYYY, h:mm A z')
