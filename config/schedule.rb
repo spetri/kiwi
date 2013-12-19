@@ -18,8 +18,8 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-=begin
-every 3.hours do
-  runner "MyModel.some_process"
+set :environment, ARGV[0]
+
+every 1.minutes do
+  runner "Reminder.send_reminders"
 end
-=end

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pp'
 describe Reminder do 
 
   it "should have associations with user and event" do
