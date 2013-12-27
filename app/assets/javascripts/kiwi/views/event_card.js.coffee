@@ -5,7 +5,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       className: 'event-card row'
 
       templateHelpers: () =>
-        return prettyDate: () => @model.get('datetime').format('dddd, MMM Do, YYYY, h:mm A z')
+        return prettyDateTime: () => @model.get('prettyDateTime')
 
       ui:
         upvotesIcon: '#upvotes-icon'

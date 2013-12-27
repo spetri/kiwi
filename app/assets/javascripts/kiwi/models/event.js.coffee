@@ -65,7 +65,12 @@ class FK.Models.Event extends Backbone.GSModel
 
 
   getters:
-    all_day: () ->
+    prettyDateTime: () ->
+      return "#{@.get('prettyDate')} #{@.get('time')}"
+
+    prettyDate: () ->
+      return moment(@.get('datetime')).format('dddd, MMM Do, YYYY')
+
     time: () ->
       if @.get('time_format') is 'recurring'
         return @.get('local_time')

@@ -3,10 +3,10 @@
 </div>
 <div class="event-info-container col-md-6">
   <div class="event-heading-container">
-    <span class="event-title"><%=name%></span>
-    <span class="event-time-location">(<%=country_full_name%>, <%=prettyDate()%>)</span></div>
+    <span class="event-title"><%= name %></span>
+    <span class="event-time-location">(<%= country_full_name%>, <%= prettyDateTime() %>)</span></div>
   <div class="event-description-container">
-    <span class="event-description"><%=description%></span>
+    <span class="event-description"><%= description%></span>
     <span class="event-submitter">(Submitted by <%=user%>)</span>
   </div>
   <div class="event-tools-container">
