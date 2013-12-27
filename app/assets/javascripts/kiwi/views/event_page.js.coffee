@@ -38,8 +38,10 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
   @triggerEditEvent = (args) ->
     event = args.model
-    App.vent.trigger 'container:new', event
-    Backbone.history.navigate('events/edit/' + event.id, trigger : false)
+    event.fetch(
+      success: () => 
+        Backbone.history.navigate('events/edit/' + event.id, trigger : true)
+    )
 
   @toggleShowReminders = () ->
     return @closeReminders() if @remindersView and not @remindersView.isClosed

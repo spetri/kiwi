@@ -1,21 +1,22 @@
 FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) ->
-  
+
   @startWithParent = false
 
   EventComponents = []
 
   @addInitializer (event) ->
     @listenTo EventForm, 'save', @saveEvent
-
     @event = event || new FK.Models.Event()
     @listenTo @event, 'saved', @toEvent
     @listenTo @event, 'sync', @imageStartUp
     @listenTo @event, 'change:user', @showAllowedView
 
     @showAllowedView(@event)
-    
-    @view.on 'close', () =>
-      @stop()
+  
+    # commented out so that we can maintain our events. The Events.startForm stops and starts now :(
+    #@view.on 'close', () =>
+      #      @stop()
+
 
   @saveEvent = () ->
     params =
@@ -30,11 +31,16 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     FK.Data.events.add(@event, merge: true)
 
   @showAllowedView = (event) =>
+    
+    # cleanup a potentially old view
     @view.close() if @view
+
+    # initialize the correct view:
     if @editAllowed(event)
       @showEventForm(event)
     else
       @showNotYourEvent()
+
     FK.App.mainRegion.show @view
 
   @showEventForm = (event) =>
@@ -98,29 +104,29 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @$el.find(".error").remove()
       if $(e.target).val().length > 79
         $("<div class=\"error\">Event is too long</div>").insertAfter(e.target)
-    
+
     renderLocation: (e) =>
       if @$el.find('input[name=location_type]:checked').val() is "international"
         @$el.find('select[name=country]').attr('disabled','disabled')
       else
         @$el.find('select[name=country]').removeAttr('disabled')
-        
+
 
     saveClicked: (e) =>
       e.preventDefault()
       @$('.save').addClass 'disabled'
       @$('.save').html 'Saving...'
-      EventForm.trigger('save')
-      
+      EventForm.trigger 'save'
+
     modelEvents:
       'change:name': 'refreshName'
       'change:location': 'refreshLocation'
       'change:country': 'refreshLocation'
       'change:description': 'refreshDescription'
-    
+
     refreshName: (event) ->
       @$('#name').val event.get('name')
-      
+
     refreshLocation: (event) ->
       @$('[name="location_type"][value="' + event.get('location_type') + '"]').attr('checked', 'checked')
       @$('[name="country"] [value="' + event.get('country') + '"]').attr('selected', 'selected')

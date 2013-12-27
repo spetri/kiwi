@@ -43,7 +43,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         else
           @$('.event-upvotes').tooltip
             title: 'Login to upvote.'
-      
+
       onRender: =>
         @refreshUpvotes(@model)
         @refreshUpvoted(@model)
