@@ -1,27 +1,21 @@
 class RegistrationsController < Devise::RegistrationsController
-  before_filter :configure_permitted_parameters, if: :devise_controller?    
 
   def new
     build_resource(session['omniauth.payload'])
     respond_with self.resource
   end
 
-
   def update
-    super
+    @user = User.find(current_user.id)
+
+    if @user.update_without_password(account_update_params)
+      set_flash_message :notice, :updated
+      sign_in @user, :bypass => true
+      redirect_to after_update_path_for(@user)
+    else
+      render "edit"
+    end
   end
 
 
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) do |u|
-      u.permit(:username, :name, :email,
-               :provider, :uid, :image, :oauth_token, :oauth_expires_at,
-               :password, :password_confirmation, :current_password)
-    end
-    devise_parameter_sanitizer.for(:account_update) do |u|
-      u.permit(:username, :name, :email,
-               :provider, :uid, :oauth_token, :oauth_expires_at, 
-               :password, :password_confirmation, :current_password)
-    end
-  end
 end

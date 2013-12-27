@@ -5,6 +5,7 @@ Kiwi::Application.routes.draw do
   }
   resources :users
   resources :events
+  get  '/change_password',        :to => 'passwords#change_password',  :as => 'change_password'
   root :to => 'home#index'
 
 end
