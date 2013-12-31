@@ -1,6 +1,9 @@
 class FK.Views.EventBlock extends Backbone.Marionette.Layout
   template: FK.Template('event_block')
-  className: 'well'
+  templateHelpers: () =>
+    return {
+      isToday: () => @model.isToday()
+    }
   regions:
     event_collection: 'div.event_collection'
   onRender: ->

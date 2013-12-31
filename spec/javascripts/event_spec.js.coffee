@@ -7,7 +7,6 @@ describe "Event", ->
     v = new FK.Models.Event()
     expect(v.get('country')).toEqual('US')
 
-
   it "can get time in eastern", =>
     datetime = moment("2013-12-12, 16:00 GMT+200")
     v = new FK.Models.Event datetime: datetime
@@ -137,3 +136,22 @@ describe "Event", ->
       @event.set 'user', 'grayden'
       @event.set 'current_user', 'grayden'
       expect(@event.editAllowed('gsmith')).toBeFalsy()
+
+describe 'event block', ->
+  it 'can detect if the date of the event block is today', ->
+    @block = new FK.Models.EventBlock
+      date: moment()
+
+    expect(@block.isToday()).toBeTruthy()
+
+  it 'can detect if the date of the event block is not today', ->
+    @block = new FK.Models.EventBlock
+      date: moment().days(-2)
+
+    expect(@block.isToday()).toBeFalsy()
+
+  it 'can detect if the date of the event block is today ignoring seconds', ->
+    @block = new FK.Models.EventBlock
+      date: moment().seconds(-2)
+
+    expect(@block.isToday()).toBeTruthy()

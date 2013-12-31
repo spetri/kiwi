@@ -159,6 +159,8 @@ class FK.Models.Event extends Backbone.GSModel
     @get('user') is '' || @get('user') == username
 
 class FK.Models.EventBlock extends Backbone.Model
+  isToday: () =>
+    moment().diff(@get('date'), 'days') == 0
 
 class FK.Collections.EventList extends Backbone.Collection
   model: FK.Models.Event
