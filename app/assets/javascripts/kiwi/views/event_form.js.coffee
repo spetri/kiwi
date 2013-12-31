@@ -2,13 +2,13 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
   @startWithParent = false
 
-  EventComponents = []
-
   @addInitializer (event) ->
     @event = event || new FK.Models.Event()
+    @eventComponents = []
 
     @notYourEventView = @initNotYourEventView()
     @formView = @initFormView(@event)
+    @eventComponents.push @formView
 
     @listenTo @formView, 'save', @saveEvent
     @listenTo @event, 'saved', @toEvent
@@ -16,12 +16,20 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @listenTo @event, 'change:user', @showAllowedView
 
     @showAllowedView()
-  
+
+  @addFinalizer () =>
+    @stopListening()
+    _.each @eventComponents, (child) ->
+      child.close()
+
+    @notYourEventView.close()
+    @eventComponents = []
+ 
   @saveEvent = () ->
     params =
       user: App.request('currentUser').get('username')
 
-    _.each EventComponents, (child) ->
+    _.each @eventComponents, (child) ->
       _.extend params, child.value()
 
     @event.clearImage()
@@ -48,19 +56,11 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     form.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
       @imageStartup @event
-      EventComponents.push @imageTrimmer
+      @eventComponents.push @imageTrimmer
       @datePicker = FK.App.DatePicker.create '#datetime-region', @event
-      EventComponents.push @datePicker
+      @eventComponents.push @datePicker
 
-    form.on 'close', () =>
-      _.each EventComponents, (child) ->
-        child.close()
-
-      EventComponents = []
-
-    EventComponents.push form
     form
-  
 
   @initNotYourEventView = () =>
     new EventForm.NotYourEventView()
@@ -88,9 +88,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event
-
-  @addFinalizer () =>
-    @stopListening()
 
   class EventForm.FormLayout extends Backbone.Marionette.Layout
     className: "row-fluid"
