@@ -14,12 +14,20 @@
 
 /* home */
 .events {
-  list-style: none;
-  li {
-    clear: left;
-    margin-top: 10px;
+  .event {
+    .upvote-container {
+
+    }
+    .image-container {
+
+    }
+    .meta-container {
+
+    }
   }
 }
+
+
 
 /* navbar */
 a.navbar-brand { 

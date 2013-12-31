@@ -12,6 +12,7 @@
 //= require ./kiwi/events
 //= require_tree ./kiwi/regions
 //= require_tree ./kiwi/templates
+//= require ./kiwi/views/event_collapsed.js.coffee
 //= require_tree ./kiwi/views
 //= require_tree ./kiwi/components
 //= require_tree ./kiwi/models

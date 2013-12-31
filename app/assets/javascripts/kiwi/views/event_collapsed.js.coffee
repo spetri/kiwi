@@ -1,8 +1,9 @@
 FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) ->
 
-  class FK.Views.EventCollapsed extends Backbone.Marionette.ItemView
+  class EventList.EventCollapsed extends Backbone.Marionette.ItemView
     template: FK.Template('event_collapsed')
-    tagName: 'li'
+    className: 'event'
+    tagName: 'div'
     events:
       'click .delete': 'deleteClicked'
       'click .event-name': 'triggerEventOpen'
@@ -15,7 +16,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       return true if @model.get('is_all_day') is '1' or @model.get('is_all_day') is true
       return false
 
-
     deleteClicked: (e) ->
       e.preventDefault()
       @model.destroy()
@@ -23,4 +23,3 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     triggerEventOpen: (e) ->
       e.preventDefault()
       EventList.trigger 'clicked:open', @model
-      

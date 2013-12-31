@@ -1,10 +1,11 @@
-class FK.Views.EventBlock extends Backbone.Marionette.Layout
-  template: FK.Template('event_block')
-  templateHelpers: () =>
-    return {
-      isToday: () => @model.isToday()
-    }
-  regions:
-    event_collection: 'div.event_collection'
-  onRender: ->
-    @event_collection.show(new FK.Views.EventCollection(collection: @model.get('events')))
+FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) ->
+
+  class EventList.EventBlock extends Backbone.Marionette.CompositeView
+    template: FK.Template('event_block')
+    className: 'event-block'
+    itemViewContainer: '.events'
+    itemView: EventList.EventCollapsed
+    templateHelpers: () =>
+      return {
+        isToday: () => @model.isToday()
+      }
