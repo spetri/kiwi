@@ -27,4 +27,3 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
 
     onRender: ->
       @top_ranked.show(new FK.Views.TopRanked(collection: FK.Data.events.topRanked()))
-      @most_discussed.show(new FK.Views.MostDiscussed(model: FK.Data.events.mostDiscussed()))

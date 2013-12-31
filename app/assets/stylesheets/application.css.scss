@@ -70,6 +70,16 @@ a.navbar-brand {
   width: 300px;
 }
 
+.top-ranked {
+  h5 {
+    font-weight: bold;
+  }
+
+  ol {
+    padding-left: 22px;
+  }
+}
+
 .image-trimmer-input-container {
   position: relative;
   text-align: right;
