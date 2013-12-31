@@ -1,4 +1,4 @@
-json.extract! @event, :details, :name, :created_at, :updated_at, :local_time, :tv_time, :is_all_day, :time_format, :description, :width, :height, :crop_x, :crop_y, :user
+json.extract! @event, :details, :name, :created_at, :updated_at, :local_time, :tv_time, :is_all_day, :time_format, :description, :width, :height, :crop_x, :crop_y, :user, :country, :location_type
 json.set! '_id', @event._id.to_s
 json.set! :date, @event.datetime
 json.set! :datetime, @event.datetime.utc if @event.datetime != nil

@@ -50,8 +50,8 @@ FK.Controllers.MainController = {
   edit: (id) ->
     event = new FK.Models.Event
       _id: id
-    event.fetch()
-    FK.App.vent.trigger('container:new', event)
+    event.fetch().done =>
+      FK.App.vent.trigger('container:new', event)
 
   default: ->
     Backbone.history.navigate('events/all', trigger: true)
