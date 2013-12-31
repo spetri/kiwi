@@ -5,7 +5,10 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       className: 'event-card row'
 
       templateHelpers: () =>
-        return prettyDateTime: () => @model.get('prettyDateTime')
+        return {
+          prettyDateTime: () => @model.get('prettyDateTime')
+          editAllowed: () => @model.editAllowed()
+        }
 
       ui:
         upvotesIcon: '#upvotes-icon'
@@ -24,7 +27,6 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
         'change:have_i_upvoted': 'refreshUpvoted'
-        'change:mediumUrl': 'render'
 
       refreshUpvotes: (event) =>
         @$('.upvote-counter').html event.upvotes()

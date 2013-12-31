@@ -15,7 +15,6 @@ class FK.Models.Event extends Backbone.GSModel
     upvotes: 0
     have_i_upvoted: false
     country_full_name: ''
-    edit_allowed: false
 
   urlRoot:
     '/events'
@@ -154,6 +153,10 @@ class FK.Models.Event extends Backbone.GSModel
 
   reminderTimes: () ->
     @reminders.times()
+
+  editAllowed: (username) ->
+    username = @get('current_user') if not username
+    @get('user') is '' || @get('user') == username
 
 class FK.Models.EventBlock extends Backbone.Model
 

@@ -5,8 +5,6 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
   @addInitializer (event) ->
     @event = event
     @loadSocialNetworking()
-    @updateEditAllowed(@event)
-
     @event.set 'upvote_allowed', App.request('currentUser').get('logged_in')
     @event.set 'current_user', App.request('currentUser').get('username')
     @event.set 'country_full_name', App.request('countryName', @event.get('country'))
@@ -18,7 +16,6 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
     @listenTo @eventCardView, 'click:reminders', @toggleShowReminders
     @listenTo @eventCardView, 'click:card', @closeReminders
-    @listenTo @event, 'change:user', @updateEditAllowed
 
     @eventCardView.on 'show', () =>
       @renderSocialNetworking()
@@ -39,7 +36,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
   @triggerEditEvent = (args) ->
     event = args.model
     event.fetch(
-      success: () => 
+      success: () =>
         Backbone.history.navigate('events/edit/' + event.id, trigger : true)
     )
 
@@ -76,9 +73,6 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       gapi.plusone.go()
       FB.XFBML.parse()
       twttr.widgets.load()
- 
-  @updateEditAllowed = (event) =>
-    event.set('edit_allowed', event.get('user') == FK.App.request('currentUser').get('username'))
 
   @addFinalizer () ->
     @view.close()

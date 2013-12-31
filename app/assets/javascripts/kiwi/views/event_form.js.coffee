@@ -42,7 +42,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     # cleanup a potentially old view
     @view.close() if @view
 
-    if @editAllowed(@event)
+    if @event.editAllowed(App.request('currentUser').get('username'))
       @view = @formView
     else
       @view = @notYourEventView
@@ -82,9 +82,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
   @setImagePositionY = (event, y) =>
     @imageTrimmer.setPosition event.get('crop_x'), y
-
-  @editAllowed = (event) =>
-    event.get('user') is '' or event.get('user') == App.request('currentUser').get('username')
 
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event

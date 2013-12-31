@@ -112,3 +112,28 @@ describe "Event", ->
     it 'should be able to remove a reminder', ->
       @event.removeReminder '15m'
       expect(@event.reminderTimes().length).toBe(0)
+
+  describe 'authorization', ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+
+    it 'should be able to authenticate user when the event has no user', ->
+      expect(@event.editAllowed('grayden')).toBeTruthy()
+
+    it 'should be able to authenticate user when the event user matches the input user', ->
+      @event.set 'user', 'grayden'
+      expect(@event.editAllowed('grayden')).toBeTruthy()
+
+    it 'should be able to reject authentication when the event user does not match the input user', ->
+      @event.set 'user', 'gsmith'
+      expect(@event.editAllowed('grayden')).toBeFalsy()
+
+    it 'should be able to authenticate user based on the current user property set on the event', ->
+      @event.set 'user', 'grayden'
+      @event.set 'current_user', 'grayden'
+      expect(@event.editAllowed()).toBeTruthy()
+
+    it 'should use the explicit argument to override the current user property', ->
+      @event.set 'user', 'grayden'
+      @event.set 'current_user', 'grayden'
+      expect(@event.editAllowed('gsmith')).toBeFalsy()
