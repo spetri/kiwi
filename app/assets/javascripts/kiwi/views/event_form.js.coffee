@@ -5,19 +5,18 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
   EventComponents = []
 
   @addInitializer (event) ->
-    @listenTo EventForm, 'save', @saveEvent
     @event = event || new FK.Models.Event()
+
+    @notYourEventView = @initNotYourEventView()
+    @formView = @initFormView(@event)
+
+    @listenTo @formView, 'save', @saveEvent
     @listenTo @event, 'saved', @toEvent
     @listenTo @event, 'sync', @imageStartUp
     @listenTo @event, 'change:user', @showAllowedView
 
-    @showAllowedView(@event)
+    @showAllowedView()
   
-    # commented out so that we can maintain our events. The Events.startForm stops and starts now :(
-    #@view.on 'close', () =>
-      #      @stop()
-
-
   @saveEvent = () ->
     params =
       user: App.request('currentUser').get('username')
@@ -30,39 +29,41 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @event.save(params, { silent: true })
     FK.Data.events.add(@event, merge: true)
 
-  @showAllowedView = (event) =>
+  @showAllowedView = () =>
     
     # cleanup a potentially old view
     @view.close() if @view
 
-    # initialize the correct view:
-    if @editAllowed(event)
-      @showEventForm(event)
+    if @editAllowed(@event)
+      @view = @formView
     else
-      @showNotYourEvent()
+      @view = @notYourEventView
 
     FK.App.mainRegion.show @view
 
-  @showEventForm = (event) =>
-    @view = new EventForm.FormLayout
+  @initFormView = (event) =>
+    form = new EventForm.FormLayout
       model: event
 
-    @view.on 'show', () =>
+    form.on 'show', () =>
       @imageTrimmer = FK.App.ImageTrimmer.create '#image-region'
       @imageStartup @event
       EventComponents.push @imageTrimmer
       @datePicker = FK.App.DatePicker.create '#datetime-region', @event
       EventComponents.push @datePicker
 
-    @view.on 'close', () =>
+    form.on 'close', () =>
       _.each EventComponents, (child) ->
         child.close()
 
       EventComponents = []
-    EventComponents.push @view
 
-  @showNotYourEvent = () =>
-    @view = new EventForm.NotYourEventView()
+    EventComponents.push form
+    form
+  
+
+  @initNotYourEventView = () =>
+    new EventForm.NotYourEventView()
 
   @imageStartup = (event) =>
     if event.get('originalUrl')
@@ -116,7 +117,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       e.preventDefault()
       @$('.save').addClass 'disabled'
       @$('.save').html 'Saving...'
-      EventForm.trigger 'save'
+      @trigger 'save'
 
     modelEvents:
       'change:name': 'refreshName'
