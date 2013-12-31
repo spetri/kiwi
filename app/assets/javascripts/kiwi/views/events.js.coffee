@@ -26,7 +26,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     template: FK.Template('events')
 
     initialize: =>
-      FK.Data.events.on('all',@render)
+      FK.Data.events.on('add remove',@render)
 
     onRender: ->
       @event_block.show(new EventList.EventBlocks(collection: FK.Data.events.asBlocks()))

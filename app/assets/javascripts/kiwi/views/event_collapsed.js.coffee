@@ -4,7 +4,12 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     template: FK.Template('event_collapsed')
     className: 'event'
     tagName: 'div'
+
+    ui:
+      upvotesIcon: '.upvote-contianer i'
+
     events:
+      'click .upvote-container i': 'toggleUpvote'
       'click .delete': 'deleteClicked'
       'click .event-name': 'triggerEventOpen'
 
@@ -16,6 +21,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       return true if @model.get('is_all_day') is '1' or @model.get('is_all_day') is true
       return false
 
+    toggleUpvote: (e) =>
+      @model.upvoteToggle()
+
     deleteClicked: (e) ->
       e.preventDefault()
       @model.destroy()
@@ -24,8 +32,21 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       e.preventDefault()
       EventList.trigger 'clicked:open', @model
 
+    modelEvents:
+      'change:upvotes': 'refreshUpvotes'
+      'change:have_i_upvoted': 'refreshUpvoted'
+
     refreshUpvotes: (event) =>
       @$('.upvote-counter').html event.upvotes()
 
+    refreshUpvoted: (event) =>
+      if event.userHasUpvoted()
+        @ui.upvotesIcon.removeClass('icon-caret-up')
+        @ui.upvotesIcon.addClass('icon-ok')
+      else
+        @ui.upvotesIcon.addClass('icon-caret-up')
+        @ui.upvotesIcon.removeClass('icon-ok')
+
     onRender: =>
       @refreshUpvotes @model
+      @refreshUpvoted @model

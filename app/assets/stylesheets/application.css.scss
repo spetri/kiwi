@@ -20,6 +20,9 @@
     .upvote-container {
       margin-right: 14px;
       color: grey;
+      .icon-caret-up {
+        cursor: pointer;
+      }
       .upvote-counter {
         font-size: 24px;
       }
