@@ -19,10 +19,18 @@
 
     }
     .image-container {
-
+      margin-right: 10px;
     }
     .meta-container {
+      .event-meta {
 
+      }
+      a.event-name {
+        &:hover {
+          text-decoration: none;
+        }
+        cursor: pointer;
+      }
     }
   }
 }
