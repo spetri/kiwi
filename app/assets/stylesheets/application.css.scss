@@ -13,38 +13,43 @@
  */
 
 /* home */
-.events {
-  padding: 10px 15px;
-  .event {
-    margin-bottom: 10px;
-    .upvote-container {
-      margin-right: 14px;
-      color: grey;
-      .icon-caret-up {
-        cursor: pointer;
-      }
-      .upvote-counter {
-        font-size: 24px;
-      }
-    }
-    .image-container {
-      margin-right: 10px;
-    }
-    .meta-container {
-      .event-meta {
-
-      }
-      a.event-name {
-        &:hover {
-          text-decoration: none;
-        }
-        cursor: pointer;
-      }
-    }
+.event-block {
+  h4 {
+    font-weight: bold;
   }
 }
 
+.events {
+  padding: 10px 15px;
+}
 
+.event {
+  margin-bottom: 10px;
+  .upvote-container {
+    margin-right: 14px;
+    color: grey;
+    .icon-caret-up {
+      cursor: pointer;
+    }
+    .upvote-counter {
+      font-size: 24px;
+    }
+  }
+  .image-container {
+    margin-right: 10px;
+  }
+  .meta-container {
+    .event-meta {
+
+    }
+    a.event-name {
+      &:hover {
+        text-decoration: none;
+      }
+      cursor: pointer;
+    }
+  }
+}
 
 /* navbar */
 a.navbar-brand { 
