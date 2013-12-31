@@ -14,9 +14,15 @@
 
 /* home */
 .events {
+  padding: 10px 15px;
   .event {
+    margin-bottom: 10px;
     .upvote-container {
-
+      margin-right: 14px;
+      color: grey;
+      .upvote-counter {
+        font-size: 24px;
+      }
     }
     .image-container {
       margin-right: 10px;

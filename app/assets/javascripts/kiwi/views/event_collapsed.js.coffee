@@ -23,3 +23,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     triggerEventOpen: (e) ->
       e.preventDefault()
       EventList.trigger 'clicked:open', @model
+
+    refreshUpvotes: (event) =>
+      @$('.upvote-counter').html event.upvotes()
+
+    onRender: =>
+      @refreshUpvotes @model
