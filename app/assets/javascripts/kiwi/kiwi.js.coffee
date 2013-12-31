@@ -44,8 +44,8 @@ FK.Controllers.MainController = {
   show: (id) ->
     event = new FK.Models.Event
       _id: id
-    event.fetch()
-    FK.App.vent.trigger('container:show', event)
+    event.fetch().done =>
+      FK.App.vent.trigger('container:show', event)
 
   edit: (id) ->
     event = new FK.Models.Event
