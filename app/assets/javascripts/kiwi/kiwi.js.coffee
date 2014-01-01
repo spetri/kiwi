@@ -57,6 +57,9 @@ FK.Controllers.MainController = {
     Backbone.history.navigate('events/all', trigger: true)
 }
 
+FK.App.reqres.setHandler 'events', () ->
+  FK.Data.events
+
 FK.App.reqres.setHandler 'currentUser', () ->
   FK.CurrentUser
 
