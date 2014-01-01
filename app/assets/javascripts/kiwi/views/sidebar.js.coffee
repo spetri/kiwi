@@ -5,10 +5,18 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
     @listenTo App.vent, 'container:show', @close
     @listenTo App.vent, 'container:new', @close
 
-  @show = () ->
-    @close()
+  @addFinalizer @close
 
+  @show = () ->
     @view = new EventSidebar.SidebarLayout()
+    @topRanked = new EventSidebar.TopRanked
+      collection: FK.Data.events
+
+    @topRanked.on 'itemview:clicked:event', (args) =>
+      console.log args.model
+
+    @view.on 'show', () =>
+      @view.top_ranked.show @topRanked
 
     App.sidebarRegion.show @view
 
@@ -21,9 +29,3 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
     regions:
       top_ranked: ".top-ranked"
       most_discussed: ".most-discussed"
-
-    initialize: =>
-      FK.Data.events.on('all',@render)
-
-    onRender: ->
-      @top_ranked.show(new FK.Views.TopRanked(collection: FK.Data.events.topRanked()))
