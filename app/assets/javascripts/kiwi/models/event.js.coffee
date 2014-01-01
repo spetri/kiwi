@@ -169,6 +169,7 @@ class FK.Collections.EventList extends Backbone.Collection
 
   topRanked: (howManyEvents) =>
     this.chain().
+    sortBy( (event) -> - event.get('datetime').unix() ).
     sortBy( (event) -> - event.upvotes()).
     first(howManyEvents).
     value()

@@ -144,18 +144,23 @@ describe "Event", ->
         { name: 'event 2', upvotes: 8 }
         { name: 'event 3', upvotes: 7 }
         { name: 'event 4', upvotes: 1 }
-        { name: 'event 5', upvotes: 10 }
-        { name: 'event 6', upvotes: 11 }
+        { name: 'event 5', upvotes: 11, datetime: moment() }
+        { name: 'event 6', upvotes: 11, datetime: moment().days(4) }
       ]
 
+      @topEvents = @events.topRanked(3)
+
     it 'should be able to find an arbitary number of the top ranked events', ->
-      expect(@events.topRanked(3).length).toBe(3)
+      expect(@topEvents.length).toBe(3)
 
     it 'should be finding events that are top ranked', ->
-      topEvents = @events.topRanked(3)
-      expect(topEvents[0].upvotes()).toBe(11)
-      expect(topEvents[1].upvotes()).toBe(10)
-      expect(topEvents[2].upvotes()).toBe(9)
+      expect(@topEvents[0].upvotes()).toBe(11)
+      expect(@topEvents[1].upvotes()).toBe(11)
+      expect(@topEvents[2].upvotes()).toBe(9)
+
+    it 'should be finding events ordered by date after ranking', ->
+      expect(@topEvents[0].get('name')).toBe('event 6')
+      expect(@topEvents[1].get('name')).toBe('event 5')
 
     describe 'proxy to ranked events', ->
       beforeEach ->
@@ -166,7 +171,7 @@ describe "Event", ->
 
       it 'should be able to update the proxy collection on upvote change', ->
         @events.topRanked(1)[0].set('upvotes', 1)
-        expect(@proxy.first().upvotes()).toBe(10)
+        expect(@proxy.first().upvotes()).toBe(11)
         expect(@proxy.last().upvotes()).toBe(8)
 
       it 'should be able to update the proxy collection on event add', ->
