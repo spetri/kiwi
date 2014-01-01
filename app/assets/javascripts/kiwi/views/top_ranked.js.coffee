@@ -1,8 +1,7 @@
 FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $, _) ->
 
-  class FK.Views.TopRanked extends Backbone.Marionette.ItemView
+  class EventSidebar.TopRanked extends Marionette.CompositeView
     template: FK.Template('top_ranked')
     className: 'top-ranked'
-    onBeforeRender: ->
-      #TODO: fix the slime
-      @model = @collection
+    itemView: EventSidebar.EventName
+    itemViewContainer: 'ol'

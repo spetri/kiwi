@@ -85,6 +85,13 @@ a.navbar-brand {
   }
 }
 
+.event-name {
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .image-trimmer-input-container {
   position: relative;
   text-align: right;
