@@ -137,6 +137,26 @@ describe "Event", ->
       @event.set 'current_user', 'grayden'
       expect(@event.editAllowed('gsmith')).toBeFalsy()
 
+  describe 'top ranked', ->
+    beforeEach ->
+      @events = new FK.Collections.EventList [
+        { name: 'event 1', upvotes: 9 }
+        { name: 'event 2', upvotes: 8 }
+        { name: 'event 3', upvotes: 7 }
+        { name: 'event 4', upvotes: 1 }
+        { name: 'event 5', upvotes: 10 }
+        { name: 'event 6', upvotes: 11 }
+      ]
+
+    it 'should be able to find an arbitary number of the top ranked events', ->
+      expect(@events.topRanked(3).length).toBe(3)
+
+    it 'should be finding events that are top ranked', ->
+      topEvents = @events.topRanked(3)
+      expect(topEvents[0].upvotes()).toBe(11)
+      expect(topEvents[1].upvotes()).toBe(10)
+      expect(topEvents[2].upvotes()).toBe(9)
+
 describe 'event block', ->
   it 'can detect if the date of the event block is today', ->
     @block = new FK.Models.EventBlock

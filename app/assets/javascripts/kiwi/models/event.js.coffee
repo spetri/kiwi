@@ -167,9 +167,11 @@ class FK.Collections.EventList extends Backbone.Collection
   url:
     "/events/"
 
-  topRanked: =>
-    #TODO: fix me
-    @first()
+  topRanked: (howManyEvents) =>
+    this.chain().
+    sortBy( (event) -> - event.upvotes()).
+    first(howManyEvents).
+    value()
 
   mostDiscussed: =>
     #TODO: fix me
