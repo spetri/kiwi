@@ -91,4 +91,8 @@ class Event
       self.upvote_names.include? username
     end
   end
+
+  def self.get_events_by_date(date, howMany=0, skip=0)
+    self.where(date: date).skip(skip).limit(howMany)
+  end
 end
