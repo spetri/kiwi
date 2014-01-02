@@ -16,12 +16,15 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
       collection: @topRankedEvents
 
     @topRankedEventsView.on 'itemview:clicked:event', (args) =>
-      console.log args.model
+      @toEvent args.model
 
     @view.on 'show', () =>
       @view.top_ranked.show @topRankedEventsView
 
     App.sidebarRegion.show @view
+
+  @toEvent = (event) ->
+    App.vent.trigger 'container:show', event
 
   @close = () ->
     @view.close() if @view
