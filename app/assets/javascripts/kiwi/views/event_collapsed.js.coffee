@@ -42,10 +42,10 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     refreshUpvoted: (event) =>
       if event.userHasUpvoted()
         @ui.upvotesIcon.removeClass('icon-caret-up')
-        @ui.upvotesIcon.addClass('icon-ok')
+        @ui.upvotesIcon.addClass('icon-caret-down')
       else
         @ui.upvotesIcon.addClass('icon-caret-up')
-        @ui.upvotesIcon.removeClass('icon-ok')
+        @ui.upvotesIcon.removeClass('icon-caret-down')
 
     onRender: =>
       @refreshUpvotes @model
