@@ -23,6 +23,7 @@ class Event
   field :local_time, type: String
   field :description, type: String
   field :upvote_names, type: Array
+  field :upvote_count, type: Integer
   field :country, type: String
   field :location_type, type: String
   has_many :reminders
@@ -37,6 +38,9 @@ class Event
   before_save do |event|
     if not event.datetime.nil?
       event.date = event.datetime.to_date
+    end
+    if not event.upvote_names.nil?
+      event.upvote_count = event.upvote_names.size
     end
   end
 
@@ -94,5 +98,9 @@ class Event
 
   def self.get_events_by_date(date, howMany=0, skip=0)
     self.where(date: date).skip(skip).limit(howMany)
+  end
+
+  def self.top_ranked(howMany)
+    self.all.order_by([:upvote_count, :desc]).limit(howMany)
   end
 end
