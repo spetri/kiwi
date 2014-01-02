@@ -144,8 +144,8 @@ describe "Event", ->
         { name: 'event 2', upvotes: 8 }
         { name: 'event 3', upvotes: 7 }
         { name: 'event 4', upvotes: 1 }
-        { name: 'event 5', upvotes: 11, datetime: moment() }
-        { name: 'event 6', upvotes: 11, datetime: moment().days(4) }
+        { name: 'event 5', upvotes: 11 }
+        { name: 'event 6', upvotes: 11, datetime: moment().add('days', 4) }
       ]
 
       @topEvents = @events.topRanked(3)
