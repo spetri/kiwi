@@ -176,8 +176,8 @@ class FK.Collections.EventList extends Backbone.Collection
 
   topRankedProxy: (howManyEvents) =>
     proxy = new FK.Collections.EventList @topRanked(howManyEvents)
-    @on 'change:upvotes', () => proxy.set @topRanked(howManyEvents)
-    @on 'add', () => proxy.set @topRanked(howManyEvents)
+    @on 'change:upvotes', () => proxy.reset @topRanked(howManyEvents)
+    @on 'add', () => proxy.reset @topRanked(howManyEvents)
     proxy
 
   mostDiscussed: =>

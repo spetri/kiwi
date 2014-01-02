@@ -9,16 +9,17 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
 
   @show = () ->
     @events = App.request('events')
+    @topRankedEvents = @events.topRankedProxy(10)
 
     @view = new EventSidebar.SidebarLayout()
-    @topRanked = new EventSidebar.TopRanked
-      collection: @events.topRankedProxy(10)
+    @topRankedEventsView = new EventSidebar.TopRanked
+      collection: @topRankedEvents
 
-    @topRanked.on 'itemview:clicked:event', (args) =>
+    @topRankedEventsView.on 'itemview:clicked:event', (args) =>
       console.log args.model
 
     @view.on 'show', () =>
-      @view.top_ranked.show @topRanked
+      @view.top_ranked.show @topRankedEventsView
 
     App.sidebarRegion.show @view
 
