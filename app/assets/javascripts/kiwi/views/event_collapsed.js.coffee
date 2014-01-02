@@ -6,7 +6,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     tagName: 'div'
 
     ui:
-      upvotesIcon: '.upvote-contianer i'
+      upvotesIcon: '.upvote-container i'
 
     events:
       'click .upvote-container i': 'toggleUpvote'
