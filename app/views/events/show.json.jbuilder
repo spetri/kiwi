@@ -5,7 +5,7 @@ json.set! :datetime, @event.datetime.utc if @event.datetime != nil
 json.set! :mediumUrl, @event.image.url(:medium)
 json.set! :thumbUrl, @event.image.url(:thumb)
 json.set! :originalUrl, @event.image.url(:original)
-json.set! :upvote_allowed user_signed_in?
+json.set! :upvote_allowed, user_signed_in?
 if user_signed_in?
   json.set! :have_i_upvoted, @event.have_i_upvoted(current_user.username)
 end
