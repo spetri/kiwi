@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'active_support/core_ext'
 
 class Event
   include Mongoid::Document
@@ -9,6 +10,7 @@ class Event
   field :name, type: String
   field :user, type: String
   field :datetime, type: DateTime
+  field :date, type: Date
   field :width, type: Integer
   field :height, type: Integer
   field :crop_x, type: Integer
@@ -31,6 +33,12 @@ class Event
       :medium => "400x300^"
     },
     :processors => [:cropper]
+
+  before_save do |event|
+    if not event.datetime.nil?
+      event.date = event.datetime.to_date
+    end
+  end
 
   def image_from_url(url)
     if url
