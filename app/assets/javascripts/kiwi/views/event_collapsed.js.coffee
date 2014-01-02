@@ -47,6 +47,14 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesIcon.addClass('icon-caret-up')
         @ui.upvotesIcon.removeClass('icon-caret-down')
 
+    refreshUpvoteAllowed: (event) =>
+      if event.get('upvoted_allowed')
+        @ui.upvotesIcon.tooltip 'destroy'
+      else
+        @ui.upvotesIcon.tooltip
+          title: 'Login to upvote.'
+
     onRender: =>
       @refreshUpvotes @model
       @refreshUpvoted @model
+      @refreshUpvoteAllowed @model
