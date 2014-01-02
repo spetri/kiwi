@@ -169,7 +169,7 @@ class FK.Collections.EventList extends Backbone.Collection
 
   topRanked: (howManyEvents) =>
     this.chain().
-    sortBy( (event) -> - event.get('datetime').unix() ).
+    sortBy( (event) -> event.get('datetime').unix() ).
     sortBy( (event) -> - event.upvotes()).
     first(howManyEvents).
     value()
@@ -186,8 +186,8 @@ class FK.Collections.EventList extends Backbone.Collection
 
   asBlocks: =>
     sorted = @chain().
-    sortBy( (event) -> - event.get('datetime').unix() ).
     sortBy( (event) -> - event.upvotes()).
+    sortBy( (event) -> event.get('datetime').unix() ).
     value()
     new FK.Collections.EventBlockList(_.map(_.groupBy(sorted,(ev) ->
       moment(ev.get('fk_datetime')).format("YYYY-MM-DD")

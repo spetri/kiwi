@@ -159,8 +159,8 @@ describe "Event", ->
       expect(@topEvents[2].upvotes()).toBe(9)
 
     it 'should be finding events ordered by date after ranking', ->
-      expect(@topEvents[0].get('name')).toBe('event 6')
-      expect(@topEvents[1].get('name')).toBe('event 5')
+      expect(@topEvents[0].get('name')).toBe('event 5')
+      expect(@topEvents[1].get('name')).toBe('event 6')
 
     describe 'proxy to ranked events', ->
       beforeEach ->
