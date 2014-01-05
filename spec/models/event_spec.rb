@@ -99,7 +99,7 @@ describe Event do
 
       it "should be able to get the first 6 events and top 5 without overlap" do
         events = Event.get_starting_events(Date.today(), 6, 3, 5)
-        events.size.should == 8
+        events.size.should == 7
       end
     end
   end

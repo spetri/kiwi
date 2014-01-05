@@ -169,7 +169,7 @@ class FK.Collections.EventList extends Backbone.Collection
 
   fetchStartupEvents: (howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
     @fetch
-      url: @url + 'startupEvents'
+      url: 'api' + @url + 'startupEvents'
       data:
         howManyTopRanked: howManyTopRanked
         howManyEventsPerDay: howManyEventsPerDay
@@ -183,7 +183,7 @@ class FK.Collections.EventList extends Backbone.Collection
     value()
 
   topRankedProxy: (howManyEvents) =>
-    proxy = new FK.Collections.EventList @topRanked(howManyEvents)
+    proxy = new Backbone.Collection @topRanked(howManyEvents)
     @on 'change:upvotes', () => proxy.reset @topRanked(howManyEvents)
     @on 'add', () => proxy.reset @topRanked(howManyEvents)
     proxy

@@ -199,7 +199,7 @@ describe 'event list', ->
       eventsMinimum = 10
       @events.fetchStartupEvents(topRanked, eventsPerDay, eventsMinimum)
       expect(@requests.length).toBe(1)
-      expect(@requests[0].url).toBe('/events/startupEvents?howManyTopRanked=10&howManyEventsPerDay=3&howManyEventsMinimum=10')
+      expect(@requests[0].url).toBe('api/events/startupEvents?howManyTopRanked=10&howManyEventsPerDay=3&howManyEventsMinimum=10')
 
 describe 'event block', ->
   it 'can detect if the date of the event block is today', ->

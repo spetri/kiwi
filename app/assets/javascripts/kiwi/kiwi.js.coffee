@@ -32,7 +32,7 @@ FK.App.addInitializer (prefetch) ->
   FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
   FK.Data.events = new FK.Collections.EventList(prefetch.events)
-  FK.Data.events.fetch()
+  FK.Data.events.fetchStartupEvents(10, 3, 10)
 
   FK.App.appRouter = new FK.Routers.AppRouter()
 
