@@ -62,5 +62,40 @@ describe Event do
         @topRanked[1].upvote_names.size.should == 2
       end
     end
+
+    describe "starting package" do
+      before(:each) do
+        for i in 0..2
+          event = create :upvoted_further_future_event
+          event.save
+        end
+        for i in 0..2
+          event = create :many_upvoted_future_event
+          event.save
+        end
+        for i in 0..2
+          event = create :many_upvoted_further_future_event
+          event.save
+        end
+
+        event = create :future_event
+        event.save
+
+        event = create :past_event
+        event.save
+
+        event = create :highly_upvoted_event
+        event.save
+      end
+      it "should be able to get a total total number of events across days" do
+        events = Event.get_enough_events_from_day(Date.today(), 5, 3)
+        Array(events).size.should == 6
+      end
+
+      it "should be able to find the date of the latest event" do
+        date = Event.get_last_date()
+        date.should === 3.week.from_now.to_date
+      end
+    end
   end
 end

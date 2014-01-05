@@ -103,4 +103,28 @@ class Event
   def self.top_ranked(howMany)
     self.all.order_by([:upvote_count, :desc]).limit(howMany)
   end
+
+  def self.get_enough_events_from_day(date, minimum, eventsPerDay)
+    events = []
+    eventCount = 0
+    lookupDate = date
+    lastDate = self.get_last_date
+
+    while eventCount < minimum && lookupDate <=> lastDate do
+      eventsOnDay = self.get_events_by_date(lookupDate, eventsPerDay)
+
+      if Array(eventsOnDay).size > 0
+        events.concat eventsOnDay
+        eventCount += Array(eventsOnDay).size
+      end
+
+      lookupDate = lookupDate.next_day
+    end
+
+    events
+  end
+
+  def self.get_last_date
+    self.order_by([:date, :desc])[0].date
+  end
 end
