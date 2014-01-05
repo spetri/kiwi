@@ -124,6 +124,13 @@ class Event
     events
   end
 
+  def self.get_starting_events(date, minimum, eventsPerDay, topRanked)
+    listEvents = self.get_enough_events_from_day(date, minimum, eventsPerDay)
+    topEvents = self.top_ranked(topRanked)
+    events = listEvents.concat topEvents
+    return events.uniq!
+  end
+
   def self.get_last_date
     self.order_by([:date, :desc])[0].date
   end
