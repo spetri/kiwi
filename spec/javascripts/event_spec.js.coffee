@@ -180,6 +180,27 @@ describe "Event", ->
         expect(@proxy.first().upvotes()).toBe(11)
         expect(@proxy.last().upvotes()).toBe(10)
 
+describe 'event list', ->
+  describe 'fetching events', ->
+    beforeEach ->
+      @xhr = sinon.useFakeXMLHttpRequest()
+      @requests = []
+      @xhr.onCreate = (xhr) =>
+        @requests.push xhr
+
+      @events = new FK.Collections.EventList()
+
+    afterEach ->
+      @xhr.restore()
+
+    it "should be able to fetch startup events", ->
+      topRanked = 10
+      eventsPerDay = 3
+      eventsMinimum = 10
+      @events.fetchStartupEvents(topRanked, eventsPerDay, eventsMinimum)
+      expect(@requests.length).toBe(1)
+      expect(@requests[0].url).toBe('/events/startupEvents?howManyTopRanked=10&howManyEventsPerDay=3&howManyEventsMinimum=10')
+
 describe 'event block', ->
   it 'can detect if the date of the event block is today', ->
     @block = new FK.Models.EventBlock

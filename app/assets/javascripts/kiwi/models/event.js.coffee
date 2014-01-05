@@ -167,6 +167,14 @@ class FK.Collections.EventList extends Backbone.Collection
   url:
     "/events/"
 
+  fetchStartupEvents: (howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
+    @fetch
+      url: @url + 'startupEvents'
+      data:
+        howManyTopRanked: howManyTopRanked
+        howManyEventsPerDay: howManyEventsPerDay
+        howManyEventsMinimum: howManyEventsMinimum
+
   topRanked: (howManyEvents) =>
     this.chain().
     sortBy( (event) -> event.get('datetime').unix() ).
