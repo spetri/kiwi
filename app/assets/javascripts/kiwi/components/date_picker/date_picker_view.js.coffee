@@ -24,7 +24,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
 
     updateTimeStatus: =>
       selector = @$('input[name=time_format],select[name=hours],select[name=minutes],select[name=ampm],select[name=time_type]')
-      if @model.get('is_all_day') is true
+      if @model.is_all_day()
         selector.attr('disabled','disabled')
         @$('.timedisplay').hide()
         @$('[name="is_all_day"]').attr('checked', 'checked')
@@ -48,8 +48,11 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').removeAttr('checked', 'checked')
       @$('[name="time_format"][value="' + @model.get('time_format') + '"]').attr('checked', 'checked')
       @updateTimeDisplay()
-      
-    onRender: () ->
-      @$('input[name=date]').datepicker()
+
+    onRender: () =>
+      date = @model.get('datetime')
+      @$('input[name="date"]').val(date.format('MM/D/YYYY'))
+      @$('input[name="date"]').datepicker()
       @updateTimeStatus()
       @updateTimeFormat()
+      @updateTime()

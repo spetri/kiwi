@@ -3,26 +3,49 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
   Instance = null
 
   @addFinalizer () ->
-    Instance.close()
+    @trimmer().close()
 
-  @create = (domLocation) ->
-
-    newInstance = new ImageTrimmer.ImageTrimmerController()
-
+  @create = (domLocation, model) ->
     regionManager = new Marionette.RegionManager()
     region = regionManager.addRegion("instance", domLocation)
 
-    newInstance.on 'close', () =>
+    @trimmer().on 'close', () =>
       regionManager.close()
 
     layout = new ImageTrimmer.ImageTrimmerLayout
-      model: newInstance.model
-      controller: newInstance
+      model: @trimmer().model
+      controller: @trimmer()
 
     region.show layout
+    @listenTo model, 'sync', @startup
+    @startup(model)
 
-    Instance = newInstance
-    return newInstance
+    return @trimmer() 
+
+
+  # singleton factory:
+  @trimmer = () =>
+    if Instance is null
+      Instance = new ImageTrimmer.ImageTrimmerController()
+    return Instance 
+
+  @startup = (model, trimmer) =>
+    if model.get('originalUrl')
+      @setImageUrl model, model.get('originalUrl')
+      @setImageSize model, model.get('width')
+      @trimmer().setPosition model.get('crop_x'), model.get('crop_y')
+
+  @setImageUrl = (model, url) =>
+    @trimmer().newImage url, 'remote'
+
+  @setImageSize = (model, width) =>
+    @trimmer().setWidth width
+
+  @setImagePositionX = (model, x) =>
+    @trimmer().setPosition x, model.get('crop_y')
+
+  @setImagePositionY = (model, y) =>
+    @trimmer().setPosition model.get('crop_x'), y
 
   @validImageTypes = () ->
     ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/svg', 'image/tiff']

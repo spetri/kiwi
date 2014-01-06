@@ -4,25 +4,26 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
   @addFinalizer () ->
     Instance.close()
 
-  @create = (domLocation, event) ->
-    newInstance = new DatePicker.DatePickerController
-      model: event
+  @create = (domLocation, model) ->
+    Instance = new DatePicker.DatePickerController
+      model: model
+    
     regionManager = new Marionette.RegionManager()
     region = regionManager.addRegion("instance", domLocation)
-    region.show new DatePicker.DatePickerView
-      model: event
+    datepicker_view = new DatePicker.DatePickerView
+      model: model
+   
 
-    newInstance.on 'close', () =>
+    region.show datepicker_view
+
+    Instance.on 'close', () =>
       regionManager.close()
 
-    Instance = newInstance
-    return newInstance
-
+    return Instance
 
   class DatePicker.DatePickerController extends Marionette.Controller
     initialize: (options) =>
       @model = options.model
-
     value: () =>
       # I'm a good citizen, i only return what I partied on
       {
