@@ -71,6 +71,8 @@ class FK.Models.Event extends Backbone.GSModel
       return moment(@.get('datetime')).format('dddd, MMM Do, YYYY')
 
     time: () ->
+      return ' – all day' if @.get('is_all_day')
+
       if @.get('time_format') is 'recurring'
         return @.get('local_time')
 
