@@ -56,7 +56,7 @@ class FK.Models.Event extends Backbone.GSModel
     resp
 
   time_from_moment: (moment_val) =>
-    moment_val.zone(moment().zone()).format('H:mm A')
+    moment_val.zone(moment().zone()).format('h:mm A')
 
   getters:
     prettyDateTime: () ->
