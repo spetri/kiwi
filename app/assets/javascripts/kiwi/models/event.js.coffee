@@ -242,7 +242,7 @@ class FK.Collections.EventList extends Backbone.Collection
     sortBy( (event) -> event.get('datetime').unix() ).
     value()
     new FK.Collections.EventBlockList(_.map(_.groupBy(sorted,(ev) ->
-      moment(ev.get('fk_datetime')).format("YYYY-MM-DD")
+      moment(ev.get('fk_datetime'))
     ), (blocks, date) ->
       events: new FK.Collections.EventList(blocks), date: date
     ))
