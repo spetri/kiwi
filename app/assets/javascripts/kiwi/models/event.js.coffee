@@ -191,13 +191,14 @@ class FK.Collections.EventList extends Backbone.Collection
         howManyEventsPerDay: howManyEventsPerDay
         howManyEventsMinimum: howManyEventsMinimum
 
-  fetchMoreEventsByDate: (date, howManyEvents) =>
+  fetchMoreEventsByDate: (date, howManyEvents, skip) =>
     @fetch
       url: 'api' + @url + 'eventsByDate'
       remove: false
       data:
-        date: date.toString()
+        date: moment(date).format('YYYY-MM-DD')
         howManyEvents: howManyEvents
+        skip: skip
 
   getEventsByDate: (date, howManyEvents, skip) =>
     matchingEvents = @chain().
@@ -210,7 +211,7 @@ class FK.Collections.EventList extends Backbone.Collection
 
     howManyShort = howManyEvents - matchingEvents.length
     if howManyShort > 0
-      @fetchMoreEventsByDate(date, howManyShort).done( (events) =>
+      @fetchMoreEventsByDate(date, howManyShort, skip).done( (events) =>
         deferred.resolve(matchingEvents.concat(events))
       )
     else
