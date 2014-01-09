@@ -55,16 +55,8 @@ class FK.Models.Event extends Backbone.GSModel
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
     resp
 
-  time_in_eastern: ->
-    @.convert_moment_to_eastern moment(@.get('datetime'))
-
-  convert_moment_to_eastern: (moment) ->
-    moment.tz('America/New_York')
-    @.time_from_moment(moment)
-
   time_from_moment: (moment_val) =>
     moment_val.zone(moment().zone()).format('H:mm A')
-
 
   getters:
     prettyDateTime: () ->
@@ -113,7 +105,7 @@ class FK.Models.Event extends Backbone.GSModel
   setters:
     datetime: (moment_val) ->
       moment_val = moment(moment_val)
-      @.set('local_time', moment_val.format('H:mm A'))
+      @.set('local_time', moment_val.format('h:mm A'))
       # set the input time to UTC:
       return moment(moment_val).zone(0)
 
