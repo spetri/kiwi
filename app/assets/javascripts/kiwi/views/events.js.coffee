@@ -4,7 +4,17 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   @addInitializer () ->
     @listenTo EventList, 'clicked:open', @triggerShowEvent
+    @events = App.request('events')
     @view = new EventList.ListLayout()
+    @eventBlocksView = new EventList.EventBlocks(collection: @events.asBlocks())
+    
+    @events.on 'add', =>
+      @eventBlocksView.collection.reset @events.asBlocks().toJSON()
+
+    @view.on 'show', =>
+      @view.event_block.show @eventBlocksView
+
+    @eventBlocksView.on 'itemview:click:more', @fetchMoreForBlock
 
     @view.onClose = () =>
       @stop()
@@ -13,6 +23,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   @triggerShowEvent = (event) ->
     App.vent.trigger 'container:show', event
+
+  @fetchMoreForBlock = (args) =>
+    args.model.fetchMore(3, @events)
 
   @close = () ->
     @view.close()
@@ -24,9 +37,3 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       event_block: '#event_blocks'
 
     template: FK.Template('events')
-
-    initialize: =>
-      FK.Data.events.on('add remove',@render)
-
-    onRender: ->
-      @event_block.show(new EventList.EventBlocks(collection: FK.Data.events.asBlocks()))

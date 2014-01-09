@@ -9,3 +9,5 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       return {
         isToday: () => @model.isToday()
       }
+    triggers:
+      'click .btn': 'click:more'
