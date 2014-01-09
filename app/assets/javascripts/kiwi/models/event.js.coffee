@@ -22,6 +22,9 @@ class FK.Models.Event extends Backbone.GSModel
   initialize: () =>
     @reminders = new FK.Collections.Reminders()
 
+  is_all_day: () =>
+    @.get('is_all_day') is '1' or @.get('is_all_day') is true
+
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
@@ -71,6 +74,8 @@ class FK.Models.Event extends Backbone.GSModel
       return moment(@.get('datetime')).format('dddd, MMM Do, YYYY')
 
     time: () ->
+      return ' – all day' if @.get('is_all_day') is '1'
+
       if @.get('time_format') is 'recurring'
         return @.get('local_time')
 
@@ -97,12 +102,10 @@ class FK.Models.Event extends Backbone.GSModel
 
     local_ampm: ->
       @get('local_time').split(':')[1].split(' ')[1]
-      
+
 
     fk_datetime: () ->
       if @.get('time_format') is 'recurring'
-        #console.log @.get('local_time')
-        #time_split = @.get('local_time').split(':')
         time_split = @.get('time').split(':')
         return moment(@.get('datetime').format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
       @.get('datetime')
