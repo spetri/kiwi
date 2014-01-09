@@ -4,6 +4,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   @addFinalizer () ->
     @trimmer().close()
+    Instance = null
 
   @create = (domLocation, model) ->
     regionManager = new Marionette.RegionManager()
@@ -20,14 +21,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     @listenTo model, 'sync', @startup
     @startup(model)
 
-    return @trimmer() 
+    return @trimmer()
 
 
   # singleton factory:
   @trimmer = () =>
     if Instance is null
       Instance = new ImageTrimmer.ImageTrimmerController()
-    return Instance 
+    return Instance
 
   @startup = (model, trimmer) =>
     if model.get('originalUrl')
