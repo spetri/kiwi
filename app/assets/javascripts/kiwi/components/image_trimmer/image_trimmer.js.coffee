@@ -18,7 +18,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       controller: @trimmer()
 
     region.show layout
-    @listenTo model, 'sync', @startup
     @startup(model)
 
     return @trimmer()
