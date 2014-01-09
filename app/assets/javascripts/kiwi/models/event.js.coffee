@@ -186,6 +186,25 @@ class FK.Collections.EventList extends Backbone.Collection
         date: date.toString()
         howManyEvents: howManyEvents
 
+  getEventsByDate: (date, howManyEvents, skip) =>
+    matchingEvents = @chain().
+    filter( (event) => event.get('datetime').diff(date, 'days') == 0).
+    tail(skip).
+    head(howManyEvents).
+    value()
+
+    deferred = $.Deferred()
+
+    howManyShort = howManyEvents - matchingEvents.length
+    if howManyShort > 0
+      @fetchMoreEventsByDate(date, howManyShort).done( (events) =>
+        deferred.resolve(matchingEvents.concat(events))
+      )
+    else
+      deferred.resolve(matchingEvents)
+
+    deferred.promise()
+
   topRanked: (howManyEvents) =>
     this.chain().
     sortBy( (event) -> event.get('datetime').unix() ).

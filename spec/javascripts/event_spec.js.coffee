@@ -217,6 +217,62 @@ describe 'event list', ->
 
       expect(@events.length).toBe(3)
 
+    describe "getting more events from the events list by date", ->
+      beforeEach ->
+       @events.reset([
+          { _id: 1, datetime: moment()}
+          { _id: 2, datetime: moment().add('minutes', 3) }
+          { _id: 3, datetime: moment().add('minutes', 7) }
+          { _id: 4, datetime: moment().add('days', 3) }
+        ])
+
+      it "should be able to get events by date from the event list through a deferred", ->
+        resolvedEvents = []
+        deferred = @events.getEventsByDate(moment(), 3, 0)
+        deferred.done( (events) =>
+          _.each(events, (event) =>
+            resolvedEvents.push event
+          )
+        )
+
+        expect(resolvedEvents.length).toBe(3)
+
+      it "should be able to skip a given number of events", ->
+        resolvedEvents = []
+        deferred = @events.getEventsByDate(moment(), 2, 1)
+        deferred.done( (events) =>
+          _.each(events, (event) =>
+            resolvedEvents.push event
+          )
+        )
+
+        expect(resolvedEvents.length).toBe(2)
+
+      it "should be able to return less than the number of events available", ->
+        resolvedEvents = []
+        deferred = @events.getEventsByDate(moment(), 1, 0)
+        deferred.done( (events) =>
+          _.each(events, (event) =>
+            resolvedEvents.push event
+          )
+        )
+
+        expect(resolvedEvents.length).toBe(1)
+
+      it "should attempt a server call if the number of events are less than requested", ->
+        resolvedEvents = []
+        deferred = @events.getEventsByDate(moment(), 4, 0)
+        deferred.done( (events) =>
+          _.each(events, (event) =>
+            resolvedEvents.push event
+          )
+        )
+
+        expect(@requests.length).toBe(1)
+        @requests[0].respond(200, { "Content-Type": "application/json" }, JSON.stringify({_id: 5, datetime: moment().add('minutes', 20)}))
+        expect(resolvedEvents.length).toBe(4)
+        expect(@events.length).toBe(5)
+
 describe 'event block', ->
   it 'can detect if the date of the event block is today', ->
     @block = new FK.Models.EventBlock
