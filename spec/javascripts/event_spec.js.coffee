@@ -219,12 +219,7 @@ describe 'event list', ->
 
     describe "getting more events from the events list by date", ->
       beforeEach ->
-       @events.reset([
-          { _id: 1, datetime: moment()}
-          { _id: 2, datetime: moment().add('minutes', 3) }
-          { _id: 3, datetime: moment().add('minutes', 7) }
-          { _id: 4, datetime: moment().add('days', 3) }
-        ])
+        @events.reset(FK.SpecHelpers.Events.SimpleEvents)
 
       it "should be able to get events by date from the event list through a deferred", ->
         resolvedEvents = []
@@ -274,10 +269,10 @@ describe 'event list', ->
         expect(@events.length).toBe(5)
 
 describe 'event block', ->
-  it 'can detect if the date of the event block is today', ->
+  beforeEach ->
     @block = new FK.Models.EventBlock
-      date: moment()
-
+    
+  it 'can detect if the date of the event block is today', ->
     expect(@block.isToday()).toBeTruthy()
 
   it 'can detect if the date of the event block is not today', ->
@@ -291,3 +286,24 @@ describe 'event block', ->
       date: moment().seconds(-2)
 
     expect(@block.isToday()).toBeTruthy()
+
+  describe 'fetching more events for block', ->
+    beforeEach ->
+      @events = new FK.Collections.EventList
+      @events.reset(FK.SpecHelpers.Events.SimpleEvents)
+      @xhr = sinon.useFakeXMLHttpRequest()
+      @requests = []
+      @xhr.onCreate = (xhr) =>
+        @requests.push xhr
+
+    afterEach ->
+      @xhr.restore()
+
+    it "should be able to fetch more events from an event collection", ->
+      @block.fetchMore(3, @events)
+      expect(@block.get('events').length).toBe(3)
+
+    it "should be able to notice that no more events are available", ->
+      @block.fetchMore(4, @events)
+      @requests[0].respond(200, { "Content-Type": "application/json"}, JSON.stringify([]))
+      expect(@block.get('moreEventsAvailable')).toBeFalsy()

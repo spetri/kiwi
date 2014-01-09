@@ -162,8 +162,21 @@ class FK.Models.Event extends Backbone.GSModel
     @get('user') is '' || @get('user') == username
 
 class FK.Models.EventBlock extends Backbone.Model
+  defaults:
+    date: moment()
+    events: new Backbone.Collection()
+    moreEventsAvailable: true
+
   isToday: () =>
     moment().diff(@get('date'), 'days') == 0
+
+  fetchMore: (howManyMoreEvents, events) =>
+    newEventsPromise = events.getEventsByDate(@get('date'), howManyMoreEvents, @get('events').length)
+    newEventsPromise.done( (events) =>
+      @get('events').add(events)
+      if (events.length < howManyMoreEvents)
+        @set('moreEventsAvailable', false)
+    )
 
 class FK.Collections.EventList extends Backbone.Collection
   model: FK.Models.Event
