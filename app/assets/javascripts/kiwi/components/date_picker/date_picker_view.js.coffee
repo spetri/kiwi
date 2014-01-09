@@ -32,6 +32,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         selector.removeAttr('disabled')
         @$('.timedisplay').show()
         @$('[name="is_all_day"]').removeAttr('checked')
+        @updateTimeFormat()
 
     updateTime: =>
       @updateTimeDisplay()
@@ -42,7 +43,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
 
     updateTimeDisplay: =>
       @$('.time-display-value').text(@model.get('time'))
-      @$('.status').text(moment(@model.get('datetime')).toString())
+      @$('.status').text(moment(@model.get('datetime')).format('ddd MMM DD YYYY HH:mm:ss'))
 
     updateTimeFormat: =>
       @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').removeAttr('checked', 'checked')

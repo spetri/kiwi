@@ -17,10 +17,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
      time: =>
       @model.get('time')
 
-     all_day: =>
-      return true if @model.get('is_all_day') is '1' or @model.get('is_all_day') is true
-      return false
-
     toggleUpvote: (e) =>
       @model.upvoteToggle()
 
@@ -48,7 +44,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesIcon.removeClass('icon-caret-down')
 
     refreshUpvoteAllowed: (event) =>
-      if event.get('upvoted_allowed')
+      if event.get('upvote_allowed')
         @ui.upvotesIcon.tooltip 'destroy'
       else
         @ui.upvotesIcon.tooltip
