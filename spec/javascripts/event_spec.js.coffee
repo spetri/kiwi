@@ -201,6 +201,22 @@ describe 'event list', ->
       expect(@requests.length).toBe(1)
       expect(@requests[0].url).toBe('api/events/startupEvents?howManyTopRanked=10&howManyEventsPerDay=3&howManyEventsMinimum=10')
 
+    it "should be able to getch more events by a date", ->
+      @events.reset([
+        { _id: 1 }
+        { _id: 2 }
+      ])
+      @events.fetchMoreEventsByDate(moment(), 10)
+      expect(@requests.length).toBe(1)
+
+      @requests[0].respond(200, { "Content-Type": "application/json"},
+        JSON.stringify([
+          { _id: 3}
+        ])
+      )
+
+      expect(@events.length).toBe(3)
+
 describe 'event block', ->
   it 'can detect if the date of the event block is today', ->
     @block = new FK.Models.EventBlock

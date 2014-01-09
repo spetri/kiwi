@@ -178,6 +178,14 @@ class FK.Collections.EventList extends Backbone.Collection
         howManyEventsPerDay: howManyEventsPerDay
         howManyEventsMinimum: howManyEventsMinimum
 
+  fetchMoreEventsByDate: (date, howManyEvents) =>
+    @fetch
+      url: 'api' + @url + 'eventsByDate'
+      remove: false
+      data:
+        date: date.toString()
+        howManyEvents: howManyEvents
+
   topRanked: (howManyEvents) =>
     this.chain().
     sortBy( (event) -> event.get('datetime').unix() ).
