@@ -6,7 +6,6 @@ class FK.Models.Event extends Backbone.GSModel
     user: ''
     description: ''
     #TODO: fix me - all events will start with the date that the file was parsed
-    datetime: moment()
     thumbUrl: ''
     mediumUrl: ''
     is_all_day: false
@@ -63,9 +62,10 @@ class FK.Models.Event extends Backbone.GSModel
       return "#{@.get('prettyDate')} #{@.get('time')}"
 
     prettyDate: () ->
-      return moment(@.get('datetime')).format('dddd, MMM Do, YYYY')
+      return @get('datetime').format('dddd, MMM Do, YYYY')
 
     time: () ->
+      return '' if not @get('datetime')
       return ' – all day' if @.get('is_all_day')
 
       if @.get('time_format') is 'recurring'
@@ -85,16 +85,18 @@ class FK.Models.Event extends Backbone.GSModel
       return @.time_from_moment(moment(@.get('datetime')))
 
     local_hour: ->
+      return "" if not @get('local_time')
       local_hour = @get('local_time').split(':')[0]
       local_hour = local_hour - 12 + "" if local_hour > 12
       local_hour
 
     local_minute: ->
+      return "" if not @get('local_time')
       @get('local_time').split(':')[1].split(' ')[0]
 
     local_ampm: ->
+      return "" if not @get('local_time')
       @get('local_time').split(':')[1].split(' ')[1]
-
 
     fk_datetime: () ->
       if @.get('time_format') is 'recurring'
