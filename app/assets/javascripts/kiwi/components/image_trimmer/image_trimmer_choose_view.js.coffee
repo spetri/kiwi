@@ -7,7 +7,7 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     events:
       'click button': 'clickFileUploader'
       'change input[type="file"]': 'startImageTrimmerFromUpload'
-      'blur .url-input': 'loadFileInInput'
+      'paste .url-input': 'loadFileInInput'
 
     clickFileUploader: (e) =>
       e.preventDefault()
@@ -28,10 +28,17 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       reader.readAsDataURL(file)
 
     loadFileInInput: (e) =>
-      @model.newRemoteImage @$('input.url-input').val()
+      _.delay(() =>
+        @model.newRemoteImage @$('input.url-input').val()
+      , 10)
+
 
     modelEvents:
       'change:source': 'clearIfSourceNotUrl'
+      'change:url': 'refreshUrl'
 
     clearIfSourceNotUrl: (model, source) =>
       @$('input.url-input').val('') if source != 'remote'
+
+    refreshUrl: (model, url) =>
+      @$('input.url-input').val(url)
