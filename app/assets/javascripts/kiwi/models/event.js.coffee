@@ -52,10 +52,8 @@ class FK.Models.Event extends Backbone.GSModel
 
   parse: (resp) ->
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
+    resp.is_all_day = false if resp.is_all_day is "false"
     resp
-
-  time_from_moment: (moment_val) =>
-    moment_val.zone(moment().zone()).format('h:mm A')
 
   getters:
     prettyDateTime: () ->
@@ -63,7 +61,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     prettyDate: () ->
       return "" if not @get('datetime')
-      return @get('datetime').format('dddd, MMM Do, YYYY')
+      return @get('fk_datetime').format('dddd, MMM Do, YYYY')
 
     time: () ->
       return '' if not @get('datetime')
@@ -102,8 +100,14 @@ class FK.Models.Event extends Backbone.GSModel
     fk_datetime: () ->
       if @.get('time_format') is 'recurring'
         time_split = @.get('time').split(':')
-        return moment(@.get('datetime').format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
-      @.get('datetime')
+        return moment(@in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
+      @in_my_timezone(@get('datetime'))
+
+  time_from_moment: (datetime) =>
+    @in_my_timezone(datetime).format('h:mm A')
+
+  in_my_timezone: (datetime) ->
+    datetime.zone(moment().zone())
 
   setters:
     datetime: (moment_val) ->
