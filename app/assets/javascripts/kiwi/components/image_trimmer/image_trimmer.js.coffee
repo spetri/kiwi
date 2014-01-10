@@ -1,12 +1,12 @@
 FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
-  Instance = null
+  @Instance = null
 
   @addFinalizer () ->
     @trimmer().close()
-    Instance = null
 
   @create = (domLocation, model) ->
+    @Instance = null
     regionManager = new Marionette.RegionManager()
     region = regionManager.addRegion("instance", domLocation)
 
@@ -25,9 +25,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   # singleton factory:
   @trimmer = () =>
-    if Instance is null
-      Instance = new ImageTrimmer.ImageTrimmerController()
-    return Instance
+    if @Instance is null
+      @Instance = new ImageTrimmer.ImageTrimmerController()
+    return @Instance
 
   @startup = (model, trimmer) =>
     if model.get('originalUrl')
@@ -40,12 +40,6 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   @setImageSize = (model, width) =>
     @trimmer().setWidth width
-
-  @setImagePositionX = (model, x) =>
-    @trimmer().setPosition x, model.get('crop_y')
-
-  @setImagePositionY = (model, y) =>
-    @trimmer().setPosition model.get('crop_x'), y
 
   @validImageTypes = () ->
     ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg', 'image/svg', 'image/tiff']
