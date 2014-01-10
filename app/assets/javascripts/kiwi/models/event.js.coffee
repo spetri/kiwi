@@ -62,6 +62,7 @@ class FK.Models.Event extends Backbone.GSModel
       return "#{@.get('prettyDate')} #{@.get('time')}"
 
     prettyDate: () ->
+      return "" if not @get('datetime')
       return @get('datetime').format('dddd, MMM Do, YYYY')
 
     time: () ->
