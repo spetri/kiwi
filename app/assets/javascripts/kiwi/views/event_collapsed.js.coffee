@@ -7,9 +7,10 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     ui:
       upvotesIcon: '.upvote-container i'
+      upvotesContainer: '.upvote-container'
 
     events:
-      'click .upvote-container i': 'toggleUpvote'
+      'click .upvote-container': 'toggleUpvote'
       'click .delete': 'deleteClicked'
       'click .event-name': 'triggerEventOpen'
 
@@ -45,9 +46,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     refreshUpvoteAllowed: (event) =>
       if event.get('upvote_allowed')
-        @ui.upvotesIcon.tooltip 'destroy'
+        @ui.upvotesContainer.tooltip 'destroy'
       else
-        @ui.upvotesIcon.tooltip
+        @ui.upvotesContainer.tooltip
           title: 'Login to upvote.'
 
     onRender: =>
