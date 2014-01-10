@@ -138,11 +138,11 @@ describe "Event", ->
   describe 'top ranked', ->
     beforeEach ->
       @events = new FK.Collections.EventList [
-        { name: 'event 1', upvotes: 9 }
-        { name: 'event 2', upvotes: 8 }
-        { name: 'event 3', upvotes: 7 }
-        { name: 'event 4', upvotes: 1 }
-        { name: 'event 5', upvotes: 11 }
+        { name: 'event 1', upvotes: 9, datetime: moment() }
+        { name: 'event 2', upvotes: 8, datetime: moment() }
+        { name: 'event 3', upvotes: 7, datetime: moment() }
+        { name: 'event 4', upvotes: 1, datetime: moment() }
+        { name: 'event 5', upvotes: 11, datetime: moment() }
         { name: 'event 6', upvotes: 11, datetime: moment().add('days', 4) }
       ]
 
@@ -174,7 +174,7 @@ describe "Event", ->
 
       it 'should be able to update the proxy collection on event add', ->
         @events.add
-          name: 'event 7', upvotes: 10
+          name: 'event 7', upvotes: 10, datetime: moment()
         expect(@proxy.first().upvotes()).toBe(11)
         expect(@proxy.last().upvotes()).toBe(10)
 

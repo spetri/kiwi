@@ -39,11 +39,11 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @$('[name="hours"]').val @model.get('local_hour')
       @$('[name="minutes"]').val @model.get('local_minute')
       @$('[name="ampm"]').val @model.get('local_ampm')
-      @$('input[name="date"]').datepicker('setValue', @model.get('datetime'))
+      @$('input[name="date"]').datepicker('setValue', @model.get('datetime')) if @model.get('datetime')
 
     updateTimeDisplay: =>
       @$('.time-display-value').text(@model.get('time'))
-      @$('.status').text(moment(@model.get('datetime')).format('ddd MMM DD YYYY HH:mm:ss'))
+      @$('.status').text(@model.get('datetime').format('ddd MMM DD YYYY HH:mm:ss')) if @model.get('datetime')
 
     updateTimeFormat: =>
       @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').removeAttr('checked', 'checked')
@@ -52,7 +52,6 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
 
     onRender: () =>
       date = @model.get('datetime')
-      @$('input[name="date"]').val(date.format('MM/D/YYYY'))
       @$('input[name="date"]').datepicker()
       @updateTimeStatus()
       @updateTimeFormat()
