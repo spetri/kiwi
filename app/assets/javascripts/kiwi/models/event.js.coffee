@@ -15,11 +15,15 @@ class FK.Models.Event extends Backbone.GSModel
     have_i_upvoted: false
     country_full_name: ''
 
-  urlRoot:
+  urlRoot: () =>
     '/events'
 
   initialize: () =>
     @reminders = new FK.Collections.Reminders()
+    #Backbone thing: when collection fetches from another url, models are
+    #forced to have that url, undo that here
+    #TODO: Report backbone bug?
+    @url = Backbone.Model.prototype.url
 
   is_all_day: () =>
     @.get('is_all_day') is '1' or @.get('is_all_day') is true
@@ -33,7 +37,7 @@ class FK.Models.Event extends Backbone.GSModel
       httpMethod = methodMap[action]
 
       xhr = new XMLHttpRequest()
-      xhr.open(httpMethod, this.url(), true)
+      xhr.open(httpMethod, @url(), true)
       xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
 
       formData = new FormData()
