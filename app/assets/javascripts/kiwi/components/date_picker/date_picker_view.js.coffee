@@ -39,7 +39,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @$('[name="hours"]').val @model.get('local_hour')
       @$('[name="minutes"]').val @model.get('local_minute')
       @$('[name="ampm"]').val @model.get('local_ampm')
-      @$('input[name="date"]').datepicker('setValue', @model.get('datetime')) if @model.get('datetime')
+      @$('input[name="date"]').val(this.model.get('datetime').format('MM/DD/YYYY')) if @model.get('datetime')
 
     updateTimeDisplay: =>
       @$('.time-display-value').text(@model.get('time'))
