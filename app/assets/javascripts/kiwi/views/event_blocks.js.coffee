@@ -5,5 +5,5 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     className: 'event-blocks'
     itemViewOptions: (model) =>
       return {
-        collection: model.get('events')
+        collection: model.events
       }

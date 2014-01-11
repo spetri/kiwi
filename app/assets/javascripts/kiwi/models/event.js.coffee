@@ -248,16 +248,19 @@ class FK.Collections.EventList extends Backbone.Collection
     @last()
 
   asBlocks: =>
-    sorted = @chain().
+    blocks = @chain().
     sortBy( (event) -> - event.upvotes()).
     sortBy( (event) -> event.get('datetime').unix() ).
+    groupBy( (event) -> event.get('fk_datetime') ).
+    map( (events, date) ->
+      block = new FK.Models.EventBlock
+        date: date
+      block.addEvents events
+      return block
+    ).
     value()
-    new FK.Collections.EventBlockList(_.map(_.groupBy(sorted,(ev) ->
-      moment(ev.get('fk_datetime'))
-    ), (blocks, date) ->
-      events: new FK.Collections.EventList(blocks), date: date
-    ))
-
+    
+    new FK.Collections.EventBlockList blocks
 
 class FK.Collections.EventBlockList extends Backbone.Collection
   model: FK.Models.EventBlock

@@ -9,7 +9,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @eventBlocksView = new EventList.EventBlocks(collection: @events.asBlocks())
     
     @events.on 'add', =>
-      @eventBlocksView.collection.reset @events.asBlocks().toJSON()
+      @eventBlocksView.collection.reset @events.asBlocks().models
 
     @view.on 'show', =>
       @view.event_block.show @eventBlocksView
