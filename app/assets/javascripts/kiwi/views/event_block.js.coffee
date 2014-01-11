@@ -22,3 +22,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       else
         @$('.btn').addClass('disabled')
         @$('.btn').prop('disabled', true)
+
+    onRender: () =>
+      @refreshMoreEventsDisabled(@model, @model.get('more_events_available'))

@@ -163,7 +163,7 @@ class FK.Models.Event extends Backbone.GSModel
 class FK.Models.EventBlock extends Backbone.Model
   defaults:
     date: moment()
-    moreEventsAvailable: true
+    more_events_available: true
     event_limit: 3
 
   initialize: () =>
@@ -179,8 +179,6 @@ class FK.Models.EventBlock extends Backbone.Model
     newEventsPromise = events.getEventsByDate(@get('date'), howManyMoreEvents, @events.length)
     newEventsPromise.done( (events) =>
       @addEvents events
-      if (events.length < howManyMoreEvents)
-        @set('more_events_available', false)
     )
 
   addEvents: (events) =>
@@ -188,6 +186,10 @@ class FK.Models.EventBlock extends Backbone.Model
     howManyOver = events.length + @events.length - @get('event_limit')
     events = _.take(events, events.length - howManyOver) if howManyOver > 0
     @events.add(events)
+    if @events.length < @get('event_limit')
+      @set('more_events_available', false)
+    else
+      @set('more_events_available', true)
 
   increaseLimit: (howMuch) =>
     @set('event_limit', @get('event_limit') + howMuch)
