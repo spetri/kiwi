@@ -262,7 +262,7 @@ describe 'event list', ->
         )
 
         expect(@requests.length).toBe(1)
-        @requests[0].respond(200, { "Content-Type": "application/json" }, JSON.stringify({_id: 5, datetime: moment().add('minutes', 20)}))
+        @requests[0].respond(200, { "Content-Type": "application/json" }, JSON.stringify([{_id: 5, datetime: moment().add('minutes', 20)}]))
         expect(resolvedEvents.length).toBe(4)
         expect(@events.length).toBe(5)
 

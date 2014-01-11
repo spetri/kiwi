@@ -223,6 +223,7 @@ class FK.Collections.EventList extends Backbone.Collection
     howManyShort = howManyEvents - matchingEvents.length
     if howManyShort > 0
       @fetchMoreEventsByDate(date, howManyShort, skip).done( (events) =>
+        events = _.map(events, (event) => new FK.Models.Event event)
         deferred.resolve(matchingEvents.concat(events))
       )
     else
