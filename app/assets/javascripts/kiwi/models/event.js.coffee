@@ -172,6 +172,11 @@ class FK.Models.EventBlock extends Backbone.Model
 
   initialize: () =>
     @events = new Backbone.Collection()
+    @events.model = FK.Models.Event
+    @events.comparator = (event1, event2) =>
+      return -1 if event1.upvotes() > event2.upvotes()
+      return 0 if event1.upvotes() == event2.upvotes()
+      return 1 if event1.upvotes() < event2.upvotes()
 
   isToday: () =>
     @isDate(moment())
@@ -203,6 +208,11 @@ class FK.Collections.EventList extends Backbone.Collection
   url:
     "/events/"
 
+  comparator: (event1, event2) =>
+    return -1 if event1.upvotes() > event2.upvotes()
+    return 0 if event1.upvotes() == event2.upvotes()
+    return 1 if event1.upvotes() < event2.upvotes()
+
   fetchStartupEvents: (howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
     @fetch
       url: 'api' + @url + 'startupEvents'
@@ -223,7 +233,6 @@ class FK.Collections.EventList extends Backbone.Collection
   getEventsByDate: (date, howManyEvents, skip) =>
     matchingEvents = @chain().
     filter( (event) => event.get('datetime').diff(date, 'days') == 0).
-    sortBy( (event) => - event.upvotes() ).
     tail(skip).
     head(howManyEvents).
     value()
@@ -260,8 +269,6 @@ class FK.Collections.EventList extends Backbone.Collection
 
   asBlocks: =>
     @chain().
-    sortBy( (event) -> - event.upvotes()).
-    sortBy( (event) -> event.get('datetime').unix() ).
     groupBy( (event) -> moment(event.get('datetime').format('YYYY/MM/DD')) ).
     map( (events, date) ->
       block = new FK.Models.EventBlock
@@ -273,6 +280,12 @@ class FK.Collections.EventList extends Backbone.Collection
 
 class FK.Collections.EventBlockList extends Backbone.Collection
   model: FK.Models.EventBlock
+  comparator: (block1, block2) =>
+    date1 = moment(block1.get('date'))
+    date2 = moment(block2.get('date'))
+    return 1 if date1 > date2
+    return 0 if date1 == date2
+    return -1 if date1 < date2
 
   addEventsToBlock: (date, events) =>
     block = @find( (blocks) => blocks.isDate(date))
