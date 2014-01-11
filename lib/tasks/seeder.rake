@@ -24,4 +24,8 @@ namespace :db do
     Event.create! datetime: 8.days.from_now, name: "Solar Eclipse", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php'], location_type: 'international'
     Event.create! datetime: 8.days.from_now, name: "Mystery party", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine'], location_type: 'international'
   end 
+
+  task :resave => :environment do
+    Event.all.each { |event| event.save }
+  end
 end
