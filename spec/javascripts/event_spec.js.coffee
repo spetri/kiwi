@@ -353,3 +353,8 @@ describe "event block list", ->
   it "should be able to add events to a block by date", ->
     @blocks.addEventsToBlock(moment(), FK.SpecHelpers.Events.SimpleEvents)
     expect(@blocks.get(1).events.length).toBe(3)
+
+  it "should be able to create a block if the needed block does not exist", ->
+    @blocks.addEventsToBlock(moment().add('days', 3), FK.SpecHelpers.Events.SimpleEvents)
+    expect(@blocks.last().events.length).toBe(3)
+

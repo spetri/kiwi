@@ -128,7 +128,9 @@ class Event
     listEvents = self.get_enough_events_from_day(date, minimum, eventsPerDay)
     topEvents = self.top_ranked(topRanked)
     events = listEvents.concat topEvents
-    return events.uniq!
+    events.uniq!
+    events.sort_by! { |event| event.datetime }
+    return events
   end
 
   def self.get_last_date
