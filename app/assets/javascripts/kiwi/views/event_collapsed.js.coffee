@@ -13,6 +13,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       'click .upvote-container': 'toggleUpvote'
       'click .delete': 'deleteClicked'
       'click .event-name': 'triggerEventOpen'
+      'mouseover .upvote-container': 'showX'
+      'mouseout .upvote-container': 'hideX'
 
     templateHelpers: =>
      time: =>
@@ -29,6 +31,18 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       e.preventDefault()
       EventList.trigger 'clicked:open', @model
 
+    showX: (e) =>
+      e.preventDefault()
+      if @model.userHasUpvoted()
+        @ui.upvotesIcon.addClass('icon-remove')
+        @ui.upvotesIcon.removeClass('icon-ok')
+
+    hideX: (e) =>
+      e.preventDefault()
+      if @model.userHasUpvoted()
+        @ui.upvotesIcon.removeClass('icon-remove')
+        @ui.upvotesIcon.addClass('icon-ok')
+
     modelEvents:
       'change:upvotes': 'refreshUpvotes'
       'change:have_i_upvoted': 'refreshUpvoted'
@@ -39,10 +53,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     refreshUpvoted: (event) =>
       if event.userHasUpvoted()
         @ui.upvotesIcon.removeClass('icon-caret-up')
-        @ui.upvotesIcon.addClass('icon-caret-down')
+        @ui.upvotesIcon.addClass('icon-ok')
       else
         @ui.upvotesIcon.addClass('icon-caret-up')
-        @ui.upvotesIcon.removeClass('icon-caret-down')
+        @ui.upvotesIcon.removeClass('icon-ok')
+        @ui.upvotesIcon.removeClass('icon-remove')
 
     refreshUpvoteAllowed: (event) =>
       if event.get('upvote_allowed')
