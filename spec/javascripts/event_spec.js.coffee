@@ -289,6 +289,7 @@ describe 'event block', ->
     beforeEach ->
       @events = new FK.Collections.EventList
       @events.reset(FK.SpecHelpers.Events.SimpleEvents)
+      @block = new FK.Models.EventBlock()
       @xhr = sinon.useFakeXMLHttpRequest()
       @requests = []
       @xhr.onCreate = (xhr) =>
@@ -299,9 +300,45 @@ describe 'event block', ->
 
     it "should be able to fetch more events from an event collection", ->
       @block.fetchMore(3, @events)
-      expect(@block.get('events').length).toBe(3)
+      expect(@block.events.length).toBe(3)
 
     it "should be able to notice that no more events are available", ->
       @block.fetchMore(4, @events)
       @requests[0].respond(200, { "Content-Type": "application/json"}, JSON.stringify([]))
       expect(@block.get('moreEventsAvailable')).toBeFalsy()
+
+  describe 'adding more events to a block', ->
+    beforeEach ->
+      @events = new FK.Collections.EventList(FK.SpecHelpers.Events.SimpleEvents)
+      @block = new FK.Models.EventBlock()
+
+    it "should be able to add some events to its events collection", ->
+      @block.addEvents({ _id: 1 })
+      expect(@block.events.length).toBe(1)
+
+    it "should not be able to add events past the current limit on the block", ->
+      @block.set('event_limit', 2)
+      @block.addEvents([
+        { _id: 1 }
+        { _id: 2 }
+        { _id: 3 }
+      ])
+      expect(@block.events.length).toBe(2)
+
+    it "should not be able to add events past the current limit on the block when the block has some events", ->
+      @block.addEvents([
+        { _id: 1 }
+      ])
+      @block.addEvents([
+        { _id: 2 }
+        { _id: 3 }
+        { _id: 4 }
+      ])
+      expect(@block.events.length).toBe(3)
+
+    it "should be able to up the event limit and get more events", ->
+      @block.set('event_limit', 1)
+      @block.addEvents(@events.toJSON())
+      @block.increaseLimit(1)
+      @block.fetchMore(1, @events)
+      expect(@block.events.length).toBe(2)

@@ -163,19 +163,31 @@ class FK.Models.Event extends Backbone.GSModel
 class FK.Models.EventBlock extends Backbone.Model
   defaults:
     date: moment()
-    events: new Backbone.Collection()
     moreEventsAvailable: true
+    event_limit: 3
+
+  initialize: () =>
+    @events = new Backbone.Collection()
 
   isToday: () =>
     moment().diff(@get('date'), 'days') == 0
 
   fetchMore: (howManyMoreEvents, events) =>
-    newEventsPromise = events.getEventsByDate(@get('date'), howManyMoreEvents, @get('events').length)
+    newEventsPromise = events.getEventsByDate(@get('date'), howManyMoreEvents, @events.length)
     newEventsPromise.done( (events) =>
-      @get('events').add(events)
+      @addEvents events
       if (events.length < howManyMoreEvents)
         @set('moreEventsAvailable', false)
     )
+
+  addEvents: (events) =>
+    events = [events] if not _.isArray(events)
+    howManyOver = events.length + @events.length - @get('event_limit')
+    events = _.take(events, events.length - howManyOver) if howManyOver > 0
+    @events.add(events)
+
+  increaseLimit: (howMuch) =>
+    @set('event_limit', @get('event_limit') + howMuch)
 
 class FK.Collections.EventList extends Backbone.Collection
   model: FK.Models.Event
