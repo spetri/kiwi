@@ -25,6 +25,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     App.vent.trigger 'container:show', event
 
   @fetchMoreForBlock = (args) =>
+    args.model.increaseLimit(3)
     args.model.fetchMore(3, @events)
 
   @close = () ->
