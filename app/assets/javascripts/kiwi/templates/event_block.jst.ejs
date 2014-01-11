@@ -1,4 +1,6 @@
 <h4><% if (isToday()) { %>Today, <% } %><%= moment(date).format('MMMM D, YYYY') %></h4>
 <div class="events">
 </div>
-<button class='btn'>More Events</button>
+<div class="button-container">
+  <button class='btn btn-xs'>Show More <i class="icon-caret-down"></i></button>
+</div>
