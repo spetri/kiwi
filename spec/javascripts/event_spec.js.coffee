@@ -342,3 +342,14 @@ describe 'event block', ->
       @block.increaseLimit(1)
       @block.fetchMore(1, @events)
       expect(@block.events.length).toBe(2)
+
+describe "event block list", ->
+  beforeEach ->
+    @blocks = new FK.Collections.EventBlockList([
+      {id: 1, date: moment().toDate()}
+      {id: 2, date: moment().add('days', 1).toDate()}
+    ])
+
+  it "should be able to add events to a block by date", ->
+    @blocks.addEventsToBlock(moment(), FK.SpecHelpers.Events.SimpleEvents)
+    expect(@blocks.get(1).events.length).toBe(3)

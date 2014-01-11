@@ -170,7 +170,10 @@ class FK.Models.EventBlock extends Backbone.Model
     @events = new Backbone.Collection()
 
   isToday: () =>
-    moment().diff(@get('date'), 'days') == 0
+    @isDate(moment())
+
+  isDate: (date) =>
+    date.diff(@get('date'), 'days') == 0
 
   fetchMore: (howManyMoreEvents, events) =>
     newEventsPromise = events.getEventsByDate(@get('date'), howManyMoreEvents, @events.length)
@@ -265,3 +268,7 @@ class FK.Collections.EventList extends Backbone.Collection
 
 class FK.Collections.EventBlockList extends Backbone.Collection
   model: FK.Models.EventBlock
+
+  addEventsToBlock: (date, events) =>
+    block = @find( (blocks) => blocks.isDate(date))
+    block.addEvents events
