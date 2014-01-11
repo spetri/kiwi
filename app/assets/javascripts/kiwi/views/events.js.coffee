@@ -11,8 +11,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks(collection: @eventBlocks)
     
-    @events.once 'sync', (event) =>
-      @eventBlocks.reset @events.asBlocks()
+    @events.once 'sync', @loadBlocks
 
     @view.on 'show', =>
       @view.event_block.show @eventBlocksView
@@ -23,6 +22,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       @stop()
 
     App.mainRegion.show @view
+    @loadBlocks()
 
   @triggerShowEvent = (event) ->
     App.vent.trigger 'container:show', event
@@ -30,6 +30,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @fetchMoreForBlock = (args) =>
     args.model.increaseLimit(3)
     args.model.fetchMore(3, @events)
+
+  @loadBlocks = =>
+    @eventBlocks.reset @events.asBlocks()
 
   @close = () ->
     @view.close()
