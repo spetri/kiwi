@@ -18,5 +18,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     refreshMoreEventsDisabled: (block, moreEventsAvailable) =>
       if (moreEventsAvailable)
         @$('.btn').removeClass('disabled')
+        @$('.btn').prop('disabled', false)
       else
         @$('.btn').addClass('disabled')
+        @$('.btn').prop('disabled', true)
