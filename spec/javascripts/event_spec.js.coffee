@@ -267,6 +267,14 @@ describe 'event list', ->
         expect(resolvedEvents.length).toBe(4)
         expect(@events.length).toBe(5)
 
+  describe 'making blocks', ->
+    beforeEach ->
+      @events = new FK.Collections.EventList FK.SpecHelpers.Events.SimpleEvents
+      @blocks = @events.asBlocks()
+
+    it "should have a block for each date", ->
+      expect(@blocks.length).toBe(2)
+
 describe 'event block', ->
   beforeEach ->
     @block = new FK.Models.EventBlock

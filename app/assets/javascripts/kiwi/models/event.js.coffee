@@ -261,8 +261,8 @@ class FK.Collections.EventList extends Backbone.Collection
   asBlocks: =>
     @chain().
     sortBy( (event) -> - event.upvotes()).
-    sortBy( (event) -> event.get('fk_datetime').unix() ).
-    groupBy( (event) -> event.get('fk_datetime') ).
+    sortBy( (event) -> event.get('datetime').unix() ).
+    groupBy( (event) -> moment(event.get('datetime').format('YYYY/MM/DD')) ).
     map( (events, date) ->
       block = new FK.Models.EventBlock
         date: date
