@@ -6,13 +6,13 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @listenTo EventList, 'clicked:open', @triggerShowEvent
     
     @events = App.request('events')
-    @eventBlocks = @events.asBlocks()
+    @eventBlocks = new FK.Collections.EventBlockList()
     
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks(collection: @eventBlocks)
     
-    @events.on 'add', (event) =>
-      @eventBlocks.addEventsToBlock(event.get('fk_datetime'), event)
+    @events.once 'sync', (event) =>
+      @eventBlocks.reset @events.asBlocks()
 
     @view.on 'show', =>
       @view.event_block.show @eventBlocksView
