@@ -262,6 +262,7 @@ describe 'event list', ->
         )
 
         expect(@requests.length).toBe(1)
+        expect(@requests[0].url).toBe('api/events/eventsByDate?date=2014-01-11&howManyEvents=1&skip=3')
         @requests[0].respond(200, { "Content-Type": "application/json" }, JSON.stringify([{_id: 5, datetime: moment().add('minutes', 20)}]))
         expect(resolvedEvents.length).toBe(4)
         expect(@events.length).toBe(5)
@@ -303,6 +304,7 @@ describe 'event block', ->
       expect(@block.events.length).toBe(3)
 
     it "should be able to notice that no more events are available", ->
+      @block.increaseLimit(1)
       @block.fetchMore(4, @events)
       @requests[0].respond(200, { "Content-Type": "application/json"}, JSON.stringify([]))
       expect(@block.get('more_events_available')).toBeFalsy()

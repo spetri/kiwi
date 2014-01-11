@@ -219,6 +219,7 @@ class FK.Collections.EventList extends Backbone.Collection
   getEventsByDate: (date, howManyEvents, skip) =>
     matchingEvents = @chain().
     filter( (event) => event.get('datetime').diff(date, 'days') == 0).
+    sortBy( (event) => - event.upvotes() ).
     tail(skip).
     head(howManyEvents).
     value()
@@ -227,7 +228,7 @@ class FK.Collections.EventList extends Backbone.Collection
 
     howManyShort = howManyEvents - matchingEvents.length
     if howManyShort > 0
-      @fetchMoreEventsByDate(date, howManyShort, skip).done( (events) =>
+      @fetchMoreEventsByDate(date, howManyShort, skip + matchingEvents.length).done( (events) =>
         events = _.map(events, (event) => new FK.Models.Event event)
         deferred.resolve(matchingEvents.concat(events))
       )
