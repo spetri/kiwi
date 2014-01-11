@@ -16,6 +16,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       'mouseover .upvote-container': 'showX'
       'mouseout .upvote-container': 'hideX'
 
+    triggers:
+      'click .event-name': 'clicked:open'
+
     templateHelpers: =>
      time: =>
       @model.get('time')
@@ -26,10 +29,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     deleteClicked: (e) ->
       e.preventDefault()
       @model.destroy()
-
-    triggerEventOpen: (e) ->
-      e.preventDefault()
-      EventList.trigger 'clicked:open', @model
 
     showX: (e) =>
       e.preventDefault()

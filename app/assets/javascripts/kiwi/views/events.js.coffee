@@ -3,7 +3,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer () ->
-    @listenTo EventList, 'clicked:open', @triggerShowEvent
     
     @events = App.request('events')
     @eventBlocks = new FK.Collections.EventBlockList()
@@ -16,7 +15,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @view.on 'show', =>
       @view.event_block.show @eventBlocksView
 
-    @eventBlocksView.on 'itemview:click:more', @fetchMoreForBlock
+    @eventBlocksView.on 'block:click:more', @fetchMoreForBlock
+    @eventBlocksView.on 'block:event:clicked:open', @triggerShowEvent
 
     @view.onClose = () =>
       @stop()
@@ -24,8 +24,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     App.mainRegion.show @view
     @loadBlocks()
 
-  @triggerShowEvent = (event) ->
-    App.vent.trigger 'container:show', event
+  @triggerShowEvent = (block, event) ->
+    App.vent.trigger 'container:show', event.model
 
   @fetchMoreForBlock = (args) =>
     args.model.increaseLimit(3)

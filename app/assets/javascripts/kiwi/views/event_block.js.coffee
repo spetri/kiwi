@@ -5,6 +5,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     className: 'event-block'
     itemViewContainer: '.events'
     itemView: EventList.EventCollapsed
+    itemViewEventPrefix: 'event'
     templateHelpers: () =>
       return {
         isToday: () => @model.isToday()
