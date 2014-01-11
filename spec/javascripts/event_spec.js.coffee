@@ -305,7 +305,7 @@ describe 'event block', ->
     it "should be able to notice that no more events are available", ->
       @block.fetchMore(4, @events)
       @requests[0].respond(200, { "Content-Type": "application/json"}, JSON.stringify([]))
-      expect(@block.get('moreEventsAvailable')).toBeFalsy()
+      expect(@block.get('more_events_available')).toBeFalsy()
 
   describe 'adding more events to a block', ->
     beforeEach ->

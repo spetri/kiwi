@@ -11,3 +11,12 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       }
     triggers:
       'click .btn': 'click:more'
+
+    modelEvents:
+      'change:more_events_available': 'refreshMoreEventsDisabled'
+
+    refreshMoreEventsDisabled: (block, moreEventsAvailable) =>
+      if (moreEventsAvailable)
+        @$('.btn').removeClass('disabled')
+      else
+        @$('.btn').addClass('disabled')

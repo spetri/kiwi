@@ -177,7 +177,7 @@ class FK.Models.EventBlock extends Backbone.Model
     newEventsPromise.done( (events) =>
       @addEvents events
       if (events.length < howManyMoreEvents)
-        @set('moreEventsAvailable', false)
+        @set('more_events_available', false)
     )
 
   addEvents: (events) =>
