@@ -11,13 +11,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     events:
       'click .upvote-container': 'toggleUpvote'
-      'click .delete': 'deleteClicked'
-      'click .event-name': 'triggerEventOpen'
       'mouseover .upvote-container': 'showX'
       'mouseout .upvote-container': 'hideX'
 
     triggers:
-      'click .event-name': 'clicked:open'
+      'click .event-name,img': 'click:open'
 
     templateHelpers: =>
      time: =>
@@ -25,10 +23,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     toggleUpvote: (e) =>
       @model.upvoteToggle()
-
-    deleteClicked: (e) ->
-      e.preventDefault()
-      @model.destroy()
 
     showX: (e) =>
       e.preventDefault()

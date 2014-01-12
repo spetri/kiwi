@@ -34,6 +34,7 @@
 
 .event {
   margin-bottom: 10px;
+  cursor: pointer;
   .upvote-container {
     margin-right: 14px;
     width: 14px;
@@ -72,7 +73,6 @@
       &:hover {
         text-decoration: none;
       }
-      cursor: pointer;
     }
   }
 }
