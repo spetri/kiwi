@@ -34,19 +34,19 @@ describe Event do
 
     describe "by top ranked" do
       before(:each) do
-        create_list :event, 3
-        create :event, :with_2_upvotes
-        create :event, :with_5_upvotes
+        create_list :event, 2
+        create :event, :with_2_upvotes, :back_1_week
+        create :event, :with_5_upvotes, :in_1_week
 
-        @topRanked = Array(Event.top_ranked(4))
+        @topRanked = Array(Event.top_ranked(4, DateTime.now(), 1.week.from_now))
       end
       it "should be able to get an arbitrary number of the top ranked events" do
-        @topRanked.size.should == 4
+        @topRanked.size.should == 3
       end
 
       it "should be able to get the highest number of upvotes first" do
         @topRanked[0].upvote_names.size.should == 5
-        @topRanked[1].upvote_names.size.should == 2
+        @topRanked[1].upvote_names.size.should == 0
       end
     end
 
@@ -72,7 +72,7 @@ describe Event do
 
       it "should be able to get the first 6 events and top 5 without overlap" do
         events = Event.get_starting_events(Date.today(), 6, 3, 5)
-        events.size.should == 7
+        events.size.should == 6
       end
     end
   end

@@ -5,7 +5,8 @@ FactoryGirl.define do
 
   factory :event do 
     name
-    datetime DateTime.new
+    datetime 1.day.from_now
+    upvote_names []
 
     trait :with_2_upvotes do
       upvote_names ["eventlover1", "eventlover2"]

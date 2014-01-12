@@ -100,8 +100,8 @@ class Event
     self.all.order_by([:upvote_count, :desc]).where(date: date).skip(skip).limit(howMany)
   end
 
-  def self.top_ranked(howMany)
-    self.all.order_by([:upvote_count, :desc]).limit(howMany)
+  def self.top_ranked(howMany, startDate, endDate)
+    self.all.where({:datetime.gte => startDate, :datetime.lte => endDate }).order_by([:upvote_count, :desc]).limit(howMany)
   end
 
   def self.get_enough_events_from_day(date, minimum, eventsPerDay)
@@ -126,7 +126,7 @@ class Event
 
   def self.get_starting_events(date, minimum, eventsPerDay, topRanked)
     listEvents = self.get_enough_events_from_day(date, minimum, eventsPerDay)
-    topEvents = self.top_ranked(topRanked)
+    topEvents = self.top_ranked(topRanked, date, date + 7.days)
     events = listEvents.concat topEvents
     events.uniq!
     events.sort_by! { |event| event.datetime }
