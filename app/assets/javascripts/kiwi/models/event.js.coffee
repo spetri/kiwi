@@ -257,10 +257,6 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
     @on 'add', () => proxy.reset @topRanked(howManyEvents)
     proxy
 
-  mostDiscussed: =>
-    #TODO: fix me
-    @last()
-
   asBlocks: =>
     @chain().
     groupBy( (event) -> moment(event.get('datetime').format('YYYY/MM/DD')) ).

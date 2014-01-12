@@ -26,8 +26,6 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event
 
-  @close = () ->
-    @view.close() if @view
 
   class EventSidebar.SidebarLayout extends Backbone.Marionette.Layout
     className: "sidebar-nav"

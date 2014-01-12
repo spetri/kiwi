@@ -167,11 +167,6 @@ describe "Event", ->
       it 'should be able to make a proxy collection with the top events', ->
         expect(@proxy.at(0).upvotes()).toBe(11)
 
-      it 'should be able to update the proxy collection on upvote change', ->
-        @events.topRanked(1)[0].set('upvotes', 1)
-        expect(@proxy.first().upvotes()).toBe(11)
-        expect(@proxy.last().upvotes()).toBe(8)
-
       it 'should be able to update the proxy collection on event add', ->
         @events.add
           name: 'event 7', upvotes: 10, datetime: moment()
