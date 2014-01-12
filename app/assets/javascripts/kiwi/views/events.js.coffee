@@ -15,8 +15,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @view.on 'show', =>
       @view.event_block.show @eventBlocksView
 
-    @eventBlocksView.on 'block:click:more', @fetchMoreForBlock
-    @eventBlocksView.on 'block:event:clicked:open', @triggerShowEvent
+    @listenTo @eventBlocksView, 'block:click:more', @fetchMoreForBlock
+    @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEvent
 
     @view.onClose = () =>
       @stop()
@@ -34,9 +34,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @loadBlocks = =>
     @eventBlocks.reset @events.asBlocks()
 
-  @close = () ->
+  @addFinalizer () =>
     @view.close()
-    @stopListening()
+    @eventBlocksView.close()
+    @stopListening
+    
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "row-fluid"

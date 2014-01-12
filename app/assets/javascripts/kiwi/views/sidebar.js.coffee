@@ -1,11 +1,10 @@
 FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $, _) ->
 
-  @addInitializer () ->
-    @listenTo App.vent, 'container:all', @show
-    @listenTo App.vent, 'container:show', @close
-    @listenTo App.vent, 'container:new', @close
+  @addInitializer () =>
+    @show()
 
-  @addFinalizer @close
+  @addFinalizer () =>
+    @view.close() if @view
 
   @show = () ->
     @events = App.request('events')
