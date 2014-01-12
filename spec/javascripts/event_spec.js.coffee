@@ -138,15 +138,16 @@ describe "Event", ->
   describe 'top ranked', ->
     beforeEach ->
       @events = new FK.Collections.EventList [
-        { name: 'event 1', upvotes: 9, datetime: moment() }
-        { name: 'event 2', upvotes: 8, datetime: moment() }
-        { name: 'event 3', upvotes: 7, datetime: moment() }
-        { name: 'event 4', upvotes: 1, datetime: moment() }
-        { name: 'event 5', upvotes: 11, datetime: moment() }
+        { name: 'event 1', upvotes: 9, datetime: moment().subtract('days', 1)}
+        { name: 'event 2', upvotes: 8, datetime: moment().subtract('days', 1) }
+        { name: 'event 5', upvotes: 7, datetime: moment().add('days', 1) }
+        { name: 'event 5', upvotes: 9, datetime: moment() }
+        { name: 'event 5', upvotes: 11, datetime: moment().add('days', 1) }
         { name: 'event 6', upvotes: 11, datetime: moment().add('days', 4) }
+        { name: 'event 7', upvotes: 12, datetime: moment().add('days', 10) }
       ]
 
-      @topEvents = @events.topRanked(3)
+      @topEvents = @events.topRanked(3, moment(), moment().add('days', 7))
 
     it 'should be able to find an arbitary number of the top ranked events', ->
       expect(@topEvents.length).toBe(3)
@@ -162,7 +163,7 @@ describe "Event", ->
 
     describe 'proxy to ranked events', ->
       beforeEach ->
-        @proxy = @events.topRankedProxy(3)
+        @proxy = @events.topRankedProxy(3, moment(), moment().add('days', 7))
 
       it 'should be able to make a proxy collection with the top events', ->
         expect(@proxy.at(0).upvotes()).toBe(11)

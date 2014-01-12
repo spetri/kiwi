@@ -113,6 +113,9 @@ class FK.Models.Event extends Backbone.GSModel
   in_my_timezone: (datetime) ->
     datetime.zone(moment().zone())
 
+  in_range: (startDate, endDate) ->
+   @get('datetime').diff(startDate, 'seconds') >= 0 and @get('datetime').diff(endDate, 'seconds') < 0
+
   setters:
     datetime: (moment_val) ->
       moment_val = moment(moment_val)
@@ -249,12 +252,15 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
     deferred.promise()
 
-  topRanked: (howManyEvents) =>
-    this.first(howManyEvents)
+  topRanked: (howManyEvents, startDate, endDate) =>
+    this.chain().
+    filter( (event) => event.in_range(startDate, endDate)).
+    first(howManyEvents).
+    value()
 
-  topRankedProxy: (howManyEvents) =>
-    proxy = new FK.Collections.BaseEventList @topRanked(howManyEvents)
-    @on 'add', () => proxy.reset @topRanked(howManyEvents)
+  topRankedProxy: (howManyEvents, startDate, endDate) =>
+    proxy = new FK.Collections.BaseEventList @topRanked(howManyEvents, startDate, endDate)
+    @on 'add', () => proxy.reset @topRanked(howManyEvents, startDate, endDate)
     proxy
 
   asBlocks: =>

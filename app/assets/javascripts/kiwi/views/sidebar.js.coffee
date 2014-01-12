@@ -10,7 +10,7 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
 
   @show = () ->
     @events = App.request('events')
-    @topRankedEvents = @events.topRankedProxy(10)
+    @topRankedEvents = @events.topRankedProxy(10, moment(), moment().add('days', 7))
 
     @view = new EventSidebar.SidebarLayout()
     @topRankedEventsView = new EventSidebar.TopRanked
