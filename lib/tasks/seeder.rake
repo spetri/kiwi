@@ -9,7 +9,7 @@ namespace :db do
     Event.delete_all
     Event.create! datetime: 2.weeks.ago, name: "The once loved", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone', 'marionette', 'ruby'], location_type: 'international'
     Event.create! datetime: DateTime.now, name: "Koala Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone'], location_type: 'international'
-    Event.create! datetime: DateTime.now, name: "Giraffe Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'github'], location_type: 'national', country: 'US'
+    Event.create! datetime: DateTime.now, name: "Giraffe Day", description:"lorem ipsum", user: "rails", location_type: 'national', country: 'US'
     Event.create! datetime: 2.days.from_now, name: "Zebra Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby'], location_type: 'international'
     Event.create! datetime: 2.days.from_now, name: "Melon Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php'], location_type: 'national', country: 'CA'
     Event.create! datetime: 2.days.from_now, name: "History Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine', 'github', 'backbone'], location_type: 'national', country: 'CA'

@@ -129,7 +129,7 @@ class Event
     topEvents = self.top_ranked(topRanked, date, date + 7.days)
     events = listEvents.concat topEvents
     events.uniq!
-    events.sort_by! { |event| - event.upvote_names.size }
+    events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }
     return events
   end
 
