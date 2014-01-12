@@ -250,15 +250,10 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
     deferred.promise()
 
   topRanked: (howManyEvents) =>
-    this.chain().
-    sortBy( (event) -> event.get('datetime').unix() ).
-    sortBy( (event) -> - event.upvotes()).
-    first(howManyEvents).
-    value()
+    this.first(howManyEvents)
 
   topRankedProxy: (howManyEvents) =>
-    proxy = new Backbone.Collection @topRanked(howManyEvents)
-    @on 'change:upvotes', () => proxy.reset @topRanked(howManyEvents)
+    proxy = new FK.Collections.BaseEventList @topRanked(howManyEvents)
     @on 'add', () => proxy.reset @topRanked(howManyEvents)
     proxy
 
@@ -271,7 +266,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
     groupBy( (event) -> moment(event.get('datetime').format('YYYY/MM/DD')) ).
     map( (events, date) ->
       block = new FK.Models.EventBlock
-        date: date
+        date: moment(date)
       block.addEvents events
       return block
     ).
@@ -280,8 +275,8 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 class FK.Collections.EventBlockList extends Backbone.Collection
   model: FK.Models.EventBlock
   comparator: (block1, block2) =>
-    date1 = moment(block1.get('date'))
-    date2 = moment(block2.get('date'))
+    date1 = block1.get('date')
+    date2 = block2.get('date')
     return 1 if date1 > date2
     return 0 if date1 == date2
     return -1 if date1 < date2
