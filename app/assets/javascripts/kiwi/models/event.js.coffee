@@ -171,12 +171,7 @@ class FK.Models.EventBlock extends Backbone.Model
     event_limit: 3
 
   initialize: () =>
-    @events = new Backbone.Collection()
-    @events.model = FK.Models.Event
-    @events.comparator = (event1, event2) =>
-      return -1 if event1.upvotes() > event2.upvotes()
-      return 0 if event1.upvotes() == event2.upvotes()
-      return 1 if event1.upvotes() < event2.upvotes()
+    @events = new FK.Collections.BaseEventList()
 
   isToday: () =>
     @isDate(moment())
@@ -203,15 +198,19 @@ class FK.Models.EventBlock extends Backbone.Model
   increaseLimit: (howMuch) =>
     @set('event_limit', @get('event_limit') + howMuch)
 
-class FK.Collections.EventList extends Backbone.Collection
+class FK.Collections.BaseEventList extends Backbone.Collection
   model: FK.Models.Event
-  url:
-    "/events/"
-
   comparator: (event1, event2) =>
     return -1 if event1.upvotes() > event2.upvotes()
-    return 0 if event1.upvotes() == event2.upvotes()
+    if event1.upvotes() == event2.upvotes()
+      return 1 if event1.get('datetime') > event2.get('datetime')
+      return 0 if event1.get('datetime') == event2.get('datetime')
+      return -1 if event1.get('datetime') < event2.get('datetime')
     return 1 if event1.upvotes() < event2.upvotes()
+
+class FK.Collections.EventList extends FK.Collections.BaseEventList
+  url:
+    "/events/"
 
   fetchStartupEvents: (howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
     @fetch
