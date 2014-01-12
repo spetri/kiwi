@@ -11,14 +11,8 @@ describe Event do
   describe "Event fetching" do
     describe "by date" do
       before(:each) do
-        for i in 0..2
-          event = create :future_event
-          event.save
-        end
-        for i in 0..1
-          event = create :past_event
-          event.save
-        end
+        create_list :event, 3, :in_1_week
+        create_list :event, 2, :back_1_week
       end
 
       it "should be able to fetch events by date" do
@@ -40,16 +34,9 @@ describe Event do
 
     describe "by top ranked" do
       before(:each) do
-        for i in 0..3
-          event = create :event
-          event.save!
-        end
-
-        upvoted_event = create :upvoted_event
-        upvoted_event.save
-
-        many_upvoted_event = create :many_upvoted_event
-        many_upvoted_event.save
+        create_list :event, 3
+        create :event, :with_2_upvotes
+        create :event, :with_5_upvotes
 
         @topRanked = Array(Event.top_ranked(4))
       end
@@ -65,27 +52,13 @@ describe Event do
 
     describe "starting package" do
       before(:each) do
-        for i in 0..2
-          event = create :upvoted_further_future_event
-          event.save
-        end
-        for i in 0..2
-          event = create :many_upvoted_future_event
-          event.save
-        end
-        for i in 0..2
-          event = create :many_upvoted_further_future_event
-          event.save
-        end
+        create_list :event, 3, :with_2_upvotes, :in_1_week
+        create_list :event, 3, :with_5_upvotes, :in_1_week
+        create_list :event, 3, :with_5_upvotes, :in_2_weeks
 
-        event = create :future_event
-        event.save
-
-        event = create :past_event
-        event.save
-
-        event = create :highly_upvoted_event
-        event.save
+        create :event, :with_5_upvotes, :in_1_week
+        create :event, :with_5_upvotes, :back_1_week
+        create :event, :with_7_upvotes, :in_3_weeks
       end
       it "should be able to get a total total number of events across days" do
         events = Event.get_enough_events_from_day(Date.today(), 5, 3)

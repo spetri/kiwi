@@ -5,37 +5,33 @@ FactoryGirl.define do
 
   factory :event do 
     name
+    datetime DateTime.new
 
-    factory :upvoted_event do
+    trait :with_2_upvotes do
       upvote_names ["eventlover1", "eventlover2"]
-      factory :upvoted_future_event do
-        datetime 1.week.from_now
-      end
-      factory :upvoted_further_future_event do
-        datetime 2.week.from_now
-      end
     end
 
-    factory :many_upvoted_event do
+    trait :with_5_upvotes do
       upvote_names ["eventlover1", "eventlover2", "eventlover3", "eventlover4", "eventlover5"]
-      factory :many_upvoted_future_event do
-        datetime 1.week.from_now
-      end
-      factory :many_upvoted_further_future_event do
-        datetime 2.week.from_now
-      end
     end
 
-    factory :highly_upvoted_event do
+    trait :with_7_upvotes do
       upvote_names ["eventlover1", "eventlover2", "eventlover3", "eventlover4", "eventlover5", "eventlover6", "eventlover7"]
-      datetime 3.week.from_now
     end
 
-    factory :future_event do
+    trait :in_1_week do
       datetime 1.week.from_now
     end
 
-    factory :past_event do
+    trait :in_2_weeks do
+      datetime 2.week.from_now
+    end
+
+    trait :in_3_weeks do
+      datetime 3.week.from_now
+    end
+
+    trait :back_1_week do
       datetime 1.week.ago
     end
   end
