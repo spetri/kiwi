@@ -1,10 +1,12 @@
 FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $, _) ->
 
   @addInitializer () =>
-    @show()
+    @listenTo App.vent, 'container:all', @show
+    @listenTo App.vent, 'container:show', @close
+    @listenTo App.vent, 'container:new', @close
 
   @addFinalizer () =>
-    @view.close() if @view
+    @close()
 
   @show = () ->
     @events = App.request('events')
@@ -25,6 +27,8 @@ FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event
 
+  @close = () =>
+    @view.close() if @view
 
   class EventSidebar.SidebarLayout extends Backbone.Marionette.Layout
     className: "sidebar-nav"
