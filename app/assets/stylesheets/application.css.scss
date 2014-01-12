@@ -34,7 +34,6 @@
 
 .event {
   margin-bottom: 10px;
-  cursor: pointer;
   .upvote-container {
     margin-right: 14px;
     width: 14px;
@@ -56,11 +55,14 @@
       &.icon-caret-up {
         font-size: 18px;
       }
-
+      cursor: pointer;
     }
     .upvote-counter {
       font-size: 24px;
     }
+  }
+  img {
+    cursor: pointer;
   }
   .image-container {
     margin-right: 10px;
@@ -70,6 +72,7 @@
 
     }
     a.event-name {
+      cursor: pointer;
       &:hover {
         text-decoration: none;
       }
