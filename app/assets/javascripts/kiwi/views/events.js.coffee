@@ -5,7 +5,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @addInitializer () ->
     
     @events = App.request('events')
-    @eventBlocks = new FK.Collections.EventBlockList()
+    @eventBlocks = App.request('eventStore').blocks
     @topRankedEvents = @events.topRankedProxy(10, moment(), moment().add('days', 7))
     
     @view = new EventList.ListLayout()
@@ -15,8 +15,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @topRankedEventsView = new EventList.TopRanked
       collection: @topRankedEvents
     
-    @events.once 'sync', @loadBlocks
-
     @view.on 'show', =>
       @view.sidebar.show @topRankedEventsView
       @view.event_block.show @eventBlocksView
@@ -30,7 +28,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       @stop()
 
     App.mainRegion.show @view
-    @loadBlocks()
+
 
   @triggerShowEventDeep = (event) ->
     App.vent.trigger 'container:show', event.model
@@ -41,9 +39,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @fetchMoreForBlock = (args) =>
     args.model.increaseLimit(3)
     args.model.fetchMore(3, @events)
-
-  @loadBlocks = =>
-    @eventBlocks.reset @events.asBlocks()
 
   @addFinalizer () =>
     @view.close()

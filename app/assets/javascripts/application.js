@@ -16,3 +16,4 @@
 //= require_tree ./kiwi/views
 //= require_tree ./kiwi/components
 //= require_tree ./kiwi/models
+//= require_tree ./kiwi/lib
