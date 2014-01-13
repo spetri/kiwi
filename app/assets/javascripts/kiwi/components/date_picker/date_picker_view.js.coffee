@@ -13,7 +13,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @updateModel()
 
     updateModel: =>
-      is_all_day  = @$('input[name=is_all_day]:checked').val() is '1'
+      is_all_day  = @$('input[name=is_all_day]:checked').val()
       time_format = @$('input[name=time_format]:checked').val()
       date = @$('input[name=date]').val()
       time = "#{@$('select[name=hours]').val()}:#{@$('select[name=minutes]').val()} #{@$('select[name=ampm]').val()}"
