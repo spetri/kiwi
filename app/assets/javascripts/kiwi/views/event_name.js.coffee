@@ -1,6 +1,6 @@
-FK.App.module "Events.EventSidebar", (EventSidebar, App, Backbone, Marionette, $, _) ->
+FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) ->
 
-  class EventSidebar.EventName extends Marionette.ItemView
+  class EventList.EventName extends Marionette.ItemView
     template: FK.Template('event_name')
     tagName: 'a'
     className: 'event-name'

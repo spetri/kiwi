@@ -6,23 +6,34 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     
     @events = App.request('events')
     @eventBlocks = new FK.Collections.EventBlockList()
+    @topRankedEvents = @events.topRankedProxy(10, moment(), moment().add('days', 7))
     
     @view = new EventList.ListLayout()
-    @eventBlocksView = new EventList.EventBlocks(collection: @eventBlocks)
+    @eventBlocksView = new EventList.EventBlocks
+      collection: @eventBlocks
+
+    @topRankedEventsView = new EventList.TopRanked
+      collection: @topRankedEvents
     
     @events.once 'sync', @loadBlocks
 
     @view.on 'show', =>
+      @view.sidebar.show @topRankedEventsView
       @view.event_block.show @eventBlocksView
 
+
     @listenTo @eventBlocksView, 'block:click:more', @fetchMoreForBlock
-    @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEvent
+    @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
+    @listenTo @topRankedEventsView, 'itemview:clicked:event', @triggerShowEvent
 
     @view.onClose = () =>
       @stop()
 
     App.mainRegion.show @view
     @loadBlocks()
+
+  @triggerShowEventDeep = (event) ->
+    App.vent.trigger 'container:show', event.model
 
   @triggerShowEvent = (block, event) ->
     App.vent.trigger 'container:show', event.model
@@ -37,12 +48,14 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @addFinalizer () =>
     @view.close()
     @eventBlocksView.close()
+    @topRankedEventsView.close()
     @stopListening
     
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
-    className: "row-fluid"
+    className: "container"
     regions:
-      event_block: '#event_blocks'
+      event_block: '#event-blocks-region'
+      sidebar: '#sidebar-region'
 
     template: FK.Template('events')

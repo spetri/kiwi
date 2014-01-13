@@ -6,12 +6,9 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="container">
   <div id="navbar-region" class="navbar"></div>
-  <div class="container" id="container">
-    <div id="main-region" class="col-lg-9"></div>
-    <div id="sidebar-region" class="col-lg-3"></div>
-  </div>
+  <div id="main-region" class="col-md-9"></div>
   <script type="text/javascript">
     $(function() { 
       FK.App.start({

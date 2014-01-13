@@ -19,7 +19,6 @@ FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({
   navbarRegion: '#navbar-region'
   mainRegion: '#main-region'
-  sidebarRegion: '#sidebar-region'
 })
 
 FK.App.addInitializer (prefetch) ->
