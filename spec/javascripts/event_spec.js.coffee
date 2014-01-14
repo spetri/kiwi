@@ -64,6 +64,19 @@ describe "Event", ->
       it "should be able to get the local ampm", ->
         expect(@event.get('local_ampm')).toBe('AM')
 
+  describe "when determining the time range", ->
+    it "should be able to place the event in a simple range", ->
+      event = new FK.Models.Event (datetime: moment().add('hours', 2))
+      expect(event.in_range(moment(), moment().add('hours', 3))).toBeTruthy()
+
+    it "should be able to place the event in a range from the start datetime being the time of the event", ->
+      event = new FK.Models.Event (datetime: moment().add('hours', 2))
+      expect(event.in_range(moment().add('hours', 2), moment().add('hours', 3))).toBeTruthy()
+
+    it "should be able to place the event in a range when the event is all day", ->
+      event = new FK.Models.Event (datetime: moment(), is_all_day: true)
+      expect(event.in_range(moment().add('hours', 2), moment().add('hours', 3))).toBeTruthy()
+      
 
   describe "when adding an image", ->
     beforeEach ->

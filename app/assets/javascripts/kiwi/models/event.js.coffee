@@ -114,7 +114,10 @@ class FK.Models.Event extends Backbone.GSModel
     datetime.zone(moment().zone())
 
   in_range: (startDate, endDate) ->
-   @get('datetime').diff(startDate, 'seconds') >= 0 and @get('datetime').diff(endDate, 'seconds') < 0
+    if @get('is_all_day')
+      @get('datetime').diff(startDate, 'days') >= 0 and @get('datetime').diff(endDate, 'days') <= 0
+    else
+      @get('datetime').diff(startDate, 'seconds') >= 0 and @get('datetime').diff(endDate, 'seconds') < 0
 
   setters:
     datetime: (moment_val) ->
