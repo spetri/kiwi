@@ -31,9 +31,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
   @startup = (model, trimmer) =>
     if model.get('originalUrl')
-      @setImageUrl model, model.get('originalUrl')
+      @reloadImage model.get('originalUrl')
       @setImageSize model, model.get('width')
       @trimmer().setPosition model.get('crop_x'), model.get('crop_y')
+
+  @reloadImage = (url) =>
+    @trimmer().newImage url, 'reload'
 
   @setImageUrl = (model, url) =>
     @trimmer().newImage url, 'remote'
@@ -60,6 +63,8 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         @model.newRemoteImage url
       else if source is 'uploaded'
         @model.newUploadedImage url, file
+      else if source is 'reload'
+        @model.newReloadedImage url
 
     setWidth: (width) ->
       @imageReady.then( () =>
@@ -114,6 +119,12 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @set
         url: url
         source: 'remote'
+
+    newReloadedImage: (url) ->
+      @reset()
+      @set
+        url: url
+        source: 'reload'
 
     reset: () ->
       @clear()
