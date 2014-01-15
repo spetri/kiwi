@@ -30,10 +30,10 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     App.mainRegion.show @view
 
 
-  @triggerShowEventDeep = (event) ->
+  @triggerShowEvent = (event) ->
     App.vent.trigger 'container:show', event.model
 
-  @triggerShowEvent = (block, event) ->
+  @triggerShowEventDeep = (block, event) ->
     App.vent.trigger 'container:show', event.model
 
   @fetchMoreForBlock = (args) =>

@@ -41,4 +41,5 @@ FK.App.module 'ImageTrimmer', (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       @$('input.url-input').val('') if source != 'remote'
 
     refreshUrl: (model, url) =>
-      @$('input.url-input').val(url)
+      if model.get('source') is 'remote'
+        @$('input.url-input').val(url)

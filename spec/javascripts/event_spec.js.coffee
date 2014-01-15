@@ -22,6 +22,14 @@ describe "Event", ->
       v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 20:00 GMT+200")
       expect(v.get('time')).toEqual('1/12c')
 
+    it "can get a datetime in the local timezone without changing it", ->
+      v = new FK.Models.Event
+        datetime: moment().zone(0)
+      expect(v.in_my_timezone(v.get('datetime')).hour()).toBe(moment().hour())
+      expect(v.get('datetime').hour()).toBe(moment().zone(0).hour())
+
+      
+
   describe "when upvoting", ->
     beforeEach ->
       @event = new FK.Models.Event()
@@ -64,6 +72,19 @@ describe "Event", ->
       it "should be able to get the local ampm", ->
         expect(@event.get('local_ampm')).toBe('AM')
 
+  describe "when determining the time range", ->
+    it "should be able to place the event in a simple range", ->
+      event = new FK.Models.Event (datetime: moment().add('hours', 2))
+      expect(event.in_range(moment(), moment().add('hours', 3))).toBeTruthy()
+
+    it "should be able to place the event in a range from the start datetime being the time of the event", ->
+      event = new FK.Models.Event (datetime: moment().add('hours', 2))
+      expect(event.in_range(moment().add('hours', 2), moment().add('hours', 3))).toBeTruthy()
+
+    it "should be able to place the event in a range when the event is all day", ->
+      event = new FK.Models.Event (datetime: moment(), is_all_day: true)
+      expect(event.in_range(moment().add('hours', 2), moment().add('hours', 3))).toBeTruthy()
+      
 
   describe "when adding an image", ->
     beforeEach ->

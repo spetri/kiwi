@@ -1,6 +1,7 @@
 class FK.Models.Event extends Backbone.GSModel
   idAttribute: "_id"
   defaults:
+    location_type: 'international'
     country: 'US'
     name: ''
     user: ''
@@ -56,7 +57,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   parse: (resp) ->
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
-    resp.is_all_day = false if resp.is_all_day is "false"
+    resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
     resp
 
   getters:
@@ -69,8 +70,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     time: () ->
       return '' if not @get('datetime')
-      return ' – all day' if @.get('is_all_day')
-
+      return ' - all day ' if @is_all_day()
       if @.get('time_format') is 'recurring'
         return @.get('local_time')
 
@@ -105,16 +105,19 @@ class FK.Models.Event extends Backbone.GSModel
       if @.get('time_format') is 'recurring'
         time_split = @.get('time').split(':')
         return moment(@in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
-      @in_my_timezone(@get('datetime'))
+      @in_my_timezone(@get('datetime')).clone()
 
   time_from_moment: (datetime) =>
     @in_my_timezone(datetime).format('h:mm A')
 
   in_my_timezone: (datetime) ->
-    datetime.zone(moment().zone())
+    datetime.clone().zone(moment().zone())
 
   in_range: (startDate, endDate) ->
-   @get('datetime').diff(startDate, 'seconds') >= 0 and @get('datetime').diff(endDate, 'seconds') < 0
+    if @get('is_all_day')
+      @get('fk_datetime').diff(startDate, 'days') >= 0 and @get('fk_datetime').diff(endDate, 'days') <= 0
+    else
+      @get('fk_datetime').diff(startDate, 'seconds') >= 0 and @get('fk_datetime').diff(endDate, 'seconds') < 0
 
   setters:
     datetime: (moment_val) ->
@@ -234,7 +237,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
   getEventsByDate: (date, howManyEvents, skip) =>
     matchingEvents = @chain().
-    filter( (event) => event.get('datetime').diff(date, 'days') == 0).
+    filter( (event) => event.get('fk_datetime').diff(date, 'days') == 0).
     tail(skip).
     head(howManyEvents).
     value()
