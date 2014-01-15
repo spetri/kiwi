@@ -115,9 +115,9 @@ class FK.Models.Event extends Backbone.GSModel
 
   in_range: (startDate, endDate) ->
     if @get('is_all_day')
-      @get('datetime').diff(startDate, 'days') >= 0 and @get('datetime').diff(endDate, 'days') <= 0
+      @get('fk_datetime').diff(startDate, 'days') >= 0 and @get('fk_datetime').diff(endDate, 'days') <= 0
     else
-      @get('datetime').diff(startDate, 'seconds') >= 0 and @get('datetime').diff(endDate, 'seconds') < 0
+      @get('fk_datetime').diff(startDate, 'seconds') >= 0 and @get('fk_datetime').diff(endDate, 'seconds') < 0
 
   setters:
     datetime: (moment_val) ->
@@ -237,7 +237,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
   getEventsByDate: (date, howManyEvents, skip) =>
     matchingEvents = @chain().
-    filter( (event) => event.get('datetime').diff(date, 'days') == 0).
+    filter( (event) => event.get('fk_datetime').diff(date, 'days') == 0).
     tail(skip).
     head(howManyEvents).
     value()
