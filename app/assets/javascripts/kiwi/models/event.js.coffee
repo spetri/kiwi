@@ -1,6 +1,7 @@
 class FK.Models.Event extends Backbone.GSModel
   idAttribute: "_id"
   defaults:
+    location_type: 'international'
     country: 'US'
     name: ''
     user: ''
@@ -56,7 +57,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   parse: (resp) ->
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
-    resp.is_all_day = false if resp.is_all_day is "false"
+    resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
     resp
 
   getters:
@@ -69,8 +70,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     time: () ->
       return '' if not @get('datetime')
-      return ' – all day' if @.get('is_all_day')
-
+      return ' - all day ' if @is_all_day()
       if @.get('time_format') is 'recurring'
         return @.get('local_time')
 
