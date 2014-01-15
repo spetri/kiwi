@@ -105,13 +105,13 @@ class FK.Models.Event extends Backbone.GSModel
       if @.get('time_format') is 'recurring'
         time_split = @.get('time').split(':')
         return moment(@in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
-      @in_my_timezone(@get('datetime'))
+      @in_my_timezone(@get('datetime')).clone()
 
   time_from_moment: (datetime) =>
     @in_my_timezone(datetime).format('h:mm A')
 
   in_my_timezone: (datetime) ->
-    datetime.zone(moment().zone())
+    datetime.clone().zone(moment().zone())
 
   in_range: (startDate, endDate) ->
     if @get('is_all_day')

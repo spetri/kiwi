@@ -22,6 +22,14 @@ describe "Event", ->
       v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 20:00 GMT+200")
       expect(v.get('time')).toEqual('1/12c')
 
+    it "can get a datetime in the local timezone without changing it", ->
+      v = new FK.Models.Event
+        datetime: moment().zone(0)
+      expect(v.in_my_timezone(v.get('datetime')).hour()).toBe(moment().hour())
+      expect(v.get('datetime').hour()).toBe(moment().zone(0).hour())
+
+      
+
   describe "when upvoting", ->
     beforeEach ->
       @event = new FK.Models.Event()
