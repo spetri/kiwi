@@ -6,6 +6,12 @@ FK.SpecHelpers =
       { _id: 3, datetime: moment().add('minutes', 7) }
       { _id: 4, datetime: moment().add('days', 3) }
     ]
+    TodayEvents: [
+      new FK.Models.Event { _id: 1, datetime: moment().add('seconds', 2) }
+      new FK.Models.Event { _id: 2, datetime: moment().add('minutes', 3) }
+      new FK.Models.Event { _id: 3, datetime: moment().add('minutes', 7) }
+      new FK.Models.Event { _id: 4, datetime: moment().add('hours', 3) }
+    ]
     UpvotedEvents: [
         { name: 'event 1', upvotes: 9, datetime: moment().subtract('days', 1)}
         { name: 'event 2', upvotes: 8, datetime: moment().subtract('days', 1) }
