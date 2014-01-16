@@ -6,8 +6,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     
     @events = App.request('events')
     @eventBlocks = App.request('eventStore').blocks
-    @topRankedEvents = @events.topRankedProxy(10, moment(), moment().add('days', 7))
-    
+    @topRankedEvents = App.request('eventStore').topRanked
+
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks

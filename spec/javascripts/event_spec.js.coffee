@@ -158,16 +158,7 @@ describe "Event", ->
 
   describe 'top ranked', ->
     beforeEach ->
-      @events = new FK.Collections.EventList [
-        { name: 'event 1', upvotes: 9, datetime: moment().subtract('days', 1)}
-        { name: 'event 2', upvotes: 8, datetime: moment().subtract('days', 1) }
-        { name: 'event 5', upvotes: 7, datetime: moment().add('days', 1) }
-        { name: 'event 5', upvotes: 9, datetime: moment() }
-        { name: 'event 5', upvotes: 11, datetime: moment().add('days', 1) }
-        { name: 'event 6', upvotes: 11, datetime: moment().add('days', 4) }
-        { name: 'event 7', upvotes: 12, datetime: moment().add('days', 10) }
-      ]
-
+      @events = new FK.Collections.EventList FK.SpecHelpers.Events.UpvotedEvents
       @topEvents = @events.topRanked(3, moment(), moment().add('days', 7))
 
     it 'should be able to find an arbitary number of the top ranked events', ->
@@ -181,19 +172,6 @@ describe "Event", ->
     it 'should be finding events ordered by date after ranking', ->
       expect(@topEvents[0].get('name')).toBe('event 5')
       expect(@topEvents[1].get('name')).toBe('event 6')
-
-    describe 'proxy to ranked events', ->
-      beforeEach ->
-        @proxy = @events.topRankedProxy(3, moment(), moment().add('days', 7))
-
-      it 'should be able to make a proxy collection with the top events', ->
-        expect(@proxy.at(0).upvotes()).toBe(11)
-
-      it 'should be able to update the proxy collection on event add', ->
-        @events.add
-          name: 'event 7', upvotes: 10, datetime: moment()
-        expect(@proxy.first().upvotes()).toBe(11)
-        expect(@proxy.last().upvotes()).toBe(10)
 
 describe 'event list', ->
   describe 'fetching events', ->
