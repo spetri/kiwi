@@ -30,3 +30,5 @@ FK.SpecHelpers =
         { name: 'event 15', upvotes: 5, datetime: moment().add('days', 3) }
     ]
 
+# Force all test cases to use Jan 16 at 2:20 pm as the current date time
+sinon.useFakeTimers(1389892800000, "Date")
