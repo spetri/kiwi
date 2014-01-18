@@ -28,7 +28,19 @@ describe "Event", ->
       expect(v.in_my_timezone(v.get('datetime')).hour()).toBe(moment().hour())
       expect(v.get('datetime').hour()).toBe(moment().zone(0).hour())
 
-      
+    it "can detect if an event is in the future", ->
+      event = new FK.Models.Event
+        datetime: moment().add('seconds', 10)
+
+      expect(event.in_future()).toBeTruthy()
+
+    it "can detect if an event with a recurring time format is in the future", ->
+      event = new FK.Models.Event
+        datetime: moment().toDate()
+        local_time: moment().add('hours', 4).format('h:mm A')
+        time_format: 'recurring'
+
+      expect(event.in_future()).toBeTruthy()
 
   describe "when upvoting", ->
     beforeEach ->

@@ -31,6 +31,9 @@ class FK.Models.Event extends Backbone.GSModel
   is_all_day: () =>
     @.get('is_all_day') is '1' or @.get('is_all_day') is true
 
+  in_future: () =>
+    @get('fk_datetime').diff(moment(), 'seconds') > 0
+
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
@@ -105,8 +108,13 @@ class FK.Models.Event extends Backbone.GSModel
 
     fk_datetime: () ->
       if @.get('time_format') is 'recurring'
-        time_split = @.get('time').split(':')
-        return moment(@in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
+        event_time = moment(@get('local_time'), 'h:mm A')
+        return moment(
+              @in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")
+            ).
+            add(
+              hours: event_time.hour(), minutes: event_time.minute()
+            )
       @in_my_timezone(@get('datetime')).clone()
 
   time_from_moment: (datetime) =>
@@ -198,11 +206,14 @@ class FK.Models.EventBlock extends Backbone.Model
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
 
-    events = _.filter(events, (event) => event.get('datetime').diff(moment(), 'seconds') > 0 )
+    events = _.filter(events, (event) => event.in_future() )
 
     howManyOver = events.length + @events.length - @get('event_limit')
+
     events = _.take(events, events.length - howManyOver) if howManyOver > 0
+
     @events.add(events)
+
     if @events.length < @get('event_limit')
       @set('more_events_available', false)
     else
