@@ -10,6 +10,7 @@ class FK.EventStore extends Marionette.Controller
     @listenTo @events, 'sync', @resetTopRanked
     @listenToOnce @events, 'sync', @startAddListeners
 
+  fetchStartupEvents: () =>
     @events.fetchStartupEvents(10, 3, 10)
 
   startAddListeners: () =>
@@ -19,12 +20,12 @@ class FK.EventStore extends Marionette.Controller
     blocks = _.take(@events.asBlocks(), @howManyDaysInBlocks)
     @blocks.reset blocks
 
-  addBlocks: (howManyBlocks) =>
+  moreBlocks: (howManyBlocks) =>
     @howManyDaysInBlocks += howManyBlocks
     howManyBlocksAlready = @blocks.length
     blocks = _.chain(@events.asBlocks()).
       drop(howManyBlocksAlready).
-      take(@howManyDaysInBlocks).
+      take(howManyBlocks).
       value()
     @blocks.add blocks
 
