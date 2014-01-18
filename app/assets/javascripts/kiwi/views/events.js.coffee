@@ -30,6 +30,13 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     App.mainRegion.show @view
 
+    $(document).scroll (e) =>
+      $doc = $(e.target)
+      $window = $(window)
+
+      percentage = $doc.scrollTop() / ($doc.height() - $window.height())
+
+      @fetchMoreBlocks() if percentage > 0.9
 
   @triggerShowEvent = (event) ->
     App.vent.trigger 'container:show', event.model
@@ -45,6 +52,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @eventStore.moreBlocks(1)
 
   @addFinalizer () =>
+    $(document).off('scroll')
     @view.close()
     @eventBlocksView.close()
     @topRankedEventsView.close()
