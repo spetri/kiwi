@@ -281,7 +281,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
   asBlocks: =>
     @chain().
-    groupBy( (event) -> moment(event.get('datetime').format('YYYY/MM/DD')) ).
+    groupBy( (event) -> moment(event.get('fk_datetime').format('YYYY/MM/DD')) ).
     map( (events, date) ->
       block = new FK.Models.EventBlock
         date: moment(date)
