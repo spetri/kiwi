@@ -1,20 +1,22 @@
 class FK.Models.Event extends Backbone.GSModel
   idAttribute: "_id"
-  defaults:
-    location_type: 'international'
-    country: 'US'
-    name: ''
-    user: ''
-    description: ''
-    #TODO: fix me - all events will start with the date that the file was parsed
-    thumbUrl: ''
-    mediumUrl: ''
-    is_all_day: false
-    time_format: ''
-    tv_time: ''
-    upvotes: 0
-    have_i_upvoted: false
-    country_full_name: ''
+  defaults: () =>
+    return {
+      location_type: 'international'
+      country: 'US'
+      name: ''
+      user: ''
+      description: ''
+      #TODO: fix me - all events will start with the date that the file was parsed
+      thumbUrl: ''
+      mediumUrl: ''
+      is_all_day: false
+      time_format: ''
+      tv_time: ''
+      upvotes: 0
+      have_i_upvoted: false
+      country_full_name: ''
+    }
 
   urlRoot: () =>
     '/events'
@@ -171,10 +173,12 @@ class FK.Models.Event extends Backbone.GSModel
     @get('user') is '' || @get('user') == username
 
 class FK.Models.EventBlock extends Backbone.Model
-  defaults:
-    date: moment()
-    more_events_available: true
-    event_limit: 3
+  defaults: () =>
+    return {
+      date: moment()
+      more_events_available: true
+      event_limit: 3
+    }
 
   initialize: () =>
     @events = new FK.Collections.BaseEventList()
