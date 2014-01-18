@@ -104,6 +104,10 @@ class Event
     self.all.where({datetime: (startDate..endDate) }).order_by([:upvote_count, :desc]).limit(howMany)
   end
 
+  def self.get_events_after_date(date, howMany=0)
+    self.all.where({ :datetime.gt => date }).limit(howMany)
+  end
+
   def self.get_enough_events_from_day(date, minimum, eventsPerDay)
     events = []
     eventCount = 0

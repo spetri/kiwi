@@ -5,6 +5,7 @@ class FK.EventStore extends Marionette.Controller
     @topRanked = new FK.Collections.BaseEventList()
 
     @howManyDaysInBlocks = 3
+    @howManyBlocks = 3
 
     @listenToOnce @events, 'sync', @resetBlocks
     @listenTo @events, 'sync', @resetTopRanked
@@ -21,13 +22,19 @@ class FK.EventStore extends Marionette.Controller
     @blocks.reset blocks
 
   moreBlocks: (howManyBlocks) =>
-    @howManyDaysInBlocks += howManyBlocks
     howManyBlocksAlready = @blocks.length
     blocks = _.chain(@events.asBlocks()).
       drop(howManyBlocksAlready).
       take(howManyBlocks).
       value()
     @blocks.add blocks
+
+    if @blocks.length < @howManyBlocks + howManyBlocks
+      @events.getBlocksAfterDate(@blocks.last().get('date').clone().add('days', 1), @howManyBlocks - @blocks.length).done (blocks) =>
+        @blocks.add blocks
+        @howManyBlocks = @blocks.length
+    else
+      @howManyBlocks = @blocks.length
 
   resetTopRanked: () =>
     @topRanked.reset @events.topRanked(10, moment(), moment().add('days', 7))

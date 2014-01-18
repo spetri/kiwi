@@ -253,6 +253,14 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
         howManyEvents: howManyEvents
         skip: skip
 
+  fetchMoreEventsAfterDate: (date, howManyEvents) =>
+    @fetch
+      url: 'api' + @url + 'eventsAfterDate'
+      remove: false
+      data:
+        date: moment(date).format('YYYY-MM-DD')
+        howManyEvents: howManyEvents
+
   getEventsByDate: (date, howManyEvents, skip) =>
     matchingEvents = @chain().
     filter( (event) => event.get('fk_datetime').diff(date, 'days') == 0).
@@ -273,6 +281,14 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
     deferred.promise()
 
+  getBlocksAfterDate: (date, howManyBlocks) =>
+    deferred = $.Deferred()
+    
+    @fetchMoreEventsAfterDate(date, howManyBlocks * 3).done () =>
+      deferred.resolve(@asBlocksOnAfterDate(date))
+    
+    deferred.promise()
+
   topRanked: (howManyEvents, startDate, endDate) =>
     this.chain().
     filter( (event) => event.in_range(startDate, endDate)).
@@ -291,6 +307,9 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
       return block
     ).
     value()
+
+  asBlocksOnAfterDate: (date) =>
+    _.filter(@asBlocks(), (block) => block.get('date').diff(date, 'days') >= 0)
 
 class FK.Collections.EventBlockList extends Backbone.Collection
   model: FK.Models.EventBlock

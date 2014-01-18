@@ -51,3 +51,47 @@ describe "Event Store", ->
         
       it "should have the latest event on the last block", ->
         expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 5).format('YYYY-MM-DD'))
+
+    describe "getting the limit of blocks in local memory", ->
+      beforeEach ->
+        @store.moreBlocks(4)
+
+      it "should be able to convert all events in local memory to blocks", ->
+        expect(@blocks.length).toBe(7)
+
+      it "should have the date of the last block as the same as the event furthest in the future", ->
+        expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(
+          @store.events.sortBy( (event) -> event.get('datetime'))[@store.events.length - 1].get('datetime').format('YYYY-MM-DD'))
+        
+
+    describe "increasing the number of blocks beyond the number of already fetched events", ->
+      beforeEach ->
+        @xhr = sinon.useFakeXMLHttpRequest()
+        @requests = []
+        @xhr.onCreate = (xhr) =>
+          @requests.push xhr
+
+        @store.moreBlocks(7)
+
+      afterEach ->
+        @xhr.restore()
+      
+      it "should be able to get events by date from the server when there aren't enough events locally", ->
+        expect(@requests.length).toBe(1)
+
+      describe "when the server responds", ->
+        beforeEach ->
+          @requests[0].respond(200, { "Content-Type": "application/json"}, JSON.stringify([
+            { datetime: moment().add('days', 12) }
+            { datetime: moment().add('days', 12) }
+            { datetime: moment().add('days', 12) }
+          ]))
+
+        it "should also add all the new events to the events collection", ->
+          expect(@store.events.length).toBe(18)
+
+        it "should be able to add more blocks after more events have come back from the server", ->
+          expect(@blocks.length).toBe(8)
+
+        it "should be able to set the blocks count to the number of blocks when there are no more blocks to make", ->
+          expect(@store.howManyBlocks).toBe(8)

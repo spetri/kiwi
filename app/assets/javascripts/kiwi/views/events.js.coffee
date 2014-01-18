@@ -5,6 +5,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @addInitializer () ->
     
     @events = App.request('events')
+    @eventStore = App.request('eventStore')
     @eventBlocks = App.request('eventStore').blocks
     @topRankedEvents = App.request('eventStore').topRanked
 
@@ -39,6 +40,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @fetchMoreForBlock = (args) =>
     args.model.increaseLimit(3)
     args.model.fetchMore(3, @events)
+
+  @fetchMoreBlocks = () =>
+    @eventStore.moreBlocks(1)
 
   @addFinalizer () =>
     @view.close()

@@ -89,6 +89,10 @@ class EventsController < ApplicationController
     @events = Event.get_events_by_date(Date.parse(params[:date]), params[:howManyEvents], params[:skip])
   end
 
+  def events_after_date
+    @events = Event.get_events_by_date(Date.parse(params[:date]), params[:howManyEvents])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
