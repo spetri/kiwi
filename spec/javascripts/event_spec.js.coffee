@@ -281,6 +281,17 @@ describe 'event list', ->
     it "should have a block for each date", ->
       expect(@blocks.length).toBe(2)
 
+  describe 'making blocks with past events', ->
+    beforeEach ->
+      @events = new FK.Collections.EventList FK.SpecHelpers.Events.PastTodayEvents
+      @blocks = @events.asBlocks()
+
+    it "should only have blocks for days that have events in the future", ->
+      expect(@blocks.length).toBe(1)
+
+    it "should not have today as the date of a block", ->
+      expect(@blocks[0].get('date').format('YYYY-MM-DD')).not.toEqual(moment().format('YYYY-MM-DD'))
+
 describe 'event block', ->
   beforeEach ->
     @block = new FK.Models.EventBlock
