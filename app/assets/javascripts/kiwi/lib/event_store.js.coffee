@@ -1,11 +1,13 @@
 class FK.EventStore extends Marionette.Controller
-  initialize: (startupEvents = [], howManyBlocksToStart = 4) =>
-    @events = new FK.Collections.EventList startupEvents
+  initialize: (options) =>
+    options.events = [] if options.events is null
+    options.howManyStartingBlocks = 3 if options.howManyStartingBlocks is null
+    @events = new FK.Collections.EventList options.events
     @blocks = new FK.Collections.EventBlockList()
     @topRanked = new FK.Collections.BaseEventList()
 
     @howManyDaysInBlocks = 3
-    @howManyBlocks = howManyBlocksToStart
+    @howManyBlocks = options.howManyStartingBlocks
 
     @listenToOnce @events, 'sync', @resetBlocks
     @listenTo @events, 'sync', @resetTopRanked

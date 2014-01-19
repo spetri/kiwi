@@ -1,6 +1,6 @@
 describe "Event Store", ->
   beforeEach ->
-    @store = new FK.EventStore(FK.SpecHelpers.Events.UpvotedEvents, 3)
+    @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3)
     @store.events.trigger "sync"
 
   describe "top ranked events", ->
