@@ -75,5 +75,22 @@ describe Event do
         events.size.should == 10
       end
     end
+
+    describe "should be able to get events after a certain date" do
+      before(:each) do
+        create_list :event, 3, :in_1_week
+        create :event, :back_1_week
+      end
+
+      it "should be able to get events after a certain date" do
+        events = Event.get_events_after_date(3.days.from_now)
+        events.size.should == 3
+      end
+
+      it "should be able to limit the number of events found after a certain date" do
+        events = Event.get_events_after_date(3.days.from_now, 2)
+        Array(events).size.should == 2
+      end
+    end
   end
 end

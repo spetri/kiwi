@@ -5,9 +5,10 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @addInitializer () ->
     
     @events = App.request('events')
-    @eventBlocks = new FK.Collections.EventBlockList()
-    @topRankedEvents = @events.topRankedProxy(10, moment(), moment().add('days', 7))
-    
+    @eventStore = App.request('eventStore')
+    @eventBlocks = App.request('eventStore').blocks
+    @topRankedEvents = App.request('eventStore').topRanked
+
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks
@@ -15,8 +16,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @topRankedEventsView = new EventList.TopRanked
       collection: @topRankedEvents
     
-    @events.once 'sync', @loadBlocks
-
     @view.on 'show', =>
       @view.sidebar.show @topRankedEventsView
       @view.event_block.show @eventBlocksView
@@ -29,8 +28,17 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @view.onClose = () =>
       @stop()
 
+    Backbone.history.navigate('events/all', trigger : false)
+
     App.mainRegion.show @view
-    @loadBlocks()
+
+    $(document).scroll (e) =>
+      $doc = $(e.target)
+      $window = $(window)
+
+      percentage = $doc.scrollTop() / ($doc.height() - $window.height())
+
+      @fetchMoreBlocks() if percentage > 0.9
 
   @triggerShowEvent = (event) ->
     App.vent.trigger 'container:show', event.model
@@ -42,10 +50,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     args.model.increaseLimit(3)
     args.model.fetchMore(3, @events)
 
-  @loadBlocks = =>
-    @eventBlocks.reset @events.asBlocks()
+  @fetchMoreBlocks = () =>
+    @eventStore.moreBlocks(1)
 
   @addFinalizer () =>
+    $(document).off('scroll')
     @view.close()
     @eventBlocksView.close()
     @topRankedEventsView.close()

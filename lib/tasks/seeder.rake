@@ -8,9 +8,9 @@ namespace :db do
     end
     Event.delete_all
     Event.create! datetime: 2.weeks.ago, name: "The once loved", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone', 'marionette', 'ruby'], location_type: 'international'
-    Event.create! datetime: DateTime.now, name: "Koala Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone'], location_type: 'international'
-    Event.create! datetime: DateTime.now, is_all_day: true, name: "Giraffe Day", description:"lorem ipsum", user: "rails", location_type: 'national', country: 'US'
-    Event.create! datetime: 2.days.from_now, name: "Zebra Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby'], location_type: 'international'
+    Event.create! datetime: 5.hours.from_now, name: "Koala Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone'], location_type: 'international'
+    Event.create! datetime: 6.hours.from_now, is_all_day: true, name: "Giraffe Day", description:"lorem ipsum", user: "rails", location_type: 'national', country: 'US'
+    Event.create! datetime: 8.hours.from_now, name: "Zebra Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby'], location_type: 'international'
     Event.create! datetime: 2.days.from_now, name: "Melon Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php'], location_type: 'national', country: 'CA'
     Event.create! datetime: 2.days.from_now, name: "History Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine', 'github', 'backbone'], location_type: 'national', country: 'CA'
     Event.create! datetime: 2.days.from_now, name: "Lion Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine'], location_type: 'international'
@@ -24,6 +24,8 @@ namespace :db do
     Event.create! datetime: 8.days.from_now, name: "Movie night", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine'], location_type: 'international'
     Event.create! datetime: 8.days.from_now, name: "Solar Eclipse", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php'], location_type: 'international'
     Event.create! datetime: 8.days.from_now, name: "Mystery party", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine'], location_type: 'international'
+    Event.create! datetime: 9.days.from_now, name: "Magical event", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine'], location_type: 'international'
+    Event.create! datetime: 9.days.from_now, name: "Predictable hurricane", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine'], location_type: 'international'
   end 
 
   task :resave => :environment do

@@ -1,20 +1,22 @@
 class FK.Models.Event extends Backbone.GSModel
   idAttribute: "_id"
-  defaults:
-    location_type: 'international'
-    country: 'US'
-    name: ''
-    user: ''
-    description: ''
-    #TODO: fix me - all events will start with the date that the file was parsed
-    thumbUrl: ''
-    mediumUrl: ''
-    is_all_day: false
-    time_format: ''
-    tv_time: ''
-    upvotes: 0
-    have_i_upvoted: false
-    country_full_name: ''
+  defaults: () =>
+    return {
+      location_type: 'international'
+      country: 'US'
+      name: ''
+      user: ''
+      description: ''
+      #TODO: fix me - all events will start with the date that the file was parsed
+      thumbUrl: ''
+      mediumUrl: ''
+      is_all_day: false
+      time_format: ''
+      tv_time: ''
+      upvotes: 0
+      have_i_upvoted: false
+      country_full_name: ''
+    }
 
   urlRoot: () =>
     '/events'
@@ -28,6 +30,9 @@ class FK.Models.Event extends Backbone.GSModel
 
   is_all_day: () =>
     @.get('is_all_day') is '1' or @.get('is_all_day') is true
+
+  in_future: () =>
+    @get('fk_datetime').diff(moment(), 'seconds') > 0
 
   sync: (action, model, options) =>
     methodMap =
@@ -103,8 +108,13 @@ class FK.Models.Event extends Backbone.GSModel
 
     fk_datetime: () ->
       if @.get('time_format') is 'recurring'
-        time_split = @.get('time').split(':')
-        return moment(@in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")).add(hours: time_split[0], minutes: time_split[1])
+        event_time = moment(@get('local_time'), 'h:mm A')
+        return moment(
+              @in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")
+            ).
+            add(
+              hours: event_time.hour(), minutes: event_time.minute()
+            )
       @in_my_timezone(@get('datetime')).clone()
 
   time_from_moment: (datetime) =>
@@ -171,10 +181,12 @@ class FK.Models.Event extends Backbone.GSModel
     @get('user') is '' || @get('user') == username
 
 class FK.Models.EventBlock extends Backbone.Model
-  defaults:
-    date: moment()
-    more_events_available: true
-    event_limit: 3
+  defaults: () =>
+    return {
+      date: moment()
+      more_events_available: true
+      event_limit: 3
+    }
 
   initialize: () =>
     @events = new FK.Collections.BaseEventList()
@@ -193,9 +205,15 @@ class FK.Models.EventBlock extends Backbone.Model
 
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
+
+    events = _.filter(events, (event) => event.in_future() )
+
     howManyOver = events.length + @events.length - @get('event_limit')
+
     events = _.take(events, events.length - howManyOver) if howManyOver > 0
+
     @events.add(events)
+
     if @events.length < @get('event_limit')
       @set('more_events_available', false)
     else
@@ -235,6 +253,14 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
         howManyEvents: howManyEvents
         skip: skip
 
+  fetchMoreEventsAfterDate: (date, howManyEvents) =>
+    @fetch
+      url: 'api' + @url + 'eventsAfterDate'
+      remove: false
+      data:
+        date: moment(date).format('YYYY-MM-DD')
+        howManyEvents: howManyEvents
+
   getEventsByDate: (date, howManyEvents, skip) =>
     matchingEvents = @chain().
     filter( (event) => event.get('fk_datetime').diff(date, 'days') == 0).
@@ -255,20 +281,25 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
     deferred.promise()
 
+  getBlocksAfterDate: (date, howManyBlocks) =>
+    deferred = $.Deferred()
+    
+    @fetchMoreEventsAfterDate(date, howManyBlocks * 3).done () =>
+      deferred.resolve(@asBlocksOnAfterDate(date))
+    
+    deferred.promise()
+
   topRanked: (howManyEvents, startDate, endDate) =>
     this.chain().
     filter( (event) => event.in_range(startDate, endDate)).
     first(howManyEvents).
     value()
 
-  topRankedProxy: (howManyEvents, startDate, endDate) =>
-    proxy = new FK.Collections.BaseEventList @topRanked(howManyEvents, startDate, endDate)
-    @on 'add', () => proxy.reset @topRanked(howManyEvents, startDate, endDate)
-    proxy
-
   asBlocks: =>
     @chain().
-    groupBy( (event) -> moment(event.get('datetime').format('YYYY/MM/DD')) ).
+    filter( (event) -> event.in_future() ).
+    sortBy( (event) -> event.get('datetime') ).
+    groupBy( (event) -> moment(event.get('fk_datetime').format('YYYY/MM/DD')) ).
     map( (events, date) ->
       block = new FK.Models.EventBlock
         date: moment(date)
@@ -276,6 +307,9 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
       return block
     ).
     value()
+
+  asBlocksOnAfterDate: (date) =>
+    _.filter(@asBlocks(), (block) => block.get('date').diff(date, 'days') >= 0)
 
 class FK.Collections.EventBlockList extends Backbone.Collection
   model: FK.Models.EventBlock

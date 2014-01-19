@@ -28,7 +28,19 @@ describe "Event", ->
       expect(v.in_my_timezone(v.get('datetime')).hour()).toBe(moment().hour())
       expect(v.get('datetime').hour()).toBe(moment().zone(0).hour())
 
-      
+    it "can detect if an event is in the future", ->
+      event = new FK.Models.Event
+        datetime: moment().add('seconds', 10)
+
+      expect(event.in_future()).toBeTruthy()
+
+    it "can detect if an event with a recurring time format is in the future", ->
+      event = new FK.Models.Event
+        datetime: moment().toDate()
+        local_time: moment().add('hours', 4).format('h:mm A')
+        time_format: 'recurring'
+
+      expect(event.in_future()).toBeTruthy()
 
   describe "when upvoting", ->
     beforeEach ->
@@ -158,16 +170,7 @@ describe "Event", ->
 
   describe 'top ranked', ->
     beforeEach ->
-      @events = new FK.Collections.EventList [
-        { name: 'event 1', upvotes: 9, datetime: moment().subtract('days', 1)}
-        { name: 'event 2', upvotes: 8, datetime: moment().subtract('days', 1) }
-        { name: 'event 5', upvotes: 7, datetime: moment().add('days', 1) }
-        { name: 'event 5', upvotes: 9, datetime: moment() }
-        { name: 'event 5', upvotes: 11, datetime: moment().add('days', 1) }
-        { name: 'event 6', upvotes: 11, datetime: moment().add('days', 4) }
-        { name: 'event 7', upvotes: 12, datetime: moment().add('days', 10) }
-      ]
-
+      @events = new FK.Collections.EventList FK.SpecHelpers.Events.UpvotedEvents
       @topEvents = @events.topRanked(3, moment(), moment().add('days', 7))
 
     it 'should be able to find an arbitary number of the top ranked events', ->
@@ -181,19 +184,6 @@ describe "Event", ->
     it 'should be finding events ordered by date after ranking', ->
       expect(@topEvents[0].get('name')).toBe('event 5')
       expect(@topEvents[1].get('name')).toBe('event 6')
-
-    describe 'proxy to ranked events', ->
-      beforeEach ->
-        @proxy = @events.topRankedProxy(3, moment(), moment().add('days', 7))
-
-      it 'should be able to make a proxy collection with the top events', ->
-        expect(@proxy.at(0).upvotes()).toBe(11)
-
-      it 'should be able to update the proxy collection on event add', ->
-        @events.add
-          name: 'event 7', upvotes: 10, datetime: moment()
-        expect(@proxy.first().upvotes()).toBe(11)
-        expect(@proxy.last().upvotes()).toBe(10)
 
 describe 'event list', ->
   describe 'fetching events', ->
@@ -291,6 +281,17 @@ describe 'event list', ->
     it "should have a block for each date", ->
       expect(@blocks.length).toBe(2)
 
+  describe 'making blocks with past events', ->
+    beforeEach ->
+      @events = new FK.Collections.EventList FK.SpecHelpers.Events.PastTodayEvents
+      @blocks = @events.asBlocks()
+
+    it "should only have blocks for days that have events in the future", ->
+      expect(@blocks.length).toBe(1)
+
+    it "should not have today as the date of a block", ->
+      expect(@blocks[0].get('date').format('YYYY-MM-DD')).not.toEqual(moment().format('YYYY-MM-DD'))
+
 describe 'event block', ->
   beforeEach ->
     @block = new FK.Models.EventBlock
@@ -313,7 +314,7 @@ describe 'event block', ->
   describe 'fetching more events for block', ->
     beforeEach ->
       @events = new FK.Collections.EventList
-      @events.reset(FK.SpecHelpers.Events.SimpleEvents)
+      @events.reset(FK.SpecHelpers.Events.TodayEvents)
       @block = new FK.Models.EventBlock()
       @xhr = sinon.useFakeXMLHttpRequest()
       @requests = []
@@ -328,46 +329,49 @@ describe 'event block', ->
       expect(@block.events.length).toBe(3)
 
     it "should be able to notice that no more events are available", ->
-      @block.increaseLimit(1)
-      @block.fetchMore(4, @events)
+      @block.increaseLimit(2)
+      @block.fetchMore(5, @events)
       @requests[0].respond(200, { "Content-Type": "application/json"}, JSON.stringify([]))
       expect(@block.get('more_events_available')).toBeFalsy()
 
   describe 'adding more events to a block', ->
     beforeEach ->
-      @events = new FK.Collections.EventList(FK.SpecHelpers.Events.SimpleEvents)
+      @events = new FK.Collections.EventList(FK.SpecHelpers.Events.TodayEvents)
       @block = new FK.Models.EventBlock()
 
     it "should be able to add some events to its events collection", ->
-      @block.addEvents({ _id: 1 })
+      @block.addEvents(new FK.Models.Event { _id: 1, datetime: moment().add('seconds', 2) })
       expect(@block.events.length).toBe(1)
 
     it "should not be able to add events past the current limit on the block", ->
       @block.set('event_limit', 2)
-      @block.addEvents([
-        { _id: 1 }
-        { _id: 2 }
-        { _id: 3 }
-      ])
+      @block.addEvents(FK.SpecHelpers.Events.TodayEvents)
       expect(@block.events.length).toBe(2)
 
     it "should not be able to add events past the current limit on the block when the block has some events", ->
-      @block.addEvents([
-        { _id: 1 }
-      ])
-      @block.addEvents([
-        { _id: 2 }
-        { _id: 3 }
-        { _id: 4 }
-      ])
+      @block.addEvents(FK.SpecHelpers.Events.TodayEvents[0])
+      @block.addEvents(FK.SpecHelpers.Events.TodayEvents[1..3])
       expect(@block.events.length).toBe(3)
 
     it "should be able to up the event limit and get more events", ->
       @block.set('event_limit', 1)
-      @block.addEvents(@events.toJSON())
+      @block.addEvents(@events.models)
       @block.increaseLimit(1)
       @block.fetchMore(1, @events)
       expect(@block.events.length).toBe(2)
+
+    describe "adding events from the past", ->
+      beforeEach ->
+        @block.addEvents([
+          new FK.Models.Event { _id: 2, datetime: moment().add('seconds', 5) }
+          new FK.Models.Event { _id: 3, datetime: moment().subtract('seconds', 1) }
+        ])
+
+      it "should not have every event added", ->
+        expect(@block.events.length).toBe(1)
+
+      it "should only have events after now", ->
+        expect(@block.events.first().get('_id')).toBe(2)
 
 describe "event block list", ->
   beforeEach ->
@@ -377,10 +381,10 @@ describe "event block list", ->
     ])
 
   it "should be able to add events to a block by date", ->
-    @blocks.addEventsToBlock(moment(), FK.SpecHelpers.Events.SimpleEvents)
+    @blocks.addEventsToBlock(moment(), FK.SpecHelpers.Events.TodayEvents)
     expect(@blocks.get(1).events.length).toBe(3)
 
   it "should be able to create a block if the needed block does not exist", ->
-    @blocks.addEventsToBlock(moment().add('days', 3), FK.SpecHelpers.Events.SimpleEvents)
+    @blocks.addEventsToBlock(moment().add('days', 3), FK.SpecHelpers.Events.TodayEvents)
     expect(@blocks.last().events.length).toBe(3)
 

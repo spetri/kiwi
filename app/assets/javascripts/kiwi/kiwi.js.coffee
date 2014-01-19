@@ -30,8 +30,8 @@ FK.App.addInitializer (prefetch) ->
 
   FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
-  FK.Data.events = new FK.Collections.EventList(prefetch.events)
-  FK.Data.events.fetchStartupEvents(10, 3, 10)
+  FK.Data.EventStore = new FK.EventStore prefetch.events
+  FK.Data.EventStore.fetchStartupEvents()
 
   FK.App.appRouter = new FK.Routers.AppRouter()
 
@@ -57,7 +57,10 @@ FK.Controllers.MainController = {
 }
 
 FK.App.reqres.setHandler 'events', () ->
-  FK.Data.events
+  FK.Data.EventStore.events
+
+FK.App.reqres.setHandler 'eventStore', () ->
+  FK.Data.EventStore
 
 FK.App.reqres.setHandler 'currentUser', () ->
   FK.CurrentUser
