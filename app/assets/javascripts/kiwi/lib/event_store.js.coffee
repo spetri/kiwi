@@ -32,7 +32,10 @@ class FK.EventStore extends Marionette.Controller
     @blocks.add blocks
 
     if @blocks.length < @howManyBlocks + howManyBlocks
-      @events.getBlocksAfterDate(@blocks.last().get('date').clone().add('days', 1), @howManyBlocks - @blocks.length).done (blocks) =>
+      nextDay = moment(
+        @blocks.last().get('date').clone().add(hours: moment().hour(), minutes: moment().minute()).zone(0).add('days', 1).format('YYYY-MM-DD')
+      )
+      @events.getBlocksAfterDate(nextDay, @howManyBlocks - @blocks.length).done (blocks) =>
         @blocks.add blocks
         @howManyBlocks = @blocks.length
     else
