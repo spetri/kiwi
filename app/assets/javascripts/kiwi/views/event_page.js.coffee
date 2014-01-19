@@ -17,6 +17,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @listenTo @eventCardView, 'click:reminders', @toggleShowReminders
     @listenTo @eventCardView, 'click:card', @closeReminders
 
+    @listenTo @event, 'destroy', @triggerEventList
+
     @eventCardView.on 'show', () =>
       @renderSocialNetworking()
       
@@ -39,6 +41,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       success: () =>
         Backbone.history.navigate('events/edit/' + event.id, trigger : true)
     )
+
+  @triggerEventList = () =>
+    App.vent.trigger 'container:all'
 
   @toggleShowReminders = () ->
     return @closeReminders() if @remindersView and not @remindersView.isClosed

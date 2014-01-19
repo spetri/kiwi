@@ -20,9 +20,13 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       events:
         'click .event-upvotes': 'upvoteToggle'
+        'click [data-action="destroy"]': 'destroy'
 
       upvoteToggle: =>
         @model.upvoteToggle()
+
+      destroy: =>
+        @model.destroy()
 
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
