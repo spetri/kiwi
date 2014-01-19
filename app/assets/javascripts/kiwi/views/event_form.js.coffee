@@ -34,7 +34,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @event.clearImage()
 
     @event.save(params, { silent: true })
-    FK.Data.events.add(@event, merge: true)
+    App.request('events').add(@event, merge: true)
 
   @getBaseView = () =>
     if @event.editAllowed(App.request('currentUser').get('username'))
