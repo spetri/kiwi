@@ -90,7 +90,7 @@ class EventsController < ApplicationController
   end
 
   def events_after_date
-    @events = Event.get_events_by_date(Date.parse(params[:date]), params[:howManyEvents])
+    @events = Event.get_events_after_date(Date.parse(params[:date]), params[:howManyEvents])
   end
 
   private

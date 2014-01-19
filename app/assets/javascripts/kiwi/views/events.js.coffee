@@ -51,7 +51,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     args.model.fetchMore(3, @events)
 
   @fetchMoreBlocks = () =>
-    @eventStore.moreBlocks(1)
+    @eventStore.moreBlocks(3)
 
   @addFinalizer () =>
     $(document).off('scroll')

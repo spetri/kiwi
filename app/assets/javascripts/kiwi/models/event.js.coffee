@@ -262,29 +262,20 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
         howManyEvents: howManyEvents
 
   getEventsByDate: (date, howManyEvents, skip) =>
-    matchingEvents = @chain().
-    filter( (event) => event.get('fk_datetime').diff(date, 'days') == 0).
-    tail(skip).
-    head(howManyEvents).
-    value()
-
+    
     deferred = $.Deferred()
 
-    howManyShort = howManyEvents - matchingEvents.length
-    if howManyShort > 0
-      @fetchMoreEventsByDate(date, howManyShort, skip + matchingEvents.length).done( (events) =>
-        events = _.map(events, (event) => new FK.Models.Event event)
-        deferred.resolve(matchingEvents.concat(events))
-      )
-    else
-      deferred.resolve(matchingEvents)
+    @fetchMoreEventsByDate(date, howManyEvents, skip).done( (events) =>
+      events = _.map(events, (event) => new FK.Models.Event event)
+      deferred.resolve(events)
+    )
 
     deferred.promise()
 
-  getBlocksAfterDate: (date, howManyBlocks) =>
+  getBlocksAfterDate: (date, howManyEvents) =>
     deferred = $.Deferred()
     
-    @fetchMoreEventsAfterDate(date, howManyBlocks * 3).done () =>
+    @fetchMoreEventsAfterDate(date, howManyEvents).done () =>
       deferred.resolve(@asBlocksOnAfterDate(date))
     
     deferred.promise()

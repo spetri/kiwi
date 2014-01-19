@@ -33,36 +33,11 @@ describe "Event Store", ->
     beforeEach ->
       @blocks = @store.blocks
 
-    it "should have a block for each event date up to 3", ->
-      expect(@blocks.length).toBe(3)
-
     it "should have the earliest event date as the date of the first block", ->
       expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 1).format('YYYY-MM-DD'))
 
-    describe "increasing number of blocks", ->
-      beforeEach ->
-        @store.moreBlocks(2)
-
-      it "should be able to create blocks equal to the number requested", ->
-        expect(@blocks.length).toBe(5)
-
-      it "should have the same date on the first block as before", ->
-        expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 1).format('YYYY-MM-DD'))
-        
-      it "should have the latest event on the last block", ->
-        expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 5).format('YYYY-MM-DD'))
-
-    describe "getting the limit of blocks in local memory", ->
-      beforeEach ->
-        @store.moreBlocks(4)
-
-      it "should be able to convert all events in local memory to blocks", ->
-        expect(@blocks.length).toBe(7)
-
-      it "should have the date of the last block as the same as the event furthest in the future", ->
-        expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(
-          @store.events.sortBy( (event) -> event.get('datetime'))[@store.events.length - 1].get('datetime').format('YYYY-MM-DD'))
-        
+    it "should have the latest event date as the date of the last block", ->
+      expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 10).format('YYYY-MM-DD'))
 
     describe "increasing the number of blocks beyond the number of already fetched events", ->
       beforeEach ->
