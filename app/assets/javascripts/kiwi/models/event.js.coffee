@@ -272,35 +272,11 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
     deferred.promise()
 
-  getBlocksAfterDate: (date, howManyEvents) =>
-    deferred = $.Deferred()
-    
-    @fetchMoreEventsAfterDate(date, howManyEvents).done () =>
-      deferred.resolve(@asBlocksOnAfterDate(date))
-    
-    deferred.promise()
-
   topRanked: (howManyEvents, startDate, endDate) =>
     this.chain().
     filter( (event) => event.in_range(startDate, endDate)).
     first(howManyEvents).
     value()
-
-  asBlocks: =>
-    @chain().
-    filter( (event) -> event.in_future() ).
-    sortBy( (event) -> event.get('datetime') ).
-    groupBy( (event) -> moment(event.get('fk_datetime').format('YYYY/MM/DD')) ).
-    map( (events, date) ->
-      block = new FK.Models.EventBlock
-        date: moment(date)
-      block.addEvents events
-      return block
-    ).
-    value()
-
-  asBlocksOnAfterDate: (date) =>
-    _.filter(@asBlocks(), (block) => block.get('date').diff(date, 'days') >= 0)
 
 class FK.Collections.EventBlockList extends Backbone.Collection
   model: FK.Models.EventBlock
@@ -311,10 +287,11 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     return 0 if date1 == date2
     return -1 if date1 < date2
 
-  addEventsToBlock: (date, events) =>
+  addEventToBlock: (date, event) =>
+    return if ( not event.in_future())
     block = @find( (blocks) => blocks.isDate(date))
     if not block
       block = new FK.Models.EventBlock
         date: date
       @add block
-    block.addEvents events
+    block.addEvents event

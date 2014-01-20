@@ -274,25 +274,6 @@ describe 'event list', ->
         expect(resolvedEvents.length).toBe(4)
         expect(@events.length).toBe(5)
 
-  describe 'making blocks', ->
-    beforeEach ->
-      @events = new FK.Collections.EventList FK.SpecHelpers.Events.SimpleEvents
-      @blocks = @events.asBlocks()
-
-    it "should have a block for each date", ->
-      expect(@blocks.length).toBe(2)
-
-  describe 'making blocks with past events', ->
-    beforeEach ->
-      @events = new FK.Collections.EventList FK.SpecHelpers.Events.PastTodayEvents
-      @blocks = @events.asBlocks()
-
-    it "should only have blocks for days that have events in the future", ->
-      expect(@blocks.length).toBe(1)
-
-    it "should not have today as the date of a block", ->
-      expect(@blocks[0].get('date').format('YYYY-MM-DD')).not.toEqual(moment().format('YYYY-MM-DD'))
-
 describe 'event block', ->
   beforeEach ->
     @block = new FK.Models.EventBlock
@@ -377,15 +358,26 @@ describe 'event block', ->
 describe "event block list", ->
   beforeEach ->
     @blocks = new FK.Collections.EventBlockList([
-      {id: 1, date: moment().toDate()}
-      {id: 2, date: moment().add('days', 1).toDate()}
+      {id: 1, date: moment().add('days', 1).toDate()}
     ])
 
   it "should be able to add events to a block by date", ->
-    @blocks.addEventsToBlock(moment(), FK.SpecHelpers.Events.TodayEvents)
-    expect(@blocks.get(1).events.length).toBe(3)
+    event = new FK.Models.Event
+      datetime: moment().add('days', 1)
+    @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), event)
+    expect(@blocks.get(1).events.length).toBe(1)
 
-  it "should be able to create a block if the needed block does not exist", ->
-    @blocks.addEventsToBlock(moment().add('days', 3), FK.SpecHelpers.Events.TodayEvents)
-    expect(@blocks.last().events.length).toBe(3)
+  describe "adding an event without a block already created", ->
+    beforeEach ->
+      event = new FK.Models.Event
+        datetime : moment().add('days', 3)
+      @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), event)
 
+    it "should have created a new block for the event", ->
+      expect(@blocks.length).toBe(2)
+
+    it "should have the latest date as the last block", ->
+      expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 3).format('YYYY-MM-DD'))
+
+    it "should be able to create a block if the needed block does not exist", ->
+      expect(@blocks.last().events.length).toBe(1)
