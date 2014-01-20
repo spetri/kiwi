@@ -198,7 +198,7 @@ class FK.Models.EventBlock extends Backbone.Model
     date.diff(@get('date'), 'days') == 0
 
   fetchMore: (howManyMoreEvents, events) =>
-    newEventsPromise = events.getEventsByDate(@get('date'), howManyMoreEvents, @events.length)
+    newEventsPromise = events.getEventsByDate(@events.last().get('datetime'), howManyMoreEvents, @events.length)
     newEventsPromise.done( (events) =>
       @addEvents events
     )
