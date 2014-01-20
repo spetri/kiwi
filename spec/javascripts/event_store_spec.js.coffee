@@ -68,5 +68,8 @@ describe "Event Store", ->
         it "should be able to add more blocks after more events have come back from the server", ->
           expect(@blocks.length).toBe(8)
 
-        it "should be able to set the blocks count to the number of blocks when there are no more blocks to make", ->
-          expect(@store.howManyBlocks).toBe(8)
+        it "should have the events loaded into the newly created block", ->
+          expect(@blocks.last().events.length).toBe(3)
+
+        it "should have a date on the new event block", ->
+          expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 12).format('YYYY-MM-DD'))

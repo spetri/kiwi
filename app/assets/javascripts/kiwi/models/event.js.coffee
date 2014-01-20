@@ -315,6 +315,6 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     block = @find( (blocks) => blocks.isDate(date))
     if not block
       block = new FK.Models.EventBlock
-        date: date.toDate()
+        date: date
       @add block
     block.addEvents events

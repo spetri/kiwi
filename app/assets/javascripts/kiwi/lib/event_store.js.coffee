@@ -16,15 +16,17 @@ class FK.EventStore extends Marionette.Controller
 
   startAddListeners: () =>
     @listenTo @events, 'add', @resetTopRanked
+    @listenTo @events, 'add', @addEventToBlock
 
   resetBlocks: () =>
     @blocks.reset @events.asBlocks()
 
   moreBlocks: (howManyMoreEvents) =>
     nextDay = @blocks.last().events.last().get('datetime').clone().add('days', 1)
-    @events.getBlocksAfterDate(nextDay, howManyMoreEvents).done (blocks) =>
-      @blocks.add blocks
-      @howManyBlocks = @blocks.length
+    @events.getBlocksAfterDate(nextDay, howManyMoreEvents)
 
   resetTopRanked: () =>
     @topRanked.reset @events.topRanked(10, moment(), moment().add('days', 7))
+
+  addEventToBlock: (event) =>
+    @blocks.addEventsToBlock moment(event.get('fk_datetime').format('YYYY-MM-DD')), event
