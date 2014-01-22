@@ -21,7 +21,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       @view.event_block.show @eventBlocksView
 
 
-    @listenTo @eventBlocksView, 'block:click:more', @fetchMoreForBlock
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
     @listenTo @topRankedEventsView, 'itemview:clicked:event', @triggerShowEvent
 
@@ -46,12 +45,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @triggerShowEventDeep = (block, event) ->
     App.vent.trigger 'container:show', event.model
 
-  @fetchMoreForBlock = (args) =>
-    args.model.increaseLimit(3)
-    args.model.fetchMore(3, @events)
-
   @fetchMoreBlocks = () =>
-    @eventStore.moreBlocks(3)
+    @eventStore.loadNextEvents(3)
 
   @addFinalizer () =>
     $(document).off('scroll')

@@ -1,10 +1,9 @@
 describe "Event Store", ->
-  beforeEach ->
-    @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3)
-    @store.events.trigger "sync"
-
+  
   describe "top ranked events", ->
     beforeEach ->
+      @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3)
+      @store.events.trigger "sync"
       @topRanked = @store.topRanked
 
     it "should have 10 events in the top ranked collection", ->
@@ -31,22 +30,37 @@ describe "Event Store", ->
 
   describe "blocks", ->
     beforeEach ->
+      @store = new FK.EventStore events: FK.SpecHelpers.Events.BlockEvents
+      @store.events.trigger "sync"
       @blocks = @store.blocks
 
     it "should have the earliest event date as the date of the first block", ->
-      expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 1).format('YYYY-MM-DD'))
+      expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().add('days').format('YYYY-MM-DD'))
 
     it "should have the latest event date as the date of the last block", ->
-      expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 10).format('YYYY-MM-DD'))
+      expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 3).format('YYYY-MM-DD'))
+
+    describe "adding events to a block", ->
+      beforeEach ->
+        @blocks.last().increaseLimit 3
+
+      it "should have the new events in the block", ->
+        expect(@store.blocks.last().events.length).toBe(5)
+
+      it "should still have the event with the highest number of upvotes first", ->
+        expect(@store.blocks.last().events.first().upvotes()).toBe(9)
 
     describe "increasing the number of blocks beyond the number of already fetched events", ->
       beforeEach ->
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents
+        @store.events.trigger "sync"
+        @blocks = @store.blocks
         @xhr = sinon.useFakeXMLHttpRequest()
         @requests = []
         @xhr.onCreate = (xhr) =>
           @requests.push xhr
 
-        @store.moreBlocks(7)
+        @store.loadNextEvents(7)
 
       afterEach ->
         @xhr.restore()

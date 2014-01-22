@@ -10,8 +10,12 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       return {
         isToday: () => @model.isToday()
       }
-    triggers:
-      'click .btn': 'click:more'
+    events:
+      'click .btn': 'loadMore'
+
+    loadMore: (e) =>
+      e.preventDefault()
+      @model.increaseLimit(3)
 
     modelEvents:
       'change:more_events_available': 'refreshMoreEventsDisabled'

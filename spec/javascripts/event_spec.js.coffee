@@ -226,54 +226,21 @@ describe 'event list', ->
       beforeEach ->
         @events.reset(FK.SpecHelpers.Events.SimpleEvents)
 
-      xit "should be able to get events by date from the event list through a deferred", ->
-        resolvedEvents = []
-        deferred = @events.getEventsByDate(moment(), 3, 0)
-        
-        deferred.done( (events) =>
-          _.each(events, (event) =>
-            resolvedEvents.push event
-          )
-        )
+      it "should be able to get a list of events from the collection by date", ->
+        expect(@events.eventsByDate(moment(), 3).length).toBe(3)
 
-        expect(resolvedEvents.length).toBe(3)
+      it "should get the event with the highest number of upvotes first", ->
+        expect(@events.eventsByDate(moment(), 3)[0].upvotes()).toBe(5)
 
-      xit "should be able to skip a given number of events", ->
-        resolvedEvents = []
-        deferred = @events.getEventsByDate(moment(), 2, 1)
-        deferred.done( (events) =>
-          _.each(events, (event) =>
-            resolvedEvents.push event
-          )
-        )
+      it "should get the events with the lowest number of upvotes last", ->
+        expect(@events.eventsByDate(moment(), 3)[2].upvotes()).toBe(2)
 
-        expect(resolvedEvents.length).toBe(2)
+      it "should be able to skip a given number of events", ->
+        expect(@events.eventsByDate(moment(), 2).length).toBe(2)
 
-      xit "should be able to return less than the number of events available", ->
-        resolvedEvents = []
-        deferred = @events.getEventsByDate(moment(), 1, 0)
-        deferred.done( (events) =>
-          _.each(events, (event) =>
-            resolvedEvents.push event
-          )
-        )
-
-        expect(resolvedEvents.length).toBe(1)
-
-      xit "should attempt a server call if the number of events are less than requested", ->
-        resolvedEvents = []
-        deferred = @events.getEventsByDate(moment(), 4, 0)
-        deferred.done( (events) =>
-          _.each(events, (event) =>
-            resolvedEvents.push event
-          )
-        )
-
-        expect(@requests.length).toBe(1)
-        @requests[0].respond(200, { "Content-Type": "application/json" }, JSON.stringify([{_id: 5, datetime: moment().add('minutes', 20)}]))
-        expect(resolvedEvents.length).toBe(4)
-        expect(@events.length).toBe(5)
-
+      it "should be able to return less than the number of events available", ->
+        expect(@events.eventsByDate(moment(), 2, 1).length).toBe(2)
+      
 describe 'event block', ->
   beforeEach ->
     @block = new FK.Models.EventBlock

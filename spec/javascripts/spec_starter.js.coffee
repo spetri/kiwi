@@ -4,16 +4,31 @@ sinon.useFakeTimers(1389891600000, "Date")
 FK.SpecHelpers =
   Events:
     SimpleEvents: [
-      { _id: 1, datetime: moment()}
-      { _id: 2, datetime: moment().add('minutes', 3) }
-      { _id: 3, datetime: moment().add('minutes', 7) }
-      { _id: 4, datetime: moment().add('days', 3) }
+      { _id: 1, upvotes: 2, datetime: moment()}
+      { _id: 2, upvotes: 5, datetime: moment().add('minutes', 3) }
+      { _id: 3, upvotes: 3, datetime: moment().add('minutes', 7) }
+      { _id: 4, upvotes: 1, datetime: moment().add('days', 3) }
     ]
     TodayEvents: [
       new FK.Models.Event { _id: 1, datetime: moment().add('seconds', 2) }
       new FK.Models.Event { _id: 2, datetime: moment().add('minutes', 3) }
       new FK.Models.Event { _id: 3, datetime: moment().add('minutes', 7) }
       new FK.Models.Event { _id: 4, datetime: moment().add('hours', 3) }
+    ]
+    BlockEvents: [
+      { _id: 1, upvotes: 2, datetime: moment()}
+      { _id: 2, upvotes: 5, datetime: moment().add('minutes', 3) }
+      { _id: 3, upvotes: 3, datetime: moment().add('minutes', 7) }
+      { _id: 4, upvotes: 3, datetime: moment().add('minutes', 20) }
+      { _id: 5, upvotes: 6, datetime: moment().add('hours', 2) }
+      { _id: 6, upvotes: 3, datetime: moment().add('hours', 3) }
+      { _id: 7, upvotes: 9, datetime: moment().add('days', 3) }
+      { _id: 8, upvotes: 5, datetime: moment().add('days', 3) }
+      { _id: 9, upvotes: 2, datetime: moment().add('days', 3) }
+      { _id: 10, upvotes: 10, datetime: moment().add('days', 3) }
+      { _id: 11, upvotes: 3, datetime: moment().add('days', 3) }
+      { _id: 12, upvotes: 8, datetime: moment().add('days', 3) }
+      { _id: 13, upvotes: 9, datetime: moment().add('days', 3) }
     ]
     PastTodayEvents: [
       { name: 'event 1', datetime: moment().subtract('hours', 4) }

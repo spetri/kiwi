@@ -34,6 +34,9 @@ class FK.Models.Event extends Backbone.GSModel
   in_future: () =>
     @get('fk_datetime').diff(moment(), 'seconds') > 0
 
+  is_on_date: (date) =>
+    @get('fk_datetime').diff(date, 'days') == 0
+
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
@@ -197,12 +200,6 @@ class FK.Models.EventBlock extends Backbone.Model
   isDate: (date) =>
     date.diff(@get('date'), 'days') == 0
 
-  fetchMore: (howManyMoreEvents, events) =>
-    newEventsPromise = events.getEventsByDate(@events.last().get('datetime'), howManyMoreEvents, @events.length)
-    newEventsPromise.done( (events) =>
-      @addEvents events
-    )
-
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
 
@@ -261,19 +258,15 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
         date: moment(date).format('YYYY-MM-DD')
         howManyEvents: howManyEvents
 
-  getEventsByDate: (date, howManyEvents, skip) =>
-    
-    deferred = $.Deferred()
-
-    @fetchMoreEventsByDate(date, howManyEvents, skip).done( (events) =>
-      events = _.map(events, (event) => new FK.Models.Event event)
-      deferred.resolve(events)
-    )
-
-    deferred.promise()
+  eventsByDate: (date, howManyEvents, skip = 0) =>
+    @chain().
+    filter( (event) -> event.is_on_date(date) ).
+    drop(skip).
+    first(howManyEvents).
+    value()
 
   topRanked: (howManyEvents, startDate, endDate) =>
-    this.chain().
+    @chain().
     filter( (event) => event.in_range(startDate, endDate)).
     first(howManyEvents).
     value()
@@ -289,7 +282,7 @@ class FK.Collections.EventBlockList extends Backbone.Collection
 
   addEventToBlock: (date, event) =>
     return if ( not event.in_future())
-    block = @find( (blocks) => blocks.isDate(date))
+    block = @find( (block) => block.isDate(date))
     if not block
       block = new FK.Models.EventBlock
         date: date
