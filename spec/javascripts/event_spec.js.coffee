@@ -222,7 +222,7 @@ describe 'event list', ->
 
       expect(@events.length).toBe(3)
 
-    describe "getting more events from the events list by date", ->
+    describe "getting events from the events list by date", ->
       beforeEach ->
         @events.reset(FK.SpecHelpers.Events.SimpleEvents)
 
@@ -238,8 +238,9 @@ describe 'event list', ->
       it "should be able to skip a given number of events", ->
         expect(@events.eventsByDate(moment(), 2).length).toBe(2)
 
-      it "should be able to return less than the number of events available", ->
-        expect(@events.eventsByDate(moment(), 2, 1).length).toBe(2)
+      it "should be able to exclude certain events", ->
+        expect(@events.eventsByDate(moment(), 2, [FK.SpecHelpers.Events.SimpleEvents[1]])[0].id).not.toEqual(2)
+        
       
 describe 'event block', ->
   beforeEach ->
@@ -260,29 +261,6 @@ describe 'event block', ->
 
     expect(@block.isToday()).toBeTruthy()
 
-  describe 'fetching more events for block', ->
-    beforeEach ->
-      @events = new FK.Collections.EventList
-      @events.reset(FK.SpecHelpers.Events.TodayEvents)
-      @block = new FK.Models.EventBlock()
-      @xhr = sinon.useFakeXMLHttpRequest()
-      @requests = []
-      @xhr.onCreate = (xhr) =>
-        @requests.push xhr
-
-    afterEach ->
-      @xhr.restore()
-
-    xit "should be able to fetch more events from an event collection", ->
-      @block.fetchMore(3, @events)
-      expect(@block.events.length).toBe(3)
-
-    xit "should be able to notice that no more events are available", ->
-      @block.increaseLimit(2)
-      @block.fetchMore(5, @events)
-      @requests[0].respond(200, { "Content-Type": "application/json"}, JSON.stringify([]))
-      expect(@block.get('more_events_available')).toBeFalsy()
-
   describe 'adding more events to a block', ->
     beforeEach ->
       @events = new FK.Collections.EventList(FK.SpecHelpers.Events.TodayEvents)
@@ -297,17 +275,12 @@ describe 'event block', ->
       @block.addEvents(FK.SpecHelpers.Events.TodayEvents)
       expect(@block.events.length).toBe(2)
 
-    it "should not be able to add events past the current limit on the block when the block has some events", ->
-      @block.addEvents(FK.SpecHelpers.Events.TodayEvents[0])
-      @block.addEvents(FK.SpecHelpers.Events.TodayEvents[1..3])
-      expect(@block.events.length).toBe(3)
-
-    xit "should be able to up the event limit and get more events", ->
-      @block.set('event_limit', 1)
-      @block.addEvents(@events.models)
-      @block.increaseLimit(1)
-      @block.fetchMore(1, @events)
-      expect(@block.events.length).toBe(2)
+    it "should notice when not enough events have been added to satisfy the limit and reduce the limit", ->
+      @block.increaseLimit(2)
+      @block.addEvents(FK.SpecHelpers.Events.TodayEvents)
+      @block.checkLimit()
+      expect(@block.get('more_events_available')).toBeFalsy()
+      expect(@block.get('event_limit')).toBe(4)
 
     describe "adding events from the past", ->
       beforeEach ->

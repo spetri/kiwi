@@ -24,11 +24,15 @@ class FK.EventStore extends Marionette.Controller
     date = @blocks.last().events.last().get('datetime').clone().add('days', 1)
     @events.fetchMoreEventsAfterDate(date, howManyMoreEvents)
 
-  loadNextEventsForBlock: (block, howManyMoreEvents) =>
+  loadNextEventsForBlock: (block, newLimit) =>
+    howManyMoreEvents = newLimit - block.events.length
     date = block.events.first().get('datetime').clone()
-    events = @events.eventsByDate(date, howManyMoreEvents, block.events.length)
+    events = @events.eventsByDate(date, howManyMoreEvents, block.events.models)
 
     _.each(events, @addEventToBlock)
+
+    if events.length < howManyMoreEvents
+      @events.fetchMoreEventsByDate(date, howManyMoreEvents - events.length, block.events.length + events.length).done ( () => block.checkLimit() )
 
   resetTopRanked: () =>
     @topRanked.reset @events.topRanked(10, moment(), moment().add('days', 7))

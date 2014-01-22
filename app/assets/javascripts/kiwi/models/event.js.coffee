@@ -216,6 +216,9 @@ class FK.Models.EventBlock extends Backbone.Model
     else
       @set('more_events_available', true)
 
+  checkLimit: () =>
+    @set('event_limit', @events.length) if @events.length < @get('event_limit')
+
   increaseLimit: (howMuch) =>
     @set('event_limit', @get('event_limit') + howMuch)
 
@@ -258,10 +261,10 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
         date: moment(date).format('YYYY-MM-DD')
         howManyEvents: howManyEvents
 
-  eventsByDate: (date, howManyEvents, skip = 0) =>
+  eventsByDate: (date, howManyEvents, skip = []) =>
     @chain().
     filter( (event) -> event.is_on_date(date) ).
-    drop(skip).
+    reject( (event) -> _.contains(_.map(skip, (event) -> event.get('_id')), event.get('_id')) ).
     first(howManyEvents).
     value()
 

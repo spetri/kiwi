@@ -45,12 +45,60 @@ describe "Event Store", ->
         @blocks.last().increaseLimit 3
 
       it "should have the new events in the block", ->
-        expect(@store.blocks.last().events.length).toBe(5)
+        expect(@store.blocks.last().events.length).toBe(6)
 
-      it "should still have the event with the highest number of upvotes first", ->
-        expect(@store.blocks.last().events.first().upvotes()).toBe(9)
+      it "should have the event with the new highest number of upvotes first", ->
+        expect(@store.blocks.last().events.first().upvotes()).toBe(10)
 
-    describe "increasing the number of blocks beyond the number of already fetched events", ->
+      describe "beyond the number of events already fetched", ->
+        beforeEach ->
+          @xhr = sinon.useFakeXMLHttpRequest()
+          @requests = []
+          @xhr.onCreate = (xhr) =>
+            @requests.push xhr
+          @blocks.last().increaseLimit 4
+
+          
+        afterEach ->
+          @xhr.restore()
+
+        it "should have to issue a request for more events", ->
+          expect(@requests.length).toBe(1)
+
+        describe "responding with less than the number of events requested", ->
+          beforeEach ->
+            @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify([
+              { _id: 20, upvotes: 5, datetime: moment().add('days', 3) }
+              { _id: 21, upvotes: 4, datetime: moment().add('days', 3) }
+            ]))
+
+          it "should be able to add the events from the response to the block", ->
+            expect(@blocks.last().events.length).toBe(9)
+
+          it "should have the event with the highest number of upvotes first", ->
+            expect(@blocks.last().events.first().upvotes()).toBe(10)
+
+          it "should have the event with the lowest number of upvotes last", ->
+            expect(@blocks.last().events.last().upvotes()).toBe(2)
+
+          it "should have the limit of the block in question reduced", ->
+            expect(@blocks.last().get('event_limit')).toBe(9)
+
+          it "should know that no more events are available", ->
+            expect(@blocks.last().get('more_events_available')).toBeFalsy()
+
+        describe "respond with exactly the number of events requested", ->
+          beforeEach ->
+            @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify([
+              { _id: 20, upvotes: 5, datetime: moment().add('days', 3) }
+              { _id: 21, upvotes: 4, datetime: moment().add('days', 3) }
+              { _id: 22, upvotes: 3, datetime: moment().add('days', 3) }
+            ]))
+
+          xit "should check if any more events are available", ->
+            expect()
+
+    describe "increasing the number of blocks beyond the number of already fetched blocks", ->
       beforeEach ->
         @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents
         @store.events.trigger "sync"
@@ -59,7 +107,7 @@ describe "Event Store", ->
         @requests = []
         @xhr.onCreate = (xhr) =>
           @requests.push xhr
-
+        
         @store.loadNextEvents(7)
 
       afterEach ->
