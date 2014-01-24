@@ -249,6 +249,11 @@ describe 'event block', ->
   it 'can detect if the date of the event block is today', ->
     expect(@block.isToday()).toBeTruthy()
 
+  it 'can detect if the date of the event block is not today even within 1 day', ->
+    @block = new FK.Models.EventBlock
+      date: moment().add({hours: 4, days: -1})
+    expect(@block.isToday()).toBeFalsy()
+
   it 'can detect if the date of the event block is not today', ->
     @block = new FK.Models.EventBlock
       date: moment().days(-2)
@@ -298,7 +303,7 @@ describe 'event block', ->
 describe "event block list", ->
   beforeEach ->
     @blocks = new FK.Collections.EventBlockList([
-      {id: 1, date: moment().add('days', 1).toDate()}
+      {id: 1, date: moment(moment().add('days', 1).format('YYYY-MM-DD'))}
     ])
 
   it "should be able to add events to a block by date", ->

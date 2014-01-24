@@ -37,6 +37,9 @@ class FK.Models.Event extends Backbone.GSModel
   is_on_date: (date) =>
     @get('fk_datetime').diff(date, 'days') == 0
 
+  is_on_absolute_date: (date) =>
+    @get('datetime').diff(date, 'days') == 0
+
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
@@ -198,7 +201,7 @@ class FK.Models.EventBlock extends Backbone.Model
     @isDate(moment())
 
   isDate: (date) =>
-    date.diff(@get('date'), 'days') == 0
+    date.diff(@get('date'), 'days') == 0 && date.date() == @get('date').date()
 
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
@@ -288,6 +291,6 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     block = @find( (block) => block.isDate(date))
     if not block
       block = new FK.Models.EventBlock
-        date: date
+        date: moment(date)
       @add block
     block.addEvents event
