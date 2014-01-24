@@ -32,7 +32,7 @@ describe "Event", ->
       event = new FK.Models.Event
         datetime: moment().add('seconds', 10)
 
-      expect(event.in_future()).toBeTruthy()
+      expect(event.inFuture()).toBeTruthy()
 
     it "can detect if an event with a recurring time format is in the future", ->
       event = new FK.Models.Event
@@ -40,7 +40,7 @@ describe "Event", ->
         local_time: moment().add('hours', 4).format('h:mm A')
         time_format: 'recurring'
 
-      expect(event.in_future()).toBeTruthy()
+      expect(event.inFuture()).toBeTruthy()
 
   describe "when upvoting", ->
     beforeEach ->

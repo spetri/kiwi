@@ -31,14 +31,11 @@ class FK.Models.Event extends Backbone.GSModel
   is_all_day: () =>
     @.get('is_all_day') is '1' or @.get('is_all_day') is true
 
-  in_future: () =>
+  inFuture: () =>
     @get('fk_datetime').diff(moment(), 'seconds') > 0
 
-  is_on_date: (date) =>
-    @get('fk_datetime').diff(date, 'days') == 0
-
-  is_on_absolute_date: (date) =>
-    @get('datetime').diff(date, 'days') == 0
+  isOnDate: (date) =>
+    @get('fk_datetime').diff(date, 'days') == 0 && date.date() == @get('fk_datetime').date()
 
   sync: (action, model, options) =>
     methodMap =
@@ -206,7 +203,7 @@ class FK.Models.EventBlock extends Backbone.Model
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
 
-    events = _.filter(events, (event) => event.in_future() )
+    events = _.filter(events, (event) => event.inFuture() )
 
     howManyOver = events.length + @events.length - @get('event_limit')
 
@@ -266,7 +263,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
   eventsByDate: (date, howManyEvents, skip = []) =>
     @chain().
-    filter( (event) -> event.is_on_date(date) ).
+    filter( (event) -> event.isOnDate(date) ).
     reject( (event) -> _.contains(_.map(skip, (event) -> event.get('_id')), event.get('_id')) ).
     first(howManyEvents).
     value()
@@ -287,7 +284,7 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     return -1 if date1 < date2
 
   addEventToBlock: (date, event) =>
-    return if ( not event.in_future())
+    return if ( not event.inFuture())
     block = @find( (block) => block.isDate(date))
     if not block
       block = new FK.Models.EventBlock
