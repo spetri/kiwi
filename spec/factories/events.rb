@@ -29,7 +29,7 @@ FactoryGirl.define do
     end
 
     trait :in_1_week do
-      datetime 1.week.from_now
+      datetime 1.week.from_now 
     end
 
     trait :in_2_weeks do
@@ -42,6 +42,10 @@ FactoryGirl.define do
 
     trait :back_1_week do
       datetime 1.week.ago
+    end
+
+    trait :all_day do
+      is_all_day true
     end
   end
 end

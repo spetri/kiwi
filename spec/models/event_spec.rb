@@ -3,7 +3,7 @@ require 'date'
 
 describe Event do
   before (:each) do
-    Timecop.freeze(Time.local(2014, 1, 24, 15, 5, 00))
+    Timecop.freeze(Time.local(2014, 1, 24, 12, 00, 00))
   end
 
   after (:each) do
@@ -21,22 +21,34 @@ describe Event do
       before(:each) do
         create_list :event, 3, :in_1_week
         create_list :event, 2, :back_1_week
+        @testTime = 1.week.from_now - 5.minutes
       end
 
       it "should be able to fetch events by date" do
-        Event.get_events_by_date(1.week.from_now).size.should == 3
+        Event.get_events_by_date(@testTime).size.should == 3
       end
 
       it "should be able to limit the number of events fetched by date" do
-        Array(Event.get_events_by_date(1.week.from_now, 2)).size.should == 2
+        Array(Event.get_events_by_date(@testTime, 2)).size.should == 2
       end
 
       it "should be able to skip a given number of events fetched by date" do
-        Array(Event.get_events_by_date(1.week.from_now, 0, 1)).size.should == 2
+        Array(Event.get_events_by_date(@testTime, 0, 1)).size.should == 2
       end
 
       it "should be able to skip a given number of events and still limit correctly" do
-        Array(Event.get_events_by_date(1.week.from_now, 1, 1)).size.should == 1
+        Array(Event.get_events_by_date(@testTime, 1, 1)).size.should == 1
+      end
+
+      describe "all day events" do
+        before(:each) do
+          create_list :event, 3, :in_2_weeks, :all_day
+          @testTime = 2.weeks.from_now + 2.hours
+        end
+
+        it "should be able to get an all day event when its store datetime falls outside the range requested" do
+          Array(Event.get_events_by_date(@testTime)).size.should == 3
+        end
       end
     end
 

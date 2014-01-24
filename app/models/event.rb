@@ -96,33 +96,38 @@ class Event
     end
   end
 
-  def self.get_events_by_date(date, howMany=0, skip=0)
-    self.all.order_by([:upvote_count, :desc]).where(date: date).skip(skip).limit(howMany)
+  def self.get_events_by_date(startDatetime, howMany=0, skip=0)
+    endDatetime = startDatetime + 1.day
+    self.all.order_by([:upvote_count, :desc]).where( :$or => [
+      {datetime: (startDatetime..endDatetime)}, 
+      {is_all_day: true, date: startDatetime.to_date}
+    ]
+    ).skip(skip).limit(howMany)
   end
 
-  def self.top_ranked(howMany, startDate, endDate)
-    self.all.where({datetime: (startDate..endDate) }).order_by([:upvote_count, :desc]).limit(howMany)
+  def self.top_ranked(howMany, startDatetime, endDatetime)
+    self.all.where({datetime: (startDatetime..endDatetime) }).order_by([:upvote_count, :desc]).limit(howMany)
   end
 
-  def self.get_events_after_date(date, howMany=0)
-    self.all.where({ :datetime.gt => date }).limit(howMany)
+  def self.get_events_after_date(datetime, howMany=0)
+    self.all.where({ :datetime.gt => datetime }).limit(howMany)
   end
 
-  def self.get_enough_events_from_day(date, minimum, eventsPerDay)
+  def self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
     events = []
     eventCount = 0
-    lookupDate = date
+    lookupDatetime = datetime
     lastDate = self.get_last_date
 
-    while eventCount < minimum && ( not lookupDate === lastDate.next_day ) do
-      eventsOnDay = self.get_events_by_date(lookupDate, eventsPerDay)
+    while eventCount < minimum && ( not lookupDatetime.to_date === lastDate.next_day.to_date ) do
+      eventsOnDay = self.get_events_by_date(lookupDatetime, eventsPerDay)
 
       if Array(eventsOnDay).size > 0
         events.concat eventsOnDay
         eventCount += Array(eventsOnDay).size
       end
 
-      lookupDate = lookupDate.next_day
+      lookupDatetime = lookupDatetime.next_day
     end
 
     events
