@@ -37,6 +37,7 @@ group :doc do
 end
 
 group :development, :test do
+  gem 'timecop'
   gem 'debugger'
   gem 'guard'
   gem 'guard-spork'

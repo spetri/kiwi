@@ -2,6 +2,14 @@ require 'spec_helper'
 require 'date'
 
 describe Event do
+  before (:each) do
+    Timecop.freeze(Time.local(2014, 1, 24, 15, 5, 00))
+  end
+
+  after (:each) do
+    Timecop.return
+  end
+
   it "should work" do 
     e = Event.new name: "foobar"
     e.save!

@@ -4,6 +4,14 @@ FactoryGirl.define do
   end
 
   factory :event do 
+    before (:create) do
+      Timecop.freeze(Time.local(2014, 1, 24, 12, 00, 00))
+    end
+
+    after (:create) do
+      Timecop.return
+    end 
+
     name
     datetime 1.day.from_now
     upvote_names []
