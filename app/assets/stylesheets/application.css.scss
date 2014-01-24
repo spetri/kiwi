@@ -37,11 +37,11 @@
   .upvote-container {
     margin-right: 14px;
     width: 14px;
-    color: grey;
+    color: #303030;
     text-align: center;
     cursor: pointer;
     i {
-      margin-left: 2px;
+      margin-left: 1px;
       &.icon-ok {
         font-size: 15px;
         color: green;
@@ -53,12 +53,13 @@
       }
 
       &.icon-caret-up {
-        font-size: 18px;
+        font-size: 16px;
       }
       cursor: pointer;
     }
     .upvote-counter {
-      font-size: 24px;
+      font-size: 18px;
+      margin-left: 2px;
     }
   }
   img {
