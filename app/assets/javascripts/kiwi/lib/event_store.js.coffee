@@ -32,7 +32,13 @@ class FK.EventStore extends Marionette.Controller
     _.each(events, @addEventToBlock)
 
     if events.length < howManyMoreEvents
-      @events.fetchMoreEventsByDate(date, howManyMoreEvents - events.length, block.events.length + events.length).done ( () => block.checkLimit() )
+      @events.fetchMoreEventsByDate(
+        date,
+        howManyMoreEvents - events.length,
+        block.events.length + events.length
+      ).done ( () =>
+        block.checkLimit()
+      )
 
   resetTopRanked: () =>
     @topRanked.reset @events.topRanked(10, moment(), moment().add('days', 7))
