@@ -41,7 +41,7 @@ class FK.EventStore extends Marionette.Controller
       )
 
   resetTopRanked: () =>
-    @topRanked.reset @events.topRanked(10, moment(), moment().add('days', 7))
+    @topRanked.reset @events.topRanked(10, moment().startOf('day'), moment().add('days', 7))
 
   addEventToBlock: (event) =>
     @blocks.addEventToBlock moment(event.get('fk_datetime').format('YYYY-MM-DD')), event

@@ -16,7 +16,10 @@ describe "Event Store", ->
       expect(@topRanked.first().upvotes()).toBe(11)
 
     it "should have the lowest of the top ranked events as the last event in the collection", ->
-      expect(@topRanked.last().upvotes()).toBe(2)
+      expect(@topRanked.last().upvotes()).toBe(3)
+
+    it "should include events that were set for earlier today", ->
+      expect(@topRanked.pluck('name')).toContain('event 2a')
 
     describe "when adding an event", ->
       beforeEach ->
@@ -125,7 +128,7 @@ describe "Event Store", ->
           ]))
 
         it "should also add all the new events to the events collection", ->
-          expect(@store.events.length).toBe(18)
+          expect(@store.events.length).toBe(19)
 
         it "should be able to add more blocks after more events have come back from the server", ->
           expect(@blocks.length).toBe(10)
