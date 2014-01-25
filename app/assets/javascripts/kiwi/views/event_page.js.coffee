@@ -29,7 +29,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       @stop()
 
     event.on 'change', (event) =>
-      FK.Data.events.add event, merge: true
+      App.request('events').add event, merge: true
 
     Backbone.history.navigate('events/show/' + event.id, trigger : false)
 
