@@ -215,7 +215,7 @@ class FK.Models.EventBlock extends Backbone.Model
       @set('more_events_available', true)
 
   checkLimit: () =>
-    @set('event_limit', @events.length) if @events.length < @get('event_limit')
+    @set({event_limit: @events.length}, {silent: true}) if @events.length < @get('event_limit')
 
   increaseLimit: (howMuch) =>
     @set('event_limit', @get('event_limit') + howMuch)
