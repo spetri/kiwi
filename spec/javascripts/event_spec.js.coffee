@@ -13,14 +13,14 @@ describe "Event", ->
       expect(event.get('local_time')).toBe('1:00 PM')
 
     it "can detect TV times", ->
-      v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 16:00 GMT-500")
-      expect(v.get('time')).toEqual('4/3c')
+      v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 16:30 GMT-500")
+      expect(v.get('time')).toEqual('4:30/3:30c')
       
       v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 1:00 GMT-500")
-      expect(v.get('time')).toEqual('1/12c')
+      expect(v.get('time')).toEqual('1:00/12:00c')
       
       v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 20:00 GMT+200")
-      expect(v.get('time')).toEqual('1/12c')
+      expect(v.get('time')).toEqual('1:00/12:00c')
 
     it "can get a datetime in the local timezone without changing it", ->
       v = new FK.Models.Event

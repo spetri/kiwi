@@ -79,19 +79,19 @@ class FK.Models.Event extends Backbone.GSModel
     time: () ->
       return '' if not @get('datetime')
       return ' - all day ' if @is_all_day()
+
       if @.get('time_format') is 'recurring'
         return @.get('local_time')
 
       if @.get('time_format') is 'tv_show'
-        local_time_split = @.get('local_time').split(':')
-        eastern_time = parseInt local_time_split[0]
-        eastern_time = eastern_time - 12 if eastern_time > 11
+        eastern_time = parseInt @get('local_hour')
 
-        central_time = parseInt(local_time_split[0]) - 1
-        central_time = central_time - 12 if central_time > 11
+        central_time = parseInt(@get('local_hour')) - 1
         central_time = 12 if central_time is 0
 
-        return "#{eastern_time}/#{central_time}c"
+        minutes = @get('local_minute')
+
+        return "#{eastern_time}:#{minutes}/#{central_time}:#{minutes}c"
 
       return @.time_from_moment(moment(@.get('datetime')))
 
