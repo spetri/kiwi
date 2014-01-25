@@ -133,9 +133,9 @@ class Event
     events
   end
 
-  def self.get_starting_events(date, minimum, eventsPerDay, topRanked)
-    listEvents = self.get_enough_events_from_day(date, minimum, eventsPerDay)
-    topEvents = self.top_ranked(topRanked, date, date + 7.days)
+  def self.get_starting_events(datetime, minimum, eventsPerDay, topRanked)
+    listEvents = self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
+    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days)
     events = listEvents.concat topEvents
     events.uniq!
     events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }

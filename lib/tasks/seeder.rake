@@ -8,6 +8,8 @@ namespace :db do
     end
     Event.delete_all
     Event.create! datetime: 2.weeks.ago, name: "The once loved", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone', 'marionette', 'ruby'], location_type: 'international'
+    Event.create! datetime: 8.hours.ago, name: "Geese Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'github', 'backbone'], location_type: 'international'
+    Event.create! datetime: 5.hours.ago, name: "Moose Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone', 'php', 'marionette'], location_type: 'international'
     Event.create! datetime: 5.hours.from_now, name: "Koala Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone'], location_type: 'international'
     Event.create! datetime: 6.hours.from_now, is_all_day: true, name: "Giraffe Day", description:"lorem ipsum", user: "rails", location_type: 'national', country: 'US'
     Event.create! datetime: 8.hours.from_now, name: "Zebra Day", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby'], location_type: 'international'

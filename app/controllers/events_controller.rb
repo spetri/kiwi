@@ -82,15 +82,15 @@ class EventsController < ApplicationController
   end
 
   def startup_events
-    @events = Event.get_starting_events(DateTime.now(), params[:howManyTopRanked].to_i, params[:howManyEventsPerDay].to_i, params[:howManyEventsMinimum].to_i)
+    @events = Event.get_starting_events(DateTime.now.beginning_of_day.utc, params[:howManyTopRanked].to_i, params[:howManyEventsPerDay].to_i, params[:howManyEventsMinimum].to_i)
   end
 
   def events_by_date
-    @events = Event.get_events_by_date(Date.parse(params[:date]), params[:howManyEvents], params[:skip])
+    @events = Event.get_events_by_date(DateTime.parse(params[:datetime]), params[:howManyEvents], params[:skip])
   end
 
   def events_after_date
-    @events = Event.get_events_after_date(Date.parse(params[:date]), params[:howManyEvents])
+    @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:howManyEvents])
   end
 
   private

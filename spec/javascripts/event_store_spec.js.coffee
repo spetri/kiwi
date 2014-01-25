@@ -128,7 +128,7 @@ describe "Event Store", ->
           expect(@store.events.length).toBe(18)
 
         it "should be able to add more blocks after more events have come back from the server", ->
-          expect(@blocks.length).toBe(8)
+          expect(@blocks.length).toBe(10)
 
         it "should have the events loaded into the newly created block", ->
           expect(@blocks.last().events.length).toBe(3)

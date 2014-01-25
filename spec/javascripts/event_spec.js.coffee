@@ -287,19 +287,6 @@ describe 'event block', ->
       expect(@block.get('more_events_available')).toBeFalsy()
       expect(@block.get('event_limit')).toBe(4)
 
-    describe "adding events from the past", ->
-      beforeEach ->
-        @block.addEvents([
-          new FK.Models.Event { _id: 2, datetime: moment().add('seconds', 5) }
-          new FK.Models.Event { _id: 3, datetime: moment().subtract('seconds', 1) }
-        ])
-
-      it "should not have every event added", ->
-        expect(@block.events.length).toBe(1)
-
-      it "should only have events after now", ->
-        expect(@block.events.first().get('_id')).toBe(2)
-
 describe "event block list", ->
   beforeEach ->
     @blocks = new FK.Collections.EventBlockList([
