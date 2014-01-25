@@ -269,7 +269,6 @@ describe 'event block', ->
   describe 'adding more events to a block', ->
     beforeEach ->
       @events = new FK.Collections.EventList(FK.SpecHelpers.Events.TodayEvents)
-      @block = new FK.Models.EventBlock()
 
     it "should be able to add some events to its events collection", ->
       @block.addEvents(new FK.Models.Event { _id: 1, datetime: moment().add('seconds', 2) })
@@ -286,6 +285,38 @@ describe 'event block', ->
       @block.checkLimit()
       expect(@block.get('more_events_available')).toBeFalsy()
       expect(@block.get('event_limit')).toBe(4)
+
+  describe "knowing how many events are in a block", ->
+    beforeEach ->
+      @block.set('date', moment().startOf('day'))
+      @xhr = sinon.useFakeXMLHttpRequest()
+      @requests = []
+      @xhr.onCreate = (xhr) =>
+        @requests.push xhr
+
+      describe "add events then respond", ->
+        beforeEach ->
+          @block.addEvents FK.SpecHelpers.Events.TodayEvents
+          @block.checkEventCount()
+          @requests[0].respond(200, "Content-Type": 'application/json', JSON.stringify({count: 3}))
+
+        it "should be able to check how many events are expected in this block", ->
+          expect(@block.get('event_max_count')).toBe(3)
+
+        it "should realize that there are no more events for this block", ->
+          expect(@block.get('more_events_available')).toBeFalsy()
+
+      describe "respond then add events", ->
+        beforeEach ->
+          @block.checkEventCount()
+          @requests[0].respond(200, "Content-Type": 'application/json', JSON.stringify({count: 3}))
+          @block.addEvents FK.SpecHelpers.Events.TodayEvents
+
+        it "should be able to check how many events are expected in this block", ->
+          expect(@block.get('event_max_count')).toBe(3)
+
+        it "should realize that there are no more events for this block", ->
+          expect(@block.get('more_events_available')).toBeFalsy()
 
 describe "event block list", ->
   beforeEach ->
