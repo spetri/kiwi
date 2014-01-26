@@ -1,3 +1,4 @@
+require 'json'
 require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
@@ -19,12 +20,12 @@ set :pid_file, "#{deploy_to}/shared/tmp/pids/server.pid"
 set :state_file, "#{deploy_to}/shared/tmp/sockets/puma.state"
 set :ctrl_socket, "unix://#{deploy_to}/shared/tmp/sockets/pumactl.sock"
 
-set :app_port, '3001'
+set :app_port, '4000'
 set :app_path, lambda { "#{deploy_to}/#{current_path}" }
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'log', 'tmp']
+set :shared_paths, ['config/database.yml', 'config/mongoid.yml', 'public/system', 'log', 'tmp']
 
 # Optional settings:
 set :user, 'root'    # Username in the server to SSH to.
@@ -33,6 +34,7 @@ set :ssh_options, '-A'  # ensure that ssh agent forwarding is being used.
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
+@keys = {}
 task :environment do
   # If you're using rbenv, use this to load the rbenv environment.
   # Be sure to commit your .rbenv-version to your repository.
@@ -40,6 +42,17 @@ task :environment do
 
   # For those using RVM, use this to load an RVM version@gemset.
   invoke :'rvm:use[ruby-2.0.0-p195@forekast]'
+
+  @keys = JSON.parse(open('keys.json').read)
+  if @keys['TWITTER_KEY'].nil?
+    puts 'Config did not parse correctly'
+    exit
+  end
+
+end
+
+def environment_vars
+  @keys.map { |k,v| %{#{k}=#{v}} }.join(" ")
 end
 
 set :rvm_path, "/usr/local/rvm/scripts/rvm"
@@ -62,6 +75,10 @@ task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/config"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
 
+  queue! %[mkdir -p "#{deploy_to}/shared/public"]
+  queue! %[mkdir -p "#{deploy_to}/shared/public/system"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/public"]
+
   queue! %[touch "#{deploy_to}/shared/config/database.yml"]
   queue  %[echo "-----> Be sure to edit 'shared/config/database.yml'."]
 end
@@ -81,12 +98,12 @@ end
 
 desc 'Starts the application'
 task :start => :environment do
-  queue! "cd #{app_path} ; bundle exec rails s -e production -d -p #{port}"
+  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin start -d -e production -p #{app_port}}
 end
 
 desc 'Stops the application'
 task :stop => :environment do
-  queue! %{cd #{app_path} ; kill -9 `cat #{pid_file}` || ls}
+  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin stop -d -e production -p #{app_port}}
 end
 
 desc 'Restarts the application'
