@@ -13,6 +13,9 @@ gem 'omniauth-twitter'
 
 gem 'whenever'
 
+#Server
+gem 'thin'
+
 group :assets do
   gem 'sass-rails',   '~> 4.0.0'
   gem 'coffee-rails', '~> 4.0.0'
@@ -37,6 +40,7 @@ group :doc do
 end
 
 group :development, :test do
+  gem 'mina'
   gem 'timecop'
   gem 'debugger'
   gem 'guard'
