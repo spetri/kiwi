@@ -6,6 +6,12 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     itemViewContainer: '.events'
     itemView: EventList.EventCollapsed
     itemViewEventPrefix: 'event'
+    appendHtml: (collectionView, itemView, index) =>
+      collectionView = collectionView.$(@itemViewContainer)
+      return collectionView.prepend(itemView.el) if index is 0
+      atIndex = collectionView.children().eq(index)
+      return atIndex.before(itemView.el) if atIndex.length
+      return collectionView.append(itemView.el)
     templateHelpers: () =>
       return {
         isToday: () => @model.isToday()
