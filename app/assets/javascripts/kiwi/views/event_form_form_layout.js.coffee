@@ -1,6 +1,6 @@
 FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) ->
   class EventForm.FormLayout extends Backbone.Marionette.Layout
-    className: "row-fluid"
+    className: "event-form col-md-8"
     template: FK.Template('event_form')
 
     events:

@@ -86,7 +86,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
   class EventPage.EventPageLayout extends Marionette.Layout
     template: FK.Template('event_page')
-    className: 'event-page'
+    className: 'event-page col-md-8'
 
     regions:
       eventCardRegion: '.event-card-region'

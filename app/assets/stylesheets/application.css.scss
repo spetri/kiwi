@@ -12,7 +12,23 @@
  *= require_tree .
  */
 
+
+/* navbar */
+a.navbar-brand {
+  display: block;
+  overflow: hidden;
+  text-indent: -999px;
+  margin-left: 10px;
+  background: url('/images/logo.png') top left no-repeat;
+  width: 220px;
+}
+
 /* home */
+
+#home-page {
+  margin-left: 30px;
+}
+
 .event-block {
   h4 {
     font-weight: bold;
@@ -82,19 +98,9 @@
   }
 }
 
-/* navbar */
-a.navbar-brand { 
-  display: block;
-  overflow: hidden;
-  text-indent: -999px;
-  margin-left: 10px;
-  background: url('/images/logo.png') top left no-repeat;
-  width: 220px;
-} 
-
-#main-region {
-  margin: 0 auto;
-  float:none;
+.event-form.col-md-8 {
+  float: none;
+  margin: 0px auto;
 }
 
 /* event management */
@@ -213,6 +219,11 @@ a.navbar-brand {
       }
     }
   }
+}
+
+.event-page.col-md-8 {
+  float: none;
+  margin: 0px auto;
 }
 
 .event-card {
