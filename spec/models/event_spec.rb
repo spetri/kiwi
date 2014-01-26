@@ -46,7 +46,7 @@ describe Event do
           @testTime = 2.weeks.from_now + 2.hours
         end
 
-        it "should be able to get an all day event when its store datetime falls outside the range requested" do
+        it "should be able to get an all day event when its stored datetime falls outside the range requested" do
           Array(Event.get_events_by_date(@testTime)).size.should == 3
         end
       end
@@ -111,6 +111,18 @@ describe Event do
         events = Event.get_events_after_date(3.days.from_now, 2)
         Array(events).size.should == 2
       end
+    end
+  end
+
+  describe "event counting" do
+    before(:each) do
+      create_list :event, 3, :in_1_week
+      create :event, :back_1_week
+      create :event, :in_2_weeks
+    end
+
+    it "should be able to count events on a day" do
+      Event.count_events_by_date(1.week.from_now - 1.minute).should == 3
     end
   end
 end

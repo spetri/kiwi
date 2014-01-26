@@ -93,6 +93,10 @@ class EventsController < ApplicationController
     @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:howManyEvents])
   end
 
+  def count_events_by_date
+    @count = Event.count_events_by_date(DateTime.parse(params[:datetime]))
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event

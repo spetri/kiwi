@@ -100,7 +100,7 @@ class Event
     endDatetime = startDatetime + 1.day
     self.all.order_by([:upvote_count, :desc]).where( :$or => [
       {datetime: (startDatetime..endDatetime)}, 
-      {is_all_day: true, date: startDatetime.to_date}
+      {is_all_day: true, datetime: startDatetime.beginning_of_day}
     ]
     ).skip(skip).limit(howMany)
   end
@@ -131,6 +131,11 @@ class Event
     end
 
     events
+  end
+
+  def self.count_events_by_date(datetime)
+    endDatetime = datetime + 1.day
+    self.all.where({datetime: (datetime..endDatetime)}).size
   end
 
   def self.get_starting_events(datetime, minimum, eventsPerDay, topRanked)
