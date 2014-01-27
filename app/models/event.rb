@@ -110,7 +110,7 @@ class Event
   end
 
   def self.get_events_after_date(datetime, howMany=0)
-    self.all.where({ :datetime.gt => datetime }).limit(howMany)
+    self.all.where({ :datetime.gt => datetime }).order_by([:datetime, :asc]).limit(howMany)
   end
 
   def self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
