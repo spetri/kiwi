@@ -228,7 +228,7 @@ class FK.Models.EventBlock extends Backbone.Model
   checkEventCount: =>
     $.get(
       '/api/events/countByDate',
-      datetime: @get('date').format('YYYY-MM-DD HH:MM:SS'),
+      datetime: @get('date').clone().add({ minutes: moment().zone() }).format('YYYY-MM-DD HH:MM:SS'),
       (resp) =>
         @set('event_max_count', resp.count)
     )

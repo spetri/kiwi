@@ -98,7 +98,7 @@ class Event
 
   def self.get_events_by_date(startDatetime, howMany=0, skip=0)
     endDatetime = startDatetime + 1.day
-    self.all.order_by([:upvote_count, :desc]).where( :$or => [
+    self.all.order_by([:upvote_count, :desc], [:datetime, :asc]).where( :$or => [
       {datetime: (startDatetime..endDatetime)}, 
       {is_all_day: true, datetime: startDatetime.beginning_of_day}
     ]
@@ -110,7 +110,7 @@ class Event
   end
 
   def self.get_events_after_date(datetime, howMany=0)
-    self.all.where({ :datetime.gt => datetime }).order_by([:datetime, :asc]).limit(howMany)
+    self.get_enough_events_from_day(datetime, howMany, 3)
   end
 
   def self.get_enough_events_from_day(datetime, minimum, eventsPerDay)

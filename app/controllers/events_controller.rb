@@ -86,11 +86,11 @@ class EventsController < ApplicationController
   end
 
   def events_by_date
-    @events = Event.get_events_by_date(DateTime.parse(params[:datetime]), params[:howManyEvents], params[:skip])
+    @events = Event.get_events_by_date(DateTime.parse(params[:datetime]), params[:howManyEvents].to_i, params[:skip].to_i)
   end
 
   def events_after_date
-    @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:howManyEvents])
+    @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:howManyEvents].to_i)
   end
 
   def count_events_by_date
