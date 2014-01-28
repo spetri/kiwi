@@ -195,6 +195,7 @@ class FK.Models.EventBlock extends Backbone.Model
     @events = new FK.Collections.BaseEventList()
     @on 'change:event_max_count', @determineMoreEventsAvailable
     @events.on 'add remove reset', @determineMoreEventsAvailable
+    @checkEventCount()
 
   isToday: () =>
     @isDate(moment())
