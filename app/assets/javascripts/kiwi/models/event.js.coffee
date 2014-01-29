@@ -226,10 +226,13 @@ class FK.Models.EventBlock extends Backbone.Model
   determineMoreEventsAvailable: =>
     @set('more_events_available', @events.length < @get('event_max_count'))
 
+  relativeDate: () =>
+   moment(@get('date').clone().add({ minutes: moment().zone() }))
+
   checkEventCount: =>
     $.get(
       '/api/events/countByDate',
-      datetime: @get('date').clone().add({ minutes: moment().zone() }).format('YYYY-MM-DD HH:MM:SS'),
+      datetime: @relativeDate().format('YYYY-MM-DD HH:MM:SS'),
       (resp) =>
         @set('event_max_count', resp.count)
     )
