@@ -7,7 +7,41 @@ describe "Event", ->
     v = new FK.Models.Event()
     expect(v.get('country')).toEqual('US')
 
-  describe "when working with dates and times", ->
+  describe "date and time", ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+
+    describe "normal datetime", ->
+      describe "in the future", ->
+        beforeEach ->
+          @event.set( datetime: moment().add(minutes : 1) )
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
+
+        it "should be on the current date", ->
+          expect(@event.isOnDate(moment())).toBeTruthy()
+
+        it "should provide the correct datetime date", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().format('YYYY-MM-DD'))
+
+        it "should provide the correct datetime time", ->
+          expect(@event.get('fk_datetime').format('HH:MM:SS')).toBe(moment().format('HH:MM:SS'))
+
+        it "should provide the date in the forekast format", ->
+          expect(@event.get('dateAsString')).toEqual('Thursday, Jan 16th, 2014')
+
+        it "should provide the time in the forekast format", ->
+          expect(@event.get('timeAsString')).toEqual('12:01 PM')
+          
+
+      describe "in the past", ->
+        beforeEach ->
+          @event.set( datetime: moment().add(minutes : -1))
+
+        it "should not be in the future", ->
+          expect(@event.inFuture()).toBeFalsy()
+
     it "can create a local time on set", ->
       event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
       expect(event.get('local_time')).toBe('1:00 PM')
