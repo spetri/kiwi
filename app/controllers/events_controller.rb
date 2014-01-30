@@ -124,7 +124,8 @@ class EventsController < ApplicationController
                     :description,
                     :have_i_upvoted,
                     :country,
-                    :location_type
+                    :location_type,
+                    :subkast
                    )
     end
 end

@@ -19,7 +19,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       else
         @$el.find('select[name=country]').removeAttr('disabled')
 
-
     saveClicked: (e) =>
       e.preventDefault()
       @$('.save').addClass 'disabled'
@@ -28,12 +27,16 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     modelEvents:
       'change:name': 'refreshName'
-      'change:location': 'refreshLocation'
+      'change:subkast': 'refreshSubkast'
+      'change:location_type': 'refreshLocation'
       'change:country': 'refreshLocation'
       'change:description': 'refreshDescription'
 
     refreshName: (event) ->
       @$('#name').val event.get('name')
+
+    refreshSubkast: (event) ->
+      @$('[name="subkast"]').val(event.get('subkast'))
 
     refreshLocation: (event) ->
       @$('[name="location_type"][value="' + event.get('location_type') + '"]').attr('checked', 'checked')
@@ -48,6 +51,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     onRender: =>
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
       @refreshName @model
+      @refreshSubkast @model
       @refreshLocation @model
       @refreshDescription @model
       @renderLocation()
