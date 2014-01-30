@@ -45,7 +45,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     @trimmer().setWidth width
 
   @validImageTypes = () ->
-    ['image/jpeg', 'image/png', 'image/pjpeg', 'image/tiff']
+    ['image/jpeg', 'image/png', 'image/pjpeg']
 
   class ImageTrimmer.ImageTrimmerController extends Marionette.Controller
  
