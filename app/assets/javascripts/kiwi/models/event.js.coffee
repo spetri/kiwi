@@ -244,12 +244,12 @@ class FK.Models.EventBlock extends Backbone.Model
     @set('more_events_available', @events.length < @get('event_max_count'))
 
   relativeDate: () =>
-   moment(@get('date').clone().add({ minutes: moment().zone() }))
+    moment(@get('date').clone().add({ minutes: moment().zone() }))
 
   checkEventCount: =>
     $.get(
       '/api/events/countByDate',
-      datetime: @relativeDate().format('YYYY-MM-DD HH:MM:SS'),
+      datetime: @relativeDate().format('YYYY-MM-DD HH:mm:SS'),
       (resp) =>
         @set('event_max_count', resp.count)
     )
@@ -281,7 +281,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
       url: 'api' + @url + 'eventsByDate'
       remove: false
       data:
-        datetime: moment(date).format('YYYY-MM-DD HH:MM:SS')
+        datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')
         howManyEvents: howManyEvents
         skip: skip
 
@@ -290,7 +290,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
       url: 'api' + @url + 'eventsAfterDate'
       remove: false
       data:
-        datetime: moment(date).format('YYYY-MM-DD HH:MM:SS')
+        datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')
         howManyEvents: howManyEvents
 
   eventsByDate: (date, howManyEvents, skip = []) =>
