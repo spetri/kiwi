@@ -69,31 +69,39 @@ class FK.Models.Event extends Backbone.GSModel
     resp
 
   getters:
-    prettyDateTime: () ->
-      return "#{@.get('prettyDate')} #{@.get('time')}"
-
-    prettyDate: () ->
-      return "" if not @get('datetime')
-      return @get('fk_datetime').format('dddd, MMM Do, YYYY')
+    fk_datetime: () ->
+      return @datetimeRecurring() if @get('time_format') is 'recurring'
+      return @datetimeTV() if @get('time_format') is 'tv_show'
+      return @datetimeNormal()
 
     time: () ->
+      @get('timeAsString')
+
+    timeAsString: () ->
       return '' if not @get('datetime')
       return ' - all day ' if @is_all_day()
 
-      if @.get('time_format') is 'recurring'
-        return @.get('local_time')
+      datetime = @get('fk_datetime')
 
-      if @.get('time_format') is 'tv_show'
-        eastern_time = parseInt @get('local_hour')
+      if @get('time_format') is 'tv_show'
+        eastern_time = datetime.hour()
 
-        central_time = parseInt(@get('local_hour')) - 1
+        central_time = datetime.hour() - 1
         central_time = 12 if central_time is 0
 
-        minutes = @get('local_minute')
+        minutes = datetime.format('mm')
 
         return "#{eastern_time}:#{minutes}/#{central_time}:#{minutes}c"
 
-      return @.time_from_moment(moment(@.get('datetime')))
+      else
+        return @time_from_moment(datetime)
+
+    dateAsString: () ->
+      return "" if not @get('datetime')
+      return @get('fk_datetime').format('dddd, MMM Do, YYYY')
+
+    datetimeAsString: () ->
+      return "#{@.get('dateAsString')} #{@.get('timeAsString')}"
 
     local_hour: ->
       return "" if not @get('local_time')
@@ -109,16 +117,25 @@ class FK.Models.Event extends Backbone.GSModel
       return "" if not @get('local_time')
       @get('local_time').split(':')[1].split(' ')[1]
 
-    fk_datetime: () ->
-      if @.get('time_format') is 'recurring'
-        event_time = moment(@get('local_time'), 'h:mm A')
-        return moment(
-              @in_my_timezone(@.get('datetime')).format("YYYY-MM-DD")
-            ).
-            add(
-              hours: event_time.hour(), minutes: event_time.minute()
-            )
-      @in_my_timezone(@get('datetime')).clone()
+  datetimeNormal: () ->
+    @in_my_timezone(@get('datetime')).clone()
+
+  datetimeRecurring: () ->
+    recurringHours = parseInt @get('local_hour')
+    recurringMinutes = parseInt @get('local_minute')
+
+    recurringHours += 12 if @get('local_ampm') is 'PM'
+
+    @in_my_timezone(@get('datetime')).startOf('day').clone().
+    add( hours: recurringHours, minutes: recurringMinutes )
+
+  datetimeTV: () ->
+    easternHours = parseInt @get('local_hour')
+    easternMinutes = parseInt @get('local_minute')
+
+    moment(@get('datetime')).startOf('day').clone().
+    add( hours: easternHours, minutes: easternMinutes )
+
 
   time_from_moment: (datetime) =>
     @in_my_timezone(datetime).format('h:mm A')
