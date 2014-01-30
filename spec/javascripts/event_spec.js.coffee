@@ -14,7 +14,7 @@ describe "Event", ->
     describe "normal datetime", ->
       describe "in the future", ->
         beforeEach ->
-          @event.set( datetime: moment().add(minutes : 1) )
+          @event.set( datetime: moment().add(minutes: 1) )
 
         it "should be in the future", ->
           expect(@event.inFuture()).toBeTruthy()
@@ -23,10 +23,10 @@ describe "Event", ->
           expect(@event.isOnDate(moment())).toBeTruthy()
 
         it "should provide the correct datetime date", ->
-          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().format('YYYY-MM-DD'))
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().clone().add(minutes: 1).format('YYYY-MM-DD'))
 
         it "should provide the correct datetime time", ->
-          expect(@event.get('fk_datetime').format('HH:MM:SS')).toBe(moment().format('HH:MM:SS'))
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe(moment().clone().add(minutes: 1).format('HH:mm:SS'))
 
         it "should provide the date in the forekast format", ->
           expect(@event.get('dateAsString')).toEqual('Thursday, Jan 16th, 2014')
@@ -41,6 +41,39 @@ describe "Event", ->
 
         it "should not be in the future", ->
           expect(@event.inFuture()).toBeFalsy()
+
+        it "should provide the correct datetime time", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe(moment().add(minutes: -1).format('HH:mm:SS'))
+
+        it "should provide the correct time in the forekast format", ->
+          expect(@event.get('timeAsString')).toEqual('11:59 AM')
+
+      describe "days in the future", ->
+        beforeEach ->
+          @event.set( datetime: moment().add(days: 3))
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
+
+        it "should be on the date in the future", ->
+          expect(@event.isOnDate(moment().add(days: 3))).toBeTruthy()
+
+        it "should provide the correct datetime date", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add(days: 3).format('YYYY-MM-DD'))
+
+        it "should provide the date in the forekast format", ->
+          expect(@event.get('dateAsString')).toEqual('Sunday, Jan 19th, 2014')
+          
+    describe "all day events", ->
+      describe "today", ->
+        beforeEach ->
+          @event.set (datetime: moment(), is_all_day: true)
+
+        it "should be on today's date", ->
+          expect(@event.isOnDate(moment()))
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
 
     it "can create a local time on set", ->
       event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")

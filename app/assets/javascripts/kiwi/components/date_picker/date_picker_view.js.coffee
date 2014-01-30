@@ -26,7 +26,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
 
     refreshAllDay: =>
       selector = @$('input[name=time_format],select[name=hours],select[name=minutes],select[name=ampm],select[name=time_type]')
-      if @model.is_all_day()
+      if @model.isAllDay()
         selector.attr('disabled','disabled')
         @$('.timedisplay').hide()
         @$('[name="is_all_day"]').attr('checked', 'checked')

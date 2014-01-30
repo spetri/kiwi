@@ -28,15 +28,6 @@ class FK.Models.Event extends Backbone.GSModel
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
 
-  is_all_day: () =>
-    @.get('is_all_day') is '1' or @.get('is_all_day') is true
-
-  inFuture: () =>
-    @get('fk_datetime').diff(moment(), 'seconds') > 0
-
-  isOnDate: (date) =>
-    @get('fk_datetime').diff(date, 'days') == 0 && date.date() == @get('fk_datetime').date()
-
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
@@ -68,6 +59,17 @@ class FK.Models.Event extends Backbone.GSModel
     resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
     resp
 
+  isAllDay: () =>
+    @get('is_all_day') is '1' or @get('is_all_day') is true
+
+  inFuture: () =>
+    against = moment()
+    against.startOf('day') if @isAllDay()
+    (@get('fk_datetime').diff(against, 'seconds')) >= 0
+
+  isOnDate: (date) =>
+    @get('fk_datetime').diff(date, 'days') == 0 && date.date() == @get('fk_datetime').date()
+
   getters:
     fk_datetime: () ->
       return @datetimeRecurring() if @get('time_format') is 'recurring'
@@ -79,7 +81,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     timeAsString: () ->
       return '' if not @get('datetime')
-      return ' - all day ' if @is_all_day()
+      return ' - all day ' if @isAllDay()
 
       datetime = @get('fk_datetime')
 
