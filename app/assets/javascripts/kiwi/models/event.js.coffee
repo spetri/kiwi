@@ -87,6 +87,7 @@ class FK.Models.Event extends Backbone.GSModel
     fk_datetime: () ->
       return @datetimeRecurring() if @get('time_format') is 'recurring'
       return @datetimeTV() if @get('time_format') is 'tv_show'
+      return @datetimeAllDay() if @isAllDay()
       return @datetimeNormal()
 
     time: () ->
@@ -151,6 +152,8 @@ class FK.Models.Event extends Backbone.GSModel
     moment(@get('datetime')).startOf('day').clone().
     add( hours: easternHours, minutes: easternMinutes )
 
+  datetimeAllDay: () =>
+    moment(@get('datetime').format('YYYY-MM-DD'))
 
   time_from_moment: (datetime) =>
     @in_my_timezone(datetime).format('h:mm A')

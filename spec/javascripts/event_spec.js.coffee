@@ -33,7 +33,6 @@ describe "Event", ->
 
         it "should provide the time in the forekast format", ->
           expect(@event.get('timeAsString')).toEqual('12:01 PM')
-          
 
       describe "in the past", ->
         beforeEach ->
@@ -74,6 +73,9 @@ describe "Event", ->
 
         it "should be in the future", ->
           expect(@event.inFuture()).toBeTruthy()
+
+        it "should have a datetime at the start of today", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('00:00:00')
 
     it "can create a local time on set", ->
       event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
