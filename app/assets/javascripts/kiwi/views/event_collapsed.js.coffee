@@ -5,6 +5,12 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     className: 'event'
     tagName: 'div'
 
+    templateHelpers: () =>
+      return {
+        fullSubkastName: => @model.fullSubkastName()
+        time: => @model.get('time')
+      }
+
     ui:
       upvotesIcon: '.upvote-container i'
       upvotesContainer: '.upvote-container'
@@ -16,10 +22,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     triggers:
       'click .event-name,img': 'click:open'
-
-    templateHelpers: =>
-     time: =>
-      @model.get('time')
 
     toggleUpvote: (e) =>
       @model.upvoteToggle()

@@ -48,8 +48,14 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     value: () ->
       window.serializeForm(@$el.find('input,select,textarea'))
 
+    renderSubkastOptions: () =>
+      _.each(@model.subkastOptionsAsArray(), (option) =>
+        @$('[name="subkast"]').append('<option value="' + option.value + '">' + option.option + '</option>')
+      )
+
     onRender: =>
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
+      @renderSubkastOptions()
       @refreshName @model
       @refreshSubkast @model
       @refreshLocation @model
