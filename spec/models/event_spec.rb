@@ -46,7 +46,7 @@ describe Event do
           @testTime = 2.weeks.from_now + 2.hours
         end
 
-        xit "should be able to get an all day event when its stored datetime falls outside the range requested" do
+        it "should be able to get an all day event when its stored datetime falls outside the range requested" do
           Array(Event.get_events_by_date(@testTime)).size.should == 3
         end
       end

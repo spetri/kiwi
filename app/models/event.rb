@@ -101,7 +101,7 @@ class Event
     endDatetime = startDatetime + 1.day
     self.all.order_by([:upvote_count, :desc], [:datetime, :asc]).where( :$or => [
       {datetime: (startDatetime..endDatetime)}, 
-      {is_all_day: true, datetime: startDatetime.beginning_of_day}
+      {is_all_day: true, date: startDatetime.beginning_of_day}
     ]
     ).skip(skip).limit(howMany)
   end
