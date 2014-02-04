@@ -95,14 +95,14 @@ class FK.Models.Event extends Backbone.GSModel
 
     timeAsString: () ->
       return '' if not @get('datetime')
-      return ' - all day ' if @isAllDay()
+      return 'all day' if @isAllDay()
 
       datetime = @get('fk_datetime')
 
       if @get('time_format') is 'tv_show'
-        eastern_time = datetime.hour()
+        eastern_time = datetime.format('h')
 
-        central_time = datetime.hour() - 1
+        central_time = parseInt(datetime.format('h')) - 1
         central_time = 12 if central_time is 0
 
         minutes = datetime.format('mm')
@@ -117,7 +117,7 @@ class FK.Models.Event extends Backbone.GSModel
       return @get('fk_datetime').format('dddd, MMM Do, YYYY')
 
     datetimeAsString: () ->
-      return "#{@.get('dateAsString')} #{@.get('timeAsString')}"
+      return "#{@.get('dateAsString')}, #{@.get('timeAsString')}"
 
     local_hour: ->
       return "" if not @get('local_time')
@@ -149,7 +149,9 @@ class FK.Models.Event extends Backbone.GSModel
     easternHours = parseInt @get('local_hour')
     easternMinutes = parseInt @get('local_minute')
 
-    moment(@get('datetime')).startOf('day').clone().
+    easternHours += 12 if @get('local_ampm') is 'PM'
+
+    moment(@get('datetime').format('YYYY-MM-DD') + ' -0500', 'YYYY-MM-DD ZZ').
     add( hours: easternHours, minutes: easternMinutes )
 
   datetimeAllDay: () =>
