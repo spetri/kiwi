@@ -33,4 +33,15 @@ namespace :db do
   task :resave => :environment do
     Event.all.each { |event| event.save }
   end
+
+  task :cleanup_all_day => :environment do
+    Event.all.each { |event| 
+      if event.is_all_day == "1" or event.is_all_day == "true" or event.is_all_day == true
+        event.is_all_day = true;
+      else
+        event.is_all_day = false;
+      end
+      event.save
+    }
+  end
 end

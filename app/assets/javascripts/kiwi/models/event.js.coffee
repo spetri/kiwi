@@ -73,7 +73,7 @@ class FK.Models.Event extends Backbone.GSModel
     resp
 
   isAllDay: () =>
-    @get('is_all_day') is '1' or @get('is_all_day') is true
+    @get('is_all_day') is '1' or @get('is_all_day') is true or @get('is_all_day') is 'true'
 
   inFuture: () =>
     against = moment()
@@ -170,7 +170,7 @@ class FK.Models.Event extends Backbone.GSModel
   setters:
     datetime: (moment_val) ->
       moment_val = moment(moment_val)
-      @.set('local_time', moment_val.format('h:mm A'))
+      @set('local_time', moment_val.format('h:mm A'))
       # set the input time to UTC:
       return moment(moment_val).zone(0)
 

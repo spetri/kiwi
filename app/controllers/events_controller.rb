@@ -33,6 +33,12 @@ class EventsController < ApplicationController
       @event.image_from_url(event_params[:url])
     end
 
+    if @event.is_all_day == "true"
+      @event.is_all_day = true
+    else
+      @event.is_all_day = false
+    end
+
     respond_to do |format|
       if @event.save
         format.json { render action: 'show', status: :created, location: @event }
@@ -64,6 +70,13 @@ class EventsController < ApplicationController
     end
  
     @event.update_attributes(params)
+
+    if @event.is_all_day == "true" or @event.is_all_day == true
+      @event.is_all_day = true
+    else
+      @event.is_all_day = false
+    end
+
 
     respond_to do |format|
       if @event.update(params)

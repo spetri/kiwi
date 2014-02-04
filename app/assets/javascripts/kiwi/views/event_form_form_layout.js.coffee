@@ -46,7 +46,15 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @$('[name="description"]').val(event.get('description'))
 
     value: () ->
-      window.serializeForm(@$el.find('input,select,textarea'))
+      window.serializeForm(
+        @$el.find(
+          '[name="name"],
+           [name="subkast"],
+           [name="location_type"],
+           [name="country"],
+           [name="description"]'
+        )
+      )
 
     renderSubkastOptions: () =>
       _.each(@model.subkastOptionsAsArray(), (option) =>

@@ -43,6 +43,7 @@ class Event
     if not event.upvote_names.nil?
       event.upvote_count = event.upvote_names.size
     end
+
   end
 
   def image_from_url(url)
@@ -100,7 +101,7 @@ class Event
   def self.get_events_by_date(startDatetime, howMany=0, skip=0)
     endDatetime = startDatetime + 1.day
     self.all.order_by([:upvote_count, :desc], [:datetime, :asc]).where( :$or => [
-      {datetime: (startDatetime..endDatetime)}, 
+      {is_all_day: false, datetime: (startDatetime..endDatetime)}, 
       {is_all_day: true, date: startDatetime.beginning_of_day}
     ]
     ).skip(skip).limit(howMany)
@@ -135,8 +136,7 @@ class Event
   end
 
   def self.count_events_by_date(datetime)
-    endDatetime = datetime + 1.day
-    self.all.where({datetime: (datetime..endDatetime)}).size
+    self.get_events_by_date(datetime).size
   end
 
   def self.get_starting_events(datetime, minimum, eventsPerDay, topRanked)
