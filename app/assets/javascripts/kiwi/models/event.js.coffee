@@ -95,7 +95,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     timeAsString: () ->
       return '' if not @get('datetime')
-      return 'all day' if @isAllDay()
+      return 'All Day' if @isAllDay()
 
       datetime = @get('fk_datetime')
 

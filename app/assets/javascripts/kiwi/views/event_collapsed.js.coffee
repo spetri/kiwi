@@ -8,7 +8,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     templateHelpers: () =>
       return {
         fullSubkastName: => @model.fullSubkastName()
-        time: => @model.get('time')
+        time: => @model.get('timeAsString')
       }
 
     ui:

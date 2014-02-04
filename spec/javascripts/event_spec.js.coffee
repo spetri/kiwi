@@ -81,7 +81,7 @@ describe "Event", ->
           expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().format('YYYY-MM-DD'))
 
         it "should have all day printed as the time string", ->
-          expect(@event.get('timeAsString')).toBe('all day')
+          expect(@event.get('timeAsString')).toBe('All Day')
 
         it "should have the current datetime date printed in the forekast format", ->
           expect(@event.get('dateAsString')).toBe('Thursday, Jan 16th, 2014')
