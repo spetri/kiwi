@@ -112,6 +112,16 @@ task :restart => :environment do
   invoke :start
 end
 
+desc 'Cleanups old all day values'
+task :cleanup_all_day => :environment do
+  queue "cd #{deploy_to}/current ; rake db:cleanup_all_day RAILS_ENV=production"
+end 
+
+desc 'Move to local date field from date'
+task :move_to_local_date => :environment do
+  queue "cd #{deploy_to}/current ; rake db:move_date_to_local_date RAILS_ENV=production"
+end
+
 # For help in making your deploy script, see the Mina documentation:
 #
 #  - http://nadarei.co/mina
