@@ -167,26 +167,61 @@ describe "Event", ->
         it "should not be in the future", ->
           expect(@event.inFuture()).toBeFalsy()
 
+    describe "recurring events later today", ->
+      beforeEach ->
+        @event.set(datetime: moment(), time_format: 'recurring', local_time: '9:00 PM')
+
+      it "should be on the current date", ->
+        expect(@event.isOnDate(moment())).toBeTruthy()
+
+      it "should be in the future", ->
+        expect(@event.inFuture()).toBeTruthy()
+
+      it "should have today as its date", ->
+        expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2014-01-16')
+
+      it "should have a fixed time as its time", ->
+        expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('21:00:00')
+
+      it "should have a date in the fk format", ->
+        expect(@event.get('dateAsString')).toBe('Thursday, Jan 16th, 2014')
+
+      it "should have a time in the fk format", ->
+        expect(@event.get('timeAsString')).toBe('9:00 PM')
+
+    describe "recurring events in the past", ->
+      beforeEach ->
+        @event.set(datetime: moment().add(days: -2), time_format: 'recurring', local_time: '3:00 AM')
+
+      it "should be on the set date", ->
+        expect(@event.isOnDate(moment().add(days: -2))).toBeTruthy()
+
+      it "should not be in the future", ->
+        expect(@event.inFuture()).toBeFalsy()
+
+      it "should have the datetime as its date", ->
+        expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2014-01-14')
+
+      it "should have a fixed time as its time", ->
+        expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('03:00:00')
+
+      it "should have a date in the fk format", ->
+        expect(@event.get('dateAsString')).toBe('Tuesday, Jan 14th, 2014')
+
+      it "should have a time in the fk format", ->
+        expect(@event.get('timeAsString')).toBe('3:00 AM')
  
-      it "can create a local time on set", ->
-        event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
-        expect(event.get('local_time')).toBe('1:00 PM')
-      it "can create a local date on set", ->
-        event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
-        expect(event.get('local_date')).toBe('2013-12-12')
-      it "can get a datetime in the local timezone without changing it", ->
-        v = new FK.Models.Event
-          datetime: moment().zone(0)
-        expect(v.in_my_timezone(v.get('fk_datetime')).hour()).toBe(moment().hour())
-        expect(v.get('fk_datetime').hour()).toBe(12)
-
-      it "can detect if an event with a recurring time format is in the future", ->
-        event = new FK.Models.Event
-          datetime: moment().toDate()
-          local_time: moment().add('hours', 4).format('h:mm A')
-          time_format: 'recurring'
-
-        expect(event.inFuture()).toBeTruthy()
+    it "can create a local time on set", ->
+      event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
+      expect(event.get('local_time')).toBe('1:00 PM')
+    it "can create a local date on set", ->
+      event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
+      expect(event.get('local_date')).toBe('2013-12-12')
+    it "can get a datetime in the local timezone without changing it", ->
+      v = new FK.Models.Event
+        datetime: moment().zone(0)
+      expect(v.in_my_timezone(v.get('fk_datetime')).hour()).toBe(moment().hour())
+      expect(v.get('fk_datetime').hour()).toBe(12)
 
   describe "when upvoting", ->
     beforeEach ->

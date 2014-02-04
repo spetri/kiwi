@@ -151,7 +151,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     easternHours += 12 if @get('local_ampm') is 'PM'
 
-    moment(@get('datetime').format('YYYY-MM-DD') + ' -0500', 'YYYY-MM-DD ZZ').
+    moment(moment(@get('local_date')).format('YYYY-MM-DD') + ' -0500', 'YYYY-MM-DD ZZ').
     add( hours: easternHours, minutes: easternMinutes )
 
   datetimeAllDay: () =>
