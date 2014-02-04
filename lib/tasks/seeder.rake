@@ -44,4 +44,11 @@ namespace :db do
       event.save
     }
   end
+
+  task :move_date_to_local_date => :environment do
+    Event.all.each{ |event|
+      event.local_date = event.date
+      event.save
+    }
+  end
 end

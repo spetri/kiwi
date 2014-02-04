@@ -10,7 +10,6 @@ class Event
   field :name, type: String
   field :user, type: String
   field :datetime, type: DateTime
-  field :date, type: Date
   field :width, type: Integer
   field :height, type: Integer
   field :crop_x, type: Integer
@@ -21,6 +20,8 @@ class Event
   field :tv_time , type: String
   field :creation_timezone, type: String
   field :local_time, type: String
+  field :local_date, type: Date
+  field :date, type: Date
   field :description, type: String
   field :upvote_names, type: Array
   field :upvote_count, type: Integer
@@ -37,9 +38,6 @@ class Event
     :processors => [:cropper]
 
   before_save do |event|
-    if not event.datetime.nil?
-      event.date = event.datetime.to_date
-    end
     if not event.upvote_names.nil?
       event.upvote_count = event.upvote_names.size
     end
@@ -102,7 +100,7 @@ class Event
     endDatetime = startDatetime + 1.day
     self.all.order_by([:upvote_count, :desc], [:datetime, :asc]).where( :$or => [
       {is_all_day: false, datetime: (startDatetime..endDatetime)}, 
-      {is_all_day: true, date: startDatetime.beginning_of_day}
+      {is_all_day: true, local_date: startDatetime.beginning_of_day}
     ]
     ).skip(skip).limit(howMany)
   end
@@ -149,6 +147,6 @@ class Event
   end
 
   def self.get_last_date
-    self.order_by([:date, :desc])[0].date
+    self.order_by([:local_date, :desc])[0].local_date
   end
 end

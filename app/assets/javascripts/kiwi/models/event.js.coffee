@@ -173,6 +173,7 @@ class FK.Models.Event extends Backbone.GSModel
     datetime: (moment_val) ->
       moment_val = moment(moment_val)
       @set('local_time', moment_val.format('h:mm A'))
+      @set('local_date', moment_val.format('YYYY-MM-DD'))
       # set the input time to UTC:
       return moment(moment_val).zone(0)
 

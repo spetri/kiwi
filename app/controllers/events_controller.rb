@@ -134,6 +134,7 @@ class EventsController < ApplicationController
                     :tv_time,
                     :creation_timezone,
                     :local_time,
+                    :local_date,
                     :description,
                     :have_i_upvoted,
                     :country,

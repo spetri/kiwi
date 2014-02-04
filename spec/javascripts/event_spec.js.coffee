@@ -171,7 +171,9 @@ describe "Event", ->
       it "can create a local time on set", ->
         event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
         expect(event.get('local_time')).toBe('1:00 PM')
-
+      it "can create a local date on set", ->
+        event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
+        expect(event.get('local_date')).toBe('2013-12-12')
       it "can get a datetime in the local timezone without changing it", ->
         v = new FK.Models.Event
           datetime: moment().zone(0)
