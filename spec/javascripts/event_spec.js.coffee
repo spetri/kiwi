@@ -385,10 +385,6 @@ describe 'event list', ->
     it "should have the event with the next highest number of upvotes, and the earliest date next", ->
       expect(@events.at(1).get('name')).toBe('Groundhog Day')
 
-    it "should have the event with the next highest number of upvotes and the next date sorted alphabetically", ->
-      expect(@events.at(2).get('name')).toBe('The event')
-      expect(@events.at(3).get('name')).toBe('Zoom day')
-
     it "should have the rest of the events ordered by upvote", ->
       expect(@events.at(4).get('name')).toBe('Moose Day')
       expect(@events.at(5).get('name')).toBe('Google Day')
