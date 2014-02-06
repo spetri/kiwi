@@ -155,7 +155,7 @@ class FK.Models.Event extends Backbone.GSModel
     add( hours: easternHours, minutes: easternMinutes )
 
   datetimeAllDay: () =>
-    moment(@get('datetime').format('YYYY-MM-DD'))
+    moment(moment(@get('local_date')).format('YYYY-MM-DD'))
 
   time_from_moment: (datetime) =>
     @in_my_timezone(datetime).format('h:mm A')

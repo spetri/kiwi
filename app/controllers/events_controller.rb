@@ -33,7 +33,7 @@ class EventsController < ApplicationController
       @event.image_from_url(event_params[:url])
     end
 
-    if @event.is_all_day == "true"
+    if @event.is_all_day == "true" or @event.is_all_day == true
       @event.is_all_day = true
     else
       @event.is_all_day = false
