@@ -367,6 +367,32 @@ describe "Event", ->
       expect(@topEvents[1].get('name')).toBe('event 6')
 
 describe 'event list', ->
+  describe 'sorting', ->
+    beforeEach ->
+      @events = new FK.Collections.BaseEventList()
+      @events.reset [
+        { upvotes: 2, datetime: moment().add(hours: 4), name: 'Google Day' }
+        { upvotes: 6, datetime: moment().add(hours: -2), name: 'Groundhog Day' }
+        { upvotes: 4, datetime: moment().add(hours: -3), name: 'Moose Day' }
+        { upvotes: 9, datetime: moment().add(hours: -3), name: 'Koala Day' }
+        { upvotes: 6, datetime: moment(), name: 'Zoom day' }
+        { upvotes: 6, datetime: moment(), name: 'The event' }
+      ]
+
+    it "should have the event with the highest number of upvotes first", ->
+      expect(@events.at(0).get('name')).toBe('Koala Day')
+
+    it "should have the event with the next highest number of upvotes, and the earliest date next", ->
+      expect(@events.at(1).get('name')).toBe('Groundhog Day')
+
+    it "should have the event with the next highest number of upvotes and the next date sorted alphabetically", ->
+      expect(@events.at(2).get('name')).toBe('The event')
+      expect(@events.at(3).get('name')).toBe('Zoom day')
+
+    it "should have the rest of the events ordered by upvote", ->
+      expect(@events.at(4).get('name')).toBe('Moose Day')
+      expect(@events.at(5).get('name')).toBe('Google Day')
+
   describe 'fetching events', ->
     beforeEach ->
       @xhr = sinon.useFakeXMLHttpRequest()
@@ -387,7 +413,7 @@ describe 'event list', ->
       expect(@requests.length).toBe(1)
       expect(@requests[0].url).toBe('api/events/startupEvents?howManyTopRanked=10&howManyEventsPerDay=3&howManyEventsMinimum=10')
 
-    it "should be able to getch more events by a date", ->
+    it "should be able to fetch more events by a date", ->
       @events.reset([
         { _id: 1 }
         { _id: 2 }

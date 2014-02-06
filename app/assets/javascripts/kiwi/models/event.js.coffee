@@ -284,9 +284,17 @@ class FK.Collections.BaseEventList extends Backbone.Collection
   comparator: (event1, event2) =>
     return -1 if event1.upvotes() > event2.upvotes()
     if event1.upvotes() == event2.upvotes()
-      return 1 if event1.get('datetime') > event2.get('datetime')
-      return 0 if event1.get('datetime') == event2.get('datetime')
-      return -1 if event1.get('datetime') < event2.get('datetime')
+
+      return 1 if not event2.has('datetime')
+      return -1 if not event1.has('datetime')
+
+      return 1 if event1.get('fk_datetime').diff(event2.get('fk_datetime'), 'seconds') > 0
+
+      if event1.get('fk_datetime').diff(event2.get('fk_datetime'), 'seconds') == 0
+        return 1 if event1.get('name') > event2.get('name')
+        return -1 if event1.get('name') <= event2.get('name')
+      return -1 if event1.get('fk_datetime').diff(event2.get('fk_datetime'), 'seconds') < 0
+
     return 1 if event1.upvotes() < event2.upvotes()
 
 class FK.Collections.EventList extends FK.Collections.BaseEventList
