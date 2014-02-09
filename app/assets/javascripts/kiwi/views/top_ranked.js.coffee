@@ -4,4 +4,4 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     template: FK.Template('top_ranked')
     className: 'top-ranked'
     itemView: EventList.EventName
-    itemViewContainer: 'ol'
+    itemViewContainer: 'ul'

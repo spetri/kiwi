@@ -30,6 +30,7 @@ a.navbar-brand {
 }
 
 .event-block {
+  margin-bottom: 20px;
   h4 {
     font-weight: bold;
   }
@@ -39,17 +40,20 @@ a.navbar-brand {
   }
 
   .btn {
+    width: 100%;
     border-radius: 0px;
     margin: 0px auto;
   }
 }
 
 .events {
+  background-color: #f7f7f7;
   padding: 10px 15px;
 }
 
 .event {
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   .upvote-container {
     height: 60px;
     padding-top: 6px;
@@ -112,6 +116,9 @@ a.navbar-brand {
 }
 
 .top-ranked {
+  padding: 5px 15px;
+  margin-top: 38px;
+  background-color: #f7f7f7;
   h5 {
     font-weight: bold;
   }
