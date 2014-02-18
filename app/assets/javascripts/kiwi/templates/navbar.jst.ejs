@@ -8,7 +8,7 @@
 </div>
 <div class="collapse navbar-collapse">
   <ul class="nav navbar-nav">
-    <% if(logged_in == true) { %>
+    <% if(username) { %>
       <li data-option="new">
         <a href="#/events/new">Add Event</a>
       </li>
@@ -17,20 +17,18 @@
       <a>Country <i class="icon-caret-down"></i></a>
     </li>
     <li data-option="subkast">
-      <a>All Categories <i class="icon-caret-down"></i></a>
+      <a><span class="subkast-title"></span> <i class="icon-caret-down"></i></a>
     </li>
   </ul>
   <ul class="nav navbar-nav navbar-right">
-    <% if(email.length > 0 || name.length > 0) { %>
-      <% if (email.length > 0) { %>
+    <% if(username) { %>
       <li>
         <a href="/users/edit"><%= username %></a> 
       </li>
-      <% } %>
       <li>
         <a href="<%= FK.Links.logout %>">logout</a>
       </li>
-    <% } else {  %>
+    <% } else { %>
       <li>
         <a href="<%= FK.Links.login %>">login</a>
       </li>

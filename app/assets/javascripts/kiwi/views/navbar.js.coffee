@@ -4,9 +4,14 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @listenTo App, 'start', @show
     @currentUser = App.request 'currentUser'
 
+    @navbarModel = new Navbar.NavbarModel
+      username: @currentUser.get('username')
+
+    @navbarModel.set('username', null) if not @currentUser.get('logged_in')
+
     @layout = new Navbar.NavbarLayout
     @navbarView = new Navbar.NavbarView
-      model: @currentUser
+      model: @navbarModel
     @countryFilterView = new Navbar.CountryFilterView
     @subkastFilterView = new Navbar.SubkastFilterView
 
@@ -14,7 +19,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @navbarView.on 'clicked:filter:subkast', @toggleSubkastFilterView
 
     @listenTo @countryFilterView, 'clicked:save', @toggleCountryFilterView
-    @listenTo @subkastFilterView, 'clicked:save', @toggleSubkastFilterView
+    @listenTo @subkastFilterView, 'subkasts:save', @filterSubkasts
+    @listenTo @subkastFilterView, 'subkasts:save', @toggleSubkastFilterView
 
     @layout.on 'show', =>
       @layout.navbarRegion.show @navbarView
@@ -36,9 +42,18 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       @layout.subkastFilterRegion.show @subkastFilterView
       @subkastFilterView.delegateEvents()
 
+  @filterSubkasts = (subkasts) =>
+    @navbarModel.set('subkasts', subkasts)
+
   @close = () ->
     @view.close()
 
+  class Navbar.NavbarModel extends Backbone.Model
+    defaults:
+      username: null
+      country: 'US'
+      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'HA', 'OTH']
+      
   class Navbar.NavbarLayout extends Marionette.Layout
     template: FK.Template('navbar_layout')
     regions:
@@ -65,3 +80,15 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
+
+    modelEvents:
+      'change:subkasts': 'refreshSubkastTitle'
+
+    refreshSubkastTitle: (model, subkasts) =>
+      if (subkasts.length == 6)
+        @$('.subkast-title').html('All Subkasts')
+      else
+        @$('.subkast-title').html('Some Subkasts Removed')
+
+    onRender: =>
+      @refreshSubkastTitle(@model, @model.get('subkasts'))
