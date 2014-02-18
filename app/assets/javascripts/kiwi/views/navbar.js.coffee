@@ -10,13 +10,31 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @countryFilterView = new Navbar.CountryFilterView
     @subkastFilterView = new Navbar.SubkastFilterView
 
+    @navbarView.on 'clicked:filter:country', @toggleCountryFilterView
+    @navbarView.on 'clicked:filter:subkast', @toggleSubkastFilterView
+
+    @listenTo @countryFilterView, 'clicked:save', @toggleCountryFilterView
+    @listenTo @subkastFilterView, 'clicked:save', @toggleSubkastFilterView
+
     @layout.on 'show', =>
       @layout.navbarRegion.show @navbarView
-      @layout.countryFilterRegion.show @countryFilterView
-      @layout.subkastFilterRegion.show @subkastFilterView
 
   @show = () ->
     App.navbarRegion.show @layout
+
+  @toggleCountryFilterView = () =>
+    if @layout.countryFilterRegion.currentView
+      @layout.countryFilterRegion.close()
+    else
+      @layout.countryFilterRegion.show @countryFilterView
+      @countryFilterView.delegateEvents()
+
+  @toggleSubkastFilterView = () =>
+    if @layout.subkastFilterRegion.currentView
+      @layout.subkastFilterRegion.close()
+    else
+      @layout.subkastFilterRegion.show @subkastFilterView
+      @subkastFilterView.delegateEvents()
 
   @close = () ->
     @view.close()
@@ -32,6 +50,10 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   class Navbar.NavbarView extends Backbone.Marionette.ItemView
     className: "navbar navbar-inverse navbar-fixed-top"
     template: FK.Template('navbar')
+
+    triggers:
+      'click [data-option="country"]': 'clicked:filter:country'
+      'click [data-option="subkast"]': 'clicked:filter:subkast'
 
     initialize: () =>
       @listenTo App.vent, 'container:new', @refreshHighlightNew
