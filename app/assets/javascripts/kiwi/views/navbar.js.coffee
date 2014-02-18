@@ -15,7 +15,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @view.close()
 
   class Navbar.NavbarView extends Backbone.Marionette.ItemView
-    className: "navbar-inner"
+    className: "navbar navbar-inverse navbar-fixed-top"
     template: FK.Template('navbar')
 
     initialize: () =>
