@@ -14,13 +14,19 @@
 
 
 /* navbar */
-a.navbar-brand {
-  display: block;
-  overflow: hidden;
-  text-indent: -999px;
-  margin-left: 10px;
-  background: url('/images/logo.png') top left no-repeat;
-  width: 220px;
+.navbar {
+  a.navbar-brand {
+    display: block;
+    overflow: hidden;
+    text-indent: -999px;
+    margin-left: 10px;
+    background: url('/images/logo.png') top left no-repeat;
+    width: 220px;
+  }
+  ul.nav a {
+    color: white !important;
+    cursor: pointer;
+  }
 }
 
 /* home */
