@@ -21,19 +21,6 @@ class FK.Models.Event extends Backbone.GSModel
   urlRoot: () =>
     '/events'
 
-  subkastOptions: () =>
-    {
-      'TVM': 'TV and Movies'
-      'SE': 'Sports and Entertainment'
-      'ST': 'Science and Technology'
-      'PRP': 'Product Releases / Promotions'
-      'HA': 'Holidays and Anniversaries'
-      'OTH': 'Other'
-    }
-
-  subkastOptionsAsArray: () =>
-    _.map(@subkastOptions(), (val, key) -> {value: key, option: val })
-
   initialize: () =>
     @reminders = new FK.Collections.Reminders()
     #Backbone thing: when collection fetches from another url, models are

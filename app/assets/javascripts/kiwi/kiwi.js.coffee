@@ -15,6 +15,15 @@ FK.Template = (file) ->
 FK.Uri = (uri) ->
   Backbone.history.fragment is uri
 
+FK.Data.subkastOptions = {
+      'TVM': 'TV and Movies'
+      'SE': 'Sports and Entertainment'
+      'ST': 'Science and Technology'
+      'PRP': 'Product Releases / Promotions'
+      'HA': 'Holidays and Anniversaries'
+      'OTH': 'Other'
+    }
+
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({
   navbarRegion: '#navbar-container-region'
@@ -64,6 +73,9 @@ FK.App.reqres.setHandler 'eventStore', () ->
 
 FK.App.reqres.setHandler 'currentUser', () ->
   FK.CurrentUser
+
+FK.App.reqres.setHandler 'subkastOptionsAsArray', () ->
+  _.map(FK.Data.subkastOptions, (val, key) -> { value: key, option: val })
 
 FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()
