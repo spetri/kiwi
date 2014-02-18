@@ -6,19 +6,21 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @navbarModel = new Navbar.NavbarModel
       username: @currentUser.get('username')
-
     @navbarModel.set('username', null) if not @currentUser.get('logged_in')
 
     @layout = new Navbar.NavbarLayout
     @navbarView = new Navbar.NavbarView
       model: @navbarModel
     @countryFilterView = new Navbar.CountryFilterView
+      model: @navbarModel
     @subkastFilterView = new Navbar.SubkastFilterView
+      model: @navbarModel
 
     @navbarView.on 'clicked:filter:country', @toggleCountryFilterView
     @navbarView.on 'clicked:filter:subkast', @toggleSubkastFilterView
 
-    @listenTo @countryFilterView, 'clicked:save', @toggleCountryFilterView
+    @listenTo @countryFilterView, 'country:save', @filterCountry
+    @listenTo @countryFilterView, 'country:save', @toggleCountryFilterView
     @listenTo @subkastFilterView, 'subkasts:save', @filterSubkasts
     @listenTo @subkastFilterView, 'subkasts:save', @toggleSubkastFilterView
 
@@ -44,6 +46,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
   @filterSubkasts = (subkasts) =>
     @navbarModel.set('subkasts', subkasts)
+    @trigger 'filter:subkasts', subkasts
+
+  @filterCountry = (country) =>
+    @navbarModel.set('country', country)
+    @navbarModel.set('countryName', App.request('countryName', country))
+    @trigger 'filter:country', country
 
   @close = () ->
     @view.close()
@@ -51,7 +59,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   class Navbar.NavbarModel extends Backbone.Model
     defaults:
       username: null
-      country: 'US'
+      country: 'CA'
+      countryName: 'Canada'
       subkasts: ['TVM', 'SE', 'ST', 'PRP', 'HA', 'OTH']
       
   class Navbar.NavbarLayout extends Marionette.Layout
@@ -83,6 +92,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     modelEvents:
       'change:subkasts': 'refreshSubkastTitle'
+      'change:countryName': 'refreshCountryTitle'
 
     refreshSubkastTitle: (model, subkasts) =>
       if (subkasts.length == 6)
@@ -90,5 +100,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       else
         @$('.subkast-title').html('Some Subkasts Removed')
 
+    refreshCountryTitle: (model, country) =>
+      @$('.country-title').html(country)
+
     onRender: =>
       @refreshSubkastTitle(@model, @model.get('subkasts'))
+      @refreshCountryTitle(@model, @model.get('countryName'))

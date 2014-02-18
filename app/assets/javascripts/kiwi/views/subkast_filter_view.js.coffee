@@ -15,5 +15,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
         @$('.checkbox-container').append('<div class="subkast-option"><label class="subkast-option"><input type="checkbox" name="' + subkast.value + '" /> ' + subkast.option + '</label></div>')
       )
 
+    refreshChosenSubkast: (model, subkasts) =>
+      _.each subkasts, (subkast) =>
+        @$('[name="' + subkast + '"]').prop('checked', true)
+
     onRender: =>
       @renderSubkastOptions()
+      @refreshChosenSubkast @model, @model.get('subkasts')
+
+  
