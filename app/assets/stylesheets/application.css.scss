@@ -27,6 +27,40 @@
     color: white !important;
     cursor: pointer;
   }
+
+  .filter-region {
+    position: fixed;
+    top: 50px;
+    z-index: 1000;
+
+    &.country {
+      left: 230px;
+    }
+    &.subkast {
+      left: 468px;
+    }
+  }
+
+  .filter {
+    background-color: #efefef;
+    border: solid #cecece 1px;
+    padding: 5px;
+
+    div.prompt {
+      padding: 5px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    &.country-filter {
+      width: 215px;
+    }
+  }
 }
 
 /* home */

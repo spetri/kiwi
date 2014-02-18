@@ -17,7 +17,7 @@ FK.Uri = (uri) ->
 
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({
-  navbarRegion: '#navbar-region'
+  navbarRegion: '#navbar-container-region'
   mainRegion: '#main-region'
 })
 
