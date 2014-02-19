@@ -131,10 +131,35 @@ describe "Event Store", ->
           expect(@store.events.length).toBe(19)
 
         it "should be able to add more blocks after more events have come back from the server", ->
-          expect(@blocks.length).toBe(10)
+          expect(@blocks.length).toBe(9)
 
         it "should have the events loaded into the newly created block", ->
           expect(@blocks.last().events.length).toBe(3)
 
         it "should have a date on the new event block", ->
           expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 12).format('YYYY-MM-DD'))
+
+    describe "filter by country", ->
+      beforeEach ->
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @store.filterByCountry("CA")
+        @blocks = @store.blocks
+      
+      it "should only have blocks that contain events with the country CA", ->
+        expect(@blocks.length).toBe(6)
+
+      it "should have only events with the country CA in the blocks or that are international", ->
+        expect(@blocks.at(0).events.length).toBe(2)
+        expect(@blocks.at(1).events.length).toBe(2)
+
+      it "should not have any events of another country", ->
+        countries = []
+        @blocks.each((block) =>
+          block.events.each( (event) =>
+            countries.push event.get('country') if event.get('location_type') is 'national'
+          )
+        )
+
+        extras = _.without(countries, "CA")
+        expect(extras.length).toBe(0)
+        
