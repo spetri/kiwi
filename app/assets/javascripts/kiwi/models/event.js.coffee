@@ -16,6 +16,7 @@ class FK.Models.Event extends Backbone.GSModel
       upvotes: 0
       have_i_upvoted: false
       country_full_name: ''
+      subkast: 'OTH'
     }
 
   urlRoot: () =>
@@ -210,7 +211,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   fullSubkastName: =>
     return 'Other' if not @has('subkast')
-    return @subkastOptions()[@get('subkast')]
+    return FK.Data.subkastOptions[@get('subkast')]
 
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>

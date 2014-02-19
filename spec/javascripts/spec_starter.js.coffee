@@ -54,20 +54,20 @@ FK.SpecHelpers =
         { name: 'event 15', upvotes: 5, datetime: moment().add('days', 3)}
     ],
     UpvotedEventsWithCountries: [
-        { name: 'event 1', upvotes: 9, datetime: moment().subtract('days', 1), country: 'CA', location_type: 'national'}
-        { name: 'event 2', upvotes: 8, datetime: moment().subtract('days', 1), country: 'CA', location_type: 'national'}
-        { name: 'event 2a', upvotes: 8, datetime: moment().subtract('hours', 1), country: 'US', location_type: 'national'}
-        { name: 'event 3', upvotes: 7, datetime: moment().add('days', 1), country: 'US', location_type: 'national' }
-        { name: 'event 4', upvotes: 9, datetime: moment(), country: 'US', location_type: 'national' }
-        { name: 'event 5', upvotes: 11, datetime: moment().add('days', 1), country: 'CA', location_type: 'national' }
-        { name: 'event 6', upvotes: 11, datetime: moment().add('days', 4), country: 'US', location_type: 'national' }
-        { name: 'event 7', upvotes: 12, datetime: moment().add('days', 10), country: 'CA', location_type: 'national' }
-        { name: 'event 8', upvotes: 4, datetime: moment().add('days', 2), country: 'CA', location_type: 'national' }
-        { name: 'event 9', upvotes: 3, datetime: moment().add('days', 3), country: 'US', location_type: 'national' }
-        { name: 'event 10', upvotes: 2, datetime: moment().add('days', 7), country: 'CA', location_type: 'national' }
-        { name: 'event 11', upvotes: 5, datetime: moment().add('days', 1), location_type: 'international' }
-        { name: 'event 12', upvotes: 3, datetime: moment().add('days', 5), country: 'AM', location_type: 'national' }
-        { name: 'event 13', upvotes: 2, datetime: moment().add('days', 4), country: 'CA', location_type: 'national' }
-        { name: 'event 14', upvotes: 2, datetime: moment().add('days', 2), country: 'CA', location_type: 'national' }
-        { name: 'event 15', upvotes: 5, datetime: moment().add('days', 3), country: 'CA', location_type: 'national' }
+        { name: 'event 1', upvotes: 9, datetime: moment().subtract('days', 1), country: 'CA', location_type: 'national', subkast: 'TVM'}
+        { name: 'event 2', upvotes: 8, datetime: moment().subtract('days', 1), country: 'CA', location_type: 'national', subkast: 'HA'}
+        { name: 'event 2a', upvotes: 8, datetime: moment().subtract('hours', 1), country: 'US', location_type: 'national', subkast: 'TVM'}
+        { name: 'event 3', upvotes: 7, datetime: moment().add('days', 1), country: 'US', location_type: 'national', subkast: 'ST'}
+        { name: 'event 4', upvotes: 9, datetime: moment(), country: 'US', location_type: 'national', subkast: 'ST' }
+        { name: 'event 5', upvotes: 11, datetime: moment().add('days', 1), country: 'CA', location_type: 'national', subkast: 'PRP' }
+        { name: 'event 6', upvotes: 11, datetime: moment().add('days', 4), country: 'US', location_type: 'national', subkast: 'HA' }
+        { name: 'event 7', upvotes: 12, datetime: moment().add('days', 10), country: 'CA', location_type: 'national', subkast: 'HA' }
+        { name: 'event 8', upvotes: 4, datetime: moment().add('days', 2), country: 'CA', location_type: 'national', 'TVM' }
+        { name: 'event 9', upvotes: 3, datetime: moment().add('days', 3), country: 'US', location_type: 'national', subkast: 'PRP' }
+        { name: 'event 10', upvotes: 2, datetime: moment().add('days', 7), country: 'CA', location_type: 'national', subkast: 'ST' }
+        { name: 'event 11', upvotes: 5, datetime: moment().add('days', 1), location_type: 'international', subkast: 'ST' }
+        { name: 'event 12', upvotes: 3, datetime: moment().add('days', 5), country: 'AM', location_type: 'national', subkast: 'TVM' }
+        { name: 'event 13', upvotes: 2, datetime: moment().add('days', 4), country: 'CA', location_type: 'national', subkast: 'ST' }
+        { name: 'event 14', upvotes: 2, datetime: moment().add('days', 2), country: 'CA', location_type: 'national', subkast: 'PRP' }
+        { name: 'event 15', upvotes: 5, datetime: moment().add('days', 3), country: 'CA', location_type: 'national', subkast: 'TVM' }
     ]
