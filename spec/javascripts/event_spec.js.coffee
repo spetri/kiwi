@@ -352,7 +352,7 @@ describe "Event", ->
   describe 'top ranked', ->
     beforeEach ->
       @events = new FK.Collections.EventList FK.SpecHelpers.Events.UpvotedEvents
-      @topEvents = @events.topRanked(3, moment(), moment().add('days', 7))
+      @topEvents = @events.topRanked(3, moment(), moment().add('days', 7), 'US')
 
     it 'should be able to find an arbitary number of the top ranked events', ->
       expect(@topEvents.length).toBe(3)

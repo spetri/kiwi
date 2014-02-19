@@ -31,6 +31,24 @@ describe "Event Store", ->
       it "should have the lowest event bumped out of the collection", ->
         expect(@topRanked.last().upvotes()).toBe(3)
 
+    describe "filter by country", ->
+      beforeEach ->
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @store.filterByCountry("CA")
+        @topRanked = @store.topRanked
+      
+      it "should only have top ranked events with the country CA", ->
+        expect(@topRanked.length).toBe(6)
+
+      it "should not have any events of another country", ->
+        countries = []
+        @topRanked.each((event) =>
+          countries.push event.get('country') if event.get('location_type') is 'national'
+        )
+
+        extras = _.without(countries, "CA")
+        expect(extras.length).toBe(0)
+
   describe "blocks", ->
     beforeEach ->
       @store = new FK.EventStore events: FK.SpecHelpers.Events.BlockEvents
@@ -162,4 +180,3 @@ describe "Event Store", ->
 
         extras = _.without(countries, "CA")
         expect(extras.length).toBe(0)
-        
