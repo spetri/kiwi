@@ -43,7 +43,7 @@ class FK.EventStore extends Marionette.Controller
       )
 
   resetTopRanked: () =>
-    @topRanked.reset @events.topRanked(10, moment().startOf('day'), moment().add('days', 6).endOf('day'), @country)
+    @topRanked.reset @events.topRanked(10, moment().startOf('day'), moment().add('days', 6).endOf('day'), @country, @subkasts)
 
   addEventToBlock: (event) =>
     return if (event.get('country') isnt @country and event.get('location_type') is 'national')

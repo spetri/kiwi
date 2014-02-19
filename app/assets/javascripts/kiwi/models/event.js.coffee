@@ -318,10 +318,11 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
     first(howManyEvents).
     value()
 
-  topRanked: (howManyEvents, startDate, endDate, country) =>
+  topRanked: (howManyEvents, startDate, endDate, country, subkasts) =>
     @chain().
     filter( (event) => event.in_range(startDate, endDate)).
     filter( (event) => event.get('location_type') is 'international' or event.get('country') == country ).
+    filter( (event) => _.contains(subkasts, event.get('subkast') )).
     first(howManyEvents).
     value()
 
