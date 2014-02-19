@@ -336,7 +336,7 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     return -1 if date1 < date2
 
   addEventToBlock: (date, event) =>
-    return if not event.inFuture()
+    return if not (event.inFuture() or event.isOnDate(moment()))
     block = @find( (block) => block.isDate(date))
     if not block
       block = new FK.Models.EventBlock

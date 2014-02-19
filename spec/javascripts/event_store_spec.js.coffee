@@ -65,7 +65,7 @@ describe "Event Store", ->
       @blocks = @store.blocks
 
     it "should have the earliest event date as the date of the first block", ->
-      expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().add('days').format('YYYY-MM-DD'))
+      expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().format('YYYY-MM-DD'))
 
     it "should have the latest event date as the date of the last block", ->
       expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 3).format('YYYY-MM-DD'))
