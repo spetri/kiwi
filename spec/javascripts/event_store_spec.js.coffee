@@ -49,6 +49,15 @@ describe "Event Store", ->
         extras = _.without(countries, "CA")
         expect(extras.length).toBe(0)
 
+    describe "filter by subkasts", ->
+      beforeEach ->
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @store.filterBySubkasts(['HA', 'PRP', 'ST'])
+        @topRanked = @store.topRanked
+      
+      it "should only have top ranked events with the filtered subkasts", ->
+        expect(@topRanked.length).toBe(4)
+
   describe "blocks", ->
     beforeEach ->
       @store = new FK.EventStore events: FK.SpecHelpers.Events.BlockEvents
