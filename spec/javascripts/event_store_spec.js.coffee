@@ -180,3 +180,26 @@ describe "Event Store", ->
 
         extras = _.without(countries, "CA")
         expect(extras.length).toBe(0)
+
+    describe "filter by subkasts", ->
+      beforeEach ->
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @store.filterBySubkasts(['TVM', 'ST', 'HA'])
+        @blocks = @store.blocks
+
+      it "should only have blocks that contain events with the filtered subkasts", ->
+        expect(@blocks.length).toBe(5)
+
+      it "should only have events in blocks that have one of the fitlered subkasts", ->
+        expect(@blocks.at(0).events.length).toBe(1)
+
+      it "should not have any events of another subkast", ->
+        subkasts = []
+        @blocks.each((block) =>
+          block.events.each( (event) =>
+            subkasts.push event.get('subkast')
+          )
+        )
+
+        extras = _.without(subkasts, 'TVM', 'ST', 'HA')
+        expect(extras.length).toBe(0)
