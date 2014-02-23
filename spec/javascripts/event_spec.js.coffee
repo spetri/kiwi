@@ -367,9 +367,9 @@ describe "Event", ->
       expect(@topEvents[1].get('name')).toBe('event 6')
 
 describe 'event list', ->
-  describe 'sorting', ->
+  describe 'top ranked sorting', ->
     beforeEach ->
-      @events = new FK.Collections.BaseEventList()
+      @events = new FK.Collections.TopRankedEventList()
       @events.reset [
         { upvotes: 2, datetime: moment().add(hours: 4), name: 'Google Day' }
         { upvotes: 6, datetime: moment().add(hours: -2), name: 'Groundhog Day' }

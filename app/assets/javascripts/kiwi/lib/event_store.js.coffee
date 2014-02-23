@@ -3,14 +3,13 @@ class FK.EventStore extends Marionette.Controller
     options.events = [] if options.events is null
     @events = new FK.Collections.EventList()
     @blocks = new FK.Collections.EventBlockList()
-    @topRanked = new FK.Collections.BaseEventList()
+    @topRanked = new FK.Collections.TopRankedEventList()
 
     @howManyDaysInBlocks = 3
     @country = 'CA'
     @subkasts = _.keys(FK.Data.subkastOptions)
 
     @listenTo @events, 'sync', @resetTopRanked
-    @listenToOnce @events, 'sync', @startAddListeners
     @listenTo @events, 'add', @addEventToBlock
     @listenTo @blocks, 'change:event_limit', @loadNextEventsForBlock
 
@@ -18,9 +17,6 @@ class FK.EventStore extends Marionette.Controller
 
   fetchStartupEvents: () =>
     @events.fetchStartupEvents(10, 3, 12)
-
-  startAddListeners: () =>
-    @listenTo @events, 'add', @resetTopRanked
 
   loadNextEvents: (howManyMoreEvents) =>
     date = @blocks.last().relativeDate().add('days', 1)

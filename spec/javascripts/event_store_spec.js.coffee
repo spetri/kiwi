@@ -21,7 +21,7 @@ describe "Event Store", ->
     it "should include events that were set for earlier today", ->
       expect(@topRanked.pluck('name')).toContain('event 2a')
 
-    describe "when adding an event", ->
+    xdescribe "when adding an event", ->
       beforeEach ->
         @store.events.add upvotes: 20, datetime: moment().add('days', 5)
 
