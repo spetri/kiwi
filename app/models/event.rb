@@ -96,17 +96,13 @@ class Event
     end
   end
 
-  def self.get_events_by_date(startDatetime, howMany=0, skip=0)
-    endDatetime = startDatetime + 1.day
-    self.all.any_of(
-                    { is_all_day: false, datetime: (startDatetime..endDatetime) },
-                    { is_all_day: true, local_date: startDatetime.beginning_of_day }
-                   ).
-             order_by([:upvote_count, :desc], [:datetime, :asc]).skip(skip).limit(howMany)
-  end
-
-  def self.top_ranked(howMany, startDatetime, endDatetime)
-    self.all.where({datetime: (startDatetime..endDatetime) }).order_by([:upvote_count, :desc]).limit(howMany)
+  def self.get_starting_events(datetime, minimum, eventsPerDay, topRanked)
+    listEvents = self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
+    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days)
+    events = listEvents.concat topEvents
+    events.uniq!
+    events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }
+    return events
   end
 
   def self.get_events_after_date(datetime, howMany=0)
@@ -115,35 +111,38 @@ class Event
 
   def self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
     events = []
-    eventCount = 0
     lookupDatetime = datetime
     lastDate = self.get_last_date
 
-    while eventCount < minimum && ( not lookupDatetime.to_date === lastDate.next_day.to_date ) do
-      eventsOnDay = self.get_events_by_date(lookupDatetime, eventsPerDay)
+    while events.size < minimum && ( not lookupDatetime.to_date === lastDate ) do
 
-      if Array(eventsOnDay).size > 0
-        events.concat eventsOnDay
-        eventCount += Array(eventsOnDay).size
-      end
-
+      events.concat self.get_events_by_date(lookupDatetime, eventsPerDay)
       lookupDatetime = lookupDatetime.next_day
+
     end
 
     events
+  end
+
+  def self.get_events_by_date(startDatetime, howMany=0, skip=0)
+    endDatetime = startDatetime + 1.day
+    self.get_events_by_range(startDatetime, endDatetime, 0, howMany, skip)
   end
 
   def self.count_events_by_date(datetime)
     self.get_events_by_date(datetime).size
   end
 
-  def self.get_starting_events(datetime, minimum, eventsPerDay, topRanked)
-    listEvents = self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
-    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days)
-    events = listEvents.concat topEvents
-    events.uniq!
-    events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }
-    return events
+  def self.top_ranked(howMany, startDatetime, endDatetime)
+    self.get_events_by_range(startDatetime, endDatetime, 0, howMany)
+  end
+
+  def self.get_events_by_range(startDatetime, endDatetime, zone_offset, howMany=0, skip=0)
+    self.all.any_of(
+                    { is_all_day: false, datetime: (startDatetime..endDatetime) },
+                    { is_all_day: true, local_date: startDatetime.beginning_of_day }
+                   ).
+    order_by([:upvote_count, :desc]).skip(skip).limit(howMany)
   end
 
   def self.get_last_date
