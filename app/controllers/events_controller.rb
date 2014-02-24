@@ -33,6 +33,12 @@ class EventsController < ApplicationController
       @event.image_from_url(event_params[:url])
     end
 
+    if @event.is_all_day == "true" or @event.is_all_day == true
+      @event.is_all_day = true
+    else
+      @event.is_all_day = false
+    end
+
     respond_to do |format|
       if @event.save
         format.json { render action: 'show', status: :created, location: @event }
@@ -65,6 +71,13 @@ class EventsController < ApplicationController
  
     @event.update_attributes(params)
 
+    if @event.is_all_day == "true" or @event.is_all_day == true
+      @event.is_all_day = true
+    else
+      @event.is_all_day = false
+    end
+
+
     respond_to do |format|
       if @event.update(params)
         format.json { render action: 'show', status: :ok, location: @event }
@@ -82,15 +95,19 @@ class EventsController < ApplicationController
   end
 
   def startup_events
-    @events = Event.get_starting_events(DateTime.now(), params[:howManyTopRanked].to_i, params[:howManyEventsPerDay].to_i, params[:howManyEventsMinimum].to_i)
+    @events = Event.get_starting_events(DateTime.now.beginning_of_day.utc, params[:howManyEventsMinimum].to_i, params[:howManyEventsPerDay].to_i, params[:howManyTopRanked].to_i)
   end
 
   def events_by_date
-    @events = Event.get_events_by_date(Date.parse(params[:date]), params[:howManyEvents], params[:skip])
+    @events = Event.get_events_by_date(DateTime.parse(params[:datetime]), params[:howManyEvents].to_i, params[:skip].to_i)
   end
 
   def events_after_date
-    @events = Event.get_events_after_date(Date.parse(params[:date]), params[:howManyEvents])
+    @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:howManyEvents].to_i)
+  end
+
+  def count_events_by_date
+    @count = Event.count_events_by_date(DateTime.parse(params[:datetime]))
   end
 
   private
@@ -117,10 +134,12 @@ class EventsController < ApplicationController
                     :tv_time,
                     :creation_timezone,
                     :local_time,
+                    :local_date,
                     :description,
                     :have_i_upvoted,
                     :country,
-                    :location_type
+                    :location_type,
+                    :subkast
                    )
     end
 end

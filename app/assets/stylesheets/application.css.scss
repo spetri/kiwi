@@ -12,8 +12,65 @@
  *= require_tree .
  */
 
+
+/* navbar */
+.navbar {
+  a.navbar-brand {
+    display: block;
+    overflow: hidden;
+    text-indent: -999px;
+    margin-left: 10px;
+    background: url('/images/logo.png') top left no-repeat;
+    width: 220px;
+  }
+  ul.nav a {
+    color: white !important;
+    cursor: pointer;
+  }
+
+  .filter-region {
+    position: fixed;
+    top: 50px;
+    z-index: 1000;
+
+    &.country {
+      left: 230px;
+    }
+    &.subkast {
+      left: 468px;
+    }
+  }
+
+  .filter {
+    background-color: #efefef;
+    border: solid #cecece 1px;
+    padding: 5px;
+
+    div.prompt {
+      padding: 5px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    &.country-filter {
+      width: 215px;
+    }
+  }
+}
+
 /* home */
+
+#home-page {
+  margin-left: 30px;
+}
+
 .event-block {
+  margin-bottom: 20px;
   h4 {
     font-weight: bold;
   }
@@ -23,18 +80,23 @@
   }
 
   .btn {
+    width: 100%;
     border-radius: 0px;
     margin: 0px auto;
   }
 }
 
 .events {
+  background-color: #f7f7f7;
   padding: 10px 15px;
 }
 
 .event {
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   .upvote-container {
+    height: 60px;
+    padding-top: 6px;
     margin-right: 14px;
     width: 14px;
     color: #303030;
@@ -69,6 +131,7 @@
     margin-right: 10px;
   }
   .meta-container {
+    width: 450px;
     .event-meta {
       font-size: 13px;
       color: #555555;
@@ -82,19 +145,9 @@
   }
 }
 
-/* navbar */
-a.navbar-brand { 
-  display: block;
-  overflow: hidden;
-  text-indent: -999px;
-  margin-left: 10px;
-  background: url('/images/logo.png') top left no-repeat;
-  width: 220px;
-} 
-
-#main-region {
-  margin: 0 auto;
-  float:none;
+.event-form.col-md-8 {
+  float: none;
+  margin: 0px auto;
 }
 
 /* event management */
@@ -103,6 +156,9 @@ a.navbar-brand {
 }
 
 .top-ranked {
+  padding: 5px 15px;
+  margin-top: 38px;
+  background-color: #f7f7f7;
   h5 {
     font-weight: bold;
   }
@@ -213,6 +269,11 @@ a.navbar-brand {
       }
     }
   }
+}
+
+.event-page.col-md-8 {
+  float: none;
+  margin: 0px auto;
 }
 
 .event-card {

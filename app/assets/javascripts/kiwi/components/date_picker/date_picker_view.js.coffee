@@ -2,29 +2,31 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
   class DatePicker.DatePickerView extends Marionette.ItemView
     template: FK.Template 'date_picker'
     events:
-      'change input,select': 'pickerChanged'
+      'change [name="date"],[name="hours"],[name="minutes"],[name="ampm"]': 'updateDateTime'
+      'change [name="time_format"]': 'updateTimeFormat'
+      'change [name="is_all_day"]': 'updateAllDay'
 
-    modelEvents:
-      'change:is_all_day': 'updateTimeStatus'
-      'change:datetime':   'updateTime'
-      'change:time_format':'updateTimeFormat'
-
-    pickerChanged: (e) =>
-      @updateModel()
-
-    updateModel: =>
-      is_all_day  = @$('input[name=is_all_day]:checked').val()
-      time_format = @$('input[name=time_format]:checked').val()
+    updateDateTime: =>
       date = @$('input[name=date]').val()
       time = "#{@$('select[name=hours]').val()}:#{@$('select[name=minutes]').val()} #{@$('select[name=ampm]').val()}"
-      @model.set(
-        datetime: moment("#{date} #{time}"),
-        is_all_day: is_all_day,
-        time_format: time_format)
+      @model.set('datetime', moment("#{date} #{time}")) if date and time
 
-    updateTimeStatus: =>
+    updateTimeFormat: =>
+      time_format = @$('input[name=time_format]:checked').val()
+      @model.set('time_format', time_format)
+
+    updateAllDay: =>
+      is_all_day = @$('input[name=is_all_day]').prop('checked')
+      @model.set('is_all_day', is_all_day)
+
+    modelEvents:
+      'change:is_all_day': 'refreshAllDay'
+      'change:datetime':   'refreshTime'
+      'change:time_format':'refreshTimeFormat'
+
+    refreshAllDay: =>
       selector = @$('input[name=time_format],select[name=hours],select[name=minutes],select[name=ampm],select[name=time_type]')
-      if @model.is_all_day()
+      if @model.isAllDay()
         selector.attr('disabled','disabled')
         @$('.timedisplay').hide()
         @$('[name="is_all_day"]').attr('checked', 'checked')
@@ -34,25 +36,27 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         @$('[name="is_all_day"]').removeAttr('checked')
         @updateTimeFormat()
 
-    updateTime: =>
-      @updateTimeDisplay()
+    refreshTime: =>
+      return if not @model.has('datetime')
+      @refreshTimeDisplay()
       @$('[name="hours"]').val @model.get('local_hour')
       @$('[name="minutes"]').val @model.get('local_minute')
       @$('[name="ampm"]').val @model.get('local_ampm')
-      @$('input[name="date"]').val(this.model.get('datetime').format('MM/DD/YYYY')) if @model.get('datetime')
+      @$('input[name="date"]').val(this.model.get('fk_datetime').format('MM/DD/YYYY'))
 
-    updateTimeDisplay: =>
+    refreshTimeDisplay: =>
+      return if not @model.has('datetime')
       @$('.time-display-value').text(@model.get('time'))
-      @$('.status').text(@model.get('datetime').format('ddd MMM DD YYYY HH:mm:ss')) if @model.get('datetime')
+      @$('.status').text(@model.get('datetime').format('ddd MMM DD YYYY HH:mm:ss'))
 
-    updateTimeFormat: =>
+    refreshTimeFormat: =>
       @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').removeAttr('checked', 'checked')
       @$('[name="time_format"][value="' + @model.get('time_format') + '"]').attr('checked', 'checked')
-      @updateTimeDisplay()
+      @refreshTimeDisplay()
 
     onRender: () =>
       date = @model.get('datetime')
       @$('input[name="date"]').datepicker()
-      @updateTimeStatus()
-      @updateTimeFormat()
-      @updateTime()
+      @refreshAllDay()
+      @refreshTime()
+      @refreshTimeFormat()

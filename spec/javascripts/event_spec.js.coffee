@@ -7,40 +7,221 @@ describe "Event", ->
     v = new FK.Models.Event()
     expect(v.get('country')).toEqual('US')
 
-  describe "when working with dates and times", ->
+  describe "date and time", ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+
+    describe "normal datetime", ->
+      describe "today in the future", ->
+        beforeEach ->
+          @event.set( datetime: moment().add(minutes: 1) )
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
+
+        it "should be on the current date", ->
+          expect(@event.isOnDate(moment())).toBeTruthy()
+
+        it "should provide the correct datetime date", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().clone().add(minutes: 1).format('YYYY-MM-DD'))
+
+        it "should provide the correct datetime time", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe(moment().clone().add(minutes: 1).format('HH:mm:SS'))
+
+        it "should provide the date in the forekast format", ->
+          expect(@event.get('dateAsString')).toEqual('Thursday, Jan 16th, 2014')
+
+        it "should provide the time in the forekast format", ->
+          expect(@event.get('timeAsString')).toEqual('12:01 PM')
+
+      describe "in the past", ->
+        beforeEach ->
+          @event.set( datetime: moment().add(minutes : -1))
+
+        it "should not be in the future", ->
+          expect(@event.inFuture()).toBeFalsy()
+
+        it "should provide the correct datetime time", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe(moment().add(minutes: -1).format('HH:mm:SS'))
+
+        it "should provide the correct time in the forekast format", ->
+          expect(@event.get('timeAsString')).toEqual('11:59 AM')
+
+      describe "days in the future", ->
+        beforeEach ->
+          @event.set( datetime: moment().add(days: 3))
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
+
+        it "should be on the date in the future", ->
+          expect(@event.isOnDate(moment().add(days: 3))).toBeTruthy()
+
+        it "should provide the correct datetime date", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add(days: 3).format('YYYY-MM-DD'))
+
+        it "should provide the date in the forekast format", ->
+          expect(@event.get('dateAsString')).toEqual('Sunday, Jan 19th, 2014')
+          
+    describe "all day events", ->
+      describe "today", ->
+        beforeEach ->
+          @event.set (datetime: moment(), is_all_day: true)
+
+        it "should be on today's date", ->
+          expect(@event.isOnDate(moment()))
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
+
+        it "should have a datetime at the start of today", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('00:00:00')
+
+        it "should have a datetime that is the same date as the date originally entered", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().format('YYYY-MM-DD'))
+
+        it "should have all day printed as the time string", ->
+          expect(@event.get('timeAsString')).toBe('All Day')
+
+        it "should have the current datetime date printed in the forekast format", ->
+          expect(@event.get('dateAsString')).toBe('Thursday, Jan 16th, 2014')
+
+      describe "in the past", ->
+        beforeEach ->
+          @event.set(datetime: moment().add( days: -1 ), is_all_day: true)
+
+        it "should be on yesterday's date", ->
+          expect(@event.isOnDate(moment().add( days: -1))).toBeTruthy()
+
+        it "should not be in the future", ->
+          expect(@event.inFuture()).toBeFalsy()
+
+        it "should have a datetime at the start of yesterday", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('00:00:00')
+
+        it "should have a datetime that is the same date as the date originally entered", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add( days: -1 ).format('YYYY-MM-DD'))
+
+      describe "days in the future", ->
+        beforeEach ->
+          @event.set(datetime: moment().add( days: 4 ), is_all_day: true)
+
+        it "should be on the future date date", ->
+          expect(@event.isOnDate(moment().add( days: 4))).toBeTruthy()
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
+
+        it "should have a datetime at the start of the day", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('00:00:00')
+
+        it "should have a datetime that is the same date as the date originally entered", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add( days: 4 ).format('YYYY-MM-DD'))
+
+    describe "tv time", ->
+      describe "today in the future pm", ->
+        beforeEach ->
+          @event.set(datetime: moment(), time_format: 'tv_show', local_time: '7:20 PM')
+
+        it "should be on today's date", ->
+          expect(@event.isOnDate(moment())).toBeTruthy()
+
+        it "should use the date of the event as the relative date", ->
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2014-01-16')
+
+        it "should use the time of the event as the relative time", ->
+          expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('19:20:00')
+
+        it "should use eastern time as the relative timezone", ->
+          expect(@event.get('fk_datetime').format('ZZ')).toBe('-0500')
+
+        it "should be in the future", ->
+          expect(@event.inFuture()).toBeTruthy()
+
+        it "should have a time in the fk format", ->
+          expect(@event.get('timeAsString')).toBe('7:20/6:20c')
+
+        it "should have the fk date format for the as date string", ->
+          expect(@event.get('dateAsString')).toBe('Thursday, Jan 16th, 2014')
+
+        describe "today in the future am", ->
+          beforeEach ->
+            @event.set(datetime: moment(), time_format: 'tv_show', local_time: '10:00 AM')
+
+          it "should have a time in the fk format", ->
+            expect(@event.get('timeAsString')).toBe('10:00/9:00c')
+
+        describe "today in the future at 1pm", ->
+          beforeEach ->
+            @event.set(datetime: moment(), time_format: 'tv_show', local_time: '1:00 PM')
+
+          it "should have a time in the fk format", ->
+            expect(@event.get('timeAsString')).toBe('1:00/12:00c')
+
+      describe "in the past", ->
+        beforeEach ->
+          @event.set(datetime: moment().add( days: -1 ), time_format: 'tv_show', local_time: '11:00 PM')
+        it "should be on yesterday's date", ->
+          expect(@event.isOnDate(moment().add(days: -1))).toBeTruthy()
+
+        it "should not be in the future", ->
+          expect(@event.inFuture()).toBeFalsy()
+
+    describe "recurring events later today", ->
+      beforeEach ->
+        @event.set(datetime: moment(), time_format: 'recurring', local_time: '9:00 PM')
+
+      it "should be on the current date", ->
+        expect(@event.isOnDate(moment())).toBeTruthy()
+
+      it "should be in the future", ->
+        expect(@event.inFuture()).toBeTruthy()
+
+      it "should have today as its date", ->
+        expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2014-01-16')
+
+      it "should have a fixed time as its time", ->
+        expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('21:00:00')
+
+      it "should have a date in the fk format", ->
+        expect(@event.get('dateAsString')).toBe('Thursday, Jan 16th, 2014')
+
+      it "should have a time in the fk format", ->
+        expect(@event.get('timeAsString')).toBe('9:00 PM')
+
+    describe "recurring events in the past", ->
+      beforeEach ->
+        @event.set(datetime: moment().add(days: -2), time_format: 'recurring', local_time: '3:00 AM')
+
+      it "should be on the set date", ->
+        expect(@event.isOnDate(moment().add(days: -2))).toBeTruthy()
+
+      it "should not be in the future", ->
+        expect(@event.inFuture()).toBeFalsy()
+
+      it "should have the datetime as its date", ->
+        expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2014-01-14')
+
+      it "should have a fixed time as its time", ->
+        expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('03:00:00')
+
+      it "should have a date in the fk format", ->
+        expect(@event.get('dateAsString')).toBe('Tuesday, Jan 14th, 2014')
+
+      it "should have a time in the fk format", ->
+        expect(@event.get('timeAsString')).toBe('3:00 AM')
+ 
     it "can create a local time on set", ->
       event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
       expect(event.get('local_time')).toBe('1:00 PM')
-
-    it "can detect TV times", ->
-      v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 16:00 GMT-500")
-      expect(v.get('time')).toEqual('4/3c')
-      
-      v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 1:00 GMT-500")
-      expect(v.get('time')).toEqual('1/12c')
-      
-      v = new FK.Models.Event time_format: 'tv_show', datetime: moment("2013-12-12, 20:00 GMT+200")
-      expect(v.get('time')).toEqual('1/12c')
-
+    it "can create a local date on set", ->
+      event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
+      expect(event.get('local_date')).toBe('2013-12-12')
     it "can get a datetime in the local timezone without changing it", ->
       v = new FK.Models.Event
         datetime: moment().zone(0)
-      expect(v.in_my_timezone(v.get('datetime')).hour()).toBe(moment().hour())
-      expect(v.get('datetime').hour()).toBe(moment().zone(0).hour())
-
-    it "can detect if an event is in the future", ->
-      event = new FK.Models.Event
-        datetime: moment().add('seconds', 10)
-
-      expect(event.inFuture()).toBeTruthy()
-
-    it "can detect if an event with a recurring time format is in the future", ->
-      event = new FK.Models.Event
-        datetime: moment().toDate()
-        local_time: moment().add('hours', 4).format('h:mm A')
-        time_format: 'recurring'
-
-      expect(event.inFuture()).toBeTruthy()
+      expect(v.in_my_timezone(v.get('fk_datetime')).hour()).toBe(moment().hour())
+      expect(v.get('fk_datetime').hour()).toBe(12)
 
   describe "when upvoting", ->
     beforeEach ->
@@ -186,6 +367,28 @@ describe "Event", ->
       expect(@topEvents[1].get('name')).toBe('event 6')
 
 describe 'event list', ->
+  describe 'sorting', ->
+    beforeEach ->
+      @events = new FK.Collections.BaseEventList()
+      @events.reset [
+        { upvotes: 2, datetime: moment().add(hours: 4), name: 'Google Day' }
+        { upvotes: 6, datetime: moment().add(hours: -2), name: 'Groundhog Day' }
+        { upvotes: 4, datetime: moment().add(hours: -3), name: 'Moose Day' }
+        { upvotes: 9, datetime: moment().add(hours: -3), name: 'Koala Day' }
+        { upvotes: 6, datetime: moment(), name: 'Zoom day' }
+        { upvotes: 6, datetime: moment(), name: 'The event' }
+      ]
+
+    it "should have the event with the highest number of upvotes first", ->
+      expect(@events.at(0).get('name')).toBe('Koala Day')
+
+    it "should have the event with the next highest number of upvotes, and the earliest date next", ->
+      expect(@events.at(1).get('name')).toBe('Groundhog Day')
+
+    it "should have the rest of the events ordered by upvote", ->
+      expect(@events.at(4).get('name')).toBe('Moose Day')
+      expect(@events.at(5).get('name')).toBe('Google Day')
+
   describe 'fetching events', ->
     beforeEach ->
       @xhr = sinon.useFakeXMLHttpRequest()
@@ -206,7 +409,7 @@ describe 'event list', ->
       expect(@requests.length).toBe(1)
       expect(@requests[0].url).toBe('api/events/startupEvents?howManyTopRanked=10&howManyEventsPerDay=3&howManyEventsMinimum=10')
 
-    it "should be able to getch more events by a date", ->
+    it "should be able to fetch more events by a date", ->
       @events.reset([
         { _id: 1 }
         { _id: 2 }
@@ -269,7 +472,6 @@ describe 'event block', ->
   describe 'adding more events to a block', ->
     beforeEach ->
       @events = new FK.Collections.EventList(FK.SpecHelpers.Events.TodayEvents)
-      @block = new FK.Models.EventBlock()
 
     it "should be able to add some events to its events collection", ->
       @block.addEvents(new FK.Models.Event { _id: 1, datetime: moment().add('seconds', 2) })
@@ -287,18 +489,37 @@ describe 'event block', ->
       expect(@block.get('more_events_available')).toBeFalsy()
       expect(@block.get('event_limit')).toBe(4)
 
-    describe "adding events from the past", ->
-      beforeEach ->
-        @block.addEvents([
-          new FK.Models.Event { _id: 2, datetime: moment().add('seconds', 5) }
-          new FK.Models.Event { _id: 3, datetime: moment().subtract('seconds', 1) }
-        ])
+  describe "knowing how many events are in a block", ->
+    beforeEach ->
+      @block.set('date', moment().startOf('day'))
+      @xhr = sinon.useFakeXMLHttpRequest()
+      @requests = []
+      @xhr.onCreate = (xhr) =>
+        @requests.push xhr
 
-      it "should not have every event added", ->
-        expect(@block.events.length).toBe(1)
+      describe "add events then respond", ->
+        beforeEach ->
+          @block.addEvents FK.SpecHelpers.Events.TodayEvents
+          @block.checkEventCount()
+          @requests[0].respond(200, "Content-Type": 'application/json', JSON.stringify({count: 3}))
 
-      it "should only have events after now", ->
-        expect(@block.events.first().get('_id')).toBe(2)
+        it "should be able to check how many events are expected in this block", ->
+          expect(@block.get('event_max_count')).toBe(3)
+
+        it "should realize that there are no more events for this block", ->
+          expect(@block.get('more_events_available')).toBeFalsy()
+
+      describe "respond then add events", ->
+        beforeEach ->
+          @block.checkEventCount()
+          @requests[0].respond(200, "Content-Type": 'application/json', JSON.stringify({count: 3}))
+          @block.addEvents FK.SpecHelpers.Events.TodayEvents
+
+        it "should be able to check how many events are expected in this block", ->
+          expect(@block.get('event_max_count')).toBe(3)
+
+        it "should realize that there are no more events for this block", ->
+          expect(@block.get('more_events_available')).toBeFalsy()
 
 describe "event block list", ->
   beforeEach ->

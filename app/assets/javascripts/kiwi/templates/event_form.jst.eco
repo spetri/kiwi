@@ -1,36 +1,40 @@
-<div class="">
-  <h3>Add Event!</h3>
-  <form class="well" >
-      <div class="form-group well">
-        <label class="col-lg-3" for="name">1. Name of event</label>
-        <input type="text" name="name" id="name"></input>
-      </div>
-      <div class="form-group well">
-        <label class="col-lg-3" for="location">2. Location</label>
-        <label>
-          <input type="radio" name="location_type" id="" value="international" checked>
-          This event can be experienced by an <b>international</b> audience.
-        </label>
-        <label class="col-lg-offset-3">
-          <input type="radio" name="location_type" id="" value="national" >
-          This event can be experienced in a <b>specific country</b>.
-        </label>
-        <select class="col-lg-offset-3" name="country"></select>
-      </div>
-      <div class="form-group well">
-        <label class="col-lg-3" for="location">3. Date and Time</label>
-        <div id="datetime-region"></div>
-      </div>
-      <div class="form-group well">
-	      <label class="col-lg-3"> 4. Picture</label>
-        <div id="image-region" class="col-lg-6"></div>
-        <div class="clearfix"></div>
-      </div>
-      <div class="form-group well">
-        <label class="col-lg-3"> 5. Description</label>
-        <textarea name="description" cols="80" rows="3"></textarea>
-      </div>
-      <button class="save pull-right btn btn-success">Save</button>
+<h3>Add Event!</h3>
+<form class="well" >
+    <div class="form-group well">
+      <label class="col-lg-3" for="name">1. Name of event</label>
+      <input type="text" name="name" id="name"></input>
+    </div>
+    <div class="form-group well">
+      <label class="col-lg-3">2. Subkast</label>
+      <select name="subkast">
+        <option value="-">----</option>
+      </select>
+    </div>
+    <div class="form-group well">
+      <label class="col-lg-3" for="location">3. Location</label>
+      <label>
+        <input type="radio" name="location_type" id="" value="international" checked>
+        This event can be experienced by an <b>international</b> audience.
+      </label>
+      <label class="col-lg-offset-3">
+        <input type="radio" name="location_type" id="" value="national" >
+        This event can be experienced in a <b>specific country</b>.
+      </label>
+      <select class="col-lg-offset-3" name="country"></select>
+    </div>
+    <div class="form-group well">
+      <label class="col-lg-3" for="location">4. Date and Time</label>
+      <div id="datetime-region"></div>
+    </div>
+    <div class="form-group well">
+      <label class="col-lg-3"> 5. Picture</label>
+      <div id="image-region" class="col-lg-6"></div>
       <div class="clearfix"></div>
-  </form>
-</div>
+    </div>
+    <div class="form-group well">
+      <label class="col-lg-3"> 6. Description</label>
+      <textarea name="description" cols="80" rows="3"></textarea>
+    </div>
+    <button class="save pull-right btn btn-success">Save</button>
+    <div class="clearfix"></div>
+</form>

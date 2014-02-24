@@ -2,24 +2,84 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
   @addInitializer () ->
     @listenTo App, 'start', @show
+    @currentUser = App.request 'currentUser'
+
+    @navbarModel = new Navbar.NavbarModel
+      username: @currentUser.get('username')
+    @navbarModel.set('username', null) if not @currentUser.get('logged_in')
+
+    @layout = new Navbar.NavbarLayout
+    @navbarView = new Navbar.NavbarView
+      model: @navbarModel
+    @countryFilterView = new Navbar.CountryFilterView
+      model: @navbarModel
+    @subkastFilterView = new Navbar.SubkastFilterView
+      model: @navbarModel
+
+    @navbarView.on 'clicked:filter:country', @toggleCountryFilterView
+    @navbarView.on 'clicked:filter:subkast', @toggleSubkastFilterView
+
+    @listenTo @countryFilterView, 'country:save', @filterCountry
+    @listenTo @countryFilterView, 'country:save', @toggleCountryFilterView
+    @listenTo @subkastFilterView, 'subkasts:save', @filterSubkasts
+    @listenTo @subkastFilterView, 'subkasts:save', @toggleSubkastFilterView
+
+    @layout.on 'show', =>
+      @layout.navbarRegion.show @navbarView
 
   @show = () ->
-    @close() if @view
+    App.navbarRegion.show @layout
 
-    @view = new Navbar.NavbarView
-      model: App.request 'currentUser'
+  @toggleCountryFilterView = () =>
+    if @layout.countryFilterRegion.currentView
+      @layout.countryFilterRegion.close()
+    else
+      @layout.countryFilterRegion.show @countryFilterView
+      @countryFilterView.delegateEvents()
 
-    App.navbarRegion.show @view
+  @toggleSubkastFilterView = () =>
+    if @layout.subkastFilterRegion.currentView
+      @layout.subkastFilterRegion.close()
+    else
+      @layout.subkastFilterRegion.show @subkastFilterView
+      @subkastFilterView.delegateEvents()
+
+  @filterSubkasts = (subkasts) =>
+    @navbarModel.set('subkasts', subkasts)
+    @trigger 'filter:subkasts', subkasts
+
+  @filterCountry = (country) =>
+    @navbarModel.set('country', country)
+    @navbarModel.set('countryName', App.request('countryName', country))
+    @trigger 'filter:country', country
 
   @close = () ->
     @view.close()
 
+  class Navbar.NavbarModel extends Backbone.Model
+    defaults:
+      username: null
+      country: 'CA'
+      countryName: 'Canada'
+      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'HA', 'OTH']
+      
+  class Navbar.NavbarLayout extends Marionette.Layout
+    template: FK.Template('navbar_layout')
+    regions:
+      navbarRegion: '#navbar-region'
+      countryFilterRegion: '#country-filter-region'
+      subkastFilterRegion: '#subkast-filter-region'
+    className: 'navbar-container'
+
   class Navbar.NavbarView extends Backbone.Marionette.ItemView
-    className: "navbar-inner"
+    className: "navbar navbar-inverse navbar-fixed-top"
     template: FK.Template('navbar')
 
+    triggers:
+      'click [data-option="country"]': 'clicked:filter:country'
+      'click [data-option="subkast"]': 'clicked:filter:subkast'
+
     initialize: () =>
-      @listenTo App.vent, 'container:all', @refreshHighlightAll
       @listenTo App.vent, 'container:new', @refreshHighlightNew
       @listenTo App.vent, 'container:show', @refreshHighlight
 
@@ -27,9 +87,22 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       @$('[data-option]').removeClass('active')
       @$('[data-option="' + option + '"]').addClass('active')
 
-    refreshHighlightAll: () =>
-      @refreshHighlight 'all'
-
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
 
+    modelEvents:
+      'change:subkasts': 'refreshSubkastTitle'
+      'change:countryName': 'refreshCountryTitle'
+
+    refreshSubkastTitle: (model, subkasts) =>
+      if (subkasts.length == 6)
+        @$('.subkast-title').html('All Subkasts')
+      else
+        @$('.subkast-title').html('Some Subkasts Removed')
+
+    refreshCountryTitle: (model, country) =>
+      @$('.country-title').html(country)
+
+    onRender: =>
+      @refreshSubkastTitle(@model, @model.get('subkasts'))
+      @refreshCountryTitle(@model, @model.get('countryName'))

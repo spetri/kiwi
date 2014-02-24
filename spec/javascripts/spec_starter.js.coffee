@@ -38,6 +38,7 @@ FK.SpecHelpers =
     UpvotedEvents: [
         { name: 'event 1', upvotes: 9, datetime: moment().subtract('days', 1)}
         { name: 'event 2', upvotes: 8, datetime: moment().subtract('days', 1) }
+        { name: 'event 2a', upvotes: 8, datetime: moment().subtract('hours', 1) }
         { name: 'event 3', upvotes: 7, datetime: moment().add('days', 1) }
         { name: 'event 4', upvotes: 9, datetime: moment() }
         { name: 'event 5', upvotes: 11, datetime: moment().add('days', 1) }

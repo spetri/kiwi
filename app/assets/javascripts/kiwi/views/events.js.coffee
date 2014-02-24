@@ -58,6 +58,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "container"
+    id: "home-page"
     regions:
       event_block: '#event-blocks-region'
       sidebar: '#sidebar-region'
