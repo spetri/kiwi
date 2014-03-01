@@ -15,6 +15,8 @@ FactoryGirl.define do
     name
     datetime 1.day.from_now
     upvote_names []
+    country "CA"
+    subkast "ST"
     is_all_day false
 
     trait :with_2_upvotes do

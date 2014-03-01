@@ -96,27 +96,27 @@ class Event
     end
   end
 
-  def self.get_starting_events(datetime, minimum, eventsPerDay, topRanked)
-    listEvents = self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
-    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days)
+  def self.get_starting_events(datetime, zone_offset, country, subkasts, minimum, eventsPerDay, topRanked)
+    listEvents = self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
+    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days, 300, "CA", ["ST"])
     events = listEvents.concat topEvents
     events.uniq!
     events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }
     return events
   end
 
-  def self.get_events_after_date(datetime, howMany=0)
-    self.get_enough_events_from_day(datetime, howMany, 3)
+  def self.get_events_after_date(datetime, zone_offset, country, subkasts, howMany=0)
+    self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, howMany, 3)
   end
 
-  def self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
+  def self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
     events = []
     lookupDatetime = datetime
     lastDate = self.get_last_date
 
     while events.size < minimum && ( not lookupDatetime.to_date === lastDate ) do
 
-      events.concat self.get_events_by_date(lookupDatetime, eventsPerDay)
+      events.concat self.get_events_by_date(lookupDatetime, zone_offset, country, subkasts, eventsPerDay)
       lookupDatetime = lookupDatetime.next_day
 
     end
@@ -124,24 +124,28 @@ class Event
     events
   end
 
-  def self.get_events_by_date(startDatetime, howMany=0, skip=0)
+  def self.get_events_by_date(startDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
     endDatetime = startDatetime + 1.day
-    self.get_events_by_range(startDatetime, endDatetime, 0, howMany, skip)
+    self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany, skip)
   end
 
-  def self.count_events_by_date(datetime)
-    self.get_events_by_date(datetime).size
+  def self.count_events_by_date(datetime, zone_offset, country, subkasts)
+    self.get_events_by_date(datetime, zone_offset, country, subkasts).size
   end
 
-  def self.top_ranked(howMany, startDatetime, endDatetime)
-    self.get_events_by_range(startDatetime, endDatetime, 0, howMany)
+  def self.top_ranked(howMany, startDatetime, endDatetime, zone_offset, country, subkasts)
+    self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany)
   end
 
-  def self.get_events_by_range(startDatetime, endDatetime, zone_offset, howMany=0, skip=0)
+  def self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
+    startDate = (startDatetime - zone_offset.minutes).beginning_of_day
+    endDate = (endDatetime - zone_offset.minutes).beginning_of_day
     self.all.any_of(
                     { is_all_day: false, datetime: (startDatetime..endDatetime) },
-                    { is_all_day: true, local_date: startDatetime.beginning_of_day }
+                    { is_all_day: true, local_date: (startDate..endDate) }
                    ).
+                   any_of({country: country, location_type: 'international'}).
+                   any_in( { subkast: subkasts }).
     order_by([:upvote_count, :desc]).skip(skip).limit(howMany)
   end
 

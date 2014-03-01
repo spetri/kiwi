@@ -263,6 +263,9 @@ class FK.Models.EventBlock extends Backbone.Model
     $.get(
       '/api/events/countByDate',
       datetime: @relativeDate().format('YYYY-MM-DD HH:mm:SS'),
+      zone_offset: moment().zone()
+      country: @get('country')
+      subkasts: @get('subkasts')
       (resp) =>
         @set('event_max_count', resp.count)
     )
@@ -293,29 +296,39 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
   url:
     "/events/"
 
-  fetchStartupEvents: (howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
+  fetchStartupEvents: (country, subkasts, howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
     @fetch
       url: 'api' + @url + 'startupEvents'
       data:
+        datetime: moment().format('YYYY-MM-DD HH:mm:ss')
+        zone_offset: moment().zone()
+        country: country
+        subkasts: subkasts
         howManyTopRanked: howManyTopRanked
         howManyEventsPerDay: howManyEventsPerDay
         howManyEventsMinimum: howManyEventsMinimum
 
-  fetchMoreEventsByDate: (date, howManyEvents, skip) =>
+  fetchMoreEventsByDate: (date, country, subkasts, howManyEvents, skip) =>
     @fetch
       url: 'api' + @url + 'eventsByDate'
       remove: false
       data:
         datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')
+        zone_offset: moment().zone()
+        country: country
+        subkasts: subkasts
         howManyEvents: howManyEvents
         skip: skip
 
-  fetchMoreEventsAfterDate: (date, howManyEvents) =>
+  fetchMoreEventsAfterDate: (date, country, subkasts, howManyEvents) =>
     @fetch
       url: 'api' + @url + 'eventsAfterDate'
       remove: false
       data:
         datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')
+        zone_offset: moment().zone()
+        country: country
+        subkasts: subkasts
         howManyEvents: howManyEvents
 
   eventsByDate: (date, howManyEvents, skip = []) =>
