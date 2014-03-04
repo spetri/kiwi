@@ -9,6 +9,9 @@ class FK.EventStore extends Marionette.Controller
     @country = 'CA'
     @subkasts = _.keys(FK.Data.subkastOptions)
 
+    @country = options.country if options.country
+    @subkasts = options.subkasts if options.subkasts
+
     @listenTo @events, 'sync', @resetTopRanked
     @listenTo @events, 'add', @addEventToBlock
     @listenTo @blocks, 'change:event_limit', @loadNextEventsForBlock
@@ -16,7 +19,7 @@ class FK.EventStore extends Marionette.Controller
     @events.add options.events
 
   fetchStartupEvents: () =>
-    @events.fetchStartupEvents(@country, @subkast, 10, 3, 12)
+    @events.fetchStartupEvents(@country, @subkasts, 10, 3, 12)
 
   loadNextEvents: (howManyMoreEvents) =>
     date = @blocks.last().relativeDate().add('days', 1)
@@ -46,7 +49,7 @@ class FK.EventStore extends Marionette.Controller
   addEventToBlock: (event) =>
     return if (event.get('country') isnt @country and event.get('location_type') is 'national')
     return if (not _.contains(@subkasts, event.get('subkast')))
-    @blocks.addEventToBlock moment(event.get('fk_datetime').format('YYYY-MM-DD')), event
+    @blocks.addEventToBlock moment(event.get('fk_datetime').format('YYYY-MM-DD')), @country, @subkasts, event
 
   filterByCountry: (country) =>
     @country = country

@@ -32,17 +32,17 @@ FactoryGirl.define do
     end
 
     trait :in_1_week do
-      datetime 1.week.from_now 
+      datetime 1.week.from_now - 1.second
       local_date 1.week.from_now.to_date
     end
 
     trait :in_2_weeks do
-      datetime 2.week.from_now
+      datetime 2.week.from_now - 1.second
       local_date 2.week.from_now.to_date
     end
 
     trait :in_3_weeks do
-      datetime 3.week.from_now
+      datetime 3.week.from_now - 1.second
       local_date 3.week.from_now.to_date
     end
 

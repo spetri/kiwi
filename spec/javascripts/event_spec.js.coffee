@@ -541,14 +541,14 @@ describe "event block list", ->
   it "should be able to add events to a block by date", ->
     event = new FK.Models.Event
       datetime: moment().add('days', 1)
-    @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), event)
+    @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), 'CA', ['ST', 'SE'], event)
     expect(@blocks.get(1).events.length).toBe(1)
 
   describe "adding an event without a block already created", ->
     beforeEach ->
       event = new FK.Models.Event
         datetime : moment().add('days', 3)
-      @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), event)
+      @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), 'CA', ['ST', 'SE'], event)
 
     it "should have created a new block for the event", ->
       expect(@blocks.length).toBe(2)

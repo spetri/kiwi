@@ -98,7 +98,7 @@ class Event
 
   def self.get_starting_events(datetime, zone_offset, country, subkasts, minimum, eventsPerDay, topRanked)
     listEvents = self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
-    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days, 300, "CA", ["ST"])
+    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days, zone_offset, country, subkasts)
     events = listEvents.concat topEvents
     events.uniq!
     events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }
@@ -125,12 +125,12 @@ class Event
   end
 
   def self.get_events_by_date(startDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
-    endDatetime = startDatetime + 1.day
+    endDatetime = startDatetime + 1.day - 1.second
     self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany, skip)
   end
 
   def self.count_events_by_date(datetime, zone_offset, country, subkasts)
-    self.get_events_by_date(datetime, zone_offset, country, subkasts).size
+    Array(self.get_events_by_date(datetime, zone_offset, country, subkasts)).size
   end
 
   def self.top_ranked(howMany, startDatetime, endDatetime, zone_offset, country, subkasts)
@@ -144,8 +144,8 @@ class Event
                     { is_all_day: false, datetime: (startDatetime..endDatetime) },
                     { is_all_day: true, local_date: (startDate..endDate) }
                    ).
-                   any_of({country: country, location_type: 'international'}).
-                   any_in( { subkast: subkasts }).
+                   any_of({ country: country, location_type: 'international'}).
+                   any_in({ subkast: subkasts }).
     order_by([:upvote_count, :desc]).skip(skip).limit(howMany)
   end
 

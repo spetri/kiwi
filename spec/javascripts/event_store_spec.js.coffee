@@ -132,7 +132,7 @@ describe "Event Store", ->
 
     describe "increasing the number of blocks beyond the number of already fetched blocks", ->
       beforeEach ->
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents, country: 'CA', subkasts: ['ST', 'SE']
         @store.events.trigger "sync"
         @blocks = @store.blocks
         @xhr = sinon.useFakeXMLHttpRequest()
@@ -160,13 +160,19 @@ describe "Event Store", ->
           expect(@store.events.length).toBe(19)
 
         it "should be able to add more blocks after more events have come back from the server", ->
-          expect(@blocks.length).toBe(9)
+          expect(@blocks.length).toBe(8)
+
+        it "should create blocks with the filtering country", ->
+          expect(@blocks.last().get('country')).toBe('CA')
+
+        it "should create blocks with the filtering subkast", ->
+          expect(@blocks.last().get('subkasts')).toEqual(['ST', 'SE'])
 
         it "should have the events loaded into the newly created block", ->
-          expect(@blocks.last().events.length).toBe(3)
+          expect(@blocks.last().events.length).toBe(1)
 
         it "should have a date on the new event block", ->
-          expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 12).format('YYYY-MM-DD'))
+          expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 10).format('YYYY-MM-DD'))
 
     describe "filter by country", ->
       beforeEach ->

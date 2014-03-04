@@ -262,7 +262,7 @@ class FK.Models.EventBlock extends Backbone.Model
   checkEventCount: =>
     $.get(
       '/api/events/countByDate',
-      datetime: @relativeDate().format('YYYY-MM-DD HH:mm:SS'),
+      datetime: @relativeDate().format('YYYY-MM-DD HH:mm:ss'),
       zone_offset: moment().zone()
       country: @get('country')
       subkasts: @get('subkasts')
@@ -357,11 +357,13 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     return 0 if date1 == date2
     return -1 if date1 < date2
 
-  addEventToBlock: (date, event) =>
+  addEventToBlock: (date, country, subkasts, event) =>
     return if not (event.inFuture() or event.isOnDate(moment()))
     block = @find( (block) => block.isDate(date))
     if not block
       block = new FK.Models.EventBlock
         date: moment(date)
+        country: country
+        subkasts: _.clone(subkasts)
       @add block
     block.addEvents event
