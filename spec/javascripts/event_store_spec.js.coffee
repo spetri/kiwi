@@ -3,6 +3,8 @@ describe "Event Store", ->
   describe "top ranked events", ->
     beforeEach ->
       @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3)
+      @store.country = "CA"
+      @store.subkasts = ['ST', 'SE']
       @store.events.trigger "sync"
       @topRanked = @store.topRanked
 

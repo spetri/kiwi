@@ -32,6 +32,8 @@ class FK.EventStore extends Marionette.Controller
     if events.length < howManyMoreEvents
       @events.fetchMoreEventsByDate(
         date,
+        @country,
+        @subkasts,
         howManyMoreEvents - events.length,
         block.events.length + events.length
       ).done ( () =>
