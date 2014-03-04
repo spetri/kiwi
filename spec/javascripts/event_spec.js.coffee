@@ -449,10 +449,11 @@ describe 'event list', ->
         beforeEach ->
           @events.reset(FK.SpecHelpers.Events.FilterableEvents)
 
-        it "should only get events that match the filter by country", ->
-          expect(@events.eventsByDate(moment(), "CA", ['ST', 'SE'], 3).length).toBe(2)
+        it "should only get events that match the filter by country or are international", ->
+          expect(@events.eventsByDate(moment(), "CA", ['ST', 'SE'], 4).length).toBe(3)
+
         it "should only get events that match the filter by country and subkast", ->
-          expect(@events.eventsByDate(moment(), "CA", ['ST'], 3).length).toBe(1)
+          expect(@events.eventsByDate(moment(), "CA", ['ST'], 3).length).toBe(2)
         
       
 describe 'event block', ->

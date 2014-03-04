@@ -334,7 +334,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
   eventsByDate: (date, country, subkasts, howManyEvents, skip = []) =>
     @chain().
     filter( (event) -> event.isOnDate(date) ).
-    filter( (event) -> event.get('country') == country ).
+    filter( (event) -> event.get('location_type') is 'international' or event.get('country') == country ).
     filter( (event) -> _.contains(subkasts, event.get('subkast')) ).
     reject( (event) -> _.contains(_.map(skip, (event) -> event.get('_id')), event.get('_id')) ).
     first(howManyEvents).

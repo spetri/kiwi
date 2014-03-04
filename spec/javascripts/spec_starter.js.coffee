@@ -72,8 +72,8 @@ FK.SpecHelpers =
         { name: 'event 15', upvotes: 5, datetime: moment().add('days', 3), country: 'CA', location_type: 'national', subkast: 'TVM' }
     ]
     FilterableEvents: [
-      { name: 'event 1', country: 'CA', subkast: 'ST', datetime: moment() }
-      { name: 'event 2', country: 'US', subkast: 'ST', datetime: moment() }
-      { name: 'event 3', country: 'US', subkast: 'SE', datetime: moment() }
-      { name: 'event 4', country: 'CA', subkast: 'SE', datetime: moment() }
+      { name: 'event 1', country: 'CA', subkast: 'ST', datetime: moment(), location_type: 'national' }
+      { name: 'event 2', country: 'US', subkast: 'ST', datetime: moment(), location_type: 'international' }
+      { name: 'event 3', country: 'US', subkast: 'SE', datetime: moment(), location_type: 'national' }
+      { name: 'event 4', country: 'CA', subkast: 'SE', datetime: moment(), location_type: 'national' }
     ]
