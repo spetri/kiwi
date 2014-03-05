@@ -98,12 +98,12 @@ end
 
 desc 'Starts the application'
 task :start => :environment do
-  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin start -d -e production -p #{app_port}}
+  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin start -d -e production -p #{app_port} --servers 1}
 end
 
 desc 'Stops the application'
 task :stop => :environment do
-  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin stop -d -e production -p #{app_port}}
+  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin stop -d -e production -p #{app_port} --servers 1}
 end
 
 desc 'Restarts the application'
