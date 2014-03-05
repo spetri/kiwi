@@ -16,6 +16,7 @@ FactoryGirl.define do
     datetime 1.day.from_now
     upvote_names []
     country "CA"
+    location_type "national"
     subkast "ST"
     is_all_day false
 
@@ -53,6 +54,10 @@ FactoryGirl.define do
 
     trait :all_day do
       is_all_day true
+    end
+
+    trait :international do
+      location_type "international"
     end
   end
 end

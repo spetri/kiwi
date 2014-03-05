@@ -21,11 +21,12 @@ describe Event do
       before(:each) do
         create_list :event, 3, :in_1_week
         create_list :event, 2, :back_1_week
+        create :event, :in_1_week, :international
         @testTime = 1.week.from_now - 5.minutes
       end
 
       it "should be able to fetch events by date" do
-        Event.get_events_by_date(@testTime, 300, "CA", ["ST"]).size.should == 3
+        Event.get_events_by_date(@testTime, 300, "CA", ["ST"]).size.should == 4
       end
 
       it "should be able to limit the number of events fetched by date" do
@@ -33,7 +34,7 @@ describe Event do
       end
 
       it "should be able to skip a given number of events fetched by date" do
-        Array(Event.get_events_by_date(@testTime, 300, "CA", ["ST"], 0, 1)).size.should == 2
+        Array(Event.get_events_by_date(@testTime, 300, "CA", ["ST"], 0, 1)).size.should == 3
       end
 
       it "should be able to skip a given number of events and still limit correctly" do

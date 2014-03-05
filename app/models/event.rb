@@ -144,8 +144,8 @@ class Event
                     { is_all_day: false, datetime: (startDatetime..endDatetime) },
                     { is_all_day: true, local_date: (startDate..endDate) }
                    ).
-                   any_of({ country: country, location_type: 'international'}).
                    any_in({ subkast: subkasts }).
+                   and({ country: country, location_type: 'national'}).
     order_by([:upvote_count, :desc]).skip(skip).limit(howMany)
   end
 
