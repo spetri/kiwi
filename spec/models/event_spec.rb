@@ -52,6 +52,19 @@ describe Event do
       end
     end
 
+    describe "sorting" do
+      before(:each) do
+        create_list :event, 2, :in_1_week, :with_2_upvotes
+        create_list :event, 2, :in_1_week, :with_7_upvotes
+        create_list :event, 2, :in_1_week, :with_5_upvotes
+        @testTime = 1.week.from_now - 5.minutes
+      end
+
+      it "should be able to get the events with the most upvotes sorted first" do
+        Event.get_events_by_date(@testTime, 300, "CA", ["ST"])[0].upvote_count.should == 7
+      end
+    end
+
     describe "by top ranked" do
       before(:each) do
         create_list :event, 2
