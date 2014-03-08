@@ -140,13 +140,12 @@ class Event
   def self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
     startDate = (startDatetime - zone_offset.minutes).beginning_of_day
     endDate = (endDatetime - zone_offset.minutes).beginning_of_day
-    self.all.any_of(
-                    { is_all_day: false, datetime: (startDatetime..endDatetime) },
-                    { is_all_day: true, local_date: (startDate..endDate) }
-                   ).
-                   any_in({ subkast: subkasts }).
-                   and({ country: country, location_type: 'national'}).
-    order_by([:upvote_count, :desc]).skip(skip).limit(howMany)
+    self.all.any_of({ is_all_day: false, datetime: (startDatetime..endDatetime) }, { is_all_day: true, local_date: (startDate..endDate) }).
+             any_in({ subkast: subkasts }).
+             and({ country: country, location_type: 'national'}).
+             order_by([:upvote_count, :desc]).
+             skip(skip).
+             limit(howMany)
   end
 
   def self.get_last_date
