@@ -300,7 +300,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
     @fetch
       url: 'api' + @url + 'startupEvents'
       data:
-        datetime: moment().format('YYYY-MM-DD HH:mm:ss')
+        datetime: moment().startOf('day').add('minutes', moment().zone()).format('YYYY-MM-DD HH:mm:ss')
         zone_offset: moment().zone()
         country: country
         subkasts: subkasts

@@ -114,7 +114,7 @@ class Event
     lookupDatetime = datetime
     lastDate = self.get_last_date
 
-    while events.size < minimum && ( not lookupDatetime.to_date === lastDate ) do
+    while events.size < minimum && ( not lookupDatetime.to_date > lastDate) do
 
       events.concat self.get_events_by_date(lookupDatetime, zone_offset, country, subkasts, eventsPerDay)
       lookupDatetime = lookupDatetime.next_day
