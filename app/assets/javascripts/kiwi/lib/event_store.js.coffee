@@ -19,6 +19,7 @@ class FK.EventStore extends Marionette.Controller
     @listenTo @blocks, 'change:event_limit', @loadNextEventsForBlock
 
     @listenTo @vent, 'filter:country', @filterByCountry
+    @listenTo @vent, 'filter:subkasts', @filterBySubkasts
 
     @events.add options.events
 
