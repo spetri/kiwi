@@ -42,6 +42,12 @@ FK.App.addInitializer (prefetch) ->
   FK.Data.EventStore = new FK.EventStore events: prefetch.events, howManyStartingBlocks: 10, vent: FK.App.vent
   FK.Data.EventStore.fetchStartupEvents()
 
+  if FK.CurrentUser.get('country')
+    FK.App.vent.trigger 'filter:country', FK.CurrentUser.get('country')
+
+  if FK.CurrentUser.get('subkasts')
+    FK.App.vent.trigger 'filter:subkasts', FK.CurrentUser.get('subkasts')
+
   FK.App.appRouter = new FK.Routers.AppRouter()
 
 

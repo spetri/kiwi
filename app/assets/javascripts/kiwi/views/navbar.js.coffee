@@ -6,6 +6,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @navbarModel = new Navbar.NavbarModel
       username: @currentUser.get('username')
+
+    @navbarModel.setCountry(@currentUser.get('country')) if @currentUser.get('country')
+    @navbarModel.setSubkasts(@currentUser.get('subkasts')) if @currentUser.get('subkasts')
     @navbarModel.set('username', null) if not @currentUser.get('logged_in')
 
     @layout = new Navbar.NavbarLayout

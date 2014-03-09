@@ -48,6 +48,11 @@ class User
 
   ## Token authenticatable
   # field :authentication_token, :type => String
+
+  ## Forekast
+  field :country,   :type => String
+  field :subkasts,  :type => Array
+
   include Mongoid::Timestamps
 
   def self.omniauth_find(auth)
