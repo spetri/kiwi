@@ -2,7 +2,8 @@ describe "Event Store", ->
   
   describe "top ranked events", ->
     beforeEach ->
-      @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3)
+      @vent = _.clone(Backbone.Events)
+      @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3, vent: @vent)
       @store.country = "CA"
       @store.subkasts = ['ST', 'SE']
       @store.events.trigger "sync"
@@ -35,7 +36,8 @@ describe "Event Store", ->
 
     describe "filter by country", ->
       beforeEach ->
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
         @store.filterByCountry("CA")
         @topRanked = @store.topRanked
       
@@ -53,7 +55,8 @@ describe "Event Store", ->
 
     describe "filter by subkasts", ->
       beforeEach ->
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
         @store.filterBySubkasts(['HA', 'PRP', 'ST'])
         @topRanked = @store.topRanked
       
@@ -62,7 +65,8 @@ describe "Event Store", ->
 
   describe "blocks", ->
     beforeEach ->
-      @store = new FK.EventStore events: FK.SpecHelpers.Events.BlockEvents
+      @vent = _.clone(Backbone.Events)
+      @store = new FK.EventStore events: FK.SpecHelpers.Events.BlockEvents, vent: @vent
       @store.events.trigger "sync"
       @blocks = @store.blocks
 
@@ -132,7 +136,8 @@ describe "Event Store", ->
 
     describe "increasing the number of blocks beyond the number of already fetched blocks", ->
       beforeEach ->
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents, country: 'CA', subkasts: ['ST', 'SE']
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents, country: 'CA', subkasts: ['ST', 'SE'], vent: @vent
         @store.events.trigger "sync"
         @blocks = @store.blocks
         @xhr = sinon.useFakeXMLHttpRequest()
@@ -176,7 +181,8 @@ describe "Event Store", ->
 
     describe "filter by country", ->
       beforeEach ->
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
         @store.filterByCountry("CA")
         @blocks = @store.blocks
       
@@ -200,7 +206,8 @@ describe "Event Store", ->
 
     describe "filter by subkasts", ->
       beforeEach ->
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
         @store.filterBySubkasts(['TVM', 'ST', 'HA'])
         @blocks = @store.blocks
 

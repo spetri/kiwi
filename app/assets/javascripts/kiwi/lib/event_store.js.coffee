@@ -12,9 +12,13 @@ class FK.EventStore extends Marionette.Controller
     @country = options.country if options.country
     @subkasts = options.subkasts if options.subkasts
 
+    @vent = options.vent
+
     @listenTo @events, 'sync', @resetTopRanked
     @listenTo @events, 'add', @addEventToBlock
     @listenTo @blocks, 'change:event_limit', @loadNextEventsForBlock
+
+    @listenTo @vent, 'filter:country', @filterByCountry
 
     @events.add options.events
 
@@ -60,6 +64,8 @@ class FK.EventStore extends Marionette.Controller
     @refresh()
 
   refresh: () =>
-    @resetTopRanked()
+    @topRanked.reset()
     @blocks.reset()
+    @resetTopRanked()
     @events.each @addEventToBlock
+    @fetchStartupEvents()

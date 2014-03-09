@@ -46,12 +46,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
   @filterSubkasts = (subkasts) =>
     @navbarModel.set('subkasts', subkasts)
-    @trigger 'filter:subkasts', subkasts
+    App.vent.trigger 'filter:subkasts', subkasts
 
   @filterCountry = (country) =>
     @navbarModel.set('country', country)
     @navbarModel.set('countryName', App.request('countryName', country))
-    @trigger 'filter:country', country
+    App.vent.trigger 'filter:country', country
 
   @close = () ->
     @view.close()
