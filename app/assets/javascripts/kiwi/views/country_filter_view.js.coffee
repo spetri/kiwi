@@ -8,6 +8,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     save: (e) =>
       @trigger('country:save', @$('option:selected').val())
 
+    modelEvents:
+      'change:country': 'refreshChosenCountry'
+
     refreshChosenCountry: (model, country) =>
       @$('select').val country
 
