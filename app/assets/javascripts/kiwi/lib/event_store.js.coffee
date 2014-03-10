@@ -54,7 +54,7 @@ class FK.EventStore extends Marionette.Controller
   addEventToBlock: (event) =>
     return if (event.get('country') isnt @country and event.get('location_type') is 'national')
     return if (not _.contains(@subkasts, event.get('subkast')))
-    @blocks.addEventToBlock moment(event.get('fk_datetime').format('YYYY-MM-DD')), @country, @subkasts, event
+    @blocks.addEventToBlock moment(event.get('fk_datetime').startOf('day')), @country, @subkasts, event
 
   filterByCountry: (country) =>
     @country = country
