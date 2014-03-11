@@ -6,7 +6,7 @@ class FK.EventStore extends Marionette.Controller
     @topRanked = new FK.Collections.TopRankedEventList()
 
     @howManyDaysInBlocks = 3
-    @country = 'CA'
+    @country = 'US'
     @subkasts = _.keys(FK.Data.subkastOptions)
 
     @country = options.country if options.country

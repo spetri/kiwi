@@ -42,6 +42,9 @@ FK.App.addInitializer (prefetch) ->
   FK.Data.EventStore = new FK.EventStore events: prefetch.events, howManyStartingBlocks: 10, vent: FK.App.vent
   FK.Data.EventStore.fetchStartupEvents()
 
+  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, vent: FK.App.vent
+  FK.Data.UserMediator.getUserLocation() if not FK.CurrentUser.get('country') and FK.CurrentUser.get('logged_in')
+
   if FK.CurrentUser.get('country')
     FK.App.vent.trigger 'filter:country', FK.CurrentUser.get('country')
 

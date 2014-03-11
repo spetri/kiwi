@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:account_update) do |u|
       u.permit(:username, :name, :email,
                :provider, :uid, :oauth_token, :oauth_expires_at,
+               :country, :subkasts,
                :password, :password_confirmation)
     end
   end
