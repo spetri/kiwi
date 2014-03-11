@@ -140,12 +140,37 @@ class Event
   def self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
     startDate = (startDatetime - zone_offset.minutes).beginning_of_day
     endDate = (endDatetime - zone_offset.minutes).beginning_of_day
-    self.all.any_of({ is_all_day: false, datetime: (startDatetime..endDatetime) }, { is_all_day: true, local_date: (startDate..endDate) }).
-             any_in({ subkast: subkasts }).
-             and({ country: country, location_type: 'national'}).
-             order_by([:upvote_count, :desc]).
-             skip(skip).
-             limit(howMany)
+
+    map = %Q[
+      function () {
+        emit(this._id, this);
+      }
+    ]
+
+    reduce = %Q[
+      function (key, values) {
+        return values;
+      }
+    ]
+
+    eventQuery = {
+      "subkast" => { "$in" => subkasts },
+      "$or" => [
+        { "location_type" => 'international' },
+        { "location_type" => 'national', country => country }
+      ],
+      "$or" => [
+        { "is_all_day" => false, "datetime" => { "$gte" => startDatetime.to_s, "$lte" => endDatetime.to_s } },
+        { "is_all_day" => true, "local_date" => { "$gte" => startDate.to_s, "$lte" => endDate.to_s } }
+      ]
+    }
+
+    done = self.map_reduce(map, reduce, { :query => eventQuery }).out(inline: 1)
+    events = done.find.to_a.map { |kv| Event.new(kv["value"]) }
+
+    return events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
+    drop(skip).
+    take(howMany)
   end
 
   def self.get_last_date
