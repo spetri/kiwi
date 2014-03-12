@@ -51,4 +51,11 @@ namespace :db do
       event.save
     }
   end
+
+  task :give_event_other_subkast => :environment do
+    Event.all.each { |event|
+      event.subkast = "OTH" if event.subkast.to_s == ''
+      event.save
+    }
+  end
 end
