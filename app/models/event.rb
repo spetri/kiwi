@@ -143,7 +143,8 @@ class Event
 
     map = %Q[
       function () {
-        emit(this._id, this);
+        if (this.location_type == 'international' || ( this.location_type == 'national' && this.country == '#{country}'))
+          emit(this._id, this);
       }
     ]
 
@@ -165,7 +166,7 @@ class Event
       ]
     }
 
-    done = self.map_reduce(map, reduce, { :query => eventQuery }).out(inline: 1)
+    done = self.any_of({ is_all_day: false, datetime: (startDatetime..endDatetime) }, { is_all_day: true, local_date: (startDate..endDate) }).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
     events = done.find.to_a.map { |kv| Event.new(kv["value"]) }
 
     return events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
