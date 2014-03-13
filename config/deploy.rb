@@ -41,7 +41,7 @@ task :environment do
   # invoke :'rbenv:load'
 
   # For those using RVM, use this to load an RVM version@gemset.
-  invoke :'rvm:use[ruby-2.0.0-p195@forekast]'
+  invoke :'rvm:use[ruby-2.1.1@forekast]'
 
   @keys = JSON.parse(open('keys.json').read)
   if @keys['TWITTER_KEY'].nil?
@@ -115,7 +115,7 @@ end
 desc 'Cleanups old all day values'
 task :cleanup_all_day => :environment do
   queue "cd #{deploy_to}/current ; rake db:cleanup_all_day RAILS_ENV=production"
-end 
+end
 
 desc 'Move to local date field from date'
 task :move_to_local_date => :environment do
