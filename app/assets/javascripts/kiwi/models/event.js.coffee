@@ -241,12 +241,7 @@ class FK.Models.EventBlock extends Backbone.Model
     events = _.take(events, events.length - howManyOver) if howManyOver > 0
 
     @events.add(events)
-
-    if @events.length < @get('event_limit')
-      @set('more_events_available', false)
-    else
-      @set('more_events_available', true)
-
+ 
   checkLimit: () =>
     @set({event_limit: @events.length}, {silent: true}) if @events.length < @get('event_limit')
 
