@@ -12,19 +12,30 @@
  *= require_tree .
  */
 
+/*general styles*/
+
+body, h1, h2, h4, h6, .h1, .h2, .h4, .h6, p, a, span {
+  font-family:Helvetica, sans-serif;
+}
+
+h3, .h3, h5, .h5, .upvote-counter, .event-title, .event-upvotes {
+  font-family:'Roboto Slab', Helvetica, sans-serif !important;
+} 
 
 /* navbar */
-.navbar {
+body .navbar {
+  background-color: #fff;
+  border: 1px solid #F0F0F0;
+  
   a.navbar-brand {
     display: block;
     overflow: hidden;
     text-indent: -999px;
     margin-left: 10px;
-    background: url('/images/logo.png') top left no-repeat;
+    background: url('/assets/logo.png') top left no-repeat;
     width: 220px;
   }
   ul.nav a {
-    color: white !important;
     cursor: pointer;
   }
 
@@ -71,8 +82,8 @@
 
 .event-block {
   margin-bottom: 20px;
-  h4 {
-    font-weight: bold;
+  h3 {
+    color:#444;
   }
   
   .button-container {
@@ -80,28 +91,41 @@
   }
 
   .btn {
-    width: 100%;
+    width: 96%;
+    height:30px;
     border-radius: 0px;
     margin: 0px auto;
+    background-color:#f0f0f0;
+  }
+  
+  .btn:hover {
+    background-color: #3DE0C0;
   }
 }
 
 .events {
-  background-color: #f7f7f7;
   padding: 10px 15px;
 }
 
 .event {
+  background-color: #f7f7f7;
+  padding: 10px 15px 0px 15px;
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  font-size:16px;
+  &:hover {
+    background-color:#f1f1f1;
+  }
   .upvote-container {
     height: 60px;
-    padding-top: 6px;
     margin-right: 14px;
     width: 14px;
-    color: #303030;
+    color: #666;
     text-align: center;
     cursor: pointer;
+    &:hover {
+    color: #111;
+    }
     i {
       margin-left: 1px;
       &.icon-ok {
@@ -121,7 +145,6 @@
     }
     .upvote-counter {
       font-size: 18px;
-      margin-left: 2px;
     }
   }
   img {
@@ -133,8 +156,9 @@
   .meta-container {
     width: 450px;
     .event-meta {
-      font-size: 13px;
-      color: #555555;
+      font-size: 14px;
+      color: #999;
+      font-weight:300;
     }
     a.event-name {
       cursor: pointer;
@@ -155,10 +179,16 @@
   width: 300px;
 }
 
+.filter {
+  height:50px;
+  width:50px;
+  background-color:red;
+}
+
 .top-ranked {
   padding: 5px 15px;
   margin-top: 38px;
-  background-color: #f7f7f7;
+  background-color: #fff;
   h5 {
     font-weight: bold;
   }
@@ -290,6 +320,8 @@
     max-width: 430px;
     text-align: left;
     margin: 0 auto;
+    background-color:#f7f7f7;
+    padding:10px 20px;
   }
 
   .event-heading-container {
@@ -303,6 +335,12 @@
 
   .event-time-location {
     font-size: 17px;
+    color:#888;
+    
+  }
+  
+  .event-description {
+    line-height:3;
   }
 
   .event-submitter {
@@ -315,7 +353,7 @@
     bottom: 0px;
 
     .event-upvotes {
-      color: green;
+      color: #48C9B0;
       font-weight: bold;
       margin-right: 30px;
       cursor: pointer;
@@ -333,7 +371,8 @@
       }
 
       .event-tool {
-        color: grey;
+        font-size:12px;
+        color: #ccc;
         margin-right: 8px;
         text-decoration: underline;
         cursor: pointer;

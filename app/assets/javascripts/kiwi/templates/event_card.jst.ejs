@@ -4,7 +4,8 @@
 <div class="event-info-container col-lg-6">
   <div class="event-heading-container">
     <span class="event-title"><%= name %></span>
-    <span class="event-time-location">(<% if (location_type == 'national') { %><%= country_full_name%><% } else { %>Global<% } %>, <%= prettyDateTime() %>)</span></div>
+    </br>
+    <span class="event-time-location"><% if (location_type == 'national') { %><%= country_full_name%><% } else { %>Global<% } %>, <%= prettyDateTime() %></span></div>
   <div class="event-description-container">
     <span class="event-description"><%= description%></span>
     <span class="event-submitter">(Submitted by <%= user %>)</span>
