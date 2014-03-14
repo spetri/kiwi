@@ -65,6 +65,7 @@ class FK.EventStore extends Marionette.Controller
     @refresh()
 
   refresh: () =>
+    @events.reset()
     @topRanked.reset()
     @blocks.reset()
     @resetTopRanked()
