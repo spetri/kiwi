@@ -26,3 +26,9 @@ public/system
 notes.txt
 dump
 keys.json
+
+#Mac stuff
+.DS_Store
+
+#Vim tags file
+tags
