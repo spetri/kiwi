@@ -3,7 +3,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer () ->
-    
+
     @events = App.request('events')
     @eventStore = App.request('eventStore')
     @eventBlocks = App.request('eventStore').blocks
@@ -13,16 +13,16 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks
 
-    @topRankedEventsView = new EventList.TopRanked
+    @sidebarView = new EventList.Sidebar
       collection: @topRankedEvents
-    
+
     @view.on 'show', =>
-      @view.sidebar.show @topRankedEventsView
+      @view.sidebar.show @sidebarView
       @view.event_block.show @eventBlocksView
 
 
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
-    @listenTo @topRankedEventsView, 'itemview:clicked:event', @triggerShowEvent
+    @listenTo @sidebarView, 'itemview:clicked:event', @triggerShowEvent
 
     @view.onClose = () =>
       @stop()
@@ -52,9 +52,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     $(document).off('scroll')
     @view.close()
     @eventBlocksView.close()
-    @topRankedEventsView.close()
+    @sidebarView.close()
     @stopListening
-    
+
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "container"
