@@ -3,17 +3,26 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer () ->
-
+    # get the dependencies:
     @events = App.request('events')
+    @currentUser = App.request 'currentUser'
     @eventStore = App.request('eventStore')
     @eventBlocks = App.request('eventStore').blocks
     @topRankedEvents = App.request('eventStore').topRanked
+    @sidebarViewModel = new EventList.SidebarViewModel
+       username: @currentUser.get('username')
 
+    #initialize the views that we need:
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks
 
+    @sidebarViewModel = new EventList.SidebarViewModel
+      username: @currentUser.get('username')
+      model: @sidebarViewModel
+    
     @sidebarView = new EventList.Sidebar
+      model: @sidebarViewModel
       collection: @topRankedEvents
 
     @view.on 'show', =>
@@ -39,6 +48,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
       @fetchMoreBlocks() if percentage > 0.9
 
+
   @triggerShowEvent = (event) ->
     App.vent.trigger 'container:show', event.model
 
@@ -55,6 +65,19 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @sidebarView.close()
     @stopListening
 
+  class EventList.SidebarViewModel extends Backbone.Model
+    defaults:
+      username: null
+      country: 'CA'
+      countryName: 'Canada'
+      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'HA', 'OTH']
+
+    setCountry: (country) =>
+      @set 'country', country
+      @set 'countryName', App.request('countryName', country)
+
+    setSubkasts: (subkasts) =>
+      @set 'subkasts', subkasts
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "container"
