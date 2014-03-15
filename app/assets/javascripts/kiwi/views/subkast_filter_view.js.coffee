@@ -12,7 +12,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     renderSubkastOptions: () =>
       _.each(App.request('subkastOptionsAsArray'), (subkast) =>
-        @$('.checkbox-container').append('<div class="subkast-option"><label class="subkast-option"><input type="checkbox" name="' + subkast.value + '" /> ' + subkast.option + '</label></div>')
+        @$('.checkbox-container').append(
+          '<div class="checkbox subkast-option"><label class="subkast-option"><input type="checkbox" name="' + subkast.value + '" /> ' + subkast.option + '</label></div>')
       )
 
     refreshChosenSubkast: (model, subkasts) =>

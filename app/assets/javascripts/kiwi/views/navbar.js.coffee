@@ -7,6 +7,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @navbarViewModel = new Navbar.NavbarViewModel
        username: @currentUser.get('username')
 
+    @navbarViewModel.set('username', null) if not @currentUser.get('logged_in')
+
     @navbarView = new Navbar.NavbarView
       username: @currentUser.get('username')
       model: @navbarViewModel
@@ -36,9 +38,6 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     className: "navbar navbar-fixed-top"
     template: FK.Template('navbar')
 
-    triggers:
-      'click [data-option="country"]': 'clicked:filter:country'
-      'click [data-option="subkast"]': 'clicked:filter:subkast'
 
     initialize: () =>
       @listenTo App.vent, 'container:new', @refreshHighlightNew
