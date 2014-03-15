@@ -25,19 +25,19 @@ describe Event do
       end
 
       it "should be able to fetch events by date" do
-        Event.get_events_by_date(@testTime).size.should == 3
+        Event.get_events_by_date(@testTime, 300, "CA", ["ST"]).size.should == 3
       end
 
       it "should be able to limit the number of events fetched by date" do
-        Array(Event.get_events_by_date(@testTime, 2)).size.should == 2
+        Array(Event.get_events_by_date(@testTime, 300, "CA", ["ST"], 2)).size.should == 2
       end
 
       it "should be able to skip a given number of events fetched by date" do
-        Array(Event.get_events_by_date(@testTime, 0, 1)).size.should == 2
+        Array(Event.get_events_by_date(@testTime, 300, "CA", ["ST"], 0, 1)).size.should == 2
       end
 
       it "should be able to skip a given number of events and still limit correctly" do
-        Array(Event.get_events_by_date(@testTime, 1, 1)).size.should == 1
+        Array(Event.get_events_by_date(@testTime, 300, "CA", ["ST"], 1, 1)).size.should == 1
       end
 
       describe "all day events" do
@@ -47,8 +47,21 @@ describe Event do
         end
 
         it "should be able to get an all day event when its stored datetime falls outside the range requested" do
-          Array(Event.get_events_by_date(@testTime)).size.should == 3
+          Array(Event.get_events_by_date(@testTime, 300, "CA", ["ST"])).size.should == 3
         end
+      end
+    end
+
+    describe "sorting" do
+      before(:each) do
+        create_list :event, 2, :in_1_week, :with_2_upvotes
+        create_list :event, 2, :in_1_week, :with_7_upvotes
+        create_list :event, 2, :in_1_week, :with_5_upvotes
+        @testTime = 1.week.from_now - 5.minutes
+      end
+
+      it "should be able to get the events with the most upvotes sorted first" do
+        Event.get_events_by_date(@testTime, 300, "CA", ["ST"])[0].upvote_count.should == 7
       end
     end
 
@@ -58,7 +71,7 @@ describe Event do
         create :event, :with_2_upvotes, :back_1_week
         create :event, :with_5_upvotes, :in_1_week
 
-        @topRanked = Array(Event.top_ranked(4, DateTime.now(), 1.week.from_now))
+        @topRanked = Array(Event.top_ranked(4, DateTime.now(), 1.week.from_now, 300, "CA", ["ST"]))
       end
       it "should be able to get an arbitrary number of the top ranked events" do
         @topRanked.size.should == 3
@@ -81,7 +94,7 @@ describe Event do
         create :event, :with_7_upvotes, :in_1_week
       end
       it "should be able to get a total total number of events across days" do
-        events = Event.get_enough_events_from_day(DateTime.now(), 5, 3)
+        events = Event.get_enough_events_from_day(DateTime.now(), 300, "CA", ["ST"], 5, 3)
         Array(events).size.should == 6
       end
 
@@ -91,7 +104,7 @@ describe Event do
       end
 
       it "should be able to get the first 6 events and top 5 without overlap" do
-        events = Event.get_starting_events(DateTime.now(), 6, 3, 7)
+        events = Event.get_starting_events(DateTime.now(), 300, "CA", ["ST"], 6, 3, 7)
         events.size.should == 10
       end
     end
@@ -104,17 +117,17 @@ describe Event do
       end
 
       it "should be able to get events after a certain date" do
-        events = Event.get_events_after_date(DateTime.now() + 3.days, 3)
+        events = Event.get_events_after_date(DateTime.now() + 3.days, 300, "CA", ["ST"], 3)
         Array(events).size.should == 4
       end
 
       it "should be able to limit the number of events found after a certain date" do
-        events = Event.get_events_after_date(DateTime.now() + 3.days, 2)
+        events = Event.get_events_after_date(DateTime.now() + 3.days, 300, "CA", ["ST"], 2)
         Array(events).size.should == 2
       end
 
       it "should be able to get only the earliest dates first" do
-        events = Event.get_events_after_date(DateTime.now() + 3.days, 3)
+        events = Event.get_events_after_date(DateTime.now() + 3.days, 300, "CA", ["ST"], 3)
         events[0].upvote_count.should == 2
       end
     end
@@ -128,7 +141,7 @@ describe Event do
     end
 
     it "should be able to count events on a day" do
-      Event.count_events_by_date(1.week.from_now - 1.minute).should == 3
+      Event.count_events_by_date(1.week.from_now - 1.minute, 300, "CA", ["ST"]).should == 3
     end
   end
 end

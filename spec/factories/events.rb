@@ -15,6 +15,9 @@ FactoryGirl.define do
     name
     datetime 1.day.from_now
     upvote_names []
+    country "CA"
+    location_type "national"
+    subkast "ST"
     is_all_day false
 
     trait :with_2_upvotes do
@@ -30,17 +33,17 @@ FactoryGirl.define do
     end
 
     trait :in_1_week do
-      datetime 1.week.from_now 
+      datetime 1.week.from_now - 1.second
       local_date 1.week.from_now.to_date
     end
 
     trait :in_2_weeks do
-      datetime 2.week.from_now
+      datetime 2.week.from_now - 1.second
       local_date 2.week.from_now.to_date
     end
 
     trait :in_3_weeks do
-      datetime 3.week.from_now
+      datetime 3.week.from_now - 1.second
       local_date 3.week.from_now.to_date
     end
 
@@ -51,6 +54,10 @@ FactoryGirl.define do
 
     trait :all_day do
       is_all_day true
+    end
+
+    trait :international do
+      location_type "international"
     end
   end
 end

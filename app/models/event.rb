@@ -96,54 +96,82 @@ class Event
     end
   end
 
-  def self.get_events_by_date(startDatetime, howMany=0, skip=0)
-    endDatetime = startDatetime + 1.day
-    self.all.any_of(
-                    { is_all_day: false, datetime: (startDatetime..endDatetime) },
-                    { is_all_day: true, local_date: startDatetime.beginning_of_day }
-                   ).
-             order_by([:upvote_count, :desc], [:datetime, :asc]).skip(skip).limit(howMany)
+  def self.get_starting_events(datetime, zone_offset, country, subkasts, minimum, eventsPerDay, topRanked)
+    listEvents = self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
+    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days, zone_offset, country, subkasts)
+    events = listEvents.concat topEvents
+    events.uniq!
+    events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }
+    return events
   end
 
-  def self.top_ranked(howMany, startDatetime, endDatetime)
-    self.all.where({datetime: (startDatetime..endDatetime) }).order_by([:upvote_count, :desc]).limit(howMany)
+  def self.get_events_after_date(datetime, zone_offset, country, subkasts, howMany=0)
+    self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, howMany, 3)
   end
 
-  def self.get_events_after_date(datetime, howMany=0)
-    self.get_enough_events_from_day(datetime, howMany, 3)
-  end
-
-  def self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
+  def self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
     events = []
-    eventCount = 0
     lookupDatetime = datetime
     lastDate = self.get_last_date
 
-    while eventCount < minimum && ( not lookupDatetime.to_date === lastDate.next_day.to_date ) do
-      eventsOnDay = self.get_events_by_date(lookupDatetime, eventsPerDay)
+    while events.size < minimum && ( not lookupDatetime.to_date > lastDate) do
 
-      if Array(eventsOnDay).size > 0
-        events.concat eventsOnDay
-        eventCount += Array(eventsOnDay).size
-      end
-
+      events.concat self.get_events_by_date(lookupDatetime, zone_offset, country, subkasts, eventsPerDay)
       lookupDatetime = lookupDatetime.next_day
+
     end
 
     events
   end
 
-  def self.count_events_by_date(datetime)
-    self.get_events_by_date(datetime).size
+  def self.get_events_by_date(startDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
+    endDatetime = startDatetime + 1.day - 1.second
+    self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany, skip)
   end
 
-  def self.get_starting_events(datetime, minimum, eventsPerDay, topRanked)
-    listEvents = self.get_enough_events_from_day(datetime, minimum, eventsPerDay)
-    topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days)
-    events = listEvents.concat topEvents
-    events.uniq!
-    events.sort_by! { |event| - (event.upvote_names.nil? ? 0 : event.upvote_names.size) }
-    return events
+  def self.count_events_by_date(datetime, zone_offset, country, subkasts)
+    Array(self.get_events_by_date(datetime, zone_offset, country, subkasts)).size
+  end
+
+  def self.top_ranked(howMany, startDatetime, endDatetime, zone_offset, country, subkasts)
+    self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany)
+  end
+
+  def self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
+    startDate = (startDatetime - zone_offset.minutes).beginning_of_day
+    endDate = (endDatetime - zone_offset.minutes).beginning_of_day
+
+    map = %Q[
+      function () {
+        if (this.location_type == 'international' || ( this.location_type == 'national' && this.country == '#{country}'))
+          emit(this._id, this);
+      }
+    ]
+
+    reduce = %Q[
+      function (key, values) {
+        return values;
+      }
+    ]
+
+    eventQuery = {
+      "subkast" => { "$in" => subkasts },
+      "$or" => [
+        { "location_type" => 'international' },
+        { "location_type" => 'national', country => country }
+      ],
+      "$or" => [
+        { "is_all_day" => false, "datetime" => { "$gte" => startDatetime.to_s, "$lte" => endDatetime.to_s } },
+        { "is_all_day" => true, "local_date" => { "$gte" => startDate.to_s, "$lte" => endDate.to_s } }
+      ]
+    }
+
+    done = self.any_of({ is_all_day: false, datetime: (startDatetime..endDatetime) }, { is_all_day: true, local_date: (startDate..endDate) }).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
+    events = done.find.to_a.map { |kv| Event.new(kv["value"]) }
+
+    return events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
+    drop(skip).
+    take(howMany)
   end
 
   def self.get_last_date

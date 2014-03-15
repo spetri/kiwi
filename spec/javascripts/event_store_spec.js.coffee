@@ -2,7 +2,10 @@ describe "Event Store", ->
   
   describe "top ranked events", ->
     beforeEach ->
-      @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3)
+      @vent = _.clone(Backbone.Events)
+      @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3, vent: @vent)
+      @store.country = "CA"
+      @store.subkasts = ['ST', 'SE']
       @store.events.trigger "sync"
       @topRanked = @store.topRanked
 
@@ -21,7 +24,7 @@ describe "Event Store", ->
     it "should include events that were set for earlier today", ->
       expect(@topRanked.pluck('name')).toContain('event 2a')
 
-    describe "when adding an event", ->
+    xdescribe "when adding an event", ->
       beforeEach ->
         @store.events.add upvotes: 20, datetime: moment().add('days', 5)
 
@@ -31,14 +34,44 @@ describe "Event Store", ->
       it "should have the lowest event bumped out of the collection", ->
         expect(@topRanked.last().upvotes()).toBe(3)
 
+    describe "filter by country", ->
+      beforeEach ->
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+        @store.filterByCountry("CA")
+        @topRanked = @store.topRanked
+      
+      it "should only have top ranked events with the country CA", ->
+        expect(@topRanked.length).toBe(6)
+
+      it "should not have any events of another country", ->
+        countries = []
+        @topRanked.each((event) =>
+          countries.push event.get('country') if event.get('location_type') is 'national'
+        )
+
+        extras = _.without(countries, "CA")
+        expect(extras.length).toBe(0)
+
+    describe "filter by subkasts", ->
+      beforeEach ->
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+        @store.filterBySubkasts(['HA', 'PRP', 'ST'])
+        @topRanked = @store.topRanked
+      
+      it "should only have top ranked events with the filtered subkasts", ->
+        expect(@topRanked.length).toBe(4)
+
   describe "blocks", ->
     beforeEach ->
-      @store = new FK.EventStore events: FK.SpecHelpers.Events.BlockEvents
+      @vent = _.clone(Backbone.Events)
+      @store = new FK.EventStore events: FK.SpecHelpers.Events.BlockEvents, vent: @vent
       @store.events.trigger "sync"
       @blocks = @store.blocks
 
     it "should have the earliest event date as the date of the first block", ->
-      expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().add('days').format('YYYY-MM-DD'))
+      expect(@blocks.first().get('date').format('YYYY-MM-DD')).toBe(moment().format('YYYY-MM-DD'))
 
     it "should have the latest event date as the date of the last block", ->
       expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 3).format('YYYY-MM-DD'))
@@ -103,7 +136,8 @@ describe "Event Store", ->
 
     describe "increasing the number of blocks beyond the number of already fetched blocks", ->
       beforeEach ->
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEvents, country: 'CA', subkasts: ['ST', 'SE'], vent: @vent
         @store.events.trigger "sync"
         @blocks = @store.blocks
         @xhr = sinon.useFakeXMLHttpRequest()
@@ -131,10 +165,65 @@ describe "Event Store", ->
           expect(@store.events.length).toBe(19)
 
         it "should be able to add more blocks after more events have come back from the server", ->
-          expect(@blocks.length).toBe(10)
+          expect(@blocks.length).toBe(8)
+
+        it "should create blocks with the filtering country", ->
+          expect(@blocks.last().get('country')).toBe('CA')
+
+        it "should create blocks with the filtering subkast", ->
+          expect(@blocks.last().get('subkasts')).toEqual(['ST', 'SE'])
 
         it "should have the events loaded into the newly created block", ->
-          expect(@blocks.last().events.length).toBe(3)
+          expect(@blocks.last().events.length).toBe(1)
 
         it "should have a date on the new event block", ->
-          expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 12).format('YYYY-MM-DD'))
+          expect(@blocks.last().get('date').format('YYYY-MM-DD')).toBe(moment().add('days', 10).format('YYYY-MM-DD'))
+
+    describe "filter by country", ->
+      beforeEach ->
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+        @store.filterByCountry("CA")
+        @blocks = @store.blocks
+      
+      it "should only have blocks that contain events with the country CA", ->
+        expect(@blocks.length).toBe(6)
+
+      it "should have only events with the country CA in the blocks or that are international", ->
+        expect(@blocks.at(0).events.length).toBe(2)
+        expect(@blocks.at(1).events.length).toBe(2)
+
+      it "should not have any events of another country", ->
+        countries = []
+        @blocks.each((block) =>
+          block.events.each( (event) =>
+            countries.push event.get('country') if event.get('location_type') is 'national'
+          )
+        )
+
+        extras = _.without(countries, "CA")
+        expect(extras.length).toBe(0)
+
+    describe "filter by subkasts", ->
+      beforeEach ->
+        @vent = _.clone(Backbone.Events)
+        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+        @store.filterBySubkasts(['TVM', 'ST', 'HA'])
+        @blocks = @store.blocks
+
+      it "should only have blocks that contain events with the filtered subkasts", ->
+        expect(@blocks.length).toBe(5)
+
+      it "should only have events in blocks that have one of the fitlered subkasts", ->
+        expect(@blocks.at(0).events.length).toBe(1)
+
+      it "should not have any events of another subkast", ->
+        subkasts = []
+        @blocks.each((block) =>
+          block.events.each( (event) =>
+            subkasts.push event.get('subkast')
+          )
+        )
+
+        extras = _.without(subkasts, 'TVM', 'ST', 'HA')
+        expect(extras.length).toBe(0)

@@ -95,19 +95,19 @@ class EventsController < ApplicationController
   end
 
   def startup_events
-    @events = Event.get_starting_events(DateTime.now.beginning_of_day.utc, params[:howManyEventsMinimum].to_i, params[:howManyEventsPerDay].to_i, params[:howManyTopRanked].to_i)
+    @events = Event.get_starting_events(DateTime.parse(params[:datetime]), params[:zone_offset].to_i, params[:country], params[:subkasts], params[:howManyEventsMinimum].to_i, params[:howManyEventsPerDay].to_i, params[:howManyTopRanked].to_i)
   end
 
   def events_by_date
-    @events = Event.get_events_by_date(DateTime.parse(params[:datetime]), params[:howManyEvents].to_i, params[:skip].to_i)
+    @events = Event.get_events_by_date(DateTime.parse(params[:datetime]), params[:zone_offset].to_i, params[:country], params[:subkasts], params[:howManyEvents].to_i, params[:skip].to_i)
   end
 
   def events_after_date
-    @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:howManyEvents].to_i)
+    @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:zone_offset].to_i, params[:country], params[:subkasts], params[:howManyEvents].to_i)
   end
 
   def count_events_by_date
-    @count = Event.count_events_by_date(DateTime.parse(params[:datetime]))
+    @count = Event.count_events_by_date(DateTime.parse(params[:datetime]), params[:zone_offset].to_i, params[:country], params[:subkasts])
   end
 
   private
