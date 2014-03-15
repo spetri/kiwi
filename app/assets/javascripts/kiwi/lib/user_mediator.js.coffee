@@ -4,6 +4,8 @@ class FK.UserMediator extends Marionette.Controller
     @vent = options.vent
 
   getUserLocation: () =>
+    # TODO: this is borked
+    return;
     navigator.geolocation.getCurrentPosition(( position ) =>
       latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
       geocoder = new google.maps.Geocoder()

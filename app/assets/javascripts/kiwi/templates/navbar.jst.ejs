@@ -13,9 +13,18 @@
       <li data-option="new">
         <a href="#/events/new" class="add-new">+ Add Event</a>
       </li>
+      <% } %>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+    <% if (username) { %>
+
+    <% } else { %>
+      <li><a href="<%= FK.Links.register %>" class="btn btn-default btn-focus" href="">Sign up</a></li>
+      <li><a href="<%= FK.Links.login %>" class="btn btn-default btn-alt">Log in</a></li>
     <% } %>
   </ul>
 
+<!--
   <ul class="nav navbar-nav navbar-right">
     <div class="btn-group">
       <button type="button" class="profile" data-toggle="dropdown">
@@ -27,10 +36,9 @@
         <li><a href="<%= FK.Links.logout %>">Logout</a></li>
       </ul>
     </div>
-    <!--
     <% if(username) { %>
       <li>
-        <a href="/users/edit"><%= username %></a> 
+        <a href="/users/edit"><%= username %></a>
       </li>
       <li>
         <a href="<%= FK.Links.logout %>">logout</a>
@@ -43,6 +51,6 @@
         <a href="<%= FK.Links.register %>">register</a>
       </li>
     <% } %>
-  --!>
   </ul>
 </div>
+--!>

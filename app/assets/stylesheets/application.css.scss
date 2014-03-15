@@ -13,7 +13,8 @@
  */
 
 /*general styles*/
-
+$active: #75dbc7;
+$activeText: #FFF;
 body, h1, h2, h6, .h1, .h2, .h4, .h6, p, a, span, label, button {
   font-family:Helvetica, sans-serif;
 }
@@ -38,6 +39,18 @@ body .navbar {
   ul.nav a {
     cursor: pointer;
     padding:5px 10px;
+  }
+  .navbar-right li { 
+    padding: 10px;
+    .btn-focus { 
+      background: darken($active,10%);
+      color: $activeText;
+      border: 1px solid darken($active,10%);
+    }
+    .btn-alt { 
+      background: #EEE;
+      border: 1px solid #EEE;
+    }
   }
 
   .filter-region {
@@ -114,7 +127,7 @@ body .navbar {
   }
   
   .btn:hover {
-    background-color: #75dbc7;
+    background-color: lighten($active, 10%); 
   }
 }
 
