@@ -68,6 +68,4 @@ class FK.EventStore extends Marionette.Controller
     @events.reset()
     @topRanked.reset()
     @blocks.reset()
-    @resetTopRanked()
-    @events.each @addEventToBlock
     @fetchStartupEvents()
