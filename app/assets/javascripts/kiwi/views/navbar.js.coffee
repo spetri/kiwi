@@ -38,6 +38,13 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   class Navbar.NavbarView extends Backbone.Marionette.ItemView
     className: "navbar navbar-fixed-top"
     template: FK.Template('navbar')
+    events:
+      'click .navbar-brand': 'goHome'
+
+    goHome: (e) =>
+      e.preventDefault()
+      App.vent.trigger 'container:all'
+
 
 
     initialize: () =>

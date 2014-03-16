@@ -11,6 +11,41 @@
  *= require_self
  *= require_tree .
  */
+@font-face {
+  font-family: 'icomoon';
+  src:url('fonts/icomoon.eot?-1lhpac');
+  src:url('fonts/icomoon.eot?#iefix-1lhpac') format('embedded-opentype'),
+    url('fonts/icomoon.woff?-1lhpac') format('woff'),
+    url('fonts/icomoon.ttf?-1lhpac') format('truetype'),
+    url('fonts/icomoon.svg?-1lhpac#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-menu:before {
+  content: "\e600";
+}
+.icon-twitter:before {
+  content: "\e601";
+}
+.icon-facebook:before {
+  content: "\e602";
+}
+
 
 /*general styles*/
 $active: #75dbc7;
@@ -150,10 +185,12 @@ body .navbar {
   }
 }
 
-.navbar-nav .active a.add-new {
+.navbar-nav .active a.add-new,
+.navbar-nav a.add-new {
   border:1px solid #2F0CE8;
   background: #2F0CE8;
   color: #FFF;
+  margin: 7px 0;
 }
 
 .events {
@@ -539,5 +576,64 @@ body .navbar {
     #sidebar-event-list {
       display: none;
     }
+  }
+}
+.formlegend {
+  border-top: 1px solid #666;
+  margin-bottom: 20px;
+  div { 
+    text-align: center;
+    background: #FFF;
+    width: auto;
+    margin: 0 auto;
+    margin-top: -10px;
+    width: 150px;
+    font-weight: bold;
+  }
+}
+.omniauth-login { 
+  width: 100%;
+  margin: 20px auto;
+  padding-left: 0px;
+  li { 
+
+    list-style: none;
+    margin-bottom: 20px;
+    a { 
+      font-weight: lighter;
+      color: #FFF;
+      display: block;
+      font-size: 19px;
+    }
+    a span.txt { 
+      display: block;
+      padding: 30px 0px;
+      text-indent: 20px;
+    }
+    span.icon { 
+      font-size: 40px;
+      display: block;
+      float: left;
+      border-right: 2px solid #FFF;
+      margin: 10px;
+      padding: 10px;
+    }
+  }
+  li.twitter a { 
+    background: #90C7E7;
+  }
+  li.twitter a:hover { 
+    background: darken(#90C7E7,5%);
+    text-decoration: none;
+  }
+  li.facebook a { 
+    background: #7690BC;
+    span.icon { 
+      padding-right: 30px;
+    }
+  }
+  li.facebook a:hover { 
+    background: darken(#7690BC,5%);
+    text-decoration: none;
   }
 }
