@@ -102,7 +102,7 @@ describe "Event Store", ->
         @blocks.last().increaseLimit 3
 
       it "should have the new events in the block", ->
-        expect(@store.blocks.last().events.length).toBe(6)
+        expect(@store.blocks.last().events.length).toBe(7)
 
       it "should have the event with the new highest number of upvotes first", ->
         expect(@store.blocks.last().events.first().upvotes()).toBe(10)
