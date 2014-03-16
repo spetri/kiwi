@@ -29,7 +29,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       @view.event_block.show @eventBlocksView
 
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
-    @listenTo @sidebarView, 'itemview:clicked:event', @triggerShowEvent
+    @listenTo @sidebarView.eventListView, 'itemview:clicked:event', @triggerShowEvent
 
     @view.onClose = () =>
       @stop()
@@ -51,7 +51,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     App.vent.trigger 'container:show', event.model
 
   @triggerShowEventDeep = (block, event) ->
-    App.vent.trigger 'container:show', event.model
+    @triggerShowEvent(event)
 
   @fetchMoreBlocks = () =>
     @eventStore.loadNextEvents(3)
