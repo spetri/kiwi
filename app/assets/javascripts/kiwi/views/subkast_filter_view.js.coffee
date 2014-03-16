@@ -6,9 +6,10 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       'change input': 'save'
 
     save: (e) =>
-      @trigger 'subkasts:save', @$('[type="checkbox"]:checked').map((i, subkast) =>
+      subkasts = @$('[type="checkbox"]:checked').map((i, subkast) =>
         $(subkast).attr('name')
       ).toArray()
+      @model.setSubkasts subkasts
 
     renderSubkastOptions: () =>
       FK.Utils.RenderHelpers.populate_checkboxes_from_array(@,

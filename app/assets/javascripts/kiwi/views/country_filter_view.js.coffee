@@ -6,7 +6,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       'change select': 'save'
 
     save: (e) =>
-      @trigger('country:save', @$('option:selected').val())
+      country = @$('option:selected').val()
+      @model.setCountry country
 
     modelEvents:
       'change:country': 'refreshChosenCountry'

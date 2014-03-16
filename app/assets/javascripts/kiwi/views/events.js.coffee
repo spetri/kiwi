@@ -5,30 +5,28 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @addInitializer () ->
     # get the dependencies:
     @events = App.request('events')
-    @currentUser = App.request 'currentUser'
+    @currentUser = App.request('currentUser')
     @eventStore = App.request('eventStore')
     @eventBlocks = App.request('eventStore').blocks
     @topRankedEvents = App.request('eventStore').topRanked
+
+    # setting up the view model:
     @sidebarViewModel = new EventList.SidebarViewModel
        username: @currentUser.get('username')
 
-    #initialize the views that we need:
+    # creating the views:
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks
 
-    @sidebarViewModel = new EventList.SidebarViewModel
-      username: @currentUser.get('username')
-      model: @sidebarViewModel
-    
     @sidebarView = new EventList.Sidebar
       model: @sidebarViewModel
       collection: @topRankedEvents
 
+    # binding the events:
     @view.on 'show', =>
       @view.sidebar.show @sidebarView
       @view.event_block.show @eventBlocksView
-
 
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
     @listenTo @sidebarView, 'itemview:clicked:event', @triggerShowEvent
