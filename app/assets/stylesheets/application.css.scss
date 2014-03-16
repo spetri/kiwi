@@ -23,6 +23,20 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes {
   font-family:'Roboto Slab', Helvetica, sans-serif !important;
 }
 
+/* button styles */
+
+.navbar .btn-focus,
+.btn-focus {
+  background: darken($active,10%);
+  color: $activeText;
+  border: 1px solid darken($active,10%);
+}
+.navbar .btn-alt,
+.btn-alt {
+  background: #EEE;
+  border: 1px solid #EEE;
+}
+
 /* navbar */
 body .navbar {
   background-color: #fff;
@@ -42,15 +56,6 @@ body .navbar {
   }
   .navbar-right li {
     padding: 10px;
-    .btn-focus {
-      background: darken($active,10%);
-      color: $activeText;
-      border: 1px solid darken($active,10%);
-    }
-    .btn-alt {
-      background: #EEE;
-      border: 1px solid #EEE;
-    }
   }
 
   .filter-region {
@@ -82,7 +87,21 @@ body .navbar {
     }
   }
 }
-
+.omniauth-sign-up {
+  border-left: 1px solid #CCC;
+  ul { 
+    list-style: none;
+    margin: 0 0;
+    padding: 0;
+    float: left;
+    li { 
+      margin: 0 0;
+      display: inline;
+      width: 140px;
+    }
+  }
+  height: 250px;
+}
 .profile{
   border:none;
   background:none;
@@ -221,26 +240,26 @@ body .navbar {
   ol {
     padding-left: 22px;
   }
-  #subkast-filter { 
+  #subkast-filter {
     padding-bottom: 20px;
     border-bottom: 1px solid #F0F0F0;
   }
   .sidebar-element {
-    ul { 
+    ul {
       margin-top: 0px;
       margin-left: 30px;
-      li { 
+      li {
         margin-left:10px;
       }
     }
   }
-  h5 { 
+  h5 {
     padding-top: 14px;
   }
-  select { 
+  select {
     width: 80%;
   }
-  .checkbox-container { 
+  .checkbox-container {
     padding-left: 20px;
   }
 }

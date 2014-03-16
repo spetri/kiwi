@@ -18,14 +18,14 @@
   <ul class="nav navbar-nav navbar-right">
     <% if (username) { %>
       <li>
-        <a class="btn btn-default btn-focus" href="/users/edit"><%= username %></a>
+        <a class="btn btn-focus" href="/users/edit"><%= username %></a>
       </li>
       <li>
-        <a class="btn btn-default btn-alt" href="<%= FK.Links.logout %>">logout</a>
+        <a class="btn btn-alt" href="<%= FK.Links.logout %>">logout</a>
       </li>
     <% } else { %>
-      <li><a href="<%= FK.Links.register %>" class="btn btn-default btn-focus" href="">Sign up</a></li>
-      <li><a href="<%= FK.Links.login %>" class="btn btn-default btn-alt">Log in</a></li>
+      <li><a href="<%= FK.Links.register %>" class="btn btn-focus" href="">Sign up</a></li>
+      <li><a href="<%= FK.Links.login %>" class="btn btn-alt">Log in</a></li>
     <% } %>
   </ul>
 
