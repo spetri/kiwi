@@ -1,44 +1,43 @@
 <div class="row">
-  <div class="col-md-4">
-    <h4>Sign into Forekast</h4>
-    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-      <div><%= f.label :username %><br />
-      <%= f.text_field :username, :autofocus => true %></div>
-
-      <div><%= f.label :password %><br />
-      <%= f.password_field :password %></div>
-
-      <% if devise_mapping.rememberable? -%>
-        <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
+  <div class="col-md-10">
+    <h2>Sign in!</h2>
+    <%- if devise_mapping.omniauthable? %>
+      <ul class="omniauth-login">
+      <%- resource_class.omniauth_providers.each do |provider| %>
+        <li class="<%= provider %>">
+        <%= link_to "<span class=\"icon icon-#{provider}\"></span><span class=\"txt\">Login in with #{provider.to_s.titleize} </span>".html_safe, user_omniauth_authorize_path(provider), class: provider %></li>
       <% end -%>
+    </ul>
+    <% end -%>
+    <div class="formlegend">
+      <div>Or via email</div>
+    </div>
+    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => 'form-horizontal sign-up' }) do |f| %>
+      <div class="form-group">
+        <%= f.label  :username, class: 'col-sm-2 control-label' %>
+        <div class="col-sm-offset-0 col-sm-4">
+          <%= f.text_field :username, class: 'form-control', :autofocus => true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :password, class: 'col-sm-2 control-label' %>
+        <div class="col-sm-offset-0 col-sm-4">
+          <%= f.password_field :password, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+      <% if devise_mapping.rememberable? -%>
+        <div class="pull-left"><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
+      <% end -%>
+      </div>
 
-      <div><%= f.submit "Sign in", class: 'btn btn-focus' %></div>
+      <div class=""><%= f.submit "Sign in", class: 'btn btn-focus' %></div>
     <% end %>
     <hr />
     <div class="">
       <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
         <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
       <% end -%>
-
-      <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-        <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br />
-      <% end -%>
-
-      <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-        <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
-      <% end -%>
     </div>
-  </div>
-  <div class="col-md-3 omniauth-sign-up">
-    <h4> Or sign in with: </h4>
-    <ul>
-    <%- if devise_mapping.omniauthable? %>
-      <%- resource_class.omniauth_providers.each do |provider| %>
-        <li>
-          <%= link_to "#{provider.to_s.titleize}", user_omniauth_authorize_path(provider), class: 'btn btn-alt' %>
-        </li>
-      <% end -%>
-    <% end -%>
-    </ul>
   </div>
 </div>
