@@ -13,9 +13,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       username: @currentUser.get('username')
       model: @navbarViewModel
 
+    @sidebar = App.Sidebar.create(@sidebarConfig)
+
     @layout = new Navbar.NavbarLayout
     @layout.on 'show', =>
-      @layout.navbarRegion.show @navbarView
+      @layout.navbar.show @navbarView
+      @layout.mobile_sidebar.show @sidebar.layout
 
   @show = () ->
     App.navbarRegion.show @layout
@@ -31,7 +34,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   class Navbar.NavbarLayout extends Marionette.Layout
     template: FK.Template('navbar_layout')
     regions:
-      navbarRegion: '#navbar-region'
+      navbar: '#navbar-region'
+      mobile_sidebar: '#mobile-sidebar'
     className: 'navbar-container'
 
   class Navbar.NavbarView extends Backbone.Marionette.ItemView

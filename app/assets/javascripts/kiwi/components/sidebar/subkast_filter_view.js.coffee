@@ -5,6 +5,9 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     events:
       'change input': 'save'
 
+    modelEvents:
+      'change:subkasts': 'refreshChosenSubkast'
+
     save: (e) =>
       subkasts = @$('[type="checkbox"]:checked').map((i, subkast) =>
         $(subkast).attr('name')
@@ -17,6 +20,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
         App.request('subkastOptionsAsArray'), 'subkast-option')
 
     refreshChosenSubkast: (model, subkasts) =>
+      @$("input[type=checkbox]").prop('checked', false)
       _.each subkasts, (subkast) =>
         @$("[name=\"#{subkast}\"]").prop('checked', true)
 

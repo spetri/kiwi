@@ -48,7 +48,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @view.close()
     @eventBlocksView.close()
 
-    # keep a reference of the sidebar configuration:
+    # keep a copy of the sidebar configuration:
     @sidebarConfig = @sidebar.value()
 
     @sidebar.close()
