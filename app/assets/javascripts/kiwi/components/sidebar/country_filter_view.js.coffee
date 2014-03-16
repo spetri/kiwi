@@ -1,5 +1,5 @@
-FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) ->
-  class EventList.CountryFilterView extends Marionette.ItemView
+FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
+  class Sidebar.CountryFilterView extends Marionette.ItemView
     template: FK.Template('country_filter')
     className: 'country-filter filter'
     events:

@@ -5,31 +5,22 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @addInitializer () ->
     # get the dependencies:
     @events = App.request('events')
-    @currentUser = App.request('currentUser')
     @eventStore = App.request('eventStore')
     @eventBlocks = App.request('eventStore').blocks
-    @topRankedEvents = App.request('eventStore').topRanked
-
-    # setting up the view model:
-    @sidebarViewModel = new EventList.SidebarViewModel
-       username: @currentUser.get('username')
 
     # creating the views:
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks
 
-    @sidebarView = new EventList.Sidebar
-      model: @sidebarViewModel
-      collection: @topRankedEvents
+    @sidebar = App.Sidebar.create(@sidebarConfig)
 
     # binding the events:
     @view.on 'show', =>
-      @view.sidebar.show @sidebarView
+      @view.sidebar.show @sidebar.layout
       @view.event_block.show @eventBlocksView
 
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
-    @listenTo @sidebarView.eventListView, 'itemview:clicked:event', @triggerShowEvent
 
     @view.onClose = () =>
       @stop()
@@ -46,36 +37,22 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
       @fetchMoreBlocks() if percentage > 0.9
 
-
-  @triggerShowEvent = (event) ->
+  @triggerShowEventDeep = (block, event) ->
     App.vent.trigger 'container:show', event.model
 
-  @triggerShowEventDeep = (block, event) ->
-    @triggerShowEvent(event)
-
   @fetchMoreBlocks = () =>
-    @eventStore.loadNextEvents(3)
+    @eventStore.loadNextEvents(5)
 
   @addFinalizer () =>
     $(document).off('scroll')
     @view.close()
     @eventBlocksView.close()
-    @sidebarView.close()
+
+    # keep a reference of the sidebar configuration:
+    @sidebarConfig = @sidebar.value()
+
+    @sidebar.close()
     @stopListening
-
-  class EventList.SidebarViewModel extends Backbone.Model
-    defaults:
-      username: null
-      country: 'CA'
-      countryName: 'Canada'
-      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'HA', 'OTH']
-
-    setCountry: (country) =>
-      @set 'country', country
-      @set 'countryName', App.request('countryName', country)
-
-    setSubkasts: (subkasts) =>
-      @set 'subkasts', subkasts
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "container"

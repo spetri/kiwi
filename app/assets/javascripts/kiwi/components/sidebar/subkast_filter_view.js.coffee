@@ -1,5 +1,5 @@
-FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) ->
-  class EventList.SubkastFilterView extends Marionette.ItemView
+FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
+  class Sidebar.SubkastFilterView extends Marionette.ItemView
     className: 'filter subkast-filter'
     template: FK.Template('subkast_filter')
     events:
