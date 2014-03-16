@@ -3,7 +3,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     className: 'filter subkast-filter'
     template: FK.Template('subkast_filter')
     events:
-      'click .btn': 'save'
+      'change input': 'save'
 
     save: (e) =>
       @trigger 'subkasts:save', @$('[type="checkbox"]:checked').map((i, subkast) =>
@@ -11,24 +11,14 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       ).toArray()
 
     renderSubkastOptions: () =>
-      _.each(App.request('subkastOptionsAsArray'), (subkast) =>
-        @$('.checkbox-container').append(
-          '<div class="checkbox subkast-option"><label class="subkast-option"><input type="checkbox" name="' + subkast.value + '" /> ' + subkast.option + '</label></div>')
-      )
+      FK.Utils.RenderHelpers.populate_checkboxes_from_array(@,
+        '.checkbox-container',
+        App.request('subkastOptionsAsArray'), 'subkast-option')
 
     refreshChosenSubkast: (model, subkasts) =>
       _.each subkasts, (subkast) =>
-        @$('[name="' + subkast + '"]').prop('checked', true)
-
-    refreshSaveButton: (model, username) =>
-      if username
-        @$('.save-button').text('Save')
-      else
-        @$('.save-button').text('Apply')
+        @$("[name=\"#{subkast}\"]").prop('checked', true)
 
     onRender: =>
       @renderSubkastOptions()
       @refreshChosenSubkast @model, @model.get('subkasts')
-      @refreshSaveButton @model, @model.get('username')
-
-  
