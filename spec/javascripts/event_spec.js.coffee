@@ -352,9 +352,9 @@ describe "Event", ->
   describe 'top ranked', ->
     beforeEach ->
       @events = new FK.Collections.EventList FK.SpecHelpers.Events.UpvotedEvents
-      @topEvents = @events.topRanked(3, moment(), moment().add('days', 7))
+      @topEvents = @events.topRanked(3, moment(), moment().add('days', 7), 'CA', ['ST'])
 
-    it 'should be able to find an arbitary number of the top ranked events', ->
+    it 'should be able to find an arbitrary number of the top ranked events', ->
       expect(@topEvents.length).toBe(3)
 
     it 'should be finding events that are top ranked', ->
@@ -367,9 +367,9 @@ describe "Event", ->
       expect(@topEvents[1].get('name')).toBe('event 6')
 
 describe 'event list', ->
-  describe 'sorting', ->
+  describe 'top ranked sorting', ->
     beforeEach ->
-      @events = new FK.Collections.BaseEventList()
+      @events = new FK.Collections.TopRankedEventList()
       @events.reset [
         { upvotes: 2, datetime: moment().add(hours: 4), name: 'Google Day' }
         { upvotes: 6, datetime: moment().add(hours: -2), name: 'Groundhog Day' }
@@ -405,9 +405,8 @@ describe 'event list', ->
       topRanked = 10
       eventsPerDay = 3
       eventsMinimum = 10
-      @events.fetchStartupEvents(topRanked, eventsPerDay, eventsMinimum)
+      @events.fetchStartupEvents("CA", ["ST", "SE"], topRanked, eventsPerDay, eventsMinimum)
       expect(@requests.length).toBe(1)
-      expect(@requests[0].url).toBe('api/events/startupEvents?howManyTopRanked=10&howManyEventsPerDay=3&howManyEventsMinimum=10')
 
     it "should be able to fetch more events by a date", ->
       @events.reset([
@@ -427,22 +426,34 @@ describe 'event list', ->
 
     describe "getting events from the events list by date", ->
       beforeEach ->
+        @country = "CA"
+        @subkasts = ["ST", "SE"]
         @events.reset(FK.SpecHelpers.Events.SimpleEvents)
 
       it "should be able to get a list of events from the collection by date", ->
-        expect(@events.eventsByDate(moment(), 3).length).toBe(3)
+        expect(@events.eventsByDate(moment(), @country, @subkasts, 3).length).toBe(3)
 
       it "should get the event with the highest number of upvotes first", ->
-        expect(@events.eventsByDate(moment(), 3)[0].upvotes()).toBe(5)
+        expect(@events.eventsByDate(moment(), @country, @subkasts, 3)[0].upvotes()).toBe(5)
 
       it "should get the events with the lowest number of upvotes last", ->
-        expect(@events.eventsByDate(moment(), 3)[2].upvotes()).toBe(2)
+        expect(@events.eventsByDate(moment(), @country, @subkasts, 3)[2].upvotes()).toBe(2)
 
       it "should be able to skip a given number of events", ->
-        expect(@events.eventsByDate(moment(), 2).length).toBe(2)
+        expect(@events.eventsByDate(moment(), @country, @subkasts, 2).length).toBe(2)
 
       it "should be able to exclude certain events", ->
-        expect(@events.eventsByDate(moment(), 2, [FK.SpecHelpers.Events.SimpleEvents[1]])[0].id).not.toEqual(2)
+        expect(@events.eventsByDate(moment(), @country, @subkasts, 2, [FK.SpecHelpers.Events.SimpleEvents[1]])[0].id).not.toEqual(2)
+
+      describe "and filtering by subkasts", ->
+        beforeEach ->
+          @events.reset(FK.SpecHelpers.Events.FilterableEvents)
+
+        it "should only get events that match the filter by country or are international", ->
+          expect(@events.eventsByDate(moment(), "CA", ['ST', 'SE'], 4).length).toBe(3)
+
+        it "should only get events that match the filter by country and subkast", ->
+          expect(@events.eventsByDate(moment(), "CA", ['ST'], 3).length).toBe(2)
         
       
 describe 'event block', ->
@@ -530,14 +541,14 @@ describe "event block list", ->
   it "should be able to add events to a block by date", ->
     event = new FK.Models.Event
       datetime: moment().add('days', 1)
-    @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), event)
+    @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), 'CA', ['ST', 'SE'], event)
     expect(@blocks.get(1).events.length).toBe(1)
 
   describe "adding an event without a block already created", ->
     beforeEach ->
       event = new FK.Models.Event
         datetime : moment().add('days', 3)
-      @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), event)
+      @blocks.addEventToBlock(moment(event.get('fk_datetime').format('YYYY-MM-DD')), 'CA', ['ST', 'SE'], event)
 
     it "should have created a new block for the event", ->
       expect(@blocks.length).toBe(2)

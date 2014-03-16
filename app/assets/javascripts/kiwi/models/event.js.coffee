@@ -241,12 +241,7 @@ class FK.Models.EventBlock extends Backbone.Model
     events = _.take(events, events.length - howManyOver) if howManyOver > 0
 
     @events.add(events)
-
-    if @events.length < @get('event_limit')
-      @set('more_events_available', false)
-    else
-      @set('more_events_available', true)
-
+ 
   checkLimit: () =>
     @set({event_limit: @events.length}, {silent: true}) if @events.length < @get('event_limit')
 
@@ -262,13 +257,23 @@ class FK.Models.EventBlock extends Backbone.Model
   checkEventCount: =>
     $.get(
       '/api/events/countByDate',
-      datetime: @relativeDate().format('YYYY-MM-DD HH:mm:SS'),
+      datetime: @relativeDate().format('YYYY-MM-DD HH:mm:ss'),
+      zone_offset: moment().zone()
+      country: @get('country')
+      subkasts: @get('subkasts')
       (resp) =>
         @set('event_max_count', resp.count)
     )
 
 class FK.Collections.BaseEventList extends Backbone.Collection
   model: FK.Models.Event
+  comparator: (event1, event2) =>
+    return -1 if event1.upvotes() > event2.upvotes()
+    return 0 if event1.upvotes() == event2.upvotes()
+    return 1 if event1.upvotes() < event2.upvotes()
+
+
+class FK.Collections.TopRankedEventList extends FK.Collections.BaseEventList
   comparator: (event1, event2) =>
     return -1 if event1.upvotes() > event2.upvotes()
     if event1.upvotes() == event2.upvotes()
@@ -286,41 +291,55 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
   url:
     "/events/"
 
-  fetchStartupEvents: (howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
+  fetchStartupEvents: (country, subkasts, howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
     @fetch
       url: 'api' + @url + 'startupEvents'
       data:
+        datetime: moment().startOf('day').add('minutes', moment().zone()).format('YYYY-MM-DD HH:mm:ss')
+        zone_offset: moment().zone()
+        country: country
+        subkasts: subkasts
         howManyTopRanked: howManyTopRanked
         howManyEventsPerDay: howManyEventsPerDay
         howManyEventsMinimum: howManyEventsMinimum
 
-  fetchMoreEventsByDate: (date, howManyEvents, skip) =>
+  fetchMoreEventsByDate: (date, country, subkasts, howManyEvents, skip) =>
     @fetch
       url: 'api' + @url + 'eventsByDate'
       remove: false
       data:
         datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')
+        zone_offset: moment().zone()
+        country: country
+        subkasts: subkasts
         howManyEvents: howManyEvents
         skip: skip
 
-  fetchMoreEventsAfterDate: (date, howManyEvents) =>
+  fetchMoreEventsAfterDate: (date, country, subkasts, howManyEvents) =>
     @fetch
       url: 'api' + @url + 'eventsAfterDate'
       remove: false
       data:
         datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')
+        zone_offset: moment().zone()
+        country: country
+        subkasts: subkasts
         howManyEvents: howManyEvents
 
-  eventsByDate: (date, howManyEvents, skip = []) =>
+  eventsByDate: (date, country, subkasts, howManyEvents, skip = []) =>
     @chain().
     filter( (event) -> event.isOnDate(date) ).
+    filter( (event) -> event.get('location_type') is 'international' or event.get('country') == country ).
+    filter( (event) -> _.contains(subkasts, event.get('subkast')) ).
     reject( (event) -> _.contains(_.map(skip, (event) -> event.get('_id')), event.get('_id')) ).
     first(howManyEvents).
     value()
 
-  topRanked: (howManyEvents, startDate, endDate) =>
+  topRanked: (howManyEvents, startDate, endDate, country, subkasts) =>
     @chain().
     filter( (event) => event.in_range(startDate, endDate)).
+    filter( (event) => event.get('location_type') is 'international' or event.get('country') == country ).
+    filter( (event) => _.contains(subkasts, event.get('subkast') )).
     first(howManyEvents).
     value()
 
@@ -333,10 +352,13 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     return 0 if date1 == date2
     return -1 if date1 < date2
 
-  addEventToBlock: (date, event) =>
+  addEventToBlock: (date, country, subkasts, event) =>
+    return if not (event.inFuture() or event.isOnDate(moment()))
     block = @find( (block) => block.isDate(date))
     if not block
       block = new FK.Models.EventBlock
         date: moment(date)
+        country: country
+        subkasts: _.clone(subkasts)
       @add block
     block.addEvents event

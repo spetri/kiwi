@@ -6,6 +6,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @navbarModel = new Navbar.NavbarModel
       username: @currentUser.get('username')
+
+    @navbarModel.setCountry(@currentUser.get('country')) if @currentUser.get('country')
+    @navbarModel.setSubkasts(@currentUser.get('subkasts')) if @currentUser.get('subkasts')
     @navbarModel.set('username', null) if not @currentUser.get('logged_in')
 
     @layout = new Navbar.NavbarLayout
@@ -23,6 +26,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @listenTo @countryFilterView, 'country:save', @toggleCountryFilterView
     @listenTo @subkastFilterView, 'subkasts:save', @filterSubkasts
     @listenTo @subkastFilterView, 'subkasts:save', @toggleSubkastFilterView
+
+    @listenTo App.vent, 'filter:country', @navbarModel.setCountry
+    @listenTo App.vent, 'filter:subkasts', @navbarModel.setSubkasts
 
     @layout.on 'show', =>
       @layout.navbarRegion.show @navbarView
@@ -45,13 +51,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       @subkastFilterView.delegateEvents()
 
   @filterSubkasts = (subkasts) =>
-    @navbarModel.set('subkasts', subkasts)
-    @trigger 'filter:subkasts', subkasts
+    @navbarModel.setSubkasts subkasts
+    App.vent.trigger 'filter:subkasts', subkasts
 
   @filterCountry = (country) =>
-    @navbarModel.set('country', country)
-    @navbarModel.set('countryName', App.request('countryName', country))
-    @trigger 'filter:country', country
+    @navbarModel.setCountry country
+    App.vent.trigger 'filter:country', country
 
   @close = () ->
     @view.close()
@@ -62,6 +67,13 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       country: 'CA'
       countryName: 'Canada'
       subkasts: ['TVM', 'SE', 'ST', 'PRP', 'HA', 'OTH']
+
+    setCountry: (country) =>
+      @set 'country', country
+      @set 'countryName', App.request('countryName', country)
+
+    setSubkasts: (subkasts) =>
+      @set 'subkasts', subkasts
       
   class Navbar.NavbarLayout extends Marionette.Layout
     template: FK.Template('navbar_layout')

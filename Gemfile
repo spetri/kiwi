@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails', '~> 4.0.3'
 
-gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git', :ref => 'b84b811d47778b9d9f1a6ebc5e084aac7b9c0b63'
+gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
 
 gem 'bson_ext'
 gem 'devise', '3.1.0.rc2'
@@ -42,7 +42,7 @@ end
 group :development, :test do
   gem 'mina'
   gem 'timecop'
-  gem 'debugger'
+  gem 'debugger', '1.6.6'
   gem 'guard'
   gem 'guard-spork'
   gem 'spork-rails', :github => 'sporkrb/spork-rails'
