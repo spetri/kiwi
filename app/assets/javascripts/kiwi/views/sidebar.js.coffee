@@ -17,8 +17,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
       @countryFilterView = new EventList.CountryFilterView
         model: @model
-      
-      # listen to filtering changes in the rest of the application: 
+
+      # listen to filtering changes in the rest of the application:
       @listenTo App.vent, 'filter:subkasts', @model.setSubkasts
       @listenTo App.vent, 'filter:country', @model.setCountry
 
@@ -31,7 +31,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     notifyCountryChange: (model, country) =>
       App.vent.trigger 'filter:country', country
-    
+
     onRender: =>
       @event_list.show @eventListView
       @country_filter.show @countryFilterView
