@@ -89,12 +89,12 @@ body .navbar {
 }
 .omniauth-sign-up {
   border-left: 1px solid #CCC;
-  ul { 
+  ul {
     list-style: none;
     margin: 0 0;
     padding: 0;
     float: left;
-    li { 
+    li {
       margin: 0 0;
       display: inline;
       width: 140px;
@@ -150,10 +150,10 @@ body .navbar {
   }
 }
 
-.add-new {
-  border:1px solid #ccc;
-  border-radius:20px;
-  margin-top:10px;
+.navbar-nav .active a.add-new {
+  border:1px solid #2F0CE8;
+  background: #2F0CE8;
+  color: #FFF;
 }
 
 .events {
@@ -490,6 +490,54 @@ body .navbar {
     width:100%;
     div {
       display: inline-block;
+    }
+  }
+}
+#mobile-sidebar {
+  padding: 0;
+  margin-top: 0px;
+  .filter {
+    background: #FFF;
+    border: none;
+    padding: 0;
+  }
+  .sidebar {
+    margin-top: 0px;
+  }
+  h5 {
+    font-size: 13px;
+    line-height: 13px;
+    padding: 0 0px;
+    margin: 0;
+  }
+  .country-filter-title {
+    float: left;
+  }
+  .country-filter {
+    width: auto;
+  }
+  .checkbox  {
+    margin: 0px;
+  }
+  .form-control {
+    margin-bottom: 5px;
+  }
+  #subkast-filter {
+    border-bottom: none;
+    margin-bottom: 0px;
+  }
+  display: none;
+}
+@media (max-width: 768px) {
+  body .navbar ul.navbar-right {
+    li {
+      padding: 5px 0;
+    }
+  }
+  #mobile-sidebar {
+    display: block;
+    #sidebar-event-list {
+      display: none;
     }
   }
 }
