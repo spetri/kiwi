@@ -19,6 +19,7 @@ FactoryGirl.define do
     location_type "national"
     subkast "ST"
     is_all_day false
+    time_format ''
 
     trait :with_2_upvotes do
       upvote_names ["eventlover1", "eventlover2"]
@@ -52,12 +53,25 @@ FactoryGirl.define do
       local_date 1.week.ago.to_date
     end
 
+    trait :split_datetime do
+      datetime 5.week.from_now - 8.hour
+      local_date 5.week.from_now
+    end
+
     trait :all_day do
       is_all_day true
     end
 
     trait :international do
       location_type "international"
+    end
+
+    trait :recurring do
+      time_format "recurring"
+    end
+
+    trait :tv_show do
+      time_format "tv_show"
     end
   end
 end

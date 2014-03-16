@@ -50,6 +50,25 @@ describe Event do
           Array(Event.get_events_by_date(@testTime, 300, "CA", ["ST"])).size.should == 3
         end
       end
+
+      describe "recurring timezone events" do
+        before(:each) do
+          create :event, :split_datetime, :recurring
+        end
+        it "should be able to get recurring timezone events on its local date" do
+          Event.get_events_by_date(5.week.from_now + 300.minutes, 300, "CA", ["ST"]).size.should == 1
+        end 
+      end
+
+      describe "tv show events" do
+        before(:each) do
+          create :event, :split_datetime, :tv_show
+        end
+
+        it "should be able to get tv show events on its local date" do
+          Event.get_events_by_date(5.week.from_now + 6.hour, 300, "CA", ["ST"]).size.should == 1
+        end
+      end
     end
 
     describe "sorting" do

@@ -166,12 +166,17 @@ class Event
       ]
     }
 
-    done = self.any_of({ is_all_day: false, datetime: (startDatetime..endDatetime) }, { is_all_day: true, local_date: (startDate..endDate) }).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
+    done = self.any_of(
+      { is_all_day: false, time_format: '', datetime: (startDatetime..endDatetime) },
+      { is_all_day: false, time_format: 'recurring', local_date: (startDate..endDate) },
+      { is_all_day: false, time_format: 'tv_show', local_date: (startDate..endDate) },
+      { is_all_day: true, local_date: (startDate..endDate) }
+    ).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
     events = done.find.to_a.map { |kv| Event.new(kv["value"]) }
 
-    return events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
-    drop(skip).
-    take(howMany)
+    sortedEvents = events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
+    howMany = sortedEvents.size if howMany == 0
+    return sortedEvents.slice(skip, howMany)
   end
 
   def self.get_last_date

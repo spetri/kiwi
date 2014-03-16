@@ -36,9 +36,19 @@ describe "Event Store", ->
 
     describe "filter by country", ->
       beforeEach ->
+        @xhr = sinon.useFakeXMLHttpRequest()
+        @requests = []
+        @xhr.onCreate = (xhr) =>
+          @requests.push xhr
+ 
         @vent = _.clone(Backbone.Events)
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+        @store = new FK.EventStore vent: @vent
+
         @store.filterByCountry("CA")
+
+        @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify(
+          FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        ))
         @topRanked = @store.topRanked
       
       it "should only have top ranked events with the country CA", ->
@@ -55,9 +65,20 @@ describe "Event Store", ->
 
     describe "filter by subkasts", ->
       beforeEach ->
+        @xhr = sinon.useFakeXMLHttpRequest()
+        @requests = []
+        @xhr.onCreate = (xhr) =>
+          @requests.push xhr
+
         @vent = _.clone(Backbone.Events)
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+
+        @store = new FK.EventStore vent: @vent
+
         @store.filterBySubkasts(['HA', 'PRP', 'ST'])
+
+        @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify(
+          FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        ))
         @topRanked = @store.topRanked
       
       it "should only have top ranked events with the filtered subkasts", ->
@@ -181,9 +202,17 @@ describe "Event Store", ->
 
     describe "filter by country", ->
       beforeEach ->
+        @xhr = sinon.useFakeXMLHttpRequest()
+        @requests = []
+        @xhr.onCreate = (xhr) =>
+          @requests.push xhr
+
         @vent = _.clone(Backbone.Events)
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+        @store = new FK.EventStore vent: @vent
         @store.filterByCountry("CA")
+        @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify(
+          FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        ))
         @blocks = @store.blocks
       
       it "should only have blocks that contain events with the country CA", ->
@@ -206,9 +235,17 @@ describe "Event Store", ->
 
     describe "filter by subkasts", ->
       beforeEach ->
+        @xhr = sinon.useFakeXMLHttpRequest()
+        @requests = []
+        @xhr.onCreate = (xhr) =>
+          @requests.push xhr
+
         @vent = _.clone(Backbone.Events)
-        @store = new FK.EventStore events: FK.SpecHelpers.Events.UpvotedEventsWithCountries, vent: @vent
+        @store = new FK.EventStore vent: @vent
         @store.filterBySubkasts(['TVM', 'ST', 'HA'])
+        @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify(
+          FK.SpecHelpers.Events.UpvotedEventsWithCountries
+        ))
         @blocks = @store.blocks
 
       it "should only have blocks that contain events with the filtered subkasts", ->
