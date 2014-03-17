@@ -591,6 +591,12 @@ body .navbar {
     font-weight: bold;
   }
 }
+.center { 
+  text-align: center;
+  p { 
+    margin-top: 20px;
+  }
+}
 .omniauth-login { 
   width: 100%;
   margin: 20px auto;
@@ -604,6 +610,7 @@ body .navbar {
       color: #FFF;
       display: block;
       font-size: 19px;
+      height: 80px;
     }
     a span.txt { 
       display: block;
@@ -629,7 +636,8 @@ body .navbar {
   li.facebook a { 
     background: #7690BC;
     span.icon { 
-      padding-right: 30px;
+      padding-left: 15px;
+      padding-right: 25px;
     }
   }
   li.facebook a:hover { 

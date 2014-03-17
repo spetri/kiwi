@@ -5,7 +5,7 @@
     <ul class="omniauth-login">
     <%- resource_class.omniauth_providers.each do |provider| %>
       <li class="<%= provider %>">
-      <%= link_to "<span class=\"icon icon-#{provider}\"></span><span class=\"txt\">Login in with #{provider.to_s.titleize} </span>".html_safe, user_omniauth_authorize_path(provider), class: provider %></li>
+      <%= link_to "<span class=\"icon icon-#{provider}\"></span><span class=\"txt\">Sign up with #{provider.to_s.titleize} </span>".html_safe, user_omniauth_authorize_path(provider), class: provider %></li>
     <% end -%>
     </ul>
   <% end -%>
@@ -51,7 +51,12 @@
       </div>
     </div>
 
-    <div><%= f.submit "Sign up", class: 'btn btn-focus' %></div>
+    <div class="center"><%= f.submit "Sign up", class: 'btn btn-focus' %></div>
   <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-10 center">
+    <p>Already have an account? <%= link_to "Sign in", session_path(User) %></p>
   </div>
 </div>
