@@ -1,15 +1,22 @@
-<div class="row">
-  <div class="col-sm-12 col-sm-offset-<%=depth%>">
-    <div class="up-vote" style="background:red">< ></div>
-    <div class="comment">
-      <p class="info">
+<div class="comment" style="border-left:1px dotted #aaa; margin-left:40px">
+  <div class="" style="margin-left:5px">
+    <div class="up-vote" style="display:inline-block;width:10px;vertical-align:top">
+      <i class="fa fa-sort-up" style="cursor:pointer"></i>
+      <i class="fa fa-sort-down" style="cursor:pointer"></i>
+    </div>
+    <div class="user-comment" style="display:inline-block">
+      <p class="info" style="margin-bottom:0">
       <span class="username"> <%= username %> </span>
       <span class="upvotes"> <%= upvotes %> upvote(s) </span>
       <a class="reply"> Reply </a>
       <a class="report"> Report </a>
       <a class="permalink"> Permalink </a>
       </p>
-      <%= body %>
+      <div class="comment-text" style="max-width:40em">
+        <p>
+          <%= body %>
+        </p>
+      </div>
     </div>
   </div>
 </div>

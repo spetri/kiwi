@@ -4,7 +4,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     @domLocation = options.domLocation
 
     @collection = new Comments.CommentCollection([{
-      body: 'This looks like it will be an awesome event!',
+      body: 'This looks like it will be an awesome event! He heard something loud and clearly out of the ordinary, but somewhat familiar. So he immediately reacted by a reflexive look up, then paused to determine the orgin and legitimacy of the familiar sound. He then determined that the chances of one of his kind attending this musical precession was highly unlikely, and continued on with what he was doing. He also would like to add, that your remark was very insulting, and suggest that you think next time before accusing an imaginary elephant of stupidity.',
       username: 'Kirk',
       upvotes: 10,
       depth:0,
@@ -83,6 +83,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     initialize: =>
       @collection = @model.replies
+
+    appendHtml: (collectionView, itemView) =>
+      collectionView.$("div.comment").append(itemView.el)
 
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentView
