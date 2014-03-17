@@ -29,6 +29,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     App.mainRegion.show @view
 
+    #TODO this spams on the MAC when scrolling the bottom of the pags
     $(document).scroll (e) =>
       $doc = $(e.target)
       $window = $(window)
