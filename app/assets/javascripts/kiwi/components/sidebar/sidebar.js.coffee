@@ -2,7 +2,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
   @create = (sidebarConfig) ->
     @model = new Sidebar.ViewModel
       username: App.request('currentUser')
-    
+
     # if we have a configuration, load it:
     @model.set(sidebarConfig)
 
@@ -75,7 +75,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
       @event_list.show @eventListView
       @country_filter.show @countryFilterView
       @subkast_filter.show @subkastFilterView
-  
+
   class Sidebar.ViewModel extends Backbone.Model
     defaults:
       username: null
