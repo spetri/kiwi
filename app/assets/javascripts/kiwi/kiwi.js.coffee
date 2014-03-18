@@ -32,24 +32,22 @@ FK.App.addRegions({
 
 FK.App.addInitializer (prefetch) ->
   FK.Links = prefetch.links
-  FK.CurrentUser = new FK.Models.User(prefetch.user)
 
-  if prefetch.user != null
-    FK.CurrentUser.set(logged_in: true, silent: true)
+  FK.CurrentUser = new FK.Models.User(prefetch.user)
+  FK.CurrentUser.set(logged_in: true, silent: true) if prefetch.user != null
+
+  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, vent: FK.App.vent
 
   FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
-  FK.Data.EventStore = new FK.EventStore events: prefetch.events, howManyStartingBlocks: 10, vent: FK.App.vent
+  FK.Data.EventStore = new FK.EventStore
+      events: prefetch.events,
+      howManyStartingBlocks: 10,
+      vent: FK.App.vent
+      country: FK.CurrentUser.get('country')
+      subkasts: FK.CurrentUser.get('subkasts')
+
   FK.Data.EventStore.fetchStartupEvents()
-
-  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, vent: FK.App.vent
-  FK.Data.UserMediator.getUserLocation() if not FK.CurrentUser.get('country') and FK.CurrentUser.get('logged_in')
-
-  if FK.CurrentUser.get('country')
-    FK.App.vent.trigger 'filter:country', FK.CurrentUser.get('country')
-
-  if FK.CurrentUser.get('subkasts')
-    FK.App.vent.trigger 'filter:subkasts', FK.CurrentUser.get('subkasts')
 
   FK.App.appRouter = new FK.Routers.AppRouter()
 

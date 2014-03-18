@@ -3,6 +3,11 @@ class FK.UserMediator extends Marionette.Controller
     @user = options.user
     @vent = options.vent
 
+    @listenTo @vent, 'filter:subkasts', @saveSubkasts
+    @listenTo @vent, 'filter:country', @saveCountry
+
+    @getUserLocation() if not FK.CurrentUser.get('country') and FK.CurrentUser.get('logged_in')
+
   getUserLocation: () =>
     navigator.geolocation.getCurrentPosition(( position ) =>
       latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
@@ -13,3 +18,9 @@ class FK.UserMediator extends Marionette.Controller
         @vent.trigger('filter:country', @user.get('country'))
       )
     )
+
+  saveSubkasts: (subkasts) =>
+    @user.save({subkasts: subkasts})
+
+  saveCountry: (country) =>
+    @user.save({country: country})
