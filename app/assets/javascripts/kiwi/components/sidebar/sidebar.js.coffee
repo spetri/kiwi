@@ -1,7 +1,13 @@
 FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
   @create = (sidebarConfig) ->
+    sidebarConfig = {} if not sidebarConfig
+
+    @user = App.request('currentUser')
+
     @model = new Sidebar.ViewModel
-      username: App.request('currentUser')
+      username: @user
+
+    _.defaults(sidebarConfig, @user.pick('country', 'subkasts'))
 
     # if we have a configuration, load it:
     @model.set(sidebarConfig)
