@@ -213,6 +213,13 @@ class FK.Models.Event extends Backbone.GSModel
     return 'Other' if not @has('subkast')
     return FK.Data.subkastOptions[@get('subkast')]
 
+  descriptionParsed: () =>
+    @get('description').replace(new RegExp("(http:\/\/)?(([a-zA-Z]+\\.)?[a-zA-Z]+\\.[a-zA-Z]{2,3}(\/[a-zA-Z\/_]+(\\.[a-zA-Z]+)?)?)", "g"), (m1) =>
+      m2 = ''
+      m2 = 'http://' if m1.indexOf('http') != 0
+      "<a target=\"_blank\" href=\"#{m2}#{m1}\">#{m1}</a>"
+    )
+
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>
     return {
