@@ -78,4 +78,8 @@ class User
     super && provider.blank?
   end
 
+  def admin?
+    false
+  end
+
 end

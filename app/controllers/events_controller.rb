@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
+  authorize_resource :only => [:update, :destroy, :create]
 
   def index
     @events = Event.where(:datetime.ne => nil)

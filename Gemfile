@@ -12,6 +12,7 @@ gem 'omniauth-facebook', '1.4.0'
 gem 'omniauth-twitter'
 
 gem 'whenever'
+gem 'cancan'
 
 #Server
 gem 'thin'
