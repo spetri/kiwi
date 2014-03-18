@@ -4,7 +4,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     template: FK.Template('event_form')
 
     events:
-      'click .save': 'saveClicked'
+      'click .btn-success': 'saveClicked'
       'change input[name=name]': 'validateName'
       'change input[name=location_type]': 'renderLocation'
 
@@ -21,8 +21,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     saveClicked: (e) =>
       e.preventDefault()
-      @$('.save').addClass 'disabled'
-      @$('.save').html 'Saving...'
+      @$('.save-container').html('<i class="icon-spinner icon-spin icon-2x"></i>')
       @trigger 'save'
 
     modelEvents:
