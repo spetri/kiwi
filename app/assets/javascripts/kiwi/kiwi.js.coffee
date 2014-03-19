@@ -84,6 +84,9 @@ FK.App.reqres.setHandler 'currentUser', () ->
 FK.App.reqres.setHandler 'subkastOptionsAsArray', () ->
   _.map(FK.Data.subkastOptions, (val, key) -> { value: key, option: val })
 
+FK.App.reqres.setHandler 'subkastKeys', () ->
+  _.keys(FK.Data.subkastOptions)
+
 FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()
 

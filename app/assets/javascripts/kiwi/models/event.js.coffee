@@ -59,6 +59,18 @@ class FK.Models.Event extends Backbone.GSModel
     resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
     resp
 
+  validate: (attrs, options) =>
+    errors = []
+
+    errors.push('Event must have a name.') if not attrs.name
+    errors.push('Event name must be less than 100 characters long.') if attrs.name and attrs.name.length > 100
+
+    errors.push('Event must have a datetime.') if not attrs.datetime
+
+    errors.push('Event must have a real subkast.') if not _.contains(FK.App.request('subkastKeys'), attrs.subkast)
+
+    if errors.length == 0 then false else errors
+
   isAllDay: () =>
     @get('is_all_day') is '1' or @get('is_all_day') is true or @get('is_all_day') is 'true'
 

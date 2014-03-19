@@ -385,6 +385,32 @@ describe "Event", ->
       @event.set('description', 'google.ca')
       expect(@event.descriptionParsed()).toBe('<a target=\"_blank\" href=\"http://google.ca\">google.ca</a>')
 
+  describe 'validation', ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+      @event.set('name', 'Great event')
+      @event.set('datetime', moment())
+      @event.set('subkast', 'OTH')
+
+    it "should not be valid when the event does not a have name", ->
+      @event.unset('name')
+      expect(@event.isValid()).toBeFalsy()
+      expect(@event.validationError.length).toBe(1)
+
+    it "should not have a name longer than 100 characters", ->
+      @event.set('name', 'aasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdafsdfasdfasdfasdfasdf')
+      expect(@event.isValid()).toBeFalsy()
+      expect(@event.validationError.length).toBe(1)
+
+    it "should not be valid if it does not have a datetime", ->
+      @event.unset('datetime')
+      expect(@event.isValid()).toBeFalsy()
+      expect(@event.validationError.length).toBe(1)
+
+    it "should not be valid if it does not have a subkast", ->
+      @event.set('subkast', 'OTM')
+      expect(@event.isValid()).toBeFalsy()
+
 describe 'event list', ->
   describe 'top ranked sorting', ->
     beforeEach ->
