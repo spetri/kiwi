@@ -16,7 +16,6 @@ class FK.Models.Event extends Backbone.GSModel
       upvotes: 0
       have_i_upvoted: false
       country_full_name: ''
-      subkast: 'OTH'
     }
 
   urlRoot: () =>
