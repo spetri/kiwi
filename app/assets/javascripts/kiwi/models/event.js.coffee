@@ -218,7 +218,7 @@ class FK.Models.EventBlock extends Backbone.Model
     return {
       date: moment()
       more_events_available: true
-      event_limit: 3
+      event_limit: 5
     }
 
   initialize: () =>

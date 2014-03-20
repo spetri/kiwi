@@ -35,6 +35,11 @@
       <label class="col-lg-3"> 6. Description</label>
       <textarea name="description" cols="80" rows="3"></textarea>
     </div>
-    <button class="save pull-right btn btn-success">Save</button>
+    <div class="pull-right">
+      <div class="save-container">
+        <button class="btn btn-success">Save</button>
+      </div>
+      <div class="clearfix"></div>
+    </div>
     <div class="clearfix"></div>
 </form>
