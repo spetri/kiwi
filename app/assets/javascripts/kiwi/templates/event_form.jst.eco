@@ -37,7 +37,6 @@
     </div>
     <div class="pull-right">
       <div class="save-container">
-        <button class="btn btn-success">Save</button>
       </div>
       <div class="clearfix"></div>
     </div>
