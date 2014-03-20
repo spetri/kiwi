@@ -1,0 +1,11 @@
+defaults: &defaults
+  user_voice_key: USERVOICEKEY
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
