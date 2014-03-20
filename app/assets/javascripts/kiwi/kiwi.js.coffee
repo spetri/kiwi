@@ -87,6 +87,9 @@ FK.App.reqres.setHandler 'subkastOptionsAsArray', () ->
 FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()
 
+FK.App.commands.setHandler 'signInPage', () ->
+  window.location.href = '/users/sign_in'
+
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {

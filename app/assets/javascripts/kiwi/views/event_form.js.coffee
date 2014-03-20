@@ -3,6 +3,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer (event) ->
+    @user = App.request('currentUser')
+    return App.execute('signInPage') if @user.get('logged_in') == false
+
     @event = event || new FK.Models.Event()
     @eventComponents = []
 
