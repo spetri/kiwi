@@ -19,8 +19,15 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       _.each subkasts, (subkast) =>
         @$('[name="' + subkast + '"]').prop('checked', true)
 
+    refreshSaveButton: (model, username) =>
+      if username
+        @$('.save-button').text('Save')
+      else
+        @$('.save-button').text('Apply')
+
     onRender: =>
       @renderSubkastOptions()
       @refreshChosenSubkast @model, @model.get('subkasts')
+      @refreshSaveButton @model, @model.get('username')
 
   

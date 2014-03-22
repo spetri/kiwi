@@ -6,7 +6,7 @@
     <span class="event-title"><%= name %></span>
     <span class="event-time-location">(<% if (location_type == 'national') { %><%= country_full_name%><% } else { %>Global<% } %>, <%= prettyDateTime() %>)</span></div>
   <div class="event-description-container">
-    <span class="event-description"><%= description%></span>
+    <span class="event-description"><%= description()%></span>
     <span class="event-submitter">(Submitted by <%= user %>)</span>
   </div>
   <div class="event-tools-container">

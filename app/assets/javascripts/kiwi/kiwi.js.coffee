@@ -32,14 +32,21 @@ FK.App.addRegions({
 
 FK.App.addInitializer (prefetch) ->
   FK.Links = prefetch.links
-  FK.CurrentUser = new FK.Models.User(prefetch.user)
 
-  if prefetch.user != null
-    FK.CurrentUser.set(logged_in: true, silent: true)
+  FK.CurrentUser = new FK.Models.User(prefetch.user)
+  FK.CurrentUser.set(logged_in: true, silent: true) if prefetch.user != null
+
+  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, vent: FK.App.vent
 
   FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
-  FK.Data.EventStore = new FK.EventStore events: prefetch.events, howManyStartingBlocks: 10
+  FK.Data.EventStore = new FK.EventStore
+      events: prefetch.events,
+      howManyStartingBlocks: 10,
+      vent: FK.App.vent
+      country: FK.CurrentUser.get('country')
+      subkasts: FK.CurrentUser.get('subkasts')
+
   FK.Data.EventStore.fetchStartupEvents()
 
   FK.App.appRouter = new FK.Routers.AppRouter()
@@ -76,6 +83,9 @@ FK.App.reqres.setHandler 'currentUser', () ->
 
 FK.App.reqres.setHandler 'subkastOptionsAsArray', () ->
   _.map(FK.Data.subkastOptions, (val, key) -> { value: key, option: val })
+
+FK.App.reqres.setHandler 'subkastKeys', () ->
+  _.keys(FK.Data.subkastOptions)
 
 FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()
