@@ -148,9 +148,9 @@ class Event
 
     possible_events_mr = self.any_of(
       { is_all_day: false, time_format: '', :datetime.gte => datetime },
-      { is_all_day: false, time_format: 'recurring', :local_date.gt => date },
-      { is_all_day: false, time_format: 'tv_show', :local_date.gt => date },
-      { is_all_day: true, :local_date.gt => date }
+      { is_all_day: false, time_format: 'recurring', :local_date.gte => date },
+      { is_all_day: false, time_format: 'tv_show', :local_date.gte => date },
+      { is_all_day: true, :local_date.gte => date }
     ).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
 
     possible_events = possible_events_mr.find.to_a.map { |kv| Event.new(kv["value"]) }
@@ -161,7 +161,6 @@ class Event
     dates = possible_events.collect { |event| event.relative_date(zone_offset) }
     dates.sort_by! { |date| date }
     dates = dates.uniq
-    debugger
 
     dates.each do |date|
       eventsOnDate = sorted_possible_events.select { |event| event.relative_date(zone_offset) == date }
