@@ -3,9 +3,10 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.0.3'
 
-gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
+gem "bson"
+gem "moped", github: "mongoid/moped"
+gem 'mongoid', github: 'mongoid/mongoid'
 
-gem 'bson_ext'
 gem 'devise', '3.1.0.rc2'
 gem 'slim-rails'
 gem 'omniauth-facebook', '1.4.0'

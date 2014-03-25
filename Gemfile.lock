@@ -1,4 +1,23 @@
 GIT
+  remote: git://github.com/mongoid/mongoid.git
+  revision: dba1c17b1dba667e50347ab616aaf6f2e1bee094
+  specs:
+    mongoid (4.0.0.beta1)
+      activemodel (>= 4.0.0)
+      moped (~> 2.0.beta6)
+      origin (~> 2.1)
+      tzinfo (>= 0.3.37)
+
+GIT
+  remote: git://github.com/mongoid/moped.git
+  revision: e238b4a757d64d980e3137c5b57a37a1729733a9
+  specs:
+    moped (2.0.0.beta6)
+      bson (~> 2.2)
+      connection_pool (~> 1.2)
+      optionable (~> 0.2.0)
+
+GIT
   remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
   revision: 436ceba61ad40bbef649c9b87b75684b37bea409
   branch: bootstrap3
@@ -23,16 +42,6 @@ GIT
   specs:
     jasminerice (0.1.0)
       coffee-rails
-
-GIT
-  remote: https://github.com/mongoid/mongoid.git
-  revision: bde8ac1b0f16aaad7e343073ce8c5b5b9c9ffc5b
-  specs:
-    mongoid (4.0.0.beta1)
-      activemodel (>= 4.0.0)
-      moped (~> 2.0.beta6)
-      origin (~> 2.1)
-      tzinfo (>= 0.3.37)
 
 GEM
   remote: https://rubygems.org/
@@ -65,7 +74,6 @@ GEM
     atomic (1.1.15)
     bcrypt-ruby (3.1.2)
     bson (2.2.1)
-    bson_ext (1.5.1)
     builder (3.1.4)
     celluloid (0.15.2)
       timers (~> 1.1.0)
@@ -192,10 +200,6 @@ GEM
       mongoid (>= 3.0.1)
       rake
       rspec (>= 2.14)
-    moped (2.0.0.beta6)
-      bson (~> 2.2)
-      connection_pool (~> 1.2)
-      optionable (~> 0.2.0)
     multi_json (1.9.0)
     multipart-post (1.2.0)
     oauth (0.4.7)
@@ -343,7 +347,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bson_ext
+  bson
   coffee-rails (~> 4.0.0)
   database_cleaner
   debugger (= 1.6.6)
@@ -365,6 +369,7 @@ DEPENDENCIES
   mongoid!
   mongoid-paperclip
   mongoid-rspec
+  moped!
   omniauth-facebook (= 1.4.0)
   omniauth-twitter
   paperclip (~> 3.0)

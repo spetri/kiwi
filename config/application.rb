@@ -13,6 +13,11 @@ end
 CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
 CONFIG.merge! CONFIG.fetch(Rails.env, {})
 
+require "bson"
+require "moped"
+
+Moped::BSON = BSON
+
 module Kiwi
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
