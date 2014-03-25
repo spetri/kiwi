@@ -119,6 +119,14 @@ describe "Event", ->
           expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add( days: 4 ).format('YYYY-MM-DD'))
 
     describe "tv time", ->
+      describe "setting time format after", ->
+        beforeEach ->
+          @event.set(datetime: moment())
+          @event.set(time_format: 'tv_show')
+
+        it "should have the datetime in tv format", ->
+          expect(@event.get('timeAsString')).toBe('12:00/11:00c')
+
       describe "today in the future pm", ->
         beforeEach ->
           @event.set(datetime: moment(), time_format: 'tv_show', local_time: '7:20 PM')

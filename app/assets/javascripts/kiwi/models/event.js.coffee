@@ -28,6 +28,8 @@ class FK.Models.Event extends Backbone.GSModel
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
 
+    @on 'change:time_format', @update_tv_time
+
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
@@ -174,7 +176,13 @@ class FK.Models.Event extends Backbone.GSModel
       @set('local_time', moment_val.format('h:mm A'))
       @set('local_date', moment_val.format('YYYY-MM-DD'))
       # set the input time to UTC:
-      return moment(moment_val).zone(0)
+      adjustedMoment = moment(moment_val).zone(0)
+      adjustedMoment.zone(300) if @get('time_format') is 'tv_show'
+      return adjustedMoment
+
+    update_tv_time: (model, format) ->
+      if @has('datetime') and format is 'tv_show'
+        @set('datetime', moment(@get('local_date') + ' ' + @get('local_time')))
 
   upvotes: =>
     @get 'upvotes'

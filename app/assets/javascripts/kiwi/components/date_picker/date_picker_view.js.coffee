@@ -53,6 +53,12 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @$('[name="time_format"]').not('[value="' + @model.get('time_format') + '"]').removeAttr('checked', 'checked')
       @$('[name="time_format"][value="' + @model.get('time_format') + '"]').attr('checked', 'checked')
       @refreshTimeDisplay()
+      @refreshTimezone()
+
+    refreshTimezone: =>
+      tz = jstz.determine()
+      name = if @model.get('time_format') is 'tv_show' then 'America/New York' else tz.name()
+      @$('.timezone-display').text(name.replace('_', ' '))
 
     onRender: () =>
       date = @model.get('datetime')
