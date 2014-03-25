@@ -28,7 +28,7 @@ end
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
 gem 'therubyracer', platforms: :ruby
-gem "twitter-bootstrap-rails", :github => "seyhunak/twitter-bootstrap-rails", :branch => "bootstrap3"
+gem "twitter-bootstrap-rails", :github => "seyhunak/twitter-bootstrap-rails", :branch => "bootstrap3", :ref => "58173572b5c10cfb5f1e17fbc03a8d1a9e808eb7"
 gem 'less-rails'
 
 gem 'jbuilder', '~> 1.2'
