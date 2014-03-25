@@ -251,7 +251,8 @@ class FK.Models.EventBlock extends Backbone.Model
   initialize: () =>
     @events = new FK.Collections.BaseEventList()
     @on 'change:event_max_count', @determineMoreEventsAvailable
-    @events.on 'add remove reset', @determineMoreEventsAvailable
+    @events.on 'add', @determineMoreEventsAvailable
+    @events.on 'remove reset', @checkEventCount
     @checkEventCount()
 
   isToday: () =>
@@ -276,6 +277,7 @@ class FK.Models.EventBlock extends Backbone.Model
     @set('event_limit', @get('event_limit') + howMuch)
 
   determineMoreEventsAvailable: =>
+    return @destroy() if @get('event_max_count') == 0
     @set('more_events_available', @events.length < @get('event_max_count'))
 
   relativeDate: () =>
