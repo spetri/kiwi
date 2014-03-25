@@ -14,6 +14,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
     updateTimeFormat: =>
       time_format = @$('input[name=time_format]:checked').val()
       @model.set('time_format', time_format)
+      @updateDateTime()
 
     updateAllDay: =>
       is_all_day = @$('input[name=is_all_day]').prop('checked')

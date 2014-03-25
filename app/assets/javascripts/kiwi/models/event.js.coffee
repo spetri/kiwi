@@ -152,7 +152,8 @@ class FK.Models.Event extends Backbone.GSModel
 
     easternHours += 12 if @get('local_ampm') is 'PM'
 
-    moment(moment(@get('local_date')).format('YYYY-MM-DD') + ' -0500', 'YYYY-MM-DD ZZ').
+    zone = ' -0' + (FK.App.request('easternOffset') / 60) + '00'
+    moment(moment(@get('local_date')).format('YYYY-MM-DD') + zone, 'YYYY-MM-DD ZZ').
     add( hours: easternHours, minutes: easternMinutes )
 
   datetimeAllDay: () =>
@@ -175,9 +176,9 @@ class FK.Models.Event extends Backbone.GSModel
       moment_val = moment(moment_val)
       @set('local_time', moment_val.format('h:mm A'))
       @set('local_date', moment_val.format('YYYY-MM-DD'))
+      moment_val.zone(FK.App.request('easternOffset')) if @get('time_format') is 'tv_show'
       # set the input time to UTC:
       adjustedMoment = moment(moment_val).zone(0)
-      adjustedMoment.zone(300) if @get('time_format') is 'tv_show'
       return adjustedMoment
 
     update_tv_time: (model, format) ->

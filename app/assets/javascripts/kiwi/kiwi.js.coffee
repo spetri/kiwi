@@ -90,6 +90,9 @@ FK.App.reqres.setHandler 'subkastKeys', () ->
 FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()
 
+FK.App.reqres.setHandler 'easternOffset', () ->
+  moment().tz('America/New_York').zone() - moment().tz('Europe/London').zone()
+
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {
