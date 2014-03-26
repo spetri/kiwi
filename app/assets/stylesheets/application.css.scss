@@ -55,7 +55,7 @@ body, h1, h2, h6, .h1, .h2, .h4, .h6, p, a, span, label, button {
   font-family:Helvetica, sans-serif;
 }
 
-h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, col-lg-3 {
+h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col-lg-3, .btn-more {
   font-family:'Roboto Slab', Helvetica, sans-serif !important;
 }
 
@@ -87,7 +87,8 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, col-
 
 body .navbar {
   background-color: #fff;
-  border: 1px solid #F0F0F0;
+  border-bottom: 1px dotted #F0F0F0;
+  margin:10px 10px;
 
   a.navbar-brand {
     display: block;
@@ -96,6 +97,7 @@ body .navbar {
     margin-left: 10px;
     background: url('/assets/logo.png') top left no-repeat;
     width: 220px;
+    opacity:0.75;
     
   }
   ul.nav a {
@@ -118,6 +120,18 @@ body .navbar {
       left: 468px;
     }
   }
+  
+  
+.navbar-nav .active a.add-new,
+.navbar-nav a.add-new {
+  border:1px solid #ccc;
+  color: #369DD6;
+  margin: 10px 20px;
+  
+  &:hover{
+  background:#fbfbfb;
+  }
+}
 
   .filter {
     background-color: #efefef;
@@ -190,28 +204,21 @@ body .navbar {
     height:30px;
     border-radius: 0px;
     margin: 0px auto;
-    background-color:#f0f0f0;
+    background-color:#e7e7e7;
+    font-weight:600;
+    color:#666;
   }
 
   .btn:hover {
     background-color: lighten($active, 10%);
+    color:#666;
+    font-weight:600;
   }
 }
 
 #event-blocks-region {
     padding-left:0px;
     margin-left:-5px;
-}
-
-.navbar-nav .active a.add-new,
-.navbar-nav a.add-new {
-  border:1px solid #ccc;
-  color: #369DD6;
-  margin: 10px 50px;
-  
-  &:hover{
-  background:#fbfbfb;
-  }
 }
 
 .events {
@@ -224,7 +231,7 @@ body .navbar {
   margin-bottom: 5px;
   font-size:16px;
   &:hover {
-    background-color:#f1f1f1;
+    background-color:#efefef;
   }
   .upvote-container {
     height: 60px;
@@ -283,6 +290,7 @@ body .navbar {
 .event-form.col-md-8 {
   float: none;
   margin: 0px auto;
+  padding-top:5px;
 }
 
 
@@ -432,6 +440,8 @@ body .navbar {
     }
   }
 }
+
+/* EVENT PAGE */
 
 .event-page.col-md-8 {
   float: none;
@@ -667,5 +677,14 @@ body .navbar {
   li.facebook a:hover { 
     background: darken(#7690BC,5%);
     text-decoration: none;
+  }
+}
+
+.well {
+  border:0px;
+  
+  .form-group {
+    padding-bottom: 25px !important;
+    border-bottom: 1px solid #ECECEC !important;
   }
 }

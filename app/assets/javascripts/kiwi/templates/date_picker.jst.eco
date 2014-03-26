@@ -2,11 +2,11 @@
 <input type="text" name="date" />
 
 <label style="margin-left: 60px; font-weight: normal" class="right" >
-  <input type="checkbox" <% if @is_all_day: %> checked="checked" <% end %> value="1" name="is_all_day" /> &nbsp; All Day
+  <input type="checkbox"  <% if @is_all_day: %> checked="checked" <% end %> value="1" name="is_all_day" /> &nbsp; All Day
 </label>
 <br/>
 <div style="position: relative; height:20px; width: 75%; margin-left: 25%;">
-  <hr style="position: absolute; border-top: 1px solid #DDD; left: 40px; top: 0px; width: 92%;" />
+  <hr style="position: absolute; border-top: 1px solid #e7e7e7; left: 40px; top: 0px; width: 92%;" />
   <span style="position: absolute; top:10px;">OR</span>
 </div>
 <br/>
