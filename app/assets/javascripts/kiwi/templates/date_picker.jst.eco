@@ -30,6 +30,7 @@
     <option value="AM" >AM</option>
     <option value="PM" >PM</option>
   </select>
+  <span class="timezone-display"></span>
 </div>
 <div class="col-lg-offset-3">
   <h5 style="padding-top:30px;" class="col-offset-3">Special Time Format?</h5>

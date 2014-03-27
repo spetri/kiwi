@@ -125,8 +125,8 @@ describe "Event Store", ->
         describe "responding with less than the number of events requested", ->
           beforeEach ->
             @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify([
-              { _id: 20, upvotes: 5, datetime: moment().add('days', 3) }
-              { _id: 21, upvotes: 4, datetime: moment().add('days', 3) }
+              { _id: 20, upvotes: 5, datetime: moment().add('days', 3), subkast: 'OTH' }
+              { _id: 21, upvotes: 4, datetime: moment().add('days', 3), subkast: 'OTH' }
             ]))
 
           it "should be able to add the events from the response to the block", ->

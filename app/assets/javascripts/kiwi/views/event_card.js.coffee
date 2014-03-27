@@ -8,13 +8,13 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         return {
           prettyDateTime: () => @model.get('datetimeAsString')
           editAllowed: () => @model.editAllowed()
+          description: () => @model.descriptionParsed()
         }
 
       ui:
         upvotesIcon: '#upvotes-icon'
 
       triggers:
-        'click': 'click:card'
         'click [data-action="edit"]': 'click:edit'
         'click [data-tool="reminders"] .event-tool': 'click:reminders'
 

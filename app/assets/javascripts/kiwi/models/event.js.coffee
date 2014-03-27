@@ -28,6 +28,8 @@ class FK.Models.Event extends Backbone.GSModel
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
 
+    @on 'change:time_format', @update_tv_time
+
   sync: (action, model, options) =>
     methodMap =
       'create': 'POST'
@@ -58,6 +60,18 @@ class FK.Models.Event extends Backbone.GSModel
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
     resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
     resp
+
+  validate: (attrs, options) =>
+    errors = []
+
+    errors.push('Event must have a name.') if not attrs.name
+    errors.push('Event name must be less than 100 characters long.') if attrs.name and attrs.name.length > 100
+
+    errors.push('Event must have a datetime.') if not attrs.datetime
+
+    errors.push('Event must have a real subkast.') if not _.contains(FK.App.request('subkastKeys'), attrs.subkast)
+
+    if errors.length == 0 then false else errors
 
   isAllDay: () =>
     @get('is_all_day') is '1' or @get('is_all_day') is true or @get('is_all_day') is 'true'
@@ -138,7 +152,8 @@ class FK.Models.Event extends Backbone.GSModel
 
     easternHours += 12 if @get('local_ampm') is 'PM'
 
-    moment(moment(@get('local_date')).format('YYYY-MM-DD') + ' -0500', 'YYYY-MM-DD ZZ').
+    zone = ' -0' + (FK.App.request('easternOffset') / 60) + '00'
+    moment(moment(@get('local_date')).format('YYYY-MM-DD') + zone, 'YYYY-MM-DD ZZ').
     add( hours: easternHours, minutes: easternMinutes )
 
   datetimeAllDay: () =>
@@ -161,8 +176,14 @@ class FK.Models.Event extends Backbone.GSModel
       moment_val = moment(moment_val)
       @set('local_time', moment_val.format('h:mm A'))
       @set('local_date', moment_val.format('YYYY-MM-DD'))
+      moment_val.zone(FK.App.request('easternOffset')) if @get('time_format') is 'tv_show'
       # set the input time to UTC:
-      return moment(moment_val).zone(0)
+      adjustedMoment = moment(moment_val).zone(0)
+      return adjustedMoment
+
+    update_tv_time: (model, format) ->
+      if @has('datetime') and format is 'tv_show'
+        @set('datetime', moment(@get('local_date') + ' ' + @get('local_time')))
 
   upvotes: =>
     @get 'upvotes'
@@ -212,6 +233,13 @@ class FK.Models.Event extends Backbone.GSModel
     return 'Other' if not @has('subkast')
     return FK.Data.subkastOptions[@get('subkast')]
 
+  descriptionParsed: () =>
+    @get('description').replace(new RegExp("(http:\/\/)?(([a-zA-Z]+\\.)?[a-zA-Z]+\\.[a-zA-Z]{2,3}(\/[^ ]+)?)", "g"), (m1) =>
+      m2 = ''
+      m2 = 'http://' if m1.indexOf('http') != 0
+      "<a target=\"_blank\" href=\"#{m2}#{m1}\">#{m1}</a>"
+    )
+
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>
     return {
@@ -223,7 +251,8 @@ class FK.Models.EventBlock extends Backbone.Model
   initialize: () =>
     @events = new FK.Collections.BaseEventList()
     @on 'change:event_max_count', @determineMoreEventsAvailable
-    @events.on 'add remove reset', @determineMoreEventsAvailable
+    @events.on 'add', @determineMoreEventsAvailable
+    @events.on 'remove reset', @checkEventCount
     @checkEventCount()
 
   isToday: () =>
@@ -248,6 +277,7 @@ class FK.Models.EventBlock extends Backbone.Model
     @set('event_limit', @get('event_limit') + howMuch)
 
   determineMoreEventsAvailable: =>
+    return @destroy() if @get('event_max_count') == 0
     @set('more_events_available', @events.length < @get('event_max_count'))
 
   relativeDate: () =>

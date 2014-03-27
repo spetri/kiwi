@@ -119,6 +119,14 @@ describe "Event", ->
           expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add( days: 4 ).format('YYYY-MM-DD'))
 
     describe "tv time", ->
+      describe "setting time format after", ->
+        beforeEach ->
+          @event.set(datetime: moment())
+          @event.set(time_format: 'tv_show')
+
+        it "should have the datetime in tv format", ->
+          expect(@event.get('timeAsString')).toBe('12:00/11:00c')
+
       describe "today in the future pm", ->
         beforeEach ->
           @event.set(datetime: moment(), time_format: 'tv_show', local_time: '7:20 PM')
@@ -365,6 +373,51 @@ describe "Event", ->
     it 'should be finding events ordered by date after ranking', ->
       expect(@topEvents[0].get('name')).toBe('event 5')
       expect(@topEvents[1].get('name')).toBe('event 6')
+
+  describe 'description', ->
+    beforeEach ->
+      @event = new FK.Models.Event
+
+    it "should be able to recognize various forms of hyperlinks and parse them", ->
+      hyperlinks = ['http://google.ca', 'http://google.ca', 'http://www.google.ca', 'http://www.google.ca/chrome', 'http://www.google.ca/chrome.php', 'http://www.google.com/chrome/asdf/download.asp', 'http://google.ca/chrome_download/file.asp']
+      _.each(hyperlinks, (hyperlink) =>
+
+        desc = "Find out more on this event at #{hyperlink} the search engine"
+        descParsed = "Find out more on this event at <a target=\"_blank\" href=\"#{hyperlink}\">#{hyperlink}</a> the search engine"
+        @event.set('description', desc)
+        expect(@event.descriptionParsed()).toBe(descParsed)
+
+      )
+
+    it "should be able to tag on http:// if not in the hyperlink", ->
+      @event.set('description', 'google.ca')
+      expect(@event.descriptionParsed()).toBe('<a target=\"_blank\" href=\"http://google.ca\">google.ca</a>')
+
+  describe 'validation', ->
+    beforeEach ->
+      @event = new FK.Models.Event()
+      @event.set('name', 'Great event')
+      @event.set('datetime', moment())
+      @event.set('subkast', 'OTH')
+
+    it "should not be valid when the event does not a have name", ->
+      @event.unset('name')
+      expect(@event.isValid()).toBeFalsy()
+      expect(@event.validationError.length).toBe(1)
+
+    it "should not have a name longer than 100 characters", ->
+      @event.set('name', 'aasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdafsdfasdfasdfasdfasdf')
+      expect(@event.isValid()).toBeFalsy()
+      expect(@event.validationError.length).toBe(1)
+
+    it "should not be valid if it does not have a datetime", ->
+      @event.unset('datetime')
+      expect(@event.isValid()).toBeFalsy()
+      expect(@event.validationError.length).toBe(1)
+
+    it "should not be valid if it does not have a subkast", ->
+      @event.set('subkast', 'OTM')
+      expect(@event.isValid()).toBeFalsy()
 
 describe 'event list', ->
   describe 'top ranked sorting', ->

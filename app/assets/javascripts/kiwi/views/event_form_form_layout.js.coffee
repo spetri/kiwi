@@ -3,8 +3,10 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     className: "event-form col-md-8"
     template: FK.Template('event_form')
 
+    regions:
+      'saveContainerRegion': '.save-container'
+
     events:
-      'click .btn-success': 'saveClicked'
       'change input[name=name]': 'validateName'
       'change input[name=location_type]': 'renderLocation'
 
@@ -18,11 +20,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
         @$el.find('select[name=country]').attr('disabled','disabled')
       else
         @$el.find('select[name=country]').removeAttr('disabled')
-
-    saveClicked: (e) =>
-      e.preventDefault()
-      @$('.save-container').html('<i class="icon-spinner icon-spin icon-2x"></i>')
-      @trigger 'save'
 
     modelEvents:
       'change:name': 'refreshName'

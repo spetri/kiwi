@@ -96,6 +96,14 @@ class Event
     end
   end
 
+  def relative_date(zone_offset)
+    if self.is_all_day == true || self.time_format == "recurring" || self.time_format == "tv_show"
+      return self.local_date
+    else
+      return (self.datetime - zone_offset.minutes).beginning_of_day
+    end
+  end
+
   def self.get_starting_events(datetime, zone_offset, country, subkasts, minimum, eventsPerDay, topRanked)
     listEvents = self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
     topEvents = self.top_ranked(topRanked, datetime, datetime + 7.days, zone_offset, country, subkasts)
@@ -109,21 +117,6 @@ class Event
     self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, howMany, 3)
   end
 
-  def self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
-    events = []
-    lookupDatetime = datetime
-    lastDate = self.get_last_date
-
-    while events.size < minimum && ( not lookupDatetime.to_date > lastDate) do
-
-      events.concat self.get_events_by_date(lookupDatetime, zone_offset, country, subkasts, eventsPerDay)
-      lookupDatetime = lookupDatetime.next_day
-
-    end
-
-    events
-  end
-
   def self.get_events_by_date(startDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
     endDatetime = startDatetime + 1.day - 1.second
     self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany, skip)
@@ -135,6 +128,47 @@ class Event
 
   def self.top_ranked(howMany, startDatetime, endDatetime, zone_offset, country, subkasts)
     self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany)
+  end
+
+  def self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
+    date = (datetime - zone_offset.minutes).beginning_of_day
+
+    map = %Q[
+      function () {
+        if (this.location_type == 'international' || ( this.location_type == 'national' && this.country == '#{country}'))
+          emit(this._id, this);
+      }
+    ]
+
+    reduce = %Q[
+      function (key, values) {
+        return values;
+      }
+    ]
+
+    possible_events_mr = self.any_of(
+      { is_all_day: false, time_format: '', :datetime.gte => datetime },
+      { is_all_day: false, time_format: 'recurring', :local_date.gte => date },
+      { is_all_day: false, time_format: 'tv_show', :local_date.gte => date },
+      { is_all_day: true, :local_date.gte => date }
+    ).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
+
+    possible_events = possible_events_mr.find.to_a.map { |kv| Event.new(kv["value"]) }
+    sorted_possible_events = possible_events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) } 
+
+    events = []
+    
+    dates = possible_events.collect { |event| event.relative_date(zone_offset) }
+    dates.sort_by! { |date| date }
+    dates = dates.uniq
+
+    dates.each do |date|
+      eventsOnDate = sorted_possible_events.select { |event| event.relative_date(zone_offset) == date }
+      events.concat eventsOnDate.take(eventsPerDay) 
+      break if events.length >= minimum
+    end
+
+    return events
   end
 
   def self.get_events_by_range(startDatetime, endDatetime, zone_offset, country, subkasts, howMany=0, skip=0)
@@ -153,18 +187,6 @@ class Event
         return values;
       }
     ]
-
-    eventQuery = {
-      "subkast" => { "$in" => subkasts },
-      "$or" => [
-        { "location_type" => 'international' },
-        { "location_type" => 'national', country => country }
-      ],
-      "$or" => [
-        { "is_all_day" => false, "datetime" => { "$gte" => startDatetime.to_s, "$lte" => endDatetime.to_s } },
-        { "is_all_day" => true, "local_date" => { "$gte" => startDate.to_s, "$lte" => endDate.to_s } }
-      ]
-    }
 
     done = self.any_of(
       { is_all_day: false, time_format: '', datetime: (startDatetime..endDatetime) },

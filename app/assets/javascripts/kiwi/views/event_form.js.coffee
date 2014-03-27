@@ -15,6 +15,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @listenTo @event, 'saved', @toEvent
     @listenTo @event, 'change:user', @showBaseView
+    @listenTo @event, 'invalid', @showErrors
     @showBaseView()
 
   @showBaseView = () =>
@@ -37,7 +38,14 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @event.clearImage()
 
     @event.save(params, { silent: true })
+
+    return if not @event.isValid()
+
+    @showSpinner()
     App.request('events').add(@event, merge: true)
+
+  @showErrors = (model, errors, options) =>
+    console.log(errors)
 
   @getBaseView = () =>
     if @event.editAllowed(App.request('currentUser').get('username'))
@@ -49,18 +57,24 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     form = new EventForm.FormLayout
       model: @event
 
+    @saveButton = new EventForm.SaveButton()
+
     form.on 'show', () =>
       @eventComponents.push FK.App.ImageTrimmer.create('#image-region', @event)
       @eventComponents.push FK.App.DatePicker.create('#datetime-region', @event)
       @eventComponents.push @view
+      
+      form.saveContainerRegion.show @saveButton
 
-    @listenTo form, 'save', @saveEvent
+    @listenTo @saveButton, 'save', @saveEvent
 
     form
+
+  @showSpinner = () =>
+    @view.saveContainerRegion.show new EventForm.Spinner()
 
   @initNotYourEventView = () =>
     new EventForm.NotYourEventView()
 
   @toEvent = (event) ->
     App.vent.trigger 'container:show', event
-
