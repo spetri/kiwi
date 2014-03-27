@@ -1,6 +1,6 @@
 class User
   include Mongoid::Document
-  
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :omniauth_providers => [:twitter, :facebook]
@@ -76,6 +76,10 @@ class User
 
   def email_required?
     super && provider.blank?
+  end
+
+  def admin?
+    false
   end
 
 end

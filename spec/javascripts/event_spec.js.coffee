@@ -62,7 +62,7 @@ describe "Event", ->
 
         it "should provide the date in the forekast format", ->
           expect(@event.get('dateAsString')).toEqual('Sunday, Jan 19th, 2014')
-          
+
     describe "all day events", ->
       describe "today", ->
         beforeEach ->
@@ -210,7 +210,7 @@ describe "Event", ->
 
       it "should have a time in the fk format", ->
         expect(@event.get('timeAsString')).toBe('3:00 AM')
- 
+
     it "can create a local time on set", ->
       event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
       expect(event.get('local_time')).toBe('1:00 PM')
@@ -277,7 +277,7 @@ describe "Event", ->
     it "should be able to place the event in a range when the event is all day", ->
       event = new FK.Models.Event (datetime: moment(), is_all_day: true)
       expect(event.in_range(moment().add('hours', 2), moment().add('hours', 3))).toBeTruthy()
-      
+
 
   describe "when adding an image", ->
     beforeEach ->
@@ -304,7 +304,7 @@ describe "Event", ->
       @event.set '_id', '1234asdf'
       @event.set 'current_user', 'grayden'
       @event.addReminder('15m')
-    
+
     it 'should be able to add a reminder', ->
       expect(@event.reminders.length).toBe(1)
 
@@ -454,12 +454,12 @@ describe 'event list', ->
 
         it "should only get events that match the filter by country and subkast", ->
           expect(@events.eventsByDate(moment(), "CA", ['ST'], 3).length).toBe(2)
-        
-      
+
+
 describe 'event block', ->
   beforeEach ->
     @block = new FK.Models.EventBlock
-    
+
   it 'can detect if the date of the event block is today', ->
     expect(@block.isToday()).toBeTruthy()
 
