@@ -4,7 +4,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     template: FK.Template('event_form')
 
     events:
-      'click .btn-success': 'saveClicked'
+      'click .btn-focus': 'saveClicked'
       'change input[name=name]': 'validateName'
       'change input[name=location_type]': 'renderLocation'
 
