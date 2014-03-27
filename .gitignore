@@ -20,6 +20,8 @@
 
 public/system
 
+config/application.yml
+
 #Vagrant directory
 .vagrant
 
