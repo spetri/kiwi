@@ -57,10 +57,10 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     initialize: =>
       @eventListView = new Sidebar.EventList
         collection: @collection
-      @subkastFilterView = new Sidebar.SubkastFilterView
+      @subkastFilterView = new FK.App.Sidebar.SubkastFilterView
         model: @model
 
-      @countryFilterView = new Sidebar.CountryFilterView
+      @countryFilterView = new FK.App.Navbar.CountryFilterView
         model: @model
 
       # listen to filtering changes in the rest of the application:
