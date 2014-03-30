@@ -21,6 +21,8 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       'change:location_type': 'refreshLocation'
       'change:country': 'refreshLocation'
       'change:description': 'refreshDescription'
+      'invalid': 'refreshErrors'
+      'start:save': 'clearErrors'
 
     refreshName: (event) ->
       @$('#name').val event.get('name')
@@ -34,6 +36,16 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     refreshDescription: (event) ->
       @$('[name="description"]').val(event.get('description'))
+
+    refreshErrors: (model) ->
+      _.each(model.groupedErrors(), (messages, field) =>
+        @$('[data-field="' + field + '"]').text(messages.join('<br />'))
+      )
+
+    clearErrors: () ->
+      @$('[data-field]').each((i, elem) =>
+        $(elem).text('')
+      )
 
     value: () ->
       window.serializeForm(
