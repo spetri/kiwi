@@ -1,10 +1,6 @@
 # Force all test cases to use Jan 16 at 2:20 pm as the current date time
 sinon.useFakeTimers(1389891600000, "Date")
 
-FK.CurrentUser = new FK.Models.User
-  logged_in: true
-  username: 'jasmine'
-
 FK.SpecHelpers =
   Events:
     SimpleEvents: [

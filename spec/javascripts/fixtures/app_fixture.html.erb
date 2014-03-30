@@ -19,6 +19,6 @@
     countries: <%= raw Country.all.sort(order: 1).to_json() %>,
     events: [],
     links: [],
-    user: <%= user_signed_in? ? raw(current_user.to_json()) : 'null' %>
+    user: {username: 'jasmine', logged_in: 'true' }
   });
 </script>
