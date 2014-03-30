@@ -39,11 +39,19 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     refreshErrors: (model) ->
       _.each(model.groupedErrors(), (messages, field) =>
-        @$('[data-field="' + field + '"]').text(messages.join('<br />'))
+        @$('[data-field="' + field + '"].error').text(messages.join('<br />'))
+      )
+      @toFirstError()
+
+    toFirstError: () ->
+      firstError = _.find( @$('[data-field].error'), (elem) =>
+        $(elem).text().length > 0
       )
 
+      $(document).scrollTop($(firstError).offset().top - 120)
+
     clearErrors: () ->
-      @$('[data-field]').each((i, elem) =>
+      @$('[data-field].error').each((i, elem) =>
         $(elem).text('')
       )
 
