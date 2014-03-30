@@ -5,12 +5,12 @@
   <input type="checkbox"  <% if @is_all_day: %> checked="checked" <% end %> value="1" name="is_all_day" /> &nbsp; All Day
 </label>
 <br/>
-<div style="position: relative; height:20px; width: 75%; margin-left: 25%;">
+<div style="position: relative; height:20px; width: 75%;">
   <hr style="position: absolute; border-top: 1px solid #e7e7e7; left: 40px; top: 0px; width: 92%;" />
   <span style="position: absolute; top:10px;">OR</span>
 </div>
 <br/>
-<div class="col-lg-offset-3 col-lg-9" style="padding-left: 0px;">
+<div class="col-lg-9" style="padding-left: 0px;">
   <select name="hours">
     <% for hour in [1..12]: %>
       <option value="<%= hour %>" ><%= hour %></option>
@@ -32,21 +32,21 @@
   </select>
   <span class="timezone-display"></span>
 </div>
-<div class="col-lg-offset-3">
-  <h5 style="padding-top:30px;" class="col-offset-3">Special Time Format?</h5>
+<div>
+  <h5 style="padding-top:30px;">Special Time Format?</h5>
 
-  <label class="col-offset-3">
+  <label>
     <input type="radio" name="time_format" id="" value="tv_show" /> TV Show (not sports) <span style="font-weight: normal"> (US &amp; Canada only) - A television show in the format 9/8c &dash; Examples: The Office, Friends, 60 Minutes</span>
   </label>
-  <label class="col-offset-3">
+  <label>
     <input type="radio" name="time_format" id="" value="recurring" /> Timezone Recurring Event<span style="font-weight: normal"> &dash; An event that happens throughought the day with each timezone &dash; Examples: a midnight movie premier, beginning of a worldwide festival, the exact moment of New Year's Day, etc. </span>
   </label>
-  <label class="col-offset-3">
+  <label>
     <input type="radio" name="time_format" id="" value="" checked="checked" /> None
   </label>
 
 <br/>
-<div class="col-offset-3 timedisplay clearfix">
+<div class="timedisplay clearfix">
   <span class="time-display">Time will be displayed</span>
   <span class="time-display-value"></span>
 <div>

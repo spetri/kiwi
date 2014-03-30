@@ -1,45 +1,69 @@
 <h3>Add Event!</h3>
-<form class="well" >
-    <div class="form-group">
-      <label class="col-lg-3" for="name">Name of event</label>
+<form class="well">
+  <div class="row">
+    <div class="col-sm-3">
+      <label for="name">Name of event</label>
+    </div>
+    <div class="col-sm-9">
       <input type="text" name="name" id="name"></input>
     </div>
-    <div class="form-group">
-      <label class="col-lg-3">Subkast</label>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <label>Subkast</label>
+    </div>
+    <div class="col-sm-9">
       <select name="subkast">
         <option value="-">Please select...</option>
       </select>
     </div>
-    <div class="form-group">
-      <label class="col-lg-3" for="location">Location</label>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <label for="location">Location</label>
+    </div>
+    <div class="col-sm-9">
       <label>
         <input type="radio" name="location_type" id="" value="international" checked>
         This event can be experienced by an <b>international</b> audience.
       </label>
-      <label class="col-lg-offset-3">
+      <label>
         <input type="radio" name="location_type" id="" value="national" >
         This event can be experienced in a <b>specific country</b>.
       </label>
-      <select class="col-lg-offset-3" name="country"></select>
+      <br />
+      <select name="country"></select>
     </div>
-    <div class="form-group">
-      <label class="col-lg-3" for="location">Date and Time</label>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <label for="location">Date and Time</label>
+    </div>
+    <div class="col-sm-9">
       <div id="datetime-region"></div>
     </div>
-    <div class="form-group">
-      <label class="col-lg-3">Image</label>
-      <div id="image-region" class="col-lg-6"></div>
-      <div class="clearfix"></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <label >Image</label>
     </div>
-    <div class="form-group">
-      <label class="col-lg-3">Description</label>
+    <div class="col-sm-9">
+      <div id="image-region"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <label >Description</label>
+    </div>
+    <div class="col-sm-9">
       <textarea name="description" cols="80" rows="3"></textarea>
     </div>
-    <div class="pull-right">
-      <div class="save-container">
-      </div>
-      <div class="clearfix"></div>
+  </div>
+  <div class="pull-right">
+    <div class="save-container">
     </div>
     <div class="clearfix"></div>
+  </div>
+  <div class="clearfix"></div>
 </form>
 
