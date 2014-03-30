@@ -7,13 +7,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       'saveContainerRegion': '.save-container'
 
     events:
-      'change input[name=name]': 'validateName'
       'change input[name=location_type]': 'renderLocation'
-
-    validateName: (e) =>
-      @$el.find(".error").remove()
-      if $(e.target).val().length > 79
-        $("<div class=\"error\">Event is too long</div>").insertAfter(e.target)
 
     renderLocation: (e) =>
       if @$el.find('input[name=location_type]:checked').val() is "international"
