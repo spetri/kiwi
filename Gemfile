@@ -15,7 +15,7 @@ gem 'whenever'
 gem 'cancan'
 
 #Server
-gem 'thin'
+gem 'puma'
 
 group :assets do
   gem 'sass-rails',   '~> 4.0.0'
