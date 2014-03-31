@@ -23,7 +23,7 @@ set :app_path, lambda { "#{deploy_to}/#{current_path}" }
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/mongoid.yml', 'public/system', 'config/puma.rb', 'log', 'tmp']
+set :shared_paths, ['config/mongoid.yml', 'config/application.yml', 'public/system', 'config/puma.rb', 'log', 'tmp']
 
 set :pid_file, "#{deploy_to}/shared/tmp/pids/puma.pid"
 set :state_file, "#{deploy_to}/shared/tmp/puma/state"
