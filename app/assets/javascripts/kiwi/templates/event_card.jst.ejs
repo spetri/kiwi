@@ -13,7 +13,7 @@
     <span class="event-time-location"><% if (location_type == 'national') { %><%= country_full_name%><% } else { %>Global<% } %>, <%= prettyDateTime() %></span></div>
 
  <div class="event-tools-container">
-    <span class="event-upvotes"><i id="upvotes-icon" class="fa-caret-up"></i> <span class="upvote-counter"></span> upvotes</span>
+    <span class="event-upvotes"><i id="upvotes-icon" class="glyphicon glyphicon-chevron-up"></i> <span class="upvote-counter"></span> upvotes</span>
     <% if (editAllowed()) { %>
      <div class="event-tool-container">
        <span class="event-tool" data-action="edit">(Edit my event)</span>

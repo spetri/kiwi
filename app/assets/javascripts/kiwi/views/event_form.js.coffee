@@ -30,7 +30,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
   @saveEvent = () ->
     @event.trigger('start:save')
     params =
-      user: @user
+      user: @user.get('username')
 
     _.each @eventComponents, (child) ->
       _.extend params, child.value()
