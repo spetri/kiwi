@@ -98,7 +98,7 @@ body .navbar {
     background: url('/assets/logo.png') top left no-repeat;
     width: 220px;
     opacity:0.75;
-    
+
   }
   ul.nav a {
     cursor: pointer;
@@ -120,14 +120,14 @@ body .navbar {
       left: 468px;
     }
   }
-  
-  
+
+
 .navbar-nav .active a.add-new,
 .navbar-nav a.add-new {
   border:1px solid #ccc;
   color: #369DD6;
   margin: 10px 20px;
-  
+
   &:hover{
   background:#fbfbfb;
   }
@@ -617,7 +617,7 @@ body .navbar {
 .formlegend {
   border-top: 1px solid #666;
   margin-bottom: 20px;
-  div { 
+  div {
     text-align: center;
     background: #FFF;
     width: auto;
@@ -627,33 +627,33 @@ body .navbar {
     font-weight: bold;
   }
 }
-.center { 
+.center {
   text-align: center;
-  p { 
+  p {
     margin-top: 20px;
   }
 }
-.omniauth-login { 
+.omniauth-login {
   width: 100%;
   margin: 20px auto;
   padding-left: 0px;
-  li { 
+  li {
 
     list-style: none;
     margin-bottom: 20px;
-    a { 
+    a {
       font-weight: lighter;
       color: #FFF;
       display: block;
       font-size: 19px;
       height: 80px;
     }
-    a span.txt { 
+    a span.txt {
       display: block;
       padding: 30px 0px;
       text-indent: 20px;
     }
-    span.icon { 
+    span.icon {
       font-size: 40px;
       display: block;
       float: left;
@@ -662,21 +662,21 @@ body .navbar {
       padding: 10px;
     }
   }
-  li.twitter a { 
+  li.twitter a {
     background: #90C7E7;
   }
-  li.twitter a:hover { 
+  li.twitter a:hover {
     background: darken(#90C7E7,5%);
     text-decoration: none;
   }
-  li.facebook a { 
+  li.facebook a {
     background: #7690BC;
-    span.icon { 
+    span.icon {
       padding-left: 15px;
       padding-right: 25px;
     }
   }
-  li.facebook a:hover { 
+  li.facebook a:hover {
     background: darken(#7690BC,5%);
     text-decoration: none;
   }
@@ -684,9 +684,12 @@ body .navbar {
 
 .well {
   border:0px;
-  
+
   .form-group {
     padding-bottom: 25px !important;
     border-bottom: 1px solid #ECECEC !important;
+  }
+  .form-footer {
+    text-align: right;
   }
 }
