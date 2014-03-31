@@ -1,6 +1,7 @@
 namespace :db do
   task :empty_seed => :environment do
     Country.delete_all
+    Event.delete_all
 
     IO.readlines('db/countries.csv').each_with_index do |line, index|
       l_split = line.split(',')
