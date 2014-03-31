@@ -105,6 +105,15 @@ task :deploy => :environment do
   end
 end
 
+task :deploy_assets => :environment do
+  deploy do
+    invoke :'git:clone'
+    invoke :'deploy:link_shared_paths'
+    invoke :'bundle:install'
+    invoke :'rails:assets_precompile'
+  end
+end
+
 desc 'Starts the application'
 task :start => :environment do
     queue! %{sudo service puma start}
@@ -128,6 +137,11 @@ end
 desc 'Move to local date field from date'
 task :move_to_local_date => :environment do
   queue "cd #{deploy_to}/current ; rake db:move_date_to_local_date RAILS_ENV=production"
+end
+
+desc 'Prime db for production'
+task :prime_db => :environment do
+  queue "cd #{deploy_to}/current ; rake db:empty_seed RAILS_ENV=production"
 end
 
 desc "Cold Deploy the application for the first time"
