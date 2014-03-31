@@ -10,8 +10,15 @@ if defined?(Bundler)
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
-CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
-CONFIG.merge! CONFIG.fetch(Rails.env, {})
+
+#The config file is not needed on all hosts, so only load it if it is there
+config_file = File.expand_path('../application.yml', __FILE__)
+if (File.exists?(config_file))
+  CONFIG = YAML.load(File.read(config_file))
+  CONFIG.merge! CONFIG.fetch(Rails.env, {})
+else
+  CONFIG = {}
+end
 
 require "bson"
 require "moped"
