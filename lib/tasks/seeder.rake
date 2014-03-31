@@ -1,5 +1,5 @@
 namespace :db do
-  task :empty_seed do
+  task :empty_seed => :environment do
     Country.delete_all
 
     IO.readlines('db/countries.csv').each_with_index do |line, index|
