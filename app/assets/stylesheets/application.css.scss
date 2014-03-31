@@ -100,7 +100,7 @@ body .navbar {
     overflow: hidden;
     text-indent: -999px;
     margin-left: 10px;
-    background: url('/assets/logo.png') top left no-repeat;
+    background: url(asset-path('logo.png')) top left no-repeat;
     width: 220px;
     opacity:0.75;
 
