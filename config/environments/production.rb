@@ -85,6 +85,6 @@ Kiwi::Application.configure do
     :domain         => 'gmail.com',
     :authentication => :plain,
     :user_name      => 'hello@forekast.com',
-    :password       => ENV['EMAIL_PASSWORD']
+    :password       => CONFIG['email_password']
   }
 end

@@ -10,6 +10,13 @@ if defined?(Bundler)
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
+CONFIG = YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
+CONFIG.merge! CONFIG.fetch(Rails.env, {})
+
+require "bson"
+require "moped"
+
+Moped::BSON = BSON
 
 module Kiwi
   class Application < Rails::Application

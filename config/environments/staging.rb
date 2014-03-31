@@ -1,6 +1,6 @@
 Kiwi::Application.configure do
-  config.action_mailer.default_url_options = { :host => 'beta.forekast.com' }
-  Rails.application.routes.default_url_options[:host] = 'beta.forekast.com'
+  config.action_mailer.default_url_options = { :host => 'kiwidev.copysketch.com' }
+  Rails.application.routes.default_url_options[:host] = 'kiwidev.copysketch.com'
 
   # Settings specified here will take precedence over those in config/application.rb.
   # In the development environment your application's code is reloaded on
@@ -17,6 +17,7 @@ Kiwi::Application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true 
+  config.action_mailer.smtp_settings = { :address => "localhost", :port => 25 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -28,14 +29,4 @@ Kiwi::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-
-  #Mailer
-  config.action_mailer.smtp_settings = {
-    :address        => 'smtp.gmail.com',
-    :port           => 587,
-    :domain         => 'gmail.com',
-    :authentication => :plain,
-    :user_name      => 'hello@forekast.com',
-    :password       => ENV['EMAIL_PASSWORD']
-  }
 end

@@ -1,16 +1,19 @@
 <div class="event-image-container col-lg-6">
   <img src="<%=mediumUrl%>" />
+  <div class="event-likes-container">
+    <div class="fb-like" data-layout="button_count" data-action="like" style="width:90px;"></div>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="Forekast">Tweet</a>
+    <div class="g-plusone" data-size="medium" data-annotation="bubble" data-width="200"></div>
+    </div>
 </div>
 <div class="event-info-container col-lg-6">
   <div class="event-heading-container">
     <span class="event-title"><%= name %></span>
-    <span class="event-time-location">(<% if (location_type == 'national') { %><%= country_full_name%><% } else { %>Global<% } %>, <%= prettyDateTime() %>)</span></div>
-  <div class="event-description-container">
-    <span class="event-description"><%= description()%></span>
-    <span class="event-submitter">(Submitted by <%= user %>)</span>
-  </div>
-  <div class="event-tools-container">
-    <span class="event-upvotes"><i id="upvotes-icon" class="icon-caret-up"></i> <span class="upvote-counter"></span> upvotes</span>
+    </br>
+    <span class="event-time-location"><% if (location_type == 'national') { %><%= country_full_name%><% } else { %>Global<% } %>, <%= prettyDateTime() %></span></div>
+
+ <div class="event-tools-container">
+    <span class="event-upvotes"><i id="upvotes-icon" class="glyphicon glyphicon-chevron-up"></i> <span class="upvote-counter"></span> upvotes</span>
     <% if (editAllowed()) { %>
      <div class="event-tool-container">
        <span class="event-tool" data-action="edit">(Edit my event)</span>
@@ -19,10 +22,10 @@
     <div class="event-tool-container">
        <span class="event-tool" data-action="destroy">(Delete my event)</span>
     </div>
-    <div class="event-likes-container">
-      <div class="fb-like" data-layout="button_count" data-action="like"></div>
-      <a href="https://twitter.com/share" class="twitter-share-button" data-via="Forekast">Tweet</a>
-      <div class="g-plusone" data-size="medium" data-annotation="bubble" data-width="200"></div>
-    </div>
+  </div>
+
+  <div class="event-description-container">
+    <span class="event-description"><%= description()%></span>
+    <span class="event-submitter">(Submitted by <%= user %>)</span>
   </div>
 </div>

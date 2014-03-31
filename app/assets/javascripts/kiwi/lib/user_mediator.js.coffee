@@ -9,6 +9,8 @@ class FK.UserMediator extends Marionette.Controller
     @getUserLocation() if not FK.CurrentUser.get('country') and FK.CurrentUser.get('logged_in')
 
   getUserLocation: () =>
+    # TODO: this is borked
+    return;
     navigator.geolocation.getCurrentPosition(( position ) =>
       latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
       geocoder = new google.maps.Geocoder()
