@@ -11,6 +11,7 @@
  *= require_self
  *= require_tree .
  */
+@import "bootstrap";
 @font-face {
   font-family: 'icomoon';
   src:url('/assets/fonts/icomoon.eot?-1lhpac');
@@ -21,6 +22,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 
 [class^="icon-"], [class*=" icon-"] {
   font-family: 'icomoon';
@@ -255,7 +257,7 @@ body .navbar {
         font-size: 16px;
       }
 
-      &.icon-caret-up {
+      &.fa-caret-up {
         font-size: 16px;
       }
       cursor: pointer;

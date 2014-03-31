@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
-  authorize_resource :only => [:update, :destroy, :create]
+  authorize_resource :only => [:destroy, :create]
 
   def index
     @events = Event.where(:datetime.ne => nil)
@@ -70,7 +70,9 @@ class EventsController < ApplicationController
       end
     end
 
-    @event.update_attributes(params)
+    if @event.user == current_user.username
+      @event.update_attributes(params)
+    end
 
     if @event.is_all_day == "true" or @event.is_all_day == true
       @event.is_all_day = true

@@ -1,7 +1,10 @@
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
 //= require underscore
+//= require bootstrap/tooltip
+//= require bootstrap/popover
+//= require bootstrap/modal
+//= require bootstrap/dropdown
 //= require backbone
 //= require marionette
 //= require moment.min
