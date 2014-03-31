@@ -1,5 +1,14 @@
 Kiwi::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  #
+  config.paperclip_defaults = {
+    :storage => :s3,
+    :s3_credentials => {
+      :bucket => CONFIG['aws_bucket'],
+      :access_key_id => CONFIG['aws_access_key_id'],
+      :secret_access_key => CONFIG['aws_secret_access_key']
+    }
+  }
 
   # Code is not reloaded between requests.
   config.cache_classes = true

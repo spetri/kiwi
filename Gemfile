@@ -33,6 +33,7 @@ gem 'less-rails'
 
 gem 'jbuilder', '~> 1.2'
 gem 'paperclip', '~> 3.0'
+gem 'aws-sdk'
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 
 group :doc do
