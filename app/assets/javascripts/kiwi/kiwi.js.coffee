@@ -21,6 +21,8 @@ FK.Data.subkastOptions = {
       'ST': 'Science and Technology'
       'PRP': 'Product Releases / Promotions'
       'HA': 'Holidays and Anniversaries'
+      'MA': 'Music / Arts'
+      'GM': 'Gaming'
       'OTH': 'Other'
     }
 
