@@ -36,13 +36,13 @@
   <h5 style="padding-top:30px;">Special Time Format?</h5>
 
   <label>
-    <input type="radio" name="time_format" id="" value="tv_show" /> TV Show (not sports) <span style="font-weight: normal"> (US &amp; Canada only) - A television show in the format 9/8c &dash; Examples: The Office, Friends, 60 Minutes</span>
+    <input type="radio" name="time_format" <% if @time_format == 'tv_show': %> checked="checked" <% end %> id="" value="tv_show" /> TV Show (not sports) <span style="font-weight: normal"> (US &amp; Canada only) - A television show in the format 9/8c &dash; Examples: The Office, Friends, 60 Minutes</span>
   </label>
   <label>
-    <input type="radio" name="time_format" id="" value="recurring" /> Timezone Recurring Event<span style="font-weight: normal"> &dash; An event that happens throughought the day with each timezone &dash; Examples: a midnight movie premiere, beginning of a worldwide festival, the exact moment of New Year's Day, etc. </span>
+    <input type="radio" name="time_format" <% if @time_format == 'recurring': %> checked="checked" <% end %>id="" value="recurring" /> Timezone Recurring Event<span style="font-weight: normal"> &dash; An event that happens throughought the day with each timezone &dash; Examples: a midnight movie premiere, beginning of a worldwide festival, the exact moment of New Year's Day, etc. </span>
   </label>
   <label>
-    <input type="radio" name="time_format" id="" value="" checked="checked" /> None
+    <input type="radio" name="time_format" <% if @time_format == '': %> checked="checked" <% end %>id="" value="" checked="checked" /> None
   </label>
 
 <br/>
