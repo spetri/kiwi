@@ -51,15 +51,20 @@
   font-family: 'Helvetica', 'arial', sans-serif;
   background: #000;
 }
-/* uservoice */
+
+/* USERVOICE */
 a.uservoice { 
   display: block;
   position: fixed;
-  bottom: 10px;
-  right: 10px;
-  width: 100px;
-  height: 100px;
+  bottom: 5px;
+  right: 5px;
+  width: 80px;
+  height: 80px;
   background: transparent url(asset-path('assets/feedback.png')) no-repeat;
+  opacity:0.8;
+    &:hover {
+    opacity:1;
+    }
 }
 
 
