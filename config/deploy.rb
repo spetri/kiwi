@@ -151,6 +151,13 @@ task :cold_deploy => :environment do
   invoke :start
 end
 
+desc "Full deployment start stop restart!!!!"
+task :full_deploy => :environment do
+  invoke :deploy
+  invoke :stop
+  invoke :start
+end
+
 # For help in making your deploy script, see the Mina documentation:
 #
 #  - http://nadarei.co/mina
