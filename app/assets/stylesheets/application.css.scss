@@ -60,7 +60,7 @@ a.uservoice {
   right: 5px;
   width: 80px;
   height: 80px;
-  background: transparent url(asset-path('assets/feedback.png')) no-repeat;
+  background: transparent url(asset-path('feedback.png')) no-repeat;
   opacity:0.8;
     &:hover {
     opacity:1;
@@ -405,7 +405,7 @@ form.event_form {
   .event_form_description {
     height: 100px;
   }
-  .form-group { 
+  .form-group {
     border-bottom: 1px solid #E5E5E5;
   }
   .glyphicon-calendar {
@@ -481,15 +481,15 @@ form.event_form {
   }
 }
 .image-trimmer-input-container {
-  .image_trimmer_choose_toolbar { 
+  .image_trimmer_choose_toolbar {
     height: 50px;
-    display: block; 
+    display: block;
     padding: 0;
     margin: 0;
-    .form-group { 
+    .form-group {
       max-width: 260px;
       float: left;
-      .form-control { 
+      .form-control {
         width: 196px;
         padding-left: 30px;
       }
@@ -500,14 +500,14 @@ form.event_form {
       left: 24px;
       color: #666;
     }
-    span.or { 
+    span.or {
       float: left;
       width: 20px;
       padding-top: 8px;
       text-align: center;
       padding-left: 8px;
     }
-    .btn { 
+    .btn {
       float: left;
       margin-left: 10px;
     }
@@ -757,16 +757,16 @@ form.event_form {
       padding: 5px 0;
     }
   }
-  .navbar { 
+  .navbar {
     margin-bottom:20px;
-    .checkbox-container { 
+    .checkbox-container {
       padding-bottom: 20px;
     }
   }
   .navbar-collapse.in {
     overflow: visible;
   }
-  .navbar-collapse { 
+  .navbar-collapse {
     max-height: auto;
   }
   #mobile-sidebar {
@@ -778,7 +778,7 @@ form.event_form {
       display: none;
     }
   }
-  #sidebar-region { 
+  #sidebar-region {
     display: none;
   }
 }
