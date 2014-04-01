@@ -1,5 +1,6 @@
 FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
   class DatePicker.DatePickerView extends Marionette.ItemView
+    className: 'date_picker'
     template: FK.Template 'date_picker'
     events:
       'change [name="date"],[name="hours"],[name="minutes"],[name="ampm"]': 'updateDateTime'
@@ -19,6 +20,8 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
     updateAllDay: =>
       is_all_day = @$('input[name=is_all_day]').prop('checked')
       @model.set('is_all_day', is_all_day)
+      @toggleAllDay(is_all_day)
+
 
     modelEvents:
       'change:is_all_day': 'refreshAllDay'
@@ -36,6 +39,13 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         @$('.timedisplay').show()
         @$('[name="is_all_day"]').removeAttr('checked')
         @updateTimeFormat()
+      @toggleAllDay(@model.isAllDay())
+
+    toggleAllDay: (is_all_day) =>
+      if is_all_day
+        @$el.addClass('all_day')
+      else
+        @$el.removeClass('all_day')
 
     refreshTime: =>
       return if not @model.has('datetime')
@@ -59,7 +69,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
     refreshTimezone: =>
       tz = jstz.determine()
       name = if @model.get('time_format') is 'tv_show' then 'America/New York' else tz.name()
-      @$('.timezone-display').text(name.replace('_', ' '))
+      @$('.timezone-display').text("(#{name.replace('_', ' ')})")
 
     onRender: () =>
       date = @model.get('datetime')
