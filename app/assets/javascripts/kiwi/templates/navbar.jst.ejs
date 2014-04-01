@@ -16,10 +16,11 @@
   <ul class="nav navbar-nav navbar-right">
     <% if (username) { %>
       <li>
-        <a class="btn btn-focus" href="/users/edit"><%= username %></a>
-      </li>
-      <li>
-        <a class="btn btn-alt" href="<%= FK.Links.logout %>">logout</a>
+        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><%= username %> <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/users/edit">Profile Settings</a></li>
+            <li><a href="<%= FK.Links.logout %>">Logout</a></li>
+          </ul>
       </li>
     <% } else { %>
       <li><a href="<%= FK.Links.register %>" class="btn btn-focus" href="">Sign up</a></li>

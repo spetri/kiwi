@@ -5,11 +5,30 @@
 </head>
 <body>
   <div id="navbar" class="navbar">
-    <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
+    <div class="navbar navbar-fixed-top bs-docs-nav">
       <div class="navbar-header">
         <a href="/" class="navbar-brand">Forekast</a>
-        <div class="nav-collapse collapse bs-navbar-collapse"></div>
+        <div class="nav-collapse collapse bs-navbar-collapse">
+        </div>
+        <% if current_user.present? %>
+          <ul class="nav navbar-nav">
+            <li data-option="new">
+              <a href="/#/events/new" class="btn add-new">+ Add Event</a>
+            </li>
+          </ul>
+        <% end %>
       </div>
+      <% if current_user.present? %>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><%= current_user.username %> <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/users/edit">Profile Settings</a></li>
+            <li><a href="<%= destroy_user_session_path %>">Logout</a></li>
+          </ul>
+        </ul>
+      <% end %>
+      </li>
     </div>
   </div>
   <div id="container" class="container">
@@ -19,5 +38,11 @@
     <div id="sidebar" class="col-lg-3">
     </div>
   </div>
+<a href="#" class="uservoice" data-uv-trigger></a>
+<script>
+// Include the UserVoice JavaScript SDK (only nxeeded once on a page)
+UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/<%= CONFIG['user_voice_key'] %>.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+UserVoice.push(['autoprompt', {}]);
+</script>
 </body>
 </html>

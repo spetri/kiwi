@@ -25,27 +25,10 @@
         Backbone.history.start()
     });
   </script>
-  <a href="#" class="uservoice" data-uv-trigger></a>
+<a href="#" class="uservoice" data-uv-trigger></a>
 <script>
 // Include the UserVoice JavaScript SDK (only nxeeded once on a page)
 UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/<%= CONFIG['user_voice_key'] %>.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
-
-//
-// UserVoice Javascript SDK developer documentation:
-// https://www.uservoice.com/o/javascript-sdk
-//
-
-// Set colors
-
-// Identify the user and pass traits
-// To enable, replace sample data with actual user traits and uncomment the line
-
-// Add default trigger to the bottom-right corner of the window:
-
-// Or, use your own custom trigger:
-//UserVoice.push(['addTrigger', '#id', { mode: 'contact' }]);
-
-// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
 UserVoice.push(['autoprompt', {}]);
 </script>
 </body>
