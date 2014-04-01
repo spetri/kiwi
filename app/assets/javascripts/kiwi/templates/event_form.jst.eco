@@ -1,4 +1,4 @@
-<h3>Add Event!</h3>
+<h3>Add Event</h3>
 <form class="well event_form form-horizonal">
   <div class="form-group event_form_name">
     <div class="col-sm-3">
@@ -58,13 +58,14 @@
     <div class="col-sm-3">
       <label class="control-label" >Description</label>
     </div>
-    <textarea class="form-control" name="description" cols="80" rows="3"></textarea>
+    <div class="col-sm-9">
+      <textarea class="form-control" name="description" rows="3"></textarea>
+      </div>
   </div>
-  <div class="pull-right">
+  <center>
     <div class="save-container">
     </div>
-    <div class="clearfix"></div>
-  </div>
+  </center>
   <div class="clearfix"></div>
 </form>
 

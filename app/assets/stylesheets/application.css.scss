@@ -297,7 +297,7 @@ body .navbar {
     margin-bottom: 10px;
   }
   .meta-container {
-    width: 500px;
+    width: auto;
     .event-meta {
       font-size: 14px;
       color: #999;
@@ -394,13 +394,19 @@ form.event_form {
     }
   }
   .event_form_date {
-    height: 370px;
+    height: 390px;
   }
   .event_form_date.is_all_day{
     height: 100px;
   }
   .event_form_image {
-    height: 450px;
+    height: 400px;
+  }
+  .event_form_description {
+    height: 100px;
+  }
+  .form-group { 
+    border-bottom: 1px solid #E5E5E5;
   }
   .glyphicon-calendar {
     position: absolute;
@@ -419,6 +425,7 @@ form.event_form {
   }
   .col-sm-9 .col-sm-9 {
     padding-left: 0px;
+    clear: left;
   }
   .date_picker_all_day_group,
   .date_picker_time_group,
@@ -432,6 +439,7 @@ form.event_form {
   }
 
   .date_picker_special_time_group {
+    clear: left;
     h5.time_group_title {
       font-family: 'Helvetica', sans-serif !important;
       font-weight: bold;
@@ -471,27 +479,43 @@ form.event_form {
       font-weight: bold;
     }
   }
-
 }
 .image-trimmer-input-container {
-  position: relative;
-  text-align: right;
-
-  .form-row {
-    margin-bottom: 10px;
-  }
-
-  .form-guide {
-    margin-right: 32px;
+  .image_trimmer_choose_toolbar { 
+    height: 50px;
+    display: block; 
+    padding: 0;
+    margin: 0;
+    .form-group { 
+      max-width: 260px;
+      float: left;
+      .form-control { 
+        width: 196px;
+        padding-left: 30px;
+      }
+    }
+    .glyphicon-link {
+      position: absolute;
+      top: 10px;
+      left: 24px;
+      color: #666;
+    }
+    span.or { 
+      float: left;
+      width: 20px;
+      padding-top: 8px;
+      text-align: center;
+      padding-left: 8px;
+    }
+    .btn { 
+      float: left;
+      margin-left: 10px;
+    }
   }
 
   input[type=file] {
     position:absolute;
     visibility: hidden;
-  }
-
-  .url-input {
-    width: 100%;
   }
 }
 
@@ -693,9 +717,8 @@ form.event_form {
   }
 }
 #mobile-sidebar {
-  padding: 0;
+  padding: 10px 0px;
   margin-top: -10px;
-  overflow:hidden;
   .filter {
     background: #FFF;
     border: none;
@@ -734,11 +757,29 @@ form.event_form {
       padding: 5px 0;
     }
   }
+  .navbar { 
+    margin-bottom:20px;
+    .checkbox-container { 
+      padding-bottom: 20px;
+    }
+  }
+  .navbar-collapse.in {
+    overflow: visible;
+  }
+  .navbar-collapse { 
+    max-height: auto;
+  }
   #mobile-sidebar {
     display: block;
+    .sidebar {
+      padding-bottom: 10px;
+    }
     #sidebar-event-list {
       display: none;
     }
+  }
+  #sidebar-region { 
+    display: none;
   }
 }
 .formlegend {
@@ -806,17 +847,5 @@ form.event_form {
   li.facebook a:hover {
     background: darken(#7690BC,5%);
     text-decoration: none;
-  }
-}
-
-.well {
-  border:0px;
-
-  .form-group {
-    padding-bottom: 25px !important;
-    border-bottom: 1px solid #ECECEC !important;
-  }
-  .form-footer {
-    text-align: right;
   }
 }

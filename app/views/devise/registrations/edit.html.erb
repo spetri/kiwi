@@ -1,6 +1,6 @@
-<h3>My Profile</h3>
+<h3>Profile Settings</h3>
 <div class="well col-md-10">
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), 
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name),
                        :html => { :method => :put, :class => 'form-horizontal' }) do |f| %>
   <% if resource.errors.present? %>
     <div class="alert alert-warning">
