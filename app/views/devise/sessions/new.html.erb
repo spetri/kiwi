@@ -13,6 +13,11 @@
       <div>Or via email</div>
     </div>
     <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => 'form-horizontal sign-up' }) do |f| %>
+    <% if alert.present? %>
+      <div class="alert alert-warning col-md-10">
+        <p> <%= alert %></p>
+      </div>
+    <% end %>
       <div class="form-group">
         <%= f.label  :username, class: 'col-sm-2 control-label' %>
         <div class="col-sm-offset-0 col-sm-4">
