@@ -11,6 +11,20 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+#The config file is not needed on all hosts, so only load it if it is there
+config_file = File.expand_path('../application.yml', __FILE__)
+if (File.exists?(config_file))
+  CONFIG = YAML.load(File.read(config_file))
+  CONFIG.merge! CONFIG.fetch(Rails.env, {})
+else
+  CONFIG = {}
+end
+
+require "bson"
+require "moped"
+
+Moped::BSON = BSON
+
 module Kiwi
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

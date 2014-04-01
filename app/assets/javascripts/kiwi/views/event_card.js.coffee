@@ -37,11 +37,11 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       refreshUpvoted: (event) =>
         if event.userHasUpvoted()
-          @ui.upvotesIcon.removeClass('icon-caret-up')
-          @ui.upvotesIcon.addClass('icon-ok')
+          @ui.upvotesIcon.removeClass('glyphicon-chevron-up')
+          @ui.upvotesIcon.addClass('glyphicon-ok')
         else
-          @ui.upvotesIcon.addClass('icon-caret-up')
-          @ui.upvotesIcon.removeClass('icon-ok')
+          @ui.upvotesIcon.addClass('glyphicon-chevron-up')
+          @ui.upvotesIcon.removeClass('glyphicon-ok')
 
       refreshUpvoteAllowed: (event) =>
         if event.get 'upvote_allowed'

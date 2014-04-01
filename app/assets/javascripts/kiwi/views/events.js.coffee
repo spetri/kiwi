@@ -3,26 +3,24 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer () ->
-    
+    # get the dependencies:
     @events = App.request('events')
     @eventStore = App.request('eventStore')
     @eventBlocks = App.request('eventStore').blocks
-    @topRankedEvents = App.request('eventStore').topRanked
 
+    # creating the views:
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks
 
-    @topRankedEventsView = new EventList.TopRanked
-      collection: @topRankedEvents
-    
+    @sidebar = App.Sidebar.create(@sidebarConfig)
+
+    # binding the events:
     @view.on 'show', =>
-      @view.sidebar.show @topRankedEventsView
+      @view.sidebar.show @sidebar.layout
       @view.event_block.show @eventBlocksView
 
-
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
-    @listenTo @topRankedEventsView, 'itemview:clicked:event', @triggerShowEvent
 
     @view.onClose = () =>
       @stop()
@@ -31,6 +29,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     App.mainRegion.show @view
 
+    #TODO this spams on the MAC when scrolling the bottom of the pags
     $(document).scroll (e) =>
       $doc = $(e.target)
       $window = $(window)
@@ -39,22 +38,23 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
       @fetchMoreBlocks() if percentage > 0.9
 
-  @triggerShowEvent = (event) ->
-    App.vent.trigger 'container:show', event.model
-
   @triggerShowEventDeep = (block, event) ->
     App.vent.trigger 'container:show', event.model
 
   @fetchMoreBlocks = () =>
-    @eventStore.loadNextEvents(3)
+    @eventStore.loadNextEvents(5)
 
   @addFinalizer () =>
     $(document).off('scroll')
     @view.close()
     @eventBlocksView.close()
-    @topRankedEventsView.close()
+
+    # keep a copy of the sidebar configuration:
+    # TODO: where do we refactor this to?
+    @sidebarConfig = @sidebar.value()
+
+    @sidebar.close()
     @stopListening
-    
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "container"

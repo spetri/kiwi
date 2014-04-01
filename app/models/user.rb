@@ -1,6 +1,6 @@
 class User
   include Mongoid::Document
-  
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :omniauth_providers => [:twitter, :facebook]
@@ -32,7 +32,7 @@ class User
   has_many :reminders
 
 
-  validates :username, uniqueness: true
+  validates :username, uniqueness: true, :length => { :minimum => 3, :maximum => 200 }
   validates :email, uniqueness: true
 
   ## Confirmable

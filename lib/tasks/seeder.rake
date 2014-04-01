@@ -1,4 +1,15 @@
 namespace :db do
+  task :empty_seed => :environment do
+    Country.delete_all
+    Event.create! time_format: '', datetime: 2.weeks.ago, local_date: 2.weeks.ago, name: "The once loved", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone', 'marionette', 'ruby'], country: 'CA', location_type: 'national', is_all_day: false, subkast: 'ST'
+    Event.delete_all
+
+    IO.readlines('db/countries.csv').each_with_index do |line, index|
+      l_split = line.split(',')
+      Country.create! code: l_split[0] , en_name: l_split[1], order: index
+    end
+  end
+
   task :seed do
     Country.delete_all
 

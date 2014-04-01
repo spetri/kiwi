@@ -29,6 +29,5 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       {
         datetime: @model.get('datetime')
         time_format: @model.get('time_format')
-        local_time: @model.get('local_time')
         is_all_day: @model.get('is_all_day')
       }

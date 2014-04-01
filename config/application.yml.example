@@ -1,0 +1,16 @@
+defaults: &defaults
+  user_voice_key: USERVOICEKEY
+  twitter_key: XXXX
+  twitter_secret: 1234214124124
+  facebook_key:  12345142141
+  facebook_secret:123123123j1
+
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

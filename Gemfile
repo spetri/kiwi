@@ -15,7 +15,7 @@ gem 'whenever'
 gem 'cancan'
 
 #Server
-gem 'thin'
+gem 'puma'
 
 group :assets do
   gem 'sass-rails',   '~> 4.0.0'
@@ -24,15 +24,16 @@ group :assets do
   gem 'eco'
   gem 'uglifier', '>= 1.0.3'
 end
+gem 'bootstrap-sass', '~> 3.0.2.0' 
 
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
 gem 'therubyracer', platforms: :ruby
-gem "twitter-bootstrap-rails", :github => "seyhunak/twitter-bootstrap-rails", :branch => "bootstrap3", :ref => "58173572b5c10cfb5f1e17fbc03a8d1a9e808eb7"
 gem 'less-rails'
 
 gem 'jbuilder', '~> 1.2'
 gem 'paperclip', '~> 3.0'
+gem 'aws-sdk'
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 
 group :doc do

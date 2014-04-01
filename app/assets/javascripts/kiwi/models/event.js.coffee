@@ -64,14 +64,23 @@ class FK.Models.Event extends Backbone.GSModel
   validate: (attrs, options) =>
     errors = []
 
-    errors.push('Event must have a name.') if not attrs.name
-    errors.push('Event name must be less than 100 characters long.') if attrs.name and attrs.name.length > 100
+    errors.push({field: 'name', message: 'Event must have a name.'}) if not attrs.name
+    errors.push({field: 'name', message: 'Event name must be less than 100 characters long.'}) if attrs.name and attrs.name.length > 100
 
-    errors.push('Event must have a datetime.') if not attrs.datetime
+    errors.push({field: 'datetime', message: 'Event must have a datetime.'}) if not attrs.datetime
 
-    errors.push('Event must have a real subkast.') if not _.contains(FK.App.request('subkastKeys'), attrs.subkast)
+    errors.push({field: 'subkast', message: 'Event must have a subkast.'}) if not _.contains(FK.App.request('subkastKeys'), attrs.subkast)
 
     if errors.length == 0 then false else errors
+
+  groupedErrors: () =>
+    errors = {}
+    _.each(@validationError, (error) =>
+      errors[error.field] = [] if not errors[error.field]
+      errors[error.field].push error.message
+    )
+
+    errors
 
   isAllDay: () =>
     @get('is_all_day') is '1' or @get('is_all_day') is true or @get('is_all_day') is 'true'
@@ -173,6 +182,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   setters:
     datetime: (moment_val) ->
+      return if not moment_val
       moment_val = moment(moment_val)
       @set('local_time', moment_val.format('h:mm A'))
       @set('local_date', moment_val.format('YYYY-MM-DD'))

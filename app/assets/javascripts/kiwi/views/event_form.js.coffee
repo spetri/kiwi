@@ -3,6 +3,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer (event) ->
+    @user = App.request('currentUser')
+    return App.execute('signInPage') if @user.get('logged_in') == false
+
     @event = event || new FK.Models.Event()
     @eventComponents = []
 
@@ -12,7 +15,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @listenTo @event, 'saved', @toEvent
     @listenTo @event, 'change:user', @showBaseView
-    @listenTo @event, 'invalid', @showErrors
     @showBaseView()
 
   @showBaseView = () =>
@@ -26,8 +28,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @eventComponents = []
 
   @saveEvent = () ->
+    @event.trigger('start:save')
     params =
-      user: App.request('currentUser').get('username')
+      user: @user.get('username')
 
     _.each @eventComponents, (child) ->
       _.extend params, child.value()
@@ -40,9 +43,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @showSpinner()
     App.request('events').add(@event, merge: true)
-
-  @showErrors = (model, errors, options) =>
-    console.log(errors)
 
   @getBaseView = () =>
     if @event.editAllowed(App.request('currentUser').get('username'))

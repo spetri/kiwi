@@ -11,25 +11,26 @@ require 'mina/git'
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
-set :domain, 'beta.forekast.com'
+set :domain, ENV['host'] || (puts "enter a 'host' to deploy to"; exit )
 set :deploy_to, '/srv/www/forekast'
 set :repository, 'git@github.com:Forekasting/kiwi.git'
 set :branch, 'master'
 
 set :pid_file, "#{deploy_to}/shared/tmp/pids/server.pid"
-set :state_file, "#{deploy_to}/shared/tmp/sockets/puma.state"
-set :ctrl_socket, "unix://#{deploy_to}/shared/tmp/sockets/pumactl.sock"
 
 set :app_port, '4000'
 set :app_path, lambda { "#{deploy_to}/#{current_path}" }
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'config/mongoid.yml', 'public/system', 'log', 'tmp']
+set :shared_paths, ['config/mongoid.yml', 'config/application.yml', 'public/system', 'config/puma.rb', 'log', 'tmp']
+
+set :pid_file, "#{deploy_to}/shared/tmp/pids/puma.pid"
+set :state_file, "#{deploy_to}/shared/tmp/puma/state"
 
 # Optional settings:
-set :user, 'root'    # Username in the server to SSH to.
-set :ssh_options, '-A'  # ensure that ssh agent forwarding is being used.
+set :user, 'rails'    # Username in the server to SSH to.
+set :ssh_options, '-t -A'  # ensure that ssh agent forwarding is being used.
 #   set :port, '30000'     # SSH port number.
 
 # This task is the environment that is loaded for most commands, such as
@@ -41,7 +42,7 @@ task :environment do
   # invoke :'rbenv:load'
 
   # For those using RVM, use this to load an RVM version@gemset.
-  invoke :'rvm:use[ruby-2.1.1@forekast]'
+  invoke :'rvm:use[ruby-2.1.1@kiwi]'
 
   @keys = JSON.parse(open('keys.json').read)
   if @keys['TWITTER_KEY'].nil?
@@ -57,9 +58,6 @@ end
 
 set :rvm_path, "/usr/local/rvm/scripts/rvm"
 
-# Put any custom mkdir's in here for when `mina setup` is ran.
-# For Rails apps, we'll make some of the shared paths that are shared between
-# all releases.
 task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/log"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/log"]
@@ -79,15 +77,26 @@ task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/public/system"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/public"]
 
-  queue! %[touch "#{deploy_to}/shared/config/database.yml"]
-  queue  %[echo "-----> Be sure to edit 'shared/config/database.yml'."]
+  queue  %{ssh-keyscan github.com > /home/#{user}/.ssh/known_hosts}
+
+  queue! %[mkdir -p "#{deploy_to}/shared/tmp/puma"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/tmp/puma"]
+
+  queue  %{ touch "#{deploy_to}/shared/config/puma.rb"}
+  queue  %{ echo "pidfile \\"#{pid_file}\\"" > #{deploy_to}/shared/config/puma.rb }
+  queue  %{ echo "state_path \\"#{state_file}\\"" >> #{deploy_to}/shared/config/puma.rb }
+  queue  %{ echo "port \"#{app_port}\"" >> #{deploy_to}/shared/config/puma.rb }
+  queue  %{ echo "daemonize true" >> #{deploy_to}/shared/config/puma.rb }
+  queue  %{ echo "environment \\"#{rails_env}\\"" >> #{deploy_to}/shared/config/puma.rb }
+  queue  %{ echo "activate_control_app" >> #{deploy_to}/shared/config/puma.rb }
+
+  queue  %{ echo "Adding to puma.conf" }
+  queue  %{ sudo sh -c "echo \"#{app_path},#{user},#{app_path}/config/puma.rb,#{app_path}/log/puma.log\" > /etc/puma.conf "}
 end
 
 desc "Deploys the current version to the server."
 task :deploy => :environment do
   deploy do
-    # Put things that will set up an empty directory into a fully set-up
-    # instance of your project.
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -96,30 +105,50 @@ task :deploy => :environment do
   end
 end
 
+task :deploy_assets => :environment do
+  deploy do
+    invoke :'git:clone'
+    invoke :'deploy:link_shared_paths'
+    invoke :'bundle:install'
+    invoke :'rails:assets_precompile'
+  end
+end
+
 desc 'Starts the application'
 task :start => :environment do
-  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin start -d -e production -p #{app_port} --servers 1}
+    queue! %{sudo service puma start}
 end
 
 desc 'Stops the application'
 task :stop => :environment do
-  queue! %{cd #{app_path} ; #{environment_vars} bundle exec thin stop -d -e production -p #{app_port} --servers 1}
+    queue! %{sudo service puma stop}
 end
 
 desc 'Restarts the application'
 task :restart => :environment do
-  invoke :stop
-  invoke :start
+    queue! %{sudo service puma restart}
 end
 
 desc 'Cleanups old all day values'
 task :cleanup_all_day => :environment do
-  queue "cd #{deploy_to}/current ; rake db:cleanup_all_day RAILS_ENV=production"
+  queue "cd #{deploy_to}/current ; bundle exec rake db:cleanup_all_day RAILS_ENV=production"
 end
 
 desc 'Move to local date field from date'
 task :move_to_local_date => :environment do
-  queue "cd #{deploy_to}/current ; rake db:move_date_to_local_date RAILS_ENV=production"
+  queue "cd #{deploy_to}/current ; bundle exec rake db:move_date_to_local_date RAILS_ENV=production"
+end
+
+desc 'Prime db for production'
+task :prime_db => :environment do
+  queue "cd #{deploy_to}/current ; bundle exec rake db:empty_seed RAILS_ENV=production"
+end
+
+desc "Cold Deploy the application for the first time"
+task :cold_deploy => :environment do
+  invoke :setup
+  invoke :deploy
+  invoke :start
 end
 
 # For help in making your deploy script, see the Mina documentation:
