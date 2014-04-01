@@ -31,6 +31,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     startMoving: (e) =>
       e.preventDefault()
       @model.startMoving(e.pageX, e.pageY)
+      @moving = true
       $('body').css('cursor', 'move')
       @disableTextSelect()
   
@@ -53,12 +54,14 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
       $('body').css('cursor', 'default')
   
     moveImage: (e) =>
+      return if ! @moving
       e.preventDefault()
       @model.move e.pageX, e.pageY
         
     stopMovingImage: (e) =>
       e.preventDefault()
       @model.stopMoving()
+      @moving = false
       @enableTextSelect()
       $('body').css('cursor', 'default')
 
