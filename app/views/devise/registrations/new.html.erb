@@ -6,18 +6,20 @@
   <% end %>
 <div class="row">
   <div class="col-md-10">
-  <h3>Sign up!</h3>
-  <%- if devise_mapping.omniauthable? %>
-    <ul class="omniauth-login">
-    <%- resource_class.omniauth_providers.each do |provider| %>
-      <li class="<%= provider %>">
-      <%= link_to "<span class=\"icon icon-#{provider}\"></span><span class=\"txt\">Sign up with #{provider.to_s.titleize} </span>".html_safe, user_omniauth_authorize_path(provider), class: provider %></li>
+    <h3>Sign up!</h3>
+  <% unless session['omniauth.payload'].present? %>
+    <%- if devise_mapping.omniauthable? %>
+      <ul class="omniauth-login">
+        <%- resource_class.omniauth_providers.each do |provider| %>
+          <li class="<%= provider %>">
+          <%= link_to "<span class=\"icon icon-#{provider}\"></span><span class=\"txt\">Sign up with #{provider.to_s.titleize} </span>".html_safe, user_omniauth_authorize_path(provider), class: provider %></li>
+        <% end -%>
+      </ul>
     <% end -%>
-    </ul>
-  <% end -%>
   <div class="formlegend">
     <div>Or via email</div>
   </div>
+  <% end %>
     <div class="form-group">
       <%= f.label  :username, class: 'col-sm-2 control-label' %>
       <div class="col-sm-offset-0 col-sm-4">

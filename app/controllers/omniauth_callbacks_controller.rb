@@ -9,7 +9,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     else
       session["devise.twitter_uid"] = auth_params[:uid]
       session['omniauth.payload'] = auth_params
-      redirect_to new_user_registration_url
+      redirect_to new_user_registration_url, :omni => true
     end
   end
 
@@ -21,7 +21,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     else
       session["devise.facebook_uid"] = auth_params[:uid]
       session['omniauth.payload'] = auth_params
-      redirect_to new_user_registration_url
+      redirect_to new_user_registration_url, :omni => true
     end
   end
 
