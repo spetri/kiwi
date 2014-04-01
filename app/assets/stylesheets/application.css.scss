@@ -104,6 +104,19 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 }
 
+.btn-more {
+  padding:0px;
+}
+
+.dropdown-toggle {
+  border:none;
+  border-radius:0;
+  
+    &:hover {
+    background:none !important;
+    border-bottom:1px dotted #888;
+    }
+}
 
 /* NAVBAR */
 
@@ -255,15 +268,16 @@ body .navbar {
     color: #111;
     }
     i {
-      margin-left: 1px;
-      &.icon-ok {
+      padding-top:5px;
+      &.glyphicon-ok {
         font-size: 15px;
-        color: green;
+        color:$active;
       }
 
-      &.icon-remove {
+      &.glyphicon-remove {
         color: #EB3D00;
         font-size: 16px;
+        line-height:0.9;
       }
 
       &.fa-caret-up {
@@ -273,6 +287,7 @@ body .navbar {
     }
     .upvote-counter {
       font-size: 18px;
+      line-height:1;
     }
   }
   img {
@@ -511,11 +526,11 @@ body .navbar {
     bottom: 0px;
 
     .event-upvotes {
-      color: #48C9B0;
       font-weight: bold;
       margin-right: 30px;
       cursor: pointer;
       #upvotes-icon {
+        color: #48C9B0;
         width: 14px;
         display: inline-block;
       }
