@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,300' rel='stylesheet' type='text/css'>
-  <link rel="icon" href="assets/favicon.ico" type="image/x-icon"/>
-  <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Forekast</title>
+  <head>
+  <%= render :partial => 'layouts/head_section' %>
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
-  <%= stylesheet_link_tag    "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
+  </head>
 <body>
   <div id="navbar-container-region" class="navbar"></div>
   <div id="main-region"></div>
@@ -33,35 +25,6 @@
         Backbone.history.start()
     });
   </script>
-<script>
-// Include the UserVoice JavaScript SDK (only needed once on a page)
-UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/<%= CONFIG['user_voice_key'] %>.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
-
-//
-// UserVoice Javascript SDK developer documentation:
-// https://www.uservoice.com/o/javascript-sdk
-//
-
-// Set colors
-UserVoice.push(['set', {
-  accent_color: '#448dd6',
-  trigger_color: 'white',
-  trigger_background_color: 'rgba(46, 49, 51, 0.6)'
-}]);
-
-// Identify the user and pass traits
-// To enable, replace sample data with actual user traits and uncomment the line
-UserVoice.push(['identify', {
-}]);
-
-// Add default trigger to the bottom-right corner of the window:
-UserVoice.push(['addTrigger', { mode: 'contact', trigger_position: 'bottom-right' }]);
-
-// Or, use your own custom trigger:
-//UserVoice.push(['addTrigger', '#id', { mode: 'contact' }]);
-
-// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
-UserVoice.push(['autoprompt', {}]);
-</script>
+  <%= render :partial => 'layouts/uservoice' %>
 </body>
 </html>

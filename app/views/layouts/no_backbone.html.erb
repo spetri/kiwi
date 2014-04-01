@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Forekast</title>
-  <%= stylesheet_link_tag    "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+  <%= render :partial => 'layouts/head_section' %>
 </head>
 <body>
   <div id="navbar" class="navbar">
-    <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
+    <div class="navbar navbar-fixed-top bs-docs-nav">
       <div class="navbar-header">
         <a href="/" class="navbar-brand">Forekast</a>
-        <div class="nav-collapse collapse bs-navbar-collapse"></div>
+        <div class="nav-collapse collapse bs-navbar-collapse">
+        </div>
+        <% if current_user.present? %>
+          <ul class="nav navbar-nav">
+            <li data-option="new">
+              <a href="/#/events/new" class="btn add-new">+ Add Event</a>
+            </li>
+          </ul>
+        <% end %>
       </div>
+      <% if current_user.present? %>
+        <ul class="nav navbar-nav navbar-right" style="margin-right:15px;">
+            <li>
+        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><%= current_user.username %> <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/users/edit">Profile Settings</a></li>
+            <li><a href="<%= destroy_user_session_path %>">Logout</a></li>
+          </ul>
+        </ul>
+      <% end %>
+      </li>
     </div>
   </div>
   <div id="container" class="container">
@@ -22,5 +38,6 @@
     <div id="sidebar" class="col-lg-3">
     </div>
   </div>
+  <%= render :partial => 'layouts/uservoice' %>
 </body>
 </html>

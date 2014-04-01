@@ -47,10 +47,27 @@
   content: "\e602";
 }
 
-.icon-bar { 
+.icon-bar {
   font-family: 'Helvetica', 'arial', sans-serif;
   background: #000;
 }
+
+/* USERVOICE */
+a.uservoice {
+  display: block;
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  width: 80px;
+  height: 80px;
+  background: transparent url(asset-path('assets/feedback.png')) no-repeat;
+  opacity:0.8;
+    &:hover {
+    opacity:1;
+    }
+}
+
+
 
 /* GENERAL STYLES */
 
@@ -87,6 +104,18 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 }
 
+.btn-more {
+  padding:0px;
+}
+.dropdown-toggle {
+  border:none;
+  border-radius:0;
+
+    &:hover {
+    background:none !important;
+    border-bottom:1px dotted #888;
+    }
+}
 
 /* NAVBAR */
 
@@ -238,15 +267,16 @@ body .navbar {
     color: #111;
     }
     i {
-      margin-left: 1px;
-      &.icon-ok {
+      padding-top:5px;
+      &.glyphicon-ok {
         font-size: 15px;
-        color: green;
+        color:$active;
       }
 
-      &.icon-remove {
+      &.glyphicon-remove {
         color: #EB3D00;
         font-size: 16px;
+        line-height:0.9;
       }
 
       &.fa-caret-up {
@@ -256,6 +286,7 @@ body .navbar {
     }
     .upvote-counter {
       font-size: 18px;
+      line-height:1;
     }
   }
   img {
@@ -266,7 +297,7 @@ body .navbar {
     margin-bottom: 10px;
   }
   .meta-container {
-    width: 500px;
+    width: auto;
     .event-meta {
       font-size: 14px;
       color: #999;
@@ -340,26 +371,151 @@ body .navbar {
     text-decoration: none;
   }
 }
-
-.image-trimmer-input-container {
-  position: relative;
-  text-align: right;
-
-  .form-row {
-    margin-bottom: 10px;
+form.event_form {
+  .form-group {
+    min-height: 40px;
+    .control-label {
+      line-height: 30px;
+    }
+  }
+  input, select {
+    max-width: 400px;
+  }
+  .event_form_name {
+    height: 50px;
+  }
+  .event_form_subkast {
+    height: 50px;
+  }
+  .event_form_location {
+    height: 100px;
+    .col-sm-9 label {
+      font-weight: normal;
+    }
+  }
+  .event_form_date {
+    height: 390px;
+  }
+  .event_form_date.is_all_day{
+    height: 100px;
+  }
+  .event_form_image {
+    height: 400px;
+  }
+  .event_form_description {
+    height: 100px;
+  }
+  .form-group { 
+    border-bottom: 1px solid #E5E5E5;
+  }
+  .glyphicon-calendar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #888;
+  }
+  .date_selector {
+    padding-left: 28px;
+    max-width: 200px;
+    float: left;
+  }
+  .date_picker_all_day {
+    float: left;
+    margin-left: 20px;
+  }
+  .col-sm-9 .col-sm-9 {
+    padding-left: 0px;
+    clear: left;
+  }
+  .date_picker_all_day_group,
+  .date_picker_time_group,
+  .date_picker_or {
+    height: 30px;
+    margin-top: 15px;
+    float: left;
+  }
+  .date_picker_all_day_group {
+    margin-left: 0px;
   }
 
-  .form-guide {
-    margin-right: 32px;
+  .date_picker_special_time_group {
+    clear: left;
+    h5.time_group_title {
+      font-family: 'Helvetica', sans-serif !important;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+    label.control-label {
+      line-height: 1.3;
+      .date_picker_time_format_description {
+        font-weight: normal;
+        padding-left: 18px;
+      }
+      .date_picker_time_format_example {
+        font-weight: normal;
+        font-size: 11px;
+        color: #888;
+        padding-left: 18px;
+      }
+    }
+  }
+  .event_form_date.is_all_day .date_picker_special_time_group {
+    display: none;
+  }
+  .date_picker_time_group {
+    padding-top: 5px;
+
+    .timezone-display {
+      color: #888;
+      font-size: 12px;
+    }
+  }
+  .timedisplay {
+    margin-top:10px;
+    .time-display {
+      color: #666;
+    }
+    .time-display-value {
+      font-weight: bold;
+    }
+  }
+}
+.image-trimmer-input-container {
+  .image_trimmer_choose_toolbar { 
+    height: 50px;
+    display: block; 
+    padding: 0;
+    margin: 0;
+    .form-group { 
+      max-width: 260px;
+      float: left;
+      .form-control { 
+        width: 196px;
+        padding-left: 30px;
+      }
+    }
+    .glyphicon-link {
+      position: absolute;
+      top: 10px;
+      left: 24px;
+      color: #666;
+    }
+    span.or { 
+      float: left;
+      width: 20px;
+      padding-top: 8px;
+      text-align: center;
+      padding-left: 8px;
+    }
+    .btn { 
+      float: left;
+      margin-left: 10px;
+    }
   }
 
   input[type=file] {
     position:absolute;
     visibility: hidden;
-  }
-
-  .url-input {
-    width: 100%;
   }
 }
 
@@ -494,11 +650,11 @@ body .navbar {
     bottom: 0px;
 
     .event-upvotes {
-      color: #48C9B0;
       font-weight: bold;
       margin-right: 30px;
       cursor: pointer;
       #upvotes-icon {
+        color: #48C9B0;
         width: 14px;
         display: inline-block;
       }
@@ -561,9 +717,8 @@ body .navbar {
   }
 }
 #mobile-sidebar {
-  padding: 0;
+  padding: 10px 0px;
   margin-top: -10px;
-  overflow:hidden;
   .filter {
     background: #FFF;
     border: none;
@@ -602,11 +757,29 @@ body .navbar {
       padding: 5px 0;
     }
   }
+  .navbar { 
+    margin-bottom:20px;
+    .checkbox-container { 
+      padding-bottom: 20px;
+    }
+  }
+  .navbar-collapse.in {
+    overflow: visible;
+  }
+  .navbar-collapse { 
+    max-height: auto;
+  }
   #mobile-sidebar {
     display: block;
+    .sidebar {
+      padding-bottom: 10px;
+    }
     #sidebar-event-list {
       display: none;
     }
+  }
+  #sidebar-region { 
+    display: none;
   }
 }
 .formlegend {
@@ -674,17 +847,5 @@ body .navbar {
   li.facebook a:hover {
     background: darken(#7690BC,5%);
     text-decoration: none;
-  }
-}
-
-.well {
-  border:0px;
-
-  .form-group {
-    padding-bottom: 25px !important;
-    border-bottom: 1px solid #ECECEC !important;
-  }
-  .form-footer {
-    text-align: right;
   }
 }

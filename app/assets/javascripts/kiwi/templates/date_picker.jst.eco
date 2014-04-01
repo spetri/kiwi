@@ -1,55 +1,63 @@
-
-<input type="text" name="date" />
-
-<label style="margin-left: 60px; font-weight: normal" class="right" >
-  <input type="checkbox"  <% if @is_all_day: %> checked="checked" <% end %> value="1" name="is_all_day" /> &nbsp; All Day
-</label>
-<br/>
-<div style="position: relative; height:20px; width: 75%;">
-  <hr style="position: absolute; border-top: 1px solid #e7e7e7; left: 40px; top: 0px; width: 92%;" />
-  <span style="position: absolute; top:10px;">OR</span>
-</div>
-<br/>
-<div class="col-lg-9" style="padding-left: 0px;">
-  <select name="hours">
-    <% for hour in [1..12]: %>
-      <option value="<%= hour %>" ><%= hour %></option>
-    <% end %>
-  </select>
-  :
-  <select name="minutes">
-    <% for min in [0..59]: %>
-      <% if min < 10: %>
-        <option value="0<%= min %>" >0<%= min %></option>
-      <% else: %>
-        <option value="<%= min %>" ><%= min %></option>
+<div class="col-sm-9">
+  <span class="glyphicon glyphicon-calendar "> </span>
+  <input type="text" name="date" class="form-control date_selector" />
+  <label class="date_picker_all_day control-label">
+    <input type="checkbox"  <% if @is_all_day: %> checked="checked" <% end %> value="1" name="is_all_day" />
+    All day
+  </label>
+  <div class="date_picker_time_group all_day_toggle">
+    <b>Specific time:</b>
+    <select name="hours">
+      <% for hour in [1..12]: %>
+        <option value="<%= hour %>" ><%= hour %></option>
       <% end %>
-    <% end %>
-  </select>
-  <select name="ampm">
-    <option value="AM" >AM</option>
-    <option value="PM" >PM</option>
-  </select>
-  <span class="timezone-display"></span>
+    </select>
+    :
+    <select name="minutes">
+      <% for min in [0..59]: %>
+        <% if min < 10: %>
+          <option value="0<%= min %>" >0<%= min %></option>
+        <% else: %>
+          <option value="<%= min %>" ><%= min %></option>
+        <% end %>
+      <% end %>
+    </select>
+    <select name="ampm">
+      <option value="AM" >AM</option>
+      <option value="PM" >PM</option>
+    </select>
+    <span class="timezone-display"></span>
+  </div>
 </div>
-<div>
-  <h5 style="padding-top:30px;">Special Time Format?</h5>
+<div class="col-sm-9">
+  <div class="date_picker_special_time_group all_day_toggle">
+    <h5 class="time_group_title" >Special Time Format:</h5>
+    <label class="control-label">
+      <input type="radio" name="time_format" <% if @time_format == '': %> checked="checked" <% end %>id="" value="" checked="checked"></input> None
+    </label>
+    <label class="control-label" style="display: block;">
+      <input type="radio" name="time_format" <% if @time_format == 'tv_show': %> checked="checked" <% end %> id="" value="tv_show"></input> TV Show (not sports)
+      <div class="date_picker_time_format_description">
+        A television show in the format 9/8c (US &amp; Canada only)
+      </div>
+      <div class="date_picker_time_format_example">
+        Examples: The Office, Friends, 60 Minutes
+      </div>
+    </label>
+    <label class="control-label">
+      <input type="radio" name="time_format" <% if @time_format == 'recurring': %> checked="checked" <% end %>id="" value="recurring"></input> Timezone Recurring Event
+      <div class="date_picker_time_format_description">
+        An event that happens throughought the day with each timezone
+      </div>
+      <div class="date_picker_time_format_example">
+        Examples: a midnight movie premiere, beginning of a worldwide festival, the exact moment of New Year's Day, etc.
+      </div>
+    </label>
 
-  <label>
-    <input type="radio" name="time_format" id="" value="tv_show" /> TV Show (not sports) <span style="font-weight: normal"> (US &amp; Canada only) - A television show in the format 9/8c &dash; Examples: The Office, Friends, 60 Minutes</span>
-  </label>
-  <label>
-    <input type="radio" name="time_format" id="" value="recurring" /> Timezone Recurring Event<span style="font-weight: normal"> &dash; An event that happens throughought the day with each timezone &dash; Examples: a midnight movie premier, beginning of a worldwide festival, the exact moment of New Year's Day, etc. </span>
-  </label>
-  <label>
-    <input type="radio" name="time_format" id="" value="" checked="checked" /> None
-  </label>
-
-<br/>
-<div class="timedisplay clearfix">
-  <span class="time-display">Time will be displayed</span>
-  <span class="time-display-value"></span>
-<div>
-<hr/>
-<i>Time in UTC: <span class="status"></span> </i>
+    <div class="timedisplay alert alert-success ">
+      <span class="time-display">Time will be displayed as:</span>
+      <span class="time-display-value"></span>
+    <div>
+    <i class="hide">Time in UTC: <span class="status"></span> </i>
+  </div>
 </div>

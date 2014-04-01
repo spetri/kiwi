@@ -59,7 +59,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesContainer.tooltip 'destroy'
       else
         @ui.upvotesContainer.tooltip
-          title: 'Login to upvote.'
+          title: 'Login to upvote'
 
     onRender: =>
       @refreshUpvotes @model

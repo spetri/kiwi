@@ -1,28 +1,28 @@
-<h3>Add Event!</h3>
-<form class="well">
-  <div class="row">
+<h3>Add Event</h3>
+<form class="well event_form form-horizonal">
+  <div class="form-group event_form_name">
     <div class="col-sm-3">
-      <label for="name">Name of event</label><br />
+      <label class="control-label" for="name">Name of event</label></br>
       <span class="error" data-field="name"></span>
     </div>
     <div class="col-sm-9">
-      <input type="text" name="name" id="name"></input>
+      <input class="form-control" type="text" name="name" id="name"></input>
     </div>
   </div>
-  <div class="row">
+  <div class="form-group event_form_subkast">
     <div class="col-sm-3">
-      <label>Subkast</label><br />
+      <label class="control-label" >Subkast</label><br />
       <span class="error" data-field="subkast"></span>
     </div>
     <div class="col-sm-9">
-      <select name="subkast">
+      <select class="form-control"  name="subkast">
         <option value="-">Please select...</option>
       </select>
     </div>
   </div>
-  <div class="row">
+  <div class="form-group event_form_location">
     <div class="col-sm-3">
-      <label for="location">Location</label><br />
+      <label class="control-label" for="location">Location</label><br />
       <span class="error" data-field="location"></span>
     </div>
     <div class="col-sm-9">
@@ -32,13 +32,12 @@
       </label>
       <label>
         <input type="radio" name="location_type" id="" value="national" >
-        This event can be experienced in a <b>specific country</b>.
+        This event can be experienced in a <b>specific country</b>:
       </label>
-      <br />
-      <select name="country"></select>
+      <select class="form-control"   name="country"></select>
     </div>
   </div>
-  <div class="row">
+  <div class="form-group event_form_date">
     <div class="col-sm-3">
       <label for="location">Date and Time</label><br />
       <span class="error" data-field="datetime"></span>
@@ -47,7 +46,7 @@
       <div id="datetime-region"></div>
     </div>
   </div>
-  <div class="row">
+  <div class="form-group event_form_image">
     <div class="col-sm-3">
       <label >Image</label>
     </div>
@@ -55,19 +54,18 @@
       <div id="image-region"></div>
     </div>
   </div>
-  <div class="row">
+  <div class="form-group event_form_description">
     <div class="col-sm-3">
-      <label>Description</label>
+      <label class="control-label" >Description</label>
     </div>
     <div class="col-sm-9">
-      <textarea name="description" cols="80" rows="3"></textarea>
-    </div>
+      <textarea class="form-control" name="description" rows="3"></textarea>
+      </div>
   </div>
-  <div class="pull-right">
+  <center>
     <div class="save-container">
     </div>
-    <div class="clearfix"></div>
-  </div>
+  </center>
   <div class="clearfix"></div>
 </form>
 
