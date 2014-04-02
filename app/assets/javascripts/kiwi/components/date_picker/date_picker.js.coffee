@@ -28,6 +28,8 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       # I'm a good citizen, i only return what I partied on
       {
         datetime: @model.get('datetime')
+        local_time: @model.get('local_time')
+        local_date: @model.get('local_date')
         time_format: @model.get('time_format')
         is_all_day: @model.get('is_all_day')
       }

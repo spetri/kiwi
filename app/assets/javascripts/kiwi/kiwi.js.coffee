@@ -93,7 +93,7 @@ FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()
 
 FK.App.reqres.setHandler 'easternOffset', () ->
-  moment().tz('America/New_York').zone() - moment().tz('Europe/London').zone()
+  moment().tz('America/New_York').zone()
 
 FK.App.commands.setHandler 'signInPage', () ->
   window.location.href = '/users/sign_in'
