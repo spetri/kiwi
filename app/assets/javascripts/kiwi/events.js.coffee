@@ -4,6 +4,9 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
     @listenTo App.vent, 'container:new', @startForm
     @listenTo App.vent, 'container:show', @startPage
     @listenTo App.vent, 'container:all', @startList
+
+  @addFinalizer () ->
+    @stopListening()
     
   @startForm = (event) ->
     Events.stop()
