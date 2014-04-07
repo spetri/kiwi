@@ -18,7 +18,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @listenTo @eventCardView, 'click:reminders', @toggleShowReminders
     @listenTo @eventCardView, 'click:card', @closeReminders
 
-    @listenTo @event, 'destroy', @triggerEventList
+    @listenTo @event, 'sync', @triggerEventList
 
     @eventCardView.on 'show', () =>
       @renderSocialNetworking()
