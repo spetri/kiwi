@@ -36,9 +36,9 @@
       <input type="radio" name="time_format" <% if @time_format == '': %> checked="checked" <% end %>id="" value="" checked="checked"></input> None
     </label>
     <label class="control-label" style="display: block;">
-      <input type="radio" name="time_format" <% if @time_format == 'tv_show': %> checked="checked" <% end %> id="" value="tv_show"></input> TV Show (not sports)
+      <input type="radio" name="time_format" <% if @time_format == 'tv_show': %> checked="checked" <% end %> id="" value="tv_show"></input> TV show in US & Canada Only (Not Live)
       <div class="date_picker_time_format_description">
-        A television show in the format 9/8c (US &amp; Canada only)
+        A television show in the format 9/8c
       </div>
       <div class="date_picker_time_format_example">
         Examples: The Office, Friends, 60 Minutes
