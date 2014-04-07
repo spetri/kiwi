@@ -88,7 +88,7 @@ Kiwi::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   # Mailer
-  config.action_mailer.default_url_options = { :host => CONFIG['host'] }
+  config.action_mailer.default_url_options = { :host => CONFIG['email_host'] }
   config.action_mailer.smtp_settings = {
     :address        => 'smtp.gmail.com',
     :port           => 587,
