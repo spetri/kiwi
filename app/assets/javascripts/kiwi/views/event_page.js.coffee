@@ -70,11 +70,11 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     )
     $.getScript('http://platform.twitter.com/widgets.js',
       () =>
-        @facebookApi.resolve()
+        @twitterApi.resolve()
     )
     $.getScript('//connect.facebook.net/en_US/all.js#xfbml=1',
       () =>
-        @twitterApi.resolve()
+        @facebookApi.resolve()
     )
 
   @renderSocialNetworking = () =>
