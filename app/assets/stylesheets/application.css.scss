@@ -123,16 +123,19 @@ body .navbar {
   background-color: #fff;
   border-bottom: 1px dotted #F0F0F0;
   margin: 0;
+  opacity:0.95;
+  z-index: 1;
 
   a.navbar-brand {
     display: block;
-    overflow: hidden;
-    text-indent: -999px;
-    margin-left: 10px;
-    background: url(asset-path('logo.png')) top left no-repeat;
+    margin-left: 20px;
     width: 220px;
-    opacity:0.75;
-
+    font-family:'Montserrat', sans-serif; 
+    font-weight:700;       
+    font-size:35px; 
+    letter-spacing:1px; 
+    text-transform:uppercase;
+    color:#222;
   }
   ul.nav a {
     cursor: pointer;
@@ -207,7 +210,7 @@ body .navbar {
 
 
 #home-page {
-  margin-left:35px;
+  margin-left:26px;
 }
 
 .event-block {
