@@ -1,9 +1,12 @@
 class User
   include Mongoid::Document
 
+  attr_accessor :login
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, :omniauth_providers => [:twitter, :facebook]
+         :omniauthable, :omniauth_providers => [:twitter, :facebook],
+         :authentication_keys => [:login]
 
   ## Database authenticatable
   field :username,              :type => String, :default => ""
@@ -31,7 +34,6 @@ class User
 
   has_many :reminders
 
-
   validates :username, uniqueness: true, :length => { :minimum => 3, :maximum => 200 }
   validates :email, uniqueness: true
 
@@ -54,6 +56,32 @@ class User
   field :subkasts,  :type => Array
 
   include Mongoid::Timestamps
+
+  def login=(login)
+    @login = login
+  end
+
+  def login
+    @login || self.username || self.email
+  end
+
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      self.any_of({ :username =>  /^#{Regexp.escape(login)}$/i }, { :email =>  /^#{Regexp.escape(login)}$/i }).first
+    else
+      super
+    end
+  end
+
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login).downcase
+      where(conditions).where('$or' => [ {:username => /^#{Regexp.escape(login)}$/i}, {:email => /^#{Regexp.escape(login)}$/i} ]).first
+    else
+      where(conditions).first
+    end
+  end
 
   def self.omniauth_find(auth)
     where({:provider => auth[:provider], :uid => auth[:uid] } ).first
