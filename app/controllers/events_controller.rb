@@ -58,8 +58,11 @@ class EventsController < ApplicationController
     @event.crop_x = event_params[:crop_x]
     @event.crop_y = event_params[:crop_y]
 
+    #this whole block of code should be in the model?
     if (! event_params[:image] && event_params[:url])
       @event.update_image_from_url(event_params[:url])
+    elsif !@event.image.nil?
+      @event.image.reprocess!
     end
 
     if ( user_signed_in? )
