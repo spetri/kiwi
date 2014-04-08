@@ -188,7 +188,7 @@ class FK.Models.Event extends Backbone.GSModel
       @set('local_date', moment_val.format('YYYY-MM-DD'))
       if @get('time_format') is 'tv_show'
         moment_val = moment(moment_val.format('YYYY-MM-DD') + ' ' + moment_val.format('h:mm A') + 'EST')
-      
+
       # set the input time to UTC:
       adjustedMoment = moment(moment_val).zone(0)
       return adjustedMoment
@@ -246,11 +246,7 @@ class FK.Models.Event extends Backbone.GSModel
     return FK.Data.subkastOptions[@get('subkast')]
 
   descriptionParsed: () =>
-    @get('description').replace(new RegExp("(http:\/\/)?(([a-zA-Z]+\\.)?[a-zA-Z]+\\.[a-zA-Z]{2,3}(\/[^ ]+)?)", "g"), (m1) =>
-      m2 = ''
-      m2 = 'http://' if m1.indexOf('http') != 0
-      "<a target=\"_blank\" href=\"#{m2}#{m1}\">#{m1}</a>"
-    )
+    marked(@get('description'))
 
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>
@@ -281,7 +277,7 @@ class FK.Models.EventBlock extends Backbone.Model
     events = _.take(events, events.length - howManyOver) if howManyOver > 0
 
     @events.add(events)
- 
+
   checkLimit: () =>
     @set({event_limit: @events.length}, {silent: true}) if @events.length < @get('event_limit')
 

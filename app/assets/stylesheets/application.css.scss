@@ -131,10 +131,10 @@ body .navbar {
     display: block;
     margin-left: 20px;
     width: 220px;
-    font-family:'Montserrat', sans-serif; 
-    font-weight:700;       
-    font-size:35px; 
-    letter-spacing:1px; 
+    font-family:'Montserrat', sans-serif;
+    font-weight:700;
+    font-size:35px;
+    letter-spacing:1px;
     text-transform:uppercase;
     color:#222;
   }
@@ -663,6 +663,12 @@ form.event_form {
     margin:15px 0px;
     .event-description {
       color:#666;
+    }
+    p {
+      margin: 0px;
+    }
+    .event-submitter {
+      text-align: right;
     }
   }
 

@@ -9,6 +9,7 @@
 //= require backbone
 //= require marionette
 //= require moment.min
+//= require marked
 //= require jstz.min
 //= require moment-timezone.min
 //= require moment-timezone-data.min
