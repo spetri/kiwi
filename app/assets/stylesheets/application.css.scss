@@ -661,6 +661,7 @@ form.event_form {
 
   .event-description-container {
     margin:15px 0px;
+    overflow: scroll;
     .event-description {
       color:#666;
     }
