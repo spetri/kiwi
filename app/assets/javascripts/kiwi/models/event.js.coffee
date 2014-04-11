@@ -144,6 +144,7 @@ class FK.Models.Event extends Backbone.GSModel
       @get('local_time').split(':')[1].split(' ')[1]
 
   datetimeNormal: () ->
+    return moment() unless @get('datetime')
     @in_my_timezone(@get('datetime')).clone()
 
   datetimeRecurring: () ->
@@ -151,7 +152,6 @@ class FK.Models.Event extends Backbone.GSModel
     recurringMinutes = parseInt @get('local_minute')
 
     recurringHours += 12 if @get('local_ampm') is 'PM'
-
     @in_my_timezone(@get('datetime')).startOf('day').clone().
     add( hours: recurringHours, minutes: recurringMinutes )
 
