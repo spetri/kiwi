@@ -1,6 +1,6 @@
 <div class="col-sm-9">
   <span class="glyphicon glyphicon-calendar "> </span>
-  <input type="text" name="date" class="form-control date_selector" />
+  <input type="text" name="date" class="form-control date_selector" value="<%= @local_date() %>"  />
   <label class="date_picker_all_day control-label">
     <input type="checkbox"  <% if @is_all_day: %> checked="checked" <% end %> value="1" name="is_all_day" />
     All day
@@ -9,22 +9,22 @@
     <b>Specific time:</b>
     <select name="hours">
       <% for hour in [1..12]: %>
-        <option value="<%= hour %>" ><%= hour %></option>
+        <option <% if @local_hour() == "#{hour}": %> selected="SELECTED" <% end %> value="<%= hour %>" ><%= hour %></option>
       <% end %>
     </select>
     :
     <select name="minutes">
       <% for min in [0..59]: %>
         <% if min < 10: %>
-          <option value="0<%= min %>" >0<%= min %></option>
+          <option <% if @local_minute() == "0#{min}": %> selected="SELECTED" <% end %>  value="0<%= min %>" >0<%= min %></option>
         <% else: %>
-          <option value="<%= min %>" ><%= min %></option>
+          <option <% if @local_minute() == "#{min}": %> selected="SELECTED" <% end %> value="<%= min %>" ><%= min %></option>
         <% end %>
       <% end %>
     </select>
     <select name="ampm">
-      <option value="AM" >AM</option>
-      <option value="PM" >PM</option>
+      <option <% if @local_ampm() == "AM": %> selected="SELECTED" <% end %>  value="AM" >AM</option>
+      <option <% if @local_ampm() == "PM": %> selected="SELECTED" <% end %> value="PM" >PM</option>
     </select>
     <span class="timezone-display"></span>
   </div>

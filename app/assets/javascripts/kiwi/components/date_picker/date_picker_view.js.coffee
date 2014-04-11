@@ -2,6 +2,13 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
   class DatePicker.DatePickerView extends Marionette.ItemView
     className: 'date_picker'
     template: FK.Template 'date_picker'
+
+    templateHelpers: =>
+      local_hour: => @model.get('local_hour')
+      local_minute: => @model.get('local_minute')
+      local_ampm: => @model.get('local_ampm')
+      local_date: => @model.get('fk_datetime').format('MM/DD/YYYY')
+
     events:
       'change [name="date"],[name="hours"],[name="minutes"],[name="ampm"]': 'updateDateTime'
       'change [name="time_format"]': 'updateTimeFormat'
@@ -49,10 +56,6 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
     refreshTime: =>
       return unless @model.has('datetime')
       @refreshTimeDisplay()
-      @$('[name="hours"]').val @model.get('local_hour')
-      @$('[name="minutes"]').val @model.get('local_minute')
-      @$('[name="ampm"]').val @model.get('local_ampm')
-      @$('input[name="date"]').val(@model.get('fk_datetime').format('MM/DD/YYYY'))
 
     refreshTimeDisplay: =>
       return unless @model.has('datetime')
