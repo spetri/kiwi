@@ -110,14 +110,14 @@ class FK.Models.Event extends Backbone.GSModel
       datetime = @get('fk_datetime')
 
       if @get('time_format') is 'tv_show'
-        eastern_time = datetime.format('h')
+        eastern_time = moment("#{@get('local_time')} #{@get('local_date')}" )
 
-        central_time = parseInt(datetime.format('h')) - 1
+        central_time = parseInt(eastern_time.format('h')) - 1
         central_time = 12 if central_time is 0
 
-        minutes = datetime.format('mm')
+        minutes = eastern_time.format('mm')
 
-        return "#{eastern_time}:#{minutes}/#{central_time}:#{minutes}c"
+        return "#{eastern_time.format('h')}:#{minutes}/#{central_time}:#{minutes}c"
 
       else
         return @time_from_moment(datetime)
@@ -160,7 +160,6 @@ class FK.Models.Event extends Backbone.GSModel
     easternMinutes = parseInt @get('local_minute')
 
     easternHours += 12 if @get('local_ampm') is 'PM'
-
     zone = ' -0' + (FK.App.request('easternOffset') / 60) + '00'
     moment(moment(@get('local_date')).format('YYYY-MM-DD') + zone, 'YYYY-MM-DD ZZ').
     add( hours: easternHours, minutes: easternMinutes )
@@ -182,7 +181,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   setters:
     datetime: (moment_val) ->
-      return if not moment_val
+      return unless moment_val
       moment_val = moment(moment_val)
       @set('local_time', moment_val.format('h:mm A'))
       @set('local_date', moment_val.format('YYYY-MM-DD'))

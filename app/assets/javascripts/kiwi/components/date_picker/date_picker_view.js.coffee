@@ -38,7 +38,6 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         selector.removeAttr('disabled')
         @$('.timedisplay').show()
         @$('[name="is_all_day"]').removeAttr('checked')
-        @updateTimeFormat()
       @toggleAllDay(@model.isAllDay())
 
     toggleAllDay: (is_all_day) =>
@@ -48,15 +47,15 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
         @$el.removeClass('all_day')
 
     refreshTime: =>
-      return if not @model.has('datetime')
+      return unless @model.has('datetime')
       @refreshTimeDisplay()
       @$('[name="hours"]').val @model.get('local_hour')
       @$('[name="minutes"]').val @model.get('local_minute')
       @$('[name="ampm"]').val @model.get('local_ampm')
-      @$('input[name="date"]').val(this.model.get('fk_datetime').format('MM/DD/YYYY'))
+      @$('input[name="date"]').val(@model.get('fk_datetime').format('MM/DD/YYYY'))
 
     refreshTimeDisplay: =>
-      return if not @model.has('datetime')
+      return unless @model.has('datetime')
       @$('.time-display-value').text(@model.get('time'))
       @$('.status').text(@model.get('datetime').format('ddd MMM DD YYYY HH:mm:ss'))
 
@@ -72,8 +71,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @$('.timezone-display').text("(#{name.replace('_', ' ')})")
 
     onRender: () =>
-      date = @model.get('datetime')
-      @$('input[name="date"]').datepicker()
       @refreshAllDay()
       @refreshTime()
       @refreshTimeFormat()
+      @$('input[name="date"]').datepicker()

@@ -35,7 +35,6 @@
 
   var Datepicker = function(element, options) {
     var that = this;
-
     this._process_options(options);
 
     this.element = $(element);
