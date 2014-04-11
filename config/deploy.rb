@@ -35,7 +35,6 @@ set :ssh_options, '-t -A'  # ensure that ssh agent forwarding is being used.
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
-@keys = {}
 task :environment do
   # If you're using rbenv, use this to load the rbenv environment.
   # Be sure to commit your .rbenv-version to your repository.
@@ -44,16 +43,6 @@ task :environment do
   # For those using RVM, use this to load an RVM version@gemset.
   invoke :'rvm:use[ruby-2.1.1@kiwi]'
 
-  @keys = JSON.parse(open('keys.json').read)
-  if @keys['TWITTER_KEY'].nil?
-    puts 'Config did not parse correctly'
-    exit
-  end
-
-end
-
-def environment_vars
-  @keys.map { |k,v| %{#{k}=#{v}} }.join(" ")
 end
 
 set :rvm_path, "/usr/local/rvm/scripts/rvm"
