@@ -285,21 +285,18 @@ class FK.Models.EventBlock extends Backbone.Model
 
   determineMoreEventsAvailable: =>
     return @destroy() if @get('event_max_count') == 0
-    @set('more_events_available', @events.length < @get('event_max_count'))
+    visible_events = @events.length # because this is a backbone only viewmodel
+    if @get('event_max_count') is undefined
+      @set('more_events_available', false)
+    else
+      @set('more_events_available', visible_events < @get('event_max_count'))
 
   relativeDate: () =>
-    moment()
+    moment(@get('date'))
 
   checkEventCount: =>
-    $.get(
-      '/api/events/countByDate',
-      datetime: @relativeDate().format('YYYY-MM-DD HH:mm:ss'),
-      zone_offset: moment().zone()
-      country: @get('country')
-      subkasts: @get('subkasts')
-      (resp) =>
-        @set('event_max_count', resp.count)
-    )
+    result =  FK.App.request('events').allEventsByDate(@relativeDate(), @get('country'), @get('subkasts'))
+    @set('event_max_count', result.length)
 
 class FK.Collections.BaseEventList extends Backbone.Collection
   model: FK.Models.Event
@@ -362,12 +359,16 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
         subkasts: subkasts
         howManyEvents: howManyEvents
 
-  eventsByDate: (date, country, subkasts, howManyEvents, skip = []) =>
+  allEventsByDate: (date, country, subkasts, skip = []) =>
     @chain().
     filter( (event) -> event.isOnDate(date) ).
     filter( (event) -> event.get('location_type') is 'international' or event.get('country') == country ).
     filter( (event) -> _.contains(subkasts, event.get('subkast')) ).
     reject( (event) -> _.contains(_.map(skip, (event) -> event.get('_id')), event.get('_id')) ).
+    value()
+
+  eventsByDate: (date, country, subkasts, howManyEvents, skip = []) =>
+    _.chain(@allEventsByDate(date, country, subkasts, skip)).
     first(howManyEvents).
     value()
 
