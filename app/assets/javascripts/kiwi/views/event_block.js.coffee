@@ -13,9 +13,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       return atIndex.before(itemView.el) if atIndex.length
       return collectionView.append(itemView.el)
     templateHelpers: () =>
-      return {
-        isToday: () => @model.isToday()
-      }
+      isToday: () => @model.isToday()
     events:
       'click .btn': 'loadMore'
 
