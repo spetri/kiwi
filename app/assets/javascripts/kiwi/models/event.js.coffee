@@ -298,9 +298,7 @@ class FK.Models.EventBlock extends Backbone.Model
     events = FK.App.request('events').eventsByDate(
       @relativeDate(),
       @get('country'),
-      @get('subkasts'),
-      100000,
-      @events.models
+      @get('subkasts')
     )
     @set('event_max_count', events.length )
 
@@ -373,7 +371,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
     reject( (event) -> _.contains(_.map(skip, (event) -> event.get('_id')), event.get('_id')) ).
     value()
 
-  eventsByDate: (date, country, subkasts, howManyEvents, skip = []) =>
+  eventsByDate: (date, country, subkasts, howManyEvents = 9999999, skip = []) =>
     _.chain(@allEventsByDate(date, country, subkasts, skip)).
     first(howManyEvents).
     value()
