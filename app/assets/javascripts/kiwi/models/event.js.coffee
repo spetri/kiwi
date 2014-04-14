@@ -295,8 +295,15 @@ class FK.Models.EventBlock extends Backbone.Model
     moment(@get('date'))
 
   checkEventCount: =>
-    result =  FK.App.request('events').allEventsByDate(@relativeDate(), @get('country'), @get('subkasts'))
-    @set('event_max_count', result.length)
+    $.get(
+      '/api/events/countByDate',
+      datetime: @relativeDate().format('YYYY-MM-DD HH:mm:ss'),
+      zone_offset: moment().zone()
+      country: @get('country')
+      subkasts: @get('subkasts')
+      (resp) =>
+       @set('event_max_count', resp.count)
+    )
 
 class FK.Collections.BaseEventList extends Backbone.Collection
   model: FK.Models.Event
