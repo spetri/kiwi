@@ -102,7 +102,7 @@ class EventsController < ApplicationController
 
   def startup_events
     start_date = DateTime.parse(params[:datetime])
-    end_date = start_date + 3.days
+    end_date = start_date + 7.days
     @events = []
 
     (1..5).each do |x|
