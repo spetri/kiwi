@@ -6,7 +6,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     # get the dependencies:
     @events = App.request('events')
     @eventStore = App.request('eventStore')
-    @eventStore.refresh()
     @eventBlocks = App.request('eventStore').blocks
 
     # creating the views:

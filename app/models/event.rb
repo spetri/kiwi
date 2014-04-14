@@ -59,7 +59,7 @@ class Event
       self.image.reprocess!
     end
   end
-      
+
 
   def no_image
     File.open("#{Rails.root}/public/images/thumb/missing.png")
@@ -154,17 +154,17 @@ class Event
     ).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
 
     possible_events = possible_events_mr.find.to_a.map { |kv| Event.new(kv["value"]) }
-    sorted_possible_events = possible_events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) } 
+    sorted_possible_events = possible_events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
 
     events = []
-    
+
     dates = possible_events.collect { |event| event.relative_date(zone_offset) }
     dates.sort_by! { |date| date }
     dates = dates.uniq
 
     dates.each do |date|
       eventsOnDate = sorted_possible_events.select { |event| event.relative_date(zone_offset) == date }
-      events.concat eventsOnDate.take(eventsPerDay) 
+      events.concat eventsOnDate.take(eventsPerDay)
       break if events.length >= minimum
     end
 
