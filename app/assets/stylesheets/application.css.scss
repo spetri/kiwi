@@ -621,7 +621,7 @@ form.event_form {
 
 /* EVENT PAGE */
 
-.event-page.col-md-8 {
+.event-page.col-md-10 {
   float: none;
   margin-left:24px;
   padding-top:25px;
@@ -630,7 +630,7 @@ form.event_form {
 .event-card {
 
   .event-image-container {
-    height: 300px;
+    height: 340px;
     max-width: 430px;
     margin: 0 auto;
     text-align: left;
@@ -744,6 +744,7 @@ form.event_form {
     padding-top: 10px;
     height: 35px;
     width:100%;
+      display:block;
     div {
       display: inline-block;
     }
