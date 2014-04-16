@@ -308,6 +308,7 @@ body .navbar {
       font-weight:300;
     }
     a.event-name {
+      display:block;
       cursor: pointer;
       &:hover {
         text-decoration: none;
