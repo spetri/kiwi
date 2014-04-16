@@ -872,7 +872,7 @@ Renderer.prototype.link = function(href, title, text) {
       return '';
     }
   }
-  var out = '<a href="' + href + '"';
+  var out = '<a target="_blank" href="' + href + '"';
   if (title) {
     out += ' title="' + title + '"';
   }
@@ -1173,7 +1173,6 @@ function marked(src, opt, callback) {
     if (!highlight || highlight.length < 3) {
       return done();
     }
-
     delete opt.highlight;
 
     if (!pending) return done();
@@ -1197,8 +1196,10 @@ function marked(src, opt, callback) {
     return;
   }
   try {
+
     if (opt) opt = merge({}, marked.defaults, opt);
-    return Parser.parse(Lexer.lex(src, opt), opt);
+    lexer = Lexer.lex(src, opt);
+    return Parser.parse(lexer, opt);
   } catch (e) {
     e.message += '\nPlease report this to https://github.com/chjj/marked.';
     if ((opt || marked.defaults).silent) {
