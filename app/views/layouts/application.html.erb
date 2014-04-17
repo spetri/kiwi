@@ -20,7 +20,7 @@
   <script type="text/javascript">
     $(function() {
       FK.App.start({
-        countries: <%= raw Country.all.sort(order: 1).to_json() %>,
+        countries: <%= raw Country.all.sort_by(&:en_name).to_json() %>,
         events: [],
         links:
           {
