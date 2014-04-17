@@ -189,7 +189,7 @@ class FK.Models.Event extends Backbone.GSModel
       @set('local_time', moment_val.format('h:mm A'))
       @set('local_date', moment_val.format('YYYY-MM-DD'))
       if @get('time_format') is 'tv_show'
-        moment_val = moment(moment_val.format('YYYY-MM-DD') + ' ' + moment_val.format('h:mm A') + 'EST')
+        moment_val = moment(moment_val.format('YYYY-MM-DD') + ' ' + moment_val.format('h:mm A') + ' EST')
 
       # set the input time to UTC:
       adjustedMoment = moment(moment_val).zone(0)
