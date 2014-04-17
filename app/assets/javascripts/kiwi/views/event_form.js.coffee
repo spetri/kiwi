@@ -37,6 +37,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @event.clearImage()
 
+    @event.initialUpvote() if @event.isNew()
     @event.save(params, { silent: true })
 
     return if not @event.isValid()

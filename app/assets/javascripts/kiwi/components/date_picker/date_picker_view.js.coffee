@@ -25,10 +25,10 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @updateDateTime()
 
     updateAllDay: =>
+      @updateDateTime()
       is_all_day = @$('input[name=is_all_day]').prop('checked')
       @model.set('is_all_day', is_all_day)
       @toggleAllDay(is_all_day)
-
 
     modelEvents:
       'change:is_all_day': 'refreshAllDay'

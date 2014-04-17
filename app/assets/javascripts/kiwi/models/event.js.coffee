@@ -217,6 +217,10 @@ class FK.Models.Event extends Backbone.GSModel
     @toggleUserUpvoted()
     @save()
 
+  initialUpvote: =>
+    @set 'upvotes', 1
+    @set 'have_i_upvoted', true
+
   clearImage: ->
     @unset 'url'
     @unset 'crop_x'
