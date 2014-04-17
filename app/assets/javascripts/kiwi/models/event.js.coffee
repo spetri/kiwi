@@ -131,18 +131,19 @@ class FK.Models.Event extends Backbone.GSModel
 
     local_hour: ->
       return "" unless @get('local_time')
-      if @get('local_time').indexOf(':') == -1
-        return ""
+      return "" if @get('local_time').indexOf(':') is  -1
       local_hour = @get('local_time').split(':')[0]
       local_hour = local_hour - 12 + "" if local_hour > 12
       local_hour
 
     local_minute: ->
       return "" unless @get('local_time')
+      return "" if @get('local_time').indexOf(':') is  -1
       @get('local_time').split(':')[1].split(' ')[0]
 
     local_ampm: ->
       return "" unless @get('local_time')
+      return "" if @get('local_time').indexOf(':') is  -1
       @get('local_time').split(':')[1].split(' ')[1]
 
   datetimeNormal: () ->
