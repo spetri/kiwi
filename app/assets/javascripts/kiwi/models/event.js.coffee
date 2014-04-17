@@ -104,7 +104,7 @@ class FK.Models.Event extends Backbone.GSModel
       @get('timeAsString')
 
     timeAsString: () ->
-      return '' if not @get('datetime')
+      return '' unless @get('datetime')
       return 'All Day' if @isAllDay()
 
       datetime = @get('fk_datetime')
@@ -123,24 +123,26 @@ class FK.Models.Event extends Backbone.GSModel
         return @time_from_moment(datetime)
 
     dateAsString: () ->
-      return "" if not @get('datetime')
+      return "" unless @get('datetime')
       return @get('fk_datetime').format('dddd, MMM Do, YYYY')
 
     datetimeAsString: () ->
       return "#{@.get('dateAsString')}, #{@.get('timeAsString')}"
 
     local_hour: ->
-      return "" if not @get('local_time')
+      return "" unless @get('local_time')
+      if @get('local_time').indexOf(':') == -1
+        return ""
       local_hour = @get('local_time').split(':')[0]
       local_hour = local_hour - 12 + "" if local_hour > 12
       local_hour
 
     local_minute: ->
-      return "" if not @get('local_time')
+      return "" unless @get('local_time')
       @get('local_time').split(':')[1].split(' ')[0]
 
     local_ampm: ->
-      return "" if not @get('local_time')
+      return "" unless @get('local_time')
       @get('local_time').split(':')[1].split(' ')[1]
 
   datetimeNormal: () ->
