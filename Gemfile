@@ -44,6 +44,7 @@ end
 
 group :development, :test do
   gem 'mina'
+  gem 'hipchat'
   gem 'timecop'
   gem 'debugger', '1.6.6'
   gem 'guard'

@@ -142,6 +142,8 @@ end
 
 desc "Full deployment start stop restart!!!!"
 task :full_deploy => :environment do
+  client = HipChat::Client.new(CONFIG['hipchat_api_token'])
+  client[CONFIG['hipchat_room']].send('kiwibot', "#{ENV['host']} - Doing a full deployment! (allthethings) ", :color => 'red')
   invoke :deploy
   invoke :stop
   invoke :start

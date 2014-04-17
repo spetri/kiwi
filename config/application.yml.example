@@ -4,7 +4,8 @@ defaults: &defaults
   twitter_secret: 1234214124124
   facebook_key:  12345142141
   facebook_secret:123123123j1
-
+  hipchat_api_token: 
+  hipchat_room:
 
 development:
   <<: *defaults
