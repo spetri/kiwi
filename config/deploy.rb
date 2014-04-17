@@ -4,7 +4,14 @@ require 'mina/rails'
 require 'mina/git'
 # require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
  require 'mina/rvm'    # for rvm support. (http://rvm.io)
-
+require 'HipChat'
+config_file = File.expand_path('../application.yml', __FILE__)
+if (File.exists?(config_file))
+  CONFIG = YAML.load(File.read(config_file))
+  CONFIG.merge! CONFIG.fetch('production', {})
+else
+  CONFIG = {}
+end
 # Basic settings:
 #   domain       - The hostname to SSH to.
 #   deploy_to    - Path to deploy into.
@@ -143,7 +150,7 @@ end
 desc "Full deployment start stop restart!!!!"
 task :full_deploy => :environment do
   client = HipChat::Client.new(CONFIG['hipchat_api_token'])
-  client[CONFIG['hipchat_room']].send('kiwibot', "#{ENV['host']} - Doing a full deployment! (allthethings) ", :color => 'red')
+  client[CONFIG['hipchat_room']].send('kiwibot', "#{ENV['host']} - Doing a full deployment! kthxbye ", :color => 'red')
   invoke :deploy
   invoke :stop
   invoke :start
