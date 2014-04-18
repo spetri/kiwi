@@ -7,12 +7,12 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
   @create = (domLocation, model) ->
     Instance = new DatePicker.DatePickerController
       model: model
-    
+
     regionManager = new Marionette.RegionManager()
     region = regionManager.addRegion("instance", domLocation)
     datepicker_view = new DatePicker.DatePickerView
       model: model
-   
+
 
     region.show datepicker_view
 
@@ -29,7 +29,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       {
         datetime: @model.get('datetime')
         local_time: @model.get('local_time')
-        local_date: @model.get('local_date')
+        local_date: @model.get('local_date').format('YYYY-MM-DD')
         time_format: @model.get('time_format')
         is_all_day: @model.get('is_all_day')
       }

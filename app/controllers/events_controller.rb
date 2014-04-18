@@ -33,7 +33,7 @@ class EventsController < ApplicationController
     if (! event_params[:image] && event_params[:url])
       @event.image_from_url(event_params[:url])
     end
-    
+
     if ( user_signed_in? )
       if ( have_i_upvoted == "true" )
         @event.add_upvote(current_user.username)

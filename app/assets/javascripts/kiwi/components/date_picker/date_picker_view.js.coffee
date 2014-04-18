@@ -14,7 +14,6 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       'change [name="time_format"]': 'updateTimeFormat'
       'click .datepicker .day': 'updateDateTime'
 
-
     updateDateTime: =>
       @datepicker.datepicker('hide')
       date = @$('input[name=date]').val()
