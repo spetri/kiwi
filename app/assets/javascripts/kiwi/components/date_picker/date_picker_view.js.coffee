@@ -17,7 +17,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
     updateDateTime: =>
       date = @$('input[name=date]').val()
       time = "#{@$('select[name=hours]').val()}:#{@$('select[name=minutes]').val()} #{@$('select[name=ampm]').val()}"
-      @model.set('datetime', moment("#{date} #{time}")) if date and time
+      @model.moveToDateTime(date, time) if date and time
 
     updateTimeFormat: =>
       time_format = @$('input[name=time_format]:checked').val()

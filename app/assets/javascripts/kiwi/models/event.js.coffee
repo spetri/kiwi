@@ -182,12 +182,15 @@ class FK.Models.Event extends Backbone.GSModel
     else
       @get('fk_datetime').diff(startDate, 'seconds') >= 0 and @get('fk_datetime').diff(endDate, 'seconds') < 0
 
+  moveToDateTime: (date, time) =>
+    @set('local_time', time)
+    @set('local_date', date)
+    @set('datetime', moment("#{date} #{time}"))
+
   setters:
     datetime: (moment_val) ->
       return unless moment_val
       moment_val = moment(moment_val)
-      @set('local_time', moment_val.format('h:mm A'))
-      @set('local_date', moment_val.format('YYYY-MM-DD'))
       if @get('time_format') is 'tv_show'
         moment_val = moment(moment_val.format('YYYY-MM-DD') + ' ' + moment_val.format('h:mm A') + ' EST')
 
