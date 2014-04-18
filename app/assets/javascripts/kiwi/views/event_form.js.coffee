@@ -62,13 +62,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     @saveButton = new EventForm.SaveButton()
 
-    @listenTo @event, 'change:is_all_day', () =>
-      if @event.get('is_all_day')
-        $('.event_form_date').addClass('is_all_day')
-      else
-        $('.event_form_date').removeClass('is_all_day')
-
-
     form.on 'show', () =>
       @eventComponents.push FK.App.ImageTrimmer.create('#image-region', @event)
       @eventComponents.push FK.App.DatePicker.create('#datetime-region', @event)

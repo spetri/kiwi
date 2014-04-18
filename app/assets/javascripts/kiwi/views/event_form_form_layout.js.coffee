@@ -21,6 +21,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       'change:location_type': 'refreshLocation'
       'change:country': 'refreshLocation'
       'change:description': 'refreshDescription'
+      'change:is_all_day': 'refreshAllDay'
       'invalid': 'refreshErrors'
       'start:save': 'clearErrors'
 
@@ -50,6 +51,12 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
       $(document).scrollTop($(firstError).offset().top - 120)
 
+    refreshAllDay: (model) =>
+      if @model.get('is_all_day')
+        @$('.event_form_date').addClass('is_all_day')
+      else
+        @$('.event_form_date').removeClass('is_all_day')
+
     clearErrors: () ->
       @$('[data-field].error').each((i, elem) =>
         $(elem).text('')
@@ -78,4 +85,5 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @refreshSubkast @model
       @refreshLocation @model
       @refreshDescription @model
+      @refreshAllDay @model
       @renderLocation()
