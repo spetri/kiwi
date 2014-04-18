@@ -184,7 +184,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   moveToDateTime: (date, time) =>
     @set('local_time', time)
-    @set('local_date', date)
+    @set('local_date', moment(date))
     @set('datetime', moment("#{date} #{time}"))
 
   setters:
