@@ -13,12 +13,10 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @eventCardView = new EventPage.EventCard
       model: @event
 
-
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
     @listenTo @eventCardView, 'click:reminders', @toggleShowReminders
     @listenTo @eventCardView, 'click:card', @closeReminders
-
-    @listenTo @event, 'sync', @triggerEventList
+    @listenTo @event, 'destroy', @triggerEventList
 
     @eventCardView.on 'show', () =>
       @renderSocialNetworking()
@@ -41,10 +39,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
   @triggerEditEvent = (args) ->
     event = args.model
-    event.fetch(
-      success: () =>
-        Backbone.history.navigate('events/edit/' + event.id, trigger : true)
-    )
+    App.vent.trigger 'container:new', event
 
   @triggerEventList = () =>
     App.vent.trigger 'container:all'
