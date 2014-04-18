@@ -17,6 +17,11 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @listenTo @event, 'change:user', @showBaseView
     @showBaseView()
 
+    if event
+      Backbone.history.navigate 'events/edit/' + event.id, trigger: false
+    else
+      Backbone.history.navigate 'events/new/', trigger: false
+
   @showBaseView = () =>
     FK.App.mainRegion.show @view
 

@@ -40,10 +40,15 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     template: FK.Template('navbar')
     events:
       'click .navbar-brand': 'goHome'
+      'click .add-new': 'goToForm'
 
     goHome: (e) =>
       e.preventDefault()
       App.vent.trigger 'container:all'
+
+    goToForm: (e) =>
+      e.preventDefault()
+      App.vent.trigger 'container:new'
 
 
 
