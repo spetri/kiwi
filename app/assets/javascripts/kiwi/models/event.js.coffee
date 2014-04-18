@@ -110,7 +110,8 @@ class FK.Models.Event extends Backbone.GSModel
       datetime = @get('fk_datetime')
 
       if @get('time_format') is 'tv_show'
-        eastern_time = moment("#{@get('local_time')} #{@get('local_date')}", 'h:mm A YYYY-MM-DD')
+        date_parsed = moment(@get('local_date'))
+        eastern_time = moment("#{@get('local_time')} #{date_parsed.format('YYYY-MM-DD')}", 'h:mm A YYYY-MM-DD')
         central_time = parseInt(eastern_time.format('h')) - 1
         central_time = 12 if central_time is 0
 
