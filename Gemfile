@@ -3,9 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.0.3'
 
-gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
+gem 'mongoid', '4.0.0.beta1'
 gem 'bson_ext'
-gem 'mongoid-tree', :require => 'mongoid/tree'
+gem 'mongoid-tree', branch: 'mongoid-4.0'
 
 gem 'devise', '3.1.0.rc2'
 gem 'slim-rails'
