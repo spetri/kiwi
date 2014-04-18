@@ -120,7 +120,7 @@ end
 
 desc 'Stops the application'
 task :stop => :environment do
-    notify("#{ENV['host']} - stopping! ", 'orange')
+    notify("#{ENV['host']} - stopping! ", 'gray')
     queue! %{sudo service puma stop}
 end
 
