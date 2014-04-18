@@ -3,12 +3,14 @@ require 'spec_helper'
 describe Comment do
   it "should create comments" do
     c = create :comment
-    c.kind_of? Comment
-    c.event.kind_of? Event
+    c.should be_kind_of Comment
+    c.event.should be_kind_of Event
     c.status.should == "active"
   end
 
   it "should have an author" do
+    c = create :comment
+    c.authored_by.should be_kind_of User
 
   end
 
@@ -21,12 +23,12 @@ describe Comment do
     c.status.should == "flagged"
   end
 
-  it "should be deletable" do 
+  it "should be deletable" do
     c = create :deleted_comment
     c.status.should == "deleted"
   end
 
-  it "should be hidable" do 
+  it "should be hidable" do
     c = create :hidden_comment
     c.status.should == "hidden"
   end
