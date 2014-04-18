@@ -12,9 +12,11 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
     events:
       'change [name="date"],[name="hours"],[name="minutes"],[name="ampm"]': 'updateDateTime'
       'change [name="time_format"]': 'updateTimeFormat'
-      'change [name="is_all_day"]': 'updateAllDay'
+      'click .datepicker .day': 'updateDateTime'
+
 
     updateDateTime: =>
+      @datepicker.datepicker('hide')
       date = @$('input[name=date]').val()
       time = "#{@$('select[name=hours]').val()}:#{@$('select[name=minutes]').val()} #{@$('select[name=ampm]').val()}"
       @model.moveToDateTime(date, time) if date and time
@@ -77,4 +79,4 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @refreshAllDay()
       @refreshTime()
       @refreshTimeFormat()
-      @$('input[name="date"]').datepicker()
+      @datepicker = @$('input[name="date"]').datepicker()
