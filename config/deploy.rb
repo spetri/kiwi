@@ -93,6 +93,7 @@ end
 desc "Deploys the current version to the server."
 task :deploy => :environment do
   deploy do
+    notify("#{ENV['host']} - deploying! ", 'green')
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -103,6 +104,7 @@ end
 
 task :deploy_assets => :environment do
   deploy do
+    notify("#{ENV['host']} - deploying assets! ", 'green')
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -112,36 +114,43 @@ end
 
 desc 'Starts the application'
 task :start => :environment do
+    notify("#{ENV['host']} - starting! ", 'purple')
     queue! %{sudo service puma start}
 end
 
 desc 'Stops the application'
 task :stop => :environment do
+    notify("#{ENV['host']} - stopping! ", 'orange')
     queue! %{sudo service puma stop}
 end
 
 desc 'Restarts the application'
 task :restart => :environment do
+    notify("#{ENV['host']} - restarting! ", 'green')
     queue! %{sudo service puma restart}
 end
 
 desc 'Cleanups old all day values'
 task :cleanup_all_day => :environment do
+  notify("#{ENV['host']} - cleaning up all day! ", 'green')
   queue "cd #{deploy_to}/current ; bundle exec rake db:cleanup_all_day RAILS_ENV=production"
 end
 
 desc 'Move to local date field from date'
 task :move_to_local_date => :environment do
+  notify("#{ENV['host']} - moving to local date! ", 'green')
   queue "cd #{deploy_to}/current ; bundle exec rake db:move_date_to_local_date RAILS_ENV=production"
 end
 
 desc 'Prime db for production'
 task :prime_db => :environment do
+  notify("#{ENV['host']} - priming database! ", 'green')
   queue "cd #{deploy_to}/current ; bundle exec rake db:empty_seed RAILS_ENV=production"
 end
 
 desc "Cold Deploy the application for the first time"
 task :cold_deploy => :environment do
+  notify("#{ENV['host']} - cold deploy! ", 'green')
   invoke :setup
   invoke :deploy
   invoke :start
@@ -149,11 +158,15 @@ end
 
 desc "Full deployment start stop restart!!!!"
 task :full_deploy => :environment do
-  client = HipChat::Client.new(CONFIG['hipchat_api_token'])
-  client[CONFIG['hipchat_room']].send('kiwibot', "#{ENV['host']} - Doing a full deployment! kthxbye ", :color => 'red')
   invoke :deploy
   invoke :stop
   invoke :start
+  notify("#{ENV['host']} - Full Deployment Done! kthxbye ", 'green')
+end
+
+def notify(message, color)
+  client = HipChat::Client.new(CONFIG['hipchat_api_token'])
+  client[CONFIG['hipchat_room']].send('kiwibot', message, :color => color)
 end
 
 # For help in making your deploy script, see the Mina documentation:
