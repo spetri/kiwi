@@ -202,6 +202,8 @@ GEM
       mongoid (>= 3.0.1)
       rake
       rspec (>= 2.14)
+    mongoid-tree (1.0.4)
+      mongoid (>= 3.0, <= 4.0)
     moped (2.0.0.beta6)
       bson (~> 2.2)
       connection_pool (~> 1.2)
@@ -389,6 +391,7 @@ DEPENDENCIES
   mongoid!
   mongoid-paperclip
   mongoid-rspec
+  mongoid-tree
   omniauth-facebook (= 1.4.0)
   omniauth-twitter
   paperclip (~> 3.0)
