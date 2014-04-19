@@ -7,6 +7,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collection: @collection
 
       username: App.request('currentUser').get('username')
+      event: @event
       el: @domLocation
 
     @instance = new Comments.Controller
@@ -35,7 +36,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     initialize: (options) =>
       @username = options.username
-      @model = new FK.Models.Comment(username: @username)
+      @model = new FK.Models.Comment(username: @username, event_id: options.event.get('_id'))
       @commentNewView = new Comments.CommentNewView(model: @model)
       @commentsListView = new Comments.CommentsListView(collection: @collection)
 
@@ -48,6 +49,12 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   class Comments.CommentNewView extends Marionette.ItemView
     template: FK.Template('comments_new')
     class: 'col-md-12'
+    events: 
+      'click button': 'createClicked'
+
+    createClicked: (e) =>
+      e.preventDefault()
+      @model.save(message: @$('textarea').val())
 
   #Renders all the comment and all it's replies
   class Comments.CommentView extends Marionette.CompositeView
