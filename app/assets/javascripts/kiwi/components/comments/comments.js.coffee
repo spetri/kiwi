@@ -5,8 +5,6 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     @collection = @event.fetchComments()
     @layout =  new Comments.Layout
       collection: @collection
-
-      username: App.request('currentUser').get('username')
       event: @event
       el: @domLocation
 
@@ -27,7 +25,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     value: () =>
       {}
 
-  #Pulles together all the things
+  #Pull together all the things
   class Comments.Layout extends Marionette.Layout
     template: FK.Template('comments')
     regions:
@@ -35,30 +33,43 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       comment_list: '#comment-list'
 
     initialize: (options) =>
-      @username = options.username
-      @model = new FK.Models.Comment(username: @username, event_id: options.event.get('_id'))
-      @commentNewView = new Comments.CommentNewView(model: @model)
+      @model = new FK.Models.Comment(event_id: options.event.get('_id'))
+      @commentsReplyView = new Comments.ReplyBox(model: @model, collection: @collection, is_root: true)
       @commentsListView = new Comments.CommentsListView(collection: @collection)
 
     onRender: =>
-      @comment_new.show(@commentNewView)
+      @comment_new.show(@commentsReplyView)
       @comment_list.show(@commentsListView)
 
   #Renders the text box to create a new comment
   #Can be used either to create a top level comment or to reply
-  class Comments.CommentNewView extends Marionette.ItemView
-    template: FK.Template('comments_new')
+  class Comments.ReplyBox extends Marionette.ItemView
+    initialize: (options) => 
+      @is_root = false
+      if options.is_root
+        @is_root = options.is_root
+
+    template: FK.Template('comments_reply_box')
     class: 'col-md-12'
-    events: 
+    events:
       'click button': 'createClicked'
 
     createClicked: (e) =>
       e.preventDefault()
-      @model.save(message: @$('textarea').val())
+      @model.set(message: @$('textarea').val())
+      @collection.create(@model)
 
   #Renders all the comment and all it's replies
-  class Comments.CommentView extends Marionette.CompositeView
+  class Comments.CommentSingleView extends Marionette.CompositeView
     template: FK.Template('comment_single')
+    events:
+      'click .reply': 'replyClicked'
+
+    replyClicked: (e) =>
+      e.preventDefault()
+      model = new FK.Models.Comment(parent_id: @model.get('_id'))
+      reply_box = new Comments.ReplyBox(model: model,collection: @model.getRepliesCollection())
+      @$('.replybox').html(reply_box.render().el)
 
     initialize: =>
       @collection = @model.replies
@@ -67,5 +78,5 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collectionView.$("div.comment").append(itemView.el)
 
   class Comments.CommentsListView extends Marionette.CollectionView
-    itemView: Comments.CommentView
+    itemView: Comments.CommentSingleView
 
