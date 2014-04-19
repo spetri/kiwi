@@ -29,6 +29,7 @@ class Event
   field :location_type, type: String
   field :subkast, type: String
   has_many :reminders
+  has_many :comments
 
   has_mongoid_attached_file :image, :styles =>
     {

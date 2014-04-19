@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :set_event, only: [:show, :edit, :update, :destroy, :comments]
   authorize_resource :only => [:destroy, :create]
 
   def index
@@ -135,6 +135,10 @@ class EventsController < ApplicationController
 
   def events_by_date
     @events = Event.get_events_by_date(DateTime.parse(params[:datetime]), params[:zone_offset].to_i, params[:country], params[:subkasts], params[:howManyEvents].to_i, params[:skip].to_i)
+  end
+
+  def comments
+    @comments = @event.comments()
   end
 
   private

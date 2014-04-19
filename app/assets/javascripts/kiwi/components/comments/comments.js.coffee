@@ -2,35 +2,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @create = (options) ->
     @event = options.event
     @domLocation = options.domLocation
-
-    @collection = new Comments.CommentCollection([{
-      body: 'This looks like it will be an awesome event! He heard something loud and clearly out of the ordinary, but somewhat familiar. So he immediately reacted by a reflexive look up, then paused to determine the orgin and legitimacy of the familiar sound. He then determined that the chances of one of his kind attending this musical precession was highly unlikely, and continued on with what he was doing. He also would like to add, that your remark was very insulting, and suggest that you think next time before accusing an imaginary elephant of stupidity.',
-      username: 'Kirk',
-      upvotes: 10,
-      depth:0,
-      replies: [
-        {
-          body: 'No, I think that this will kinda suck, I\'m just a Doctor',
-          username: 'McCoy'
-          upvotes: 33,
-          depth: 1,
-          replies: [
-            {
-              body: 'how did i even get here',
-              username: 'Worf',
-              upvotes: 0,
-              depth: 2,
-            }
-          ]
-        }
-      ]
-    },{
-      body: 'Engage!',
-      username: 'Picard',
-      upvotes: 100,
-      depth: 0
-    }])
-
+    @collection = @event.fetchComments()
     @layout =  new Comments.Layout
       collection: @collection
 
@@ -63,7 +35,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     initialize: (options) =>
       @username = options.username
-      @model = new Comments.ViewModel(username: @username)
+      @model = new FK.Models.Comment(username: @username)
       @commentNewView = new Comments.CommentNewView(model: @model)
       @commentsListView = new Comments.CommentsListView(collection: @collection)
 
@@ -90,15 +62,3 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentView
 
-  class Comments.ViewModel extends Backbone.Model
-    defaults:
-      username: null
-
-    initialize: =>
-      replies = @.get('replies')
-      if (replies)
-        @replies = new Comments.CommentCollection(replies);
-        @.unset("nodes");
-
-  class Comments.CommentCollection extends Backbone.Collection
-    model: Comments.ViewModel
