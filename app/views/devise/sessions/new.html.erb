@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-10">
-    <h2>Log in</h2>
+    <h3>Log in</h3>
     <%- if devise_mapping.omniauthable? %>
       <ul class="omniauth-login">
       <%- resource_class.omniauth_providers.each do |provider| %>
@@ -35,7 +35,7 @@
       <div class="form-group">
         <div class="col-sm-offset-2" style="padding-left: 15px;">
           <%= f.label :remember_me do %>
-            <%= f.check_box :remember_me %> remember me
+            <%= f.check_box :remember_me %> Remember me
           <% end -%>
         </div>
       </div>
