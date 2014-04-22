@@ -79,3 +79,4 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       @refreshTime()
       @refreshTimeFormat()
       @datepicker = @$('input[name="date"]').datepicker()
+      @updateDateTime()
