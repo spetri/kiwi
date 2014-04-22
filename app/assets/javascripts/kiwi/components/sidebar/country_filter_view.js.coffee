@@ -18,3 +18,4 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     onRender: =>
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
       @refreshChosenCountry(@model, @model.get('country'))
+      @$('sup').tooltip({title:'Some events are only relevant within a certain country such as a national holiday or tv show time. Everyone can see event with the Global label.'});
