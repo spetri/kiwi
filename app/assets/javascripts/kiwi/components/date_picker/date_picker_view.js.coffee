@@ -13,6 +13,7 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
       'change [name="date"],[name="hours"],[name="minutes"],[name="ampm"]': 'updateDateTime'
       'change [name="time_format"]': 'updateTimeFormat'
       'click .datepicker .day': 'updateDateTime'
+      'click [name="is_all_day"]': 'updateAllDay'
 
     updateDateTime: =>
       @datepicker.datepicker('hide')
