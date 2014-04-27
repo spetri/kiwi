@@ -88,10 +88,12 @@ describe "Event", ->
 
       describe "in the past", ->
         beforeEach ->
-          @event.set(datetime: moment().add( days: -1 ), is_all_day: true)
+          @datetime = moment().add( days: -1 )
+          @event.set(is_all_day: true)
+          @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('HH:mm:ss'))
 
         it "should be on yesterday's date", ->
-          expect(@event.isOnDate(moment().add( days: -1))).toBeTruthy()
+          expect(@event.isOnDate(@datetime)).toBeTruthy()
 
         it "should not be in the future", ->
           expect(@event.inFuture()).toBeFalsy()
@@ -100,14 +102,16 @@ describe "Event", ->
           expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('00:00:00')
 
         it "should have a datetime that is the same date as the date originally entered", ->
-          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add( days: -1 ).format('YYYY-MM-DD'))
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(@datetime.format('YYYY-MM-DD'))
 
       describe "days in the future", ->
         beforeEach ->
-          @event.set(datetime: moment().add( days: 4 ), is_all_day: true)
+          @datetime = moment().add( days: 4 )
+          @event.set(is_all_day: true)
+          @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('HH:mm:ss'))
 
         it "should be on the future date date", ->
-          expect(@event.isOnDate(moment().add( days: 4))).toBeTruthy()
+          expect(@event.isOnDate(@datetime)).toBeTruthy()
 
         it "should be in the future", ->
           expect(@event.inFuture()).toBeTruthy()
@@ -116,13 +120,14 @@ describe "Event", ->
           expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('00:00:00')
 
         it "should have a datetime that is the same date as the date originally entered", ->
-          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(moment().add( days: 4 ).format('YYYY-MM-DD'))
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(@datetime.format('YYYY-MM-DD'))
 
     describe "tv time", ->
       describe "setting time format after", ->
         beforeEach ->
-          @event.set(datetime: moment())
+          @datetime = moment()
           @event.set(time_format: 'tv_show')
+          @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('HH:mm:ss'))
 
         it "should have the datetime in tv format", ->
           expect(@event.get('timeAsString')).toBe('12:00/11:00c')
@@ -168,7 +173,10 @@ describe "Event", ->
 
       describe "in the past", ->
         beforeEach ->
-          @event.set(datetime: moment().add( days: -1 ), time_format: 'tv_show', local_time: '11:00 PM')
+          @datetime = moment().add( days: -1 )
+          @event.set(time_format: 'tv_show')
+          @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('HH:mm:ss'))
+
         it "should be on yesterday's date", ->
           expect(@event.isOnDate(moment().add(days: -1))).toBeTruthy()
 
@@ -219,12 +227,6 @@ describe "Event", ->
       it "should have a time in the fk format", ->
         expect(@event.get('timeAsString')).toBe('3:00 AM')
  
-    it "can create a local time on set", ->
-      event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
-      expect(event.get('local_time')).toBe('1:00 PM')
-    it "can create a local date on set", ->
-      event = new FK.Models.Event datetime: moment("2013-12-12, 13:00 GMT-500")
-      expect(event.get('local_date')).toBe('2013-12-12')
     it "can get a datetime in the local timezone without changing it", ->
       v = new FK.Models.Event
         datetime: moment().zone(0)
