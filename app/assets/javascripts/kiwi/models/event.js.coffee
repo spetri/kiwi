@@ -152,7 +152,7 @@ class FK.Models.Event extends Backbone.GSModel
     recurringHours = parseInt @get('local_hour')
     recurringMinutes = parseInt @get('local_minute')
 
-    recurringHours += 12 if @get('local_ampm') is 'PM'
+    recurringHours += 12 if @get('local_ampm') is 'PM' and recurringHours != 12
     @in_my_timezone(@get('datetime')).startOf('day').clone().
     add( hours: recurringHours, minutes: recurringMinutes )
 
@@ -160,7 +160,7 @@ class FK.Models.Event extends Backbone.GSModel
     easternHours = parseInt @get('local_hour')
     easternMinutes = parseInt @get('local_minute')
 
-    easternHours += 12 if @get('local_ampm') is 'PM'
+    easternHours += 12 if @get('local_ampm') is 'PM' && easternHours != 12
     zone = ' -0' + (FK.App.request('easternOffset') / 60) + '00'
     moment(moment(@get('local_date')).format('YYYY-MM-DD') + zone, 'YYYY-MM-DD ZZ').
     add( hours: easternHours, minutes: easternMinutes )
