@@ -380,7 +380,8 @@ describe "Event", ->
     beforeEach ->
       @event = new FK.Models.Event
 
-    it "should be able to recognize various forms of hyperlinks and parse them", ->
+    #Ignored while we use a markdown parser, this spec may be fully obsolete soon - grayden
+    xit "should be able to recognize various forms of hyperlinks and parse them", ->
       hyperlinks = ['http://google.ca', 'http://google.ca', 'http://www.google.ca', 'http://www.google.ca/chrome', 'http://www.google.ca/chrome.php', 'http://www.google.com/chrome/asdf/download.asp', 'http://google.ca/chrome_download/file.asp']
       _.each(hyperlinks, (hyperlink) =>
 
@@ -391,7 +392,8 @@ describe "Event", ->
 
       )
 
-    it "should be able to tag on http:// if not in the hyperlink", ->
+    #Ignored while we use a markdown parser, this spec may be fully obsolete soon - grayden
+    xit "should be able to tag on http:// if not in the hyperlink", ->
       @event.set('description', 'google.ca')
       expect(@event.descriptionParsed()).toBe('<a target=\"_blank\" href=\"http://google.ca\">google.ca</a>')
 
