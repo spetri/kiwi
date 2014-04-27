@@ -263,11 +263,14 @@ class FK.Models.EventBlock extends Backbone.Model
       event_limit: 5
     }
 
-  initialize: () =>
+  initialize: (options) =>
     @events = new FK.Collections.BaseEventList()
     @on 'change:event_max_count', @determineMoreEventsAvailable
     @events.on 'add', @determineMoreEventsAvailable
     @events.on 'remove reset', @checkEventCount
+
+  observeEvents: (events) =>
+    @allEvents = events
     @checkEventCount()
 
   isToday: () =>
@@ -278,11 +281,8 @@ class FK.Models.EventBlock extends Backbone.Model
 
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
-
     howManyOver = events.length + @events.length - @get('event_limit')
-
     events = _.take(events, events.length - howManyOver) if howManyOver > 0
-
     @events.add(events)
 
   checkLimit: () =>
@@ -292,7 +292,7 @@ class FK.Models.EventBlock extends Backbone.Model
     @set('event_limit', @get('event_limit') + howMuch)
 
   determineMoreEventsAvailable: =>
-    return @destroy() if @get('event_max_count') == 0
+    return @destroy() if @get('event_max_count') == 0 && @allEvents
     visible_events = @events.length # because this is a backbone only viewmodel
     if @get('event_max_count') is undefined
       @set('more_events_available', false)
@@ -303,7 +303,8 @@ class FK.Models.EventBlock extends Backbone.Model
     moment(@get('date'))
 
   checkEventCount: =>
-    events = FK.App.request('events').eventsByDate(
+    return @set('event_max_count', 0) if not @allEvents
+    events = @allEvents.eventsByDate(
       @relativeDate(),
       @get('country'),
       @get('subkasts')
@@ -401,7 +402,7 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     return 0 if date1 == date2
     return -1 if date1 < date2
 
-  addEventToBlock: (date, country, subkasts, event) =>
+  addEventToBlock: (date, country, subkasts, event, events) =>
     return if not (event.inFuture() or event.isOnDate(moment()))
     block = @find( (block) => block.isDate(date))
     if not block
@@ -409,5 +410,6 @@ class FK.Collections.EventBlockList extends Backbone.Collection
         date: moment(date)
         country: country
         subkasts: _.clone(subkasts)
+      block.observeEvents events
       @add block
     block.addEvents event
