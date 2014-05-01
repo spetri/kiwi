@@ -138,7 +138,7 @@ describe "Event Store", ->
           it "should have the event with the lowest number of upvotes last", ->
             expect(@blocks.last().events.last().upvotes()).toBe(2)
 
-          it "should have the limit of the block in question reduced", ->
+          xit "should have the limit of the block in question reduced", ->
             expect(@blocks.last().get('event_limit')).toBe(9)
 
           it "should know that no more events are available", ->

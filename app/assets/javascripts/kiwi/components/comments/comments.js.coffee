@@ -22,10 +22,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @layout = options.layout
       @collection = options.collection
 
-    value: () =>
-      {}
-
-  #Pull together all the things
+  #Pulls together all the things
   class Comments.Layout extends Marionette.Layout
     template: FK.Template('comments')
     regions:
@@ -44,7 +41,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   #Renders the text box to create a new comment
   #Can be used either to create a top level comment or to reply
   class Comments.ReplyBox extends Marionette.ItemView
-    initialize: (options) => 
+    initialize: (options) =>
       @is_root = false
       if options.is_root
         @is_root = options.is_root
@@ -79,4 +76,3 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentSingleView
-

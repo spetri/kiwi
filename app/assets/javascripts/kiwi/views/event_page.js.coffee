@@ -24,7 +24,6 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     #TODO Find out WHY!?
     @view.onShow = () =>
       @view.eventCardRegion.show @eventCardView
-      # turning off comments:
       @commentsModule = App.Comments.create(event: @event, domLocation: "#event-comments-region")
 
     @view.onClose = () =>
