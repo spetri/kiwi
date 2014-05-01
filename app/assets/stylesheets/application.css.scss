@@ -381,14 +381,34 @@ body .navbar {
   h5 {
     font-weight: bold;
     font-size:16px;
+    line-height:1.3;
   }
 
   ol {
     padding-left: 22px;
   }
+  
   #subkast-filter {
+    h5 {
+      padding-top: 14px;
+    }
+  }
+  
+  #country-filter {
     padding-bottom: 20px;
     border-bottom: 1px solid #F0F0F0;
+    
+    sup {
+      font-size:10px;
+      color:#428bca;
+      cursor: pointer;
+    }
+    
+    .tooltip {
+      font-family: Helvetica, Arial, sans-serif !important;
+      font-weight:normal !important;
+    }
+    
   }
   .sidebar-element {
     ul {
@@ -398,9 +418,6 @@ body .navbar {
         margin-left:10px;
       }
     }
-  }
-  h5 {
-    padding-top: 14px;
   }
   select {
     width: 80%;
@@ -915,7 +932,7 @@ form.event_form {
       float: left;
       border-right: 2px solid #FFF;
       margin: 10px;
-      padding: 10px;
+      padding: 10px 20px 10px 20px;
     }
   }
   li.twitter a {

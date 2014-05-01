@@ -23,5 +23,5 @@ describe "Events.EventForm", ->
       expect($('[name="location_type"]:checked').length).toBe(1)
 
     it "should have the correct country selected", () ->
-      expect($('[name="country"]').attr('disabled')).toBeFalsy()
-      expect($('[name="country"] :selected').val()).toBe('AE')
+      expect($('.event-form [name="country"]').attr('disabled')).toBeFalsy()
+      expect($('.event-form [name="country"] :selected').val()).toBe('AE')
