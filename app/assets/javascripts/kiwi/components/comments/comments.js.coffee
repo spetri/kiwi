@@ -58,6 +58,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   #Renders all the comment and all it's replies
   class Comments.CommentSingleView extends Marionette.CompositeView
     template: FK.Template('comment_single')
+    className: 'comment'
     events:
       'click .reply': 'replyClicked'
 
