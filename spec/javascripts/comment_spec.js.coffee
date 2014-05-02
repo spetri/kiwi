@@ -10,6 +10,7 @@ describe 'comments', ->
       @event.set('_id', '12345567')
       @comments = new FK.Collections.Comments()
       @comments.fetchForEvent(@event)
+      @comments.username = 'joekool'
 
       @requests[0].respond(200, [])
 
@@ -23,3 +24,6 @@ describe 'comments', ->
 
     it 'should have the correct body on the comment', ->
       expect(@comments.first().get('message')).toBe('Warbling in the dark')
+
+    it 'should have the correct username', ->
+      expect(@comments.first().get('username')).toBe('joekool')

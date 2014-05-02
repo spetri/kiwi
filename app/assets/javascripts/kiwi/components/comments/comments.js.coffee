@@ -1,8 +1,10 @@
 FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @create = (options) ->
     @event = options.event
+    @username = options.username
     @domLocation = options.domLocation
     @collection = @event.fetchComments()
+    @collection.username = @username
     @layout =  new Comments.Layout
       collection: @collection
       event: @event
@@ -31,11 +33,12 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     initialize: (options) =>
       @model = new FK.Models.Comment(event_id: options.event.get('_id'))
-      @commentsReplyView = new Comments.ReplyBox(model: @model, collection: @collection, is_root: true)
+      @commentsReplyView = new Comments.ReplyBox(collection: @collection, is_root: true)
       @commentsListView = new Comments.CommentsListView(collection: @collection)
 
     onRender: =>
-      @comment_new.show(@commentsReplyView)
+      if (@collection.knowsUser())
+        @comment_new.show(@commentsReplyView)
       @comment_list.show(@commentsListView)
 
   #Renders the text box to create a new comment
@@ -87,9 +90,6 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     initialize: =>
       @collection = @model.replies
-
-    modelEvents:
-      'change': 'render'
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)

@@ -28,5 +28,8 @@ class FK.Collections.Comments extends Backbone.Collection
         skip: 0
     @event = event
 
+  knowsUser: =>
+    return @username.length > 0
+
   comment: (message) =>
-    @create( message: message, event_id: @event.get('_id') )
+    @create( message: message, event_id: @event.get('_id'), username: @username)
