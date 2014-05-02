@@ -70,6 +70,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     initialize: =>
       @collection = @model.replies
 
+    modelEvents:
+      'change': 'render'
+
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
 
