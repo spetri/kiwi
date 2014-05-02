@@ -205,4 +205,9 @@ class Event
   def self.get_last_date
     self.order_by([:local_date, :desc])[0].local_date
   end
+
+
+  def rootComments
+    self.comments.where(:parent => nil)
+  end
 end
