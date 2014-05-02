@@ -7,6 +7,8 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     if @comment.parent_id.present? 
       @comment.event = @comment.parent.event
+    else
+      @comment.event = Event.find(params[:event_id])
     end
     @comment.save
     render action: 'show', status: :created, location: @comment 

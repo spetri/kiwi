@@ -53,8 +53,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     createClicked: (e) =>
       e.preventDefault()
-      @model.set(message: @$('textarea').val())
-      @collection.create(@model)
+      @collection.comment(@$('textarea').val())
 
   #Renders all the comment and all it's replies
   class Comments.CommentSingleView extends Marionette.CompositeView

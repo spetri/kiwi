@@ -26,4 +26,7 @@ class FK.Collections.Comments extends Backbone.Collection
       remove: false
       data:
         skip: 0
+    @event = event
 
+  comment: (message) =>
+    @create( message: message, event_id: @event.get('_id') )

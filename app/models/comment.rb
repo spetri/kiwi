@@ -14,7 +14,6 @@ class Comment
   field :message, type: String
   field :upvotes, type: Integer, default: 0
 
-
   def status
     return 'deleted' if deleted_by.kind_of? User
     return 'hidden' if hidden_by.kind_of? User

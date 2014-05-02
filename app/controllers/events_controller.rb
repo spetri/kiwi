@@ -138,7 +138,7 @@ class EventsController < ApplicationController
   end
 
   def comments
-    @comments = @event.comments().where(:parent => nil)
+    @comments = @event.comments.where(:parent => nil)
   end
 
   private
