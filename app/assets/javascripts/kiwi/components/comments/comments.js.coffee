@@ -41,6 +41,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   #Renders the text box to create a new comment
   #Can be used either to create a top level comment or to reply
   class Comments.ReplyBox extends Marionette.ItemView
+
     initialize: (options) =>
       @is_root = false
       if options.is_root
@@ -48,12 +49,28 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     template: FK.Template('comments_reply_box')
     class: 'col-md-12'
+
     events:
       'click button': 'createClicked'
+      'keyup textarea': 'writingComment'
 
     createClicked: (e) =>
       e.preventDefault()
       @collection.comment(@$('textarea').val())
+      @$('textarea').val('')
+      @enableButton(0)
+
+    writingComment: (e) =>
+      @enableButton(@$('textarea').val().length)
+
+    enableButton: (numCharacters) =>
+      if (numCharacters > 0)
+        @$('button').removeClass('disabled')
+      else
+        @$('button').addClass('disabled')
+
+    onRender: =>
+      @enableButton(0)
 
   #Renders all the comment and all it's replies
   class Comments.CommentSingleView extends Marionette.CompositeView
