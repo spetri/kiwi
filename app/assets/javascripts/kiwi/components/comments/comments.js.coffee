@@ -1,10 +1,9 @@
 FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @create = (options) ->
     @event = options.event
-    @username = options.username
     @domLocation = options.domLocation
     @collection = @event.fetchComments()
-    @collection.username = @username
+    @collection.username = options.username
     @layout =  new Comments.Layout
       collection: @collection
       event: @event

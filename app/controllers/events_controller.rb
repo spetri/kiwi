@@ -138,7 +138,7 @@ class EventsController < ApplicationController
   end
 
   def comments
-    @comments = @event.rootComments
+    @comments = @event.root_comments
   end
 
   private

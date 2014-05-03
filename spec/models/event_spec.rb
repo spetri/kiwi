@@ -163,4 +163,21 @@ describe Event do
       Event.count_events_by_date(1.week.from_now - 1.minute, 300, "CA", ["ST"]).should == 3
     end
   end
+
+  describe "comment" do
+    before(:each) do
+      @event = build :event
+      @comment1 = build :comment
+      @comment2 = build :comment
+      @comment1.event = @event
+      @comment2.event = @event
+      @event.save
+      @comment1.save
+      @comment2.save
+    end
+
+    it "should be able to get the root comments" do
+      @event.root_comments.size.should == 2
+    end
+  end
 end

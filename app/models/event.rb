@@ -207,7 +207,7 @@ class Event
   end
 
 
-  def rootComments
+  def root_comments
     self.comments.where(:parent => nil)
   end
 end
