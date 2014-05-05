@@ -29,6 +29,7 @@ class Event
   field :location_type, type: String
   field :subkast, type: String
   has_many :reminders
+  has_many :comments
 
   has_mongoid_attached_file :image, :styles =>
     {
@@ -203,5 +204,10 @@ class Event
 
   def self.get_last_date
     self.order_by([:local_date, :desc])[0].local_date
+  end
+
+
+  def root_comments
+    self.comments.where(:parent => nil)
   end
 end

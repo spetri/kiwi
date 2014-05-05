@@ -2,39 +2,11 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @create = (options) ->
     @event = options.event
     @domLocation = options.domLocation
-
-    @collection = new Comments.CommentCollection([{
-      body: 'This looks like it will be an awesome event! He heard something loud and clearly out of the ordinary, but somewhat familiar. So he immediately reacted by a reflexive look up, then paused to determine the orgin and legitimacy of the familiar sound. He then determined that the chances of one of his kind attending this musical precession was highly unlikely, and continued on with what he was doing. He also would like to add, that your remark was very insulting, and suggest that you think next time before accusing an imaginary elephant of stupidity.',
-      username: 'Kirk',
-      upvotes: 10,
-      depth:0,
-      replies: [
-        {
-          body: 'No, I think that this will kinda suck, I\'m just a Doctor',
-          username: 'McCoy'
-          upvotes: 33,
-          depth: 1,
-          replies: [
-            {
-              body: 'how did i even get here',
-              username: 'Worf',
-              upvotes: 0,
-              depth: 2,
-            }
-          ]
-        }
-      ]
-    },{
-      body: 'Engage!',
-      username: 'Picard',
-      upvotes: 100,
-      depth: 0
-    }])
-
+    @collection = @event.fetchComments()
+    @collection.username = options.username
     @layout =  new Comments.Layout
       collection: @collection
-
-      username: App.request('currentUser').get('username')
+      event: @event
       el: @domLocation
 
     @instance = new Comments.Controller
@@ -51,10 +23,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @layout = options.layout
       @collection = options.collection
 
-    value: () =>
-      {}
-
-  #Pulles together all the things
+  #Pulls together all the things
   class Comments.Layout extends Marionette.Layout
     template: FK.Template('comments')
     regions:
@@ -62,24 +31,61 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       comment_list: '#comment-list'
 
     initialize: (options) =>
-      @username = options.username
-      @model = new Comments.ViewModel(username: @username)
-      @commentNewView = new Comments.CommentNewView(model: @model)
+      @model = new FK.Models.Comment(event_id: options.event.get('_id'))
+      @commentsReplyView = new Comments.ReplyBox(collection: @collection, is_root: true)
       @commentsListView = new Comments.CommentsListView(collection: @collection)
 
     onRender: =>
-      @comment_new.show(@commentNewView)
+      if (@collection.knowsUser())
+        @comment_new.show(@commentsReplyView)
       @comment_list.show(@commentsListView)
 
   #Renders the text box to create a new comment
   #Can be used either to create a top level comment or to reply
-  class Comments.CommentNewView extends Marionette.ItemView
-    template: FK.Template('comments_new')
+  class Comments.ReplyBox extends Marionette.ItemView
+
+    initialize: (options) =>
+      @is_root = false
+      if options.is_root
+        @is_root = options.is_root
+
+    template: FK.Template('comments_reply_box')
     class: 'col-md-12'
 
+    events:
+      'click button': 'createClicked'
+      'keyup textarea': 'writingComment'
+
+    createClicked: (e) =>
+      e.preventDefault()
+      @collection.comment(@$('textarea').val())
+      @$('textarea').val('')
+      @enableButton(0)
+
+    writingComment: (e) =>
+      @enableButton(@$('textarea').val().length)
+
+    enableButton: (numCharacters) =>
+      if (numCharacters > 0)
+        @$('button').removeClass('disabled')
+      else
+        @$('button').addClass('disabled')
+
+    onRender: =>
+      @enableButton(0)
+
   #Renders all the comment and all it's replies
-  class Comments.CommentView extends Marionette.CompositeView
+  class Comments.CommentSingleView extends Marionette.CompositeView
     template: FK.Template('comment_single')
+    className: 'comment'
+    events:
+      'click .reply': 'replyClicked'
+
+    replyClicked: (e) =>
+      e.preventDefault()
+      model = new FK.Models.Comment(parent_id: @model.get('_id'))
+      reply_box = new Comments.ReplyBox(model: model,collection: @model.getRepliesCollection())
+      @$('.replybox').html(reply_box.render().el)
 
     initialize: =>
       @collection = @model.replies
@@ -88,17 +94,4 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collectionView.$("div.comment").append(itemView.el)
 
   class Comments.CommentsListView extends Marionette.CollectionView
-    itemView: Comments.CommentView
-
-  class Comments.ViewModel extends Backbone.Model
-    defaults:
-      username: null
-
-    initialize: =>
-      replies = @.get('replies')
-      if (replies)
-        @replies = new Comments.CommentCollection(replies);
-        @.unset("nodes");
-
-  class Comments.CommentCollection extends Backbone.Collection
-    model: Comments.ViewModel
+    itemView: Comments.CommentSingleView

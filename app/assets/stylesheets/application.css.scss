@@ -821,6 +821,52 @@ form.event_form {
     }
   }
 }
+
+/* COMMENTS */
+
+.comment {
+  margin-bottom: 18px;
+
+  .user-comment {
+    display: inline-block;
+    float: left;
+  }
+
+  .up-vote {
+    display: inline-block;
+    float: left;
+    margin-right: 8px;
+    margin-top: 11px;
+    color: #888888;
+
+    i {
+      cursor: pointer;
+      display: block;
+      height: 10px;
+      font-size: 20px;
+    }
+  }
+
+  .info {
+    margin-bottom: 3px;
+  }
+
+  .username {
+    font-size: 18px;
+    color: #333333;
+  }
+
+  .tools {
+    display: inline-block;
+    color: #aaaaaa;
+    font-size: 13px;
+  }
+
+  .comment-text {
+    max-width: 40em;
+  }
+}
+
 #mobile-sidebar {
   padding: 10px 0px;
   margin-top: -10px;

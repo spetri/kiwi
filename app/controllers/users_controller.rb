@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   def update
-    @user = User.find(current_user.id) 
+    @user = User.find(current_user.id)
     @user[:country] = user_params[:country]
     @user[:subkasts] = user_params[:subkasts].split(',')
     @user.save()
@@ -11,6 +11,6 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.permit(:country, :subkasts) 
+      params.permit(:country, :subkasts)
     end
 end

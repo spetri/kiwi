@@ -21,8 +21,13 @@ class FK.Models.Event extends Backbone.GSModel
   urlRoot: () =>
     '/events'
 
+  fetchComments: () =>
+    @comments.fetchForEvent(@)
+    return @comments
+
   initialize: () =>
     @reminders = new FK.Collections.Reminders()
+    @comments  = new FK.Collections.Comments()
     #Backbone thing: when collection fetches from another url, models are
     #forced to have that url, undo that here
     #TODO: Report backbone bug?

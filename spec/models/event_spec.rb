@@ -10,7 +10,7 @@ describe Event do
     Timecop.return
   end
 
-  it "should work" do 
+  it "should work" do
     e = Event.new name: "foobar"
     e.save!
     Event.all.size.should == 1
@@ -57,7 +57,7 @@ describe Event do
         end
         it "should be able to get recurring timezone events on its local date" do
           Event.get_events_by_date(5.week.from_now + 300.minutes, 300, "CA", ["ST"]).size.should == 1
-        end 
+        end
       end
 
       describe "tv show events" do
@@ -161,6 +161,23 @@ describe Event do
 
     it "should be able to count events on a day" do
       Event.count_events_by_date(1.week.from_now - 1.minute, 300, "CA", ["ST"]).should == 3
+    end
+  end
+
+  describe "comment" do
+    before(:each) do
+      @event = build :event
+      @comment1 = build :comment
+      @comment2 = build :comment
+      @comment1.event = @event
+      @comment2.event = @event
+      @event.save
+      @comment1.save
+      @comment2.save
+    end
+
+    it "should be able to get the root comments" do
+      @event.root_comments.size.should == 2
     end
   end
 end

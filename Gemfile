@@ -4,9 +4,10 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.0.3'
 gem 'newrelic_rpm'
 
-gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
-
+gem 'mongoid', '4.0.0.beta1'
 gem 'bson_ext'
+gem 'mongoid-tree', branch: 'mongoid-4.0'
+
 gem 'devise', '3.1.0.rc2'
 gem 'slim-rails'
 gem 'omniauth-facebook', '1.4.0'
@@ -25,7 +26,7 @@ group :assets do
   gem 'eco'
   gem 'uglifier', '>= 1.0.3'
 end
-gem 'bootstrap-sass', '~> 3.0.2.0' 
+gem 'bootstrap-sass', '~> 3.0.2.0'
 gem 'font-awesome-rails'
 
 gem 'jquery-ui-rails'
