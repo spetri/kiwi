@@ -6,17 +6,51 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     @collection.username = options.username
     @layout =  new Comments.Layout
       collection: @collection
-      event: @event
       el: @domLocation
+
+    @commentViews = {}
+
+    @commentsReplyView = new Comments.ReplyBox(collection: @collection)
+    @commentsListView = new Comments.CommentsListView(collection: @collection)
+
+    @commentsListView.on 'after:item:added', @registerCommentView
+
+    @listenTo @commentsReplyView, 'click:add:comment', @comment
 
     @instance = new Comments.Controller
       collection: @collection
       layout: @layout
 
+    @layout.on 'render', () =>
+      if (@collection.knowsUser())
+        @layout.comment_new.show(@commentsReplyView)
+      @layout.comment_list.show(@commentsListView)
+
     #Put its root view into the dom
     @layout.render()
 
     return @instance
+
+  @registerCommentView = (commentView) =>
+    @commentViews[commentView.model.cid] = commentView
+    replyViews = new Comments.CommentsListView collection: commentView.model.replies
+    commentView.repliesRegion.show replyViews
+    @listenTo commentView, 'click:reply', @openReply
+
+  @comment = (args) =>
+    view = args.view
+    collection = args.collection
+    collection.comment(view.commentValue())
+    view.clearInput()
+
+  @openReply = (args) =>
+    model = args.model
+    view = args.view
+    collection = new FK.Collections.Comments([], { event: @event, parent: model })
+    replyBox = new Comments.ReplyBox({ collection: collection })
+
+    @listenTo replyBox, 'click:add:comment', @comment
+    view.replyBoxRegion.show replyBox
 
   class Comments.Controller extends Marionette.Controller
     initialize: (options) =>
@@ -30,37 +64,24 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       comment_new: '#comment-new'
       comment_list: '#comment-list'
 
-    initialize: (options) =>
-      @model = new FK.Models.Comment(event_id: options.event.get('_id'))
-      @commentsReplyView = new Comments.ReplyBox(collection: @collection, is_root: true)
-      @commentsListView = new Comments.CommentsListView(collection: @collection)
-
-    onRender: =>
-      if (@collection.knowsUser())
-        @comment_new.show(@commentsReplyView)
-      @comment_list.show(@commentsListView)
-
   #Renders the text box to create a new comment
   #Can be used either to create a top level comment or to reply
   class Comments.ReplyBox extends Marionette.ItemView
-
-    initialize: (options) =>
-      @is_root = false
-      if options.is_root
-        @is_root = options.is_root
-
     template: FK.Template('comments_reply_box')
     class: 'col-md-12'
 
     events:
-      'click button': 'createClicked'
       'keyup textarea': 'writingComment'
 
-    createClicked: (e) =>
-      e.preventDefault()
-      @collection.comment(@$('textarea').val())
+    triggers:
+      'click button': 'click:add:comment'
+
+    clearInput: () =>
       @$('textarea').val('')
       @enableButton(0)
+
+    commentValue: () =>
+      @$('textarea').val()
 
     writingComment: (e) =>
       @enableButton(@$('textarea').val().length)
@@ -75,17 +96,15 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @enableButton(0)
 
   #Renders all the comment and all it's replies
-  class Comments.CommentSingleView extends Marionette.CompositeView
+  class Comments.CommentSingleView extends Marionette.Layout
     template: FK.Template('comment_single')
     className: 'comment'
-    events:
-      'click .reply': 'replyClicked'
+    regions:
+      'replyBoxRegion': '.replybox-region'
+      'repliesRegion': '.replies-region'
 
-    replyClicked: (e) =>
-      e.preventDefault()
-      model = new FK.Models.Comment(parent_id: @model.get('_id'))
-      reply_box = new Comments.ReplyBox(model: model,collection: @model.getRepliesCollection())
-      @$('.replybox').html(reply_box.render().el)
+    triggers:
+      'click .reply': 'click:reply'
 
     initialize: =>
       @collection = @model.replies

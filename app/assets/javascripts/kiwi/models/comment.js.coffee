@@ -3,33 +3,36 @@ class FK.Models.Comment extends Backbone.Model
     username: null
     upvotes: 0
     message: ''
-    replies: []
+    event_id: null,
+    parent_id: null,
+    replies_array: []
 
   urlRoot: () =>
     '/comments'
 
-  getRepliesCollection: () =>
-    @replies
-
-  initialize: =>
-    replies = @.get('replies')
-    @replies = new FK.Collections.Comments(replies)
+  initialize: (attrs) =>
+    @replies = new FK.Collections.Comments(@get('replies_array'), {event_id: @get('event_id'), parent_id: @get('parent_id') })
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
   url:
     "/comments/"
 
-  fetchForEvent: (event) =>
+  initialize: (models, options) =>
+    @event_id = options.event_id
+    @parent_id = options.parent_id
+
+  fetchForEvent: () =>
     @fetch
-      url: "api/events/#{event.get('_id')}/comments"
+      url: "api/events/#{@event_id}/comments"
       remove: false
       data:
         skip: 0
-    @event = event
 
   knowsUser: =>
     return @username.length > 0
 
   comment: (message) =>
-    @create( message: message, event_id: @event.get('_id'), username: @username)
+    params = { message: message, event_id: @event_id, username: @username }
+    params.parent_id = @parent_id
+    @create params

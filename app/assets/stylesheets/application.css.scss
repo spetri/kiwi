@@ -828,6 +828,10 @@ form.event_form {
   margin-bottom: 18px;
 
   .user-comment {
+    max-width: 90%;
+  }
+
+  .user-comment {
     display: inline-block;
     float: left;
   }
@@ -856,14 +860,14 @@ form.event_form {
     color: #333333;
   }
 
+  .reply {
+    cursor: pointer;
+  }
+
   .tools {
     display: inline-block;
     color: #aaaaaa;
     font-size: 13px;
-  }
-
-  .comment-text {
-    max-width: 40em;
   }
 }
 

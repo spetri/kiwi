@@ -23,7 +23,6 @@ class Comment
 
   def new_comment(comment)
     comment.parent = self
-    comment.save!
   end
 
   def upvote(user)
