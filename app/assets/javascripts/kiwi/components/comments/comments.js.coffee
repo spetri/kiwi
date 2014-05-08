@@ -51,7 +51,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @openReply = (args) =>
     model = args.model
     view = args.view
-    collection = new FK.Collections.Comments([], { event_id: @event.get('_id'), parent_id: model.get('_id'), username: @username })
+    collection = model.replies
     replyBox = new Comments.ReplyBox({ collection: collection })
 
     @listenTo replyBox, 'click:add:comment', @comment

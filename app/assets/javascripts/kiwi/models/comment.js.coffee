@@ -1,5 +1,6 @@
 class FK.Models.Comment extends Backbone.Model
   defaults:
+    _id: ''
     username: null
     upvotes: 0
     message: ''
@@ -11,7 +12,7 @@ class FK.Models.Comment extends Backbone.Model
     '/comments'
 
   initialize: (attrs) =>
-    @replies = new FK.Collections.Comments(@get('replies_array'), {event_id: @get('event_id'), parent_id: @get('parent_id') })
+    @replies = new FK.Collections.Comments(@get('replies_array'), {event_id: @get('event_id'), parent_id: @get('_id'), username: @get('username') })
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
