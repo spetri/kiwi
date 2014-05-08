@@ -3,6 +3,7 @@ comment = @comment if comment.nil?
 def json_comment_tree_builder( json, comment_tree_item )
   json.extract! comment_tree_item, :message, :created_at, :updated_at
   json.set! '_id', comment_tree_item._id.to_s
+  json.set! :username, comment_tree_item.authored_by.username
   children = comment_tree_item.children
   unless children.empty?
     json.children do

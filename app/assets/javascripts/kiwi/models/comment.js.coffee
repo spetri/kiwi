@@ -21,6 +21,7 @@ class FK.Collections.Comments extends Backbone.Collection
   initialize: (models, options) =>
     @event_id = options.event_id
     @parent_id = options.parent_id
+    @username = options.username
 
   fetchForEvent: () =>
     @fetch

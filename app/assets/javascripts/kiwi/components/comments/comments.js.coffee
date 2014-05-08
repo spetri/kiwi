@@ -1,9 +1,13 @@
 FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @create = (options) ->
     @event = options.event
+    @username = options.username
+
     @domLocation = options.domLocation
+
     @collection = @event.fetchComments()
-    @collection.username = options.username
+    @collection.username = @username
+
     @layout =  new Comments.Layout
       collection: @collection
       el: @domLocation
@@ -46,7 +50,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @openReply = (args) =>
     model = args.model
     view = args.view
-    collection = new FK.Collections.Comments([], { event: @event, parent: model })
+    collection = new FK.Collections.Comments([], { event_id: @event.get('_id'), parent_id: model.get('_id'), username: @username })
     replyBox = new Comments.ReplyBox({ collection: collection })
 
     @listenTo replyBox, 'click:add:comment', @comment
