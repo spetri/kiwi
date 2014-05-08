@@ -38,8 +38,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   @registerCommentView = (commentView) =>
     @commentViews[commentView.model.cid] = commentView
     replyViews = new Comments.CommentsListView collection: commentView.model.replies
-    commentView.repliesRegion.show replyViews
     @listenTo commentView, 'click:reply', @openReply
+    @listenTo replyViews, 'after:item:added', @registerCommentView
+    commentView.repliesRegion.show replyViews
 
   @comment = (args) =>
     view = args.view
