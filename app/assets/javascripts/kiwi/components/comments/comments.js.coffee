@@ -105,8 +105,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     template: FK.Template('comment_single')
     className: 'comment'
     regions:
-      'replyBoxRegion': '.replybox-region'
-      'repliesRegion': '.replies-region'
+      'replyBoxRegion': '.replybox-region:first'
+      'repliesRegion': '.replies-region:first'
 
     triggers:
       'click .reply': 'click:reply'
