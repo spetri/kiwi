@@ -119,3 +119,4 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentSingleView
+    className: 'comment-list'

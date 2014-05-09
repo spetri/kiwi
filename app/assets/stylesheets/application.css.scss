@@ -825,13 +825,8 @@ form.event_form {
 /* COMMENTS */
 
 .comment {
-  margin-bottom: 18px;
-
   .user-comment {
-    max-width: 90%;
-  }
-
-  .user-comment {
+    margin-bottom: 18px;
     display: inline-block;
     float: left;
   }
@@ -872,6 +867,8 @@ form.event_form {
 
   .nested-comments {
     margin-left: 18px;
+    border-left: dotted 1px #dddddd;
+    padding-left: 10px;
   }
 }
 
