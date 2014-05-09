@@ -18,7 +18,13 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     refreshNameCounter: (e) =>
       input = @$el.find('input[name=name_length]')
-      input.next('span').text input.val().length + " of 100 characters used"
+      remaining = 100 - input.val().length
+      input.next('span').text remaining + " of 100 characters remaining"
+      if remaining < 20
+        input.next('span').css("color", "#8a6d3b")
+      else
+        input.next('span').css("color", "black")
+
 
     modelEvents:
       'change:name': 'refreshName'
