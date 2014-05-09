@@ -6,13 +6,13 @@ class FK.Models.Comment extends Backbone.Model
     message: ''
     event_id: null,
     parent_id: null,
-    replies_array: []
+    replies: []
 
   urlRoot: () =>
     '/comments'
 
   initialize: (attrs) =>
-    @replies = new FK.Collections.Comments(@get('replies_array'), {event_id: @get('event_id'), parent_id: @get('_id'), username: @get('username') })
+    @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id'), username: @get('username') })
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
