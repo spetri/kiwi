@@ -30,6 +30,8 @@ class Event
   field :subkast, type: String
   has_many :reminders
 
+  validates_length_of :name, minimum: 1, maximum: 100
+
   has_mongoid_attached_file :image, :styles =>
     {
       :thumb => "80x60^",
