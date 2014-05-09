@@ -5,7 +5,7 @@ class FK.Models.User extends Backbone.Model
     email: ''
     provider: ''
     logged_in: false
-    username: 'noname'
+    username: ''
     country: 'US'
     subkasts: _.keys(FK.Data.subkastOptions)
 

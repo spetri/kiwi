@@ -34,6 +34,12 @@ You may need to run database migrations before you can start the server
 rake db:migrate
 ```
 
+If you want to fill your database with some seed data, also run
+
+```
+rake db:seed
+```
+
 When that is done, run
 
 ```

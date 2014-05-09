@@ -17,7 +17,7 @@ FK.Uri = (uri) ->
 
 FK.Data.subkastOptions = {
       'TVM': 'TV and Movies'
-      'SE': 'Sports and Entertainment'
+      'SE': 'Sports'
       'ST': 'Science and Technology'
       'PRP': 'Product Releases / Promotions'
       'HA': 'Holidays and Anniversaries'

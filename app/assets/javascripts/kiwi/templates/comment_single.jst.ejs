@@ -1,22 +1,15 @@
-<div class="comment" style="border-left:1px dotted #aaa; margin-left:40px">
-  <div class="" style="margin-left:5px">
-    <div class="up-vote" style="display:inline-block;width:10px;vertical-align:top">
-      <i class="fa fa-sort-up" style="cursor:pointer"></i>
-      <i class="fa fa-sort-down" style="cursor:pointer"></i>
-    </div>
-    <div class="user-comment" style="display:inline-block">
-      <p class="info" style="margin-bottom:0">
-      <span class="username"> <%= username %> </span>
-      <span class="upvotes"> <%= upvotes %> upvote(s) </span>
-      <a class="reply"> Reply </a>
-      <a class="report"> Report </a>
-      <a class="permalink"> Permalink </a>
-      </p>
-      <div class="comment-text" style="max-width:40em">
-        <p>
-          <%= body %>
-        </p>
-      </div>
+<div class="up-vote">
+  <i class="fa fa-sort-up"></i>
+  <i class="fa fa-sort-down"></i>
+</div>
+<div class="user-comment">
+  <div class="info">
+    <span class="username"> <%= username %> </span>
+    <div class="tools">
+      <span class="upvotes"><%= upvotes %></span> upvote(s) - Reply - Report
     </div>
   </div>
+  <div class="comment-text"><%= message %></div>
+  <div class="replybox"></div>
 </div>
+<div class="clearfix"></div>
