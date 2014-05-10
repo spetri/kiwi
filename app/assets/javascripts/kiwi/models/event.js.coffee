@@ -21,10 +21,6 @@ class FK.Models.Event extends Backbone.GSModel
   urlRoot: () =>
     '/events'
 
-  fetchComments: () =>
-    @comments.fetchForEvent()
-    return @comments
-
   initialize: () =>
     @reminders = new FK.Collections.Reminders()
     @comments = new FK.Collections.Comments([], {event_id: @get('_id')})

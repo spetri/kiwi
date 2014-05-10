@@ -1,14 +1,16 @@
 FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
   @create = (options) ->
-    return new Comments.Controller options
+    @instance = new Comments.Controller options
+    @instance.fetch()
+    return @instance
 
   class Comments.Controller extends Marionette.Controller
     initialize: (options) =>
       @layout = new Comments.Layout
         el: options.domLocation
 
-      @collection = options.event.fetchComments()
+      @collection = options.event.comments
       @collection.username = options.username
 
       @commentViews = {}
@@ -17,11 +19,14 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
       @layout.on 'render', () =>
         if (@collection.knowsUser())
-          @openReply(@layout.commentNewRegion, @collection)
+          @commentBox = @openReply(@layout.commentNewRegion, @collection)
         @layout.commentListRegion.show(@commentsListView)
 
       #Put its root view into the dom
       @layout.render()
+
+    fetch: () =>
+      @collection.fetchForEvent()
 
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
@@ -37,12 +42,20 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       replyBox = new Comments.ReplyBox({ collection: collection })
       @listenTo replyBox, 'click:add:comment', @comment
       region.show replyBox
+      replyBox
 
     comment: (args) =>
       view = args.view
       collection = args.collection
       collection.comment(view.commentValue())
       view.clearInput()
+
+    onClose: () =>
+      _.each(@commentViews, (view) =>
+        view.close()
+      )
+
+      @commentViews = []
 
   #Pulls together all the things
   class Comments.Layout extends Marionette.Layout

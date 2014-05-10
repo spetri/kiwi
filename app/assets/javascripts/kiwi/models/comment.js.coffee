@@ -14,6 +14,9 @@ class FK.Models.Comment extends Backbone.Model
   initialize: (attrs) =>
     @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id'), username: @get('username') })
 
+  isReply: () =>
+    !! @get('parent_id')
+
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
   url:
