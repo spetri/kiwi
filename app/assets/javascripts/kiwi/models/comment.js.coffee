@@ -34,6 +34,9 @@ class FK.Collections.Comments extends Backbone.Collection
   knowsUser: =>
     return @username.length > 0
 
+  hasParent: =>
+    return !! @parent_id
+
   comment: (message) =>
     params = { message: message, event_id: @event_id, username: @username }
     params.parent_id = @parent_id

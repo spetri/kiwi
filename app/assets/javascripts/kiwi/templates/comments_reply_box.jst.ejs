@@ -3,7 +3,7 @@
     <textarea class="form-control" rows="2"></textarea>
   </div>
   <div class="form-group pull-right">
-    Markdown formatting - <button class="btn btn-default btn-xs">ADD COMMENT</button>
+    Markdown formatting - <% if (cancelButton) { %><button class="btn btn-default btn-xs" data-action="cancel">CANCEL</button><% } %><button class="btn btn-default btn-xs" data-action="comment">ADD COMMENT</button>
   </div>
   <div class="clearfix"></div>
 </form>

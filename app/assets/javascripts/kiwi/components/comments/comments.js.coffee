@@ -57,11 +57,15 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     template: FK.Template('comments_reply_box')
     class: 'col-md-12'
 
+    templateHelpers: () =>
+      return cancelButton: @collection.hasParent()
+
     events:
       'keyup textarea': 'writingComment'
+      'click [data-action="cancel"]': 'close'
 
     triggers:
-      'click button': 'click:add:comment'
+      'click [data-action="comment"]': 'click:add:comment'
 
     clearInput: () =>
       @$('textarea').val('')
@@ -75,9 +79,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     enableButton: (numCharacters) =>
       if (numCharacters > 0)
-        @$('button').removeClass('disabled')
+        @$('[data-action="comment"]').removeClass('disabled')
       else
-        @$('button').addClass('disabled')
+        @$('[data-action="comment"]').addClass('disabled')
 
     onRender: =>
       @enableButton(0)

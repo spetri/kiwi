@@ -870,6 +870,10 @@ form.event_form {
     border-left: dotted 1px #dddddd;
     padding-left: 10px;
   }
+
+  [data-action="cancel"] {
+    margin-right: 5px;
+  }
 }
 
 #mobile-sidebar {
