@@ -156,8 +156,8 @@ describe 'comments', ->
         it 'should have a new reply under the parent comment', ->
           expect(@comment.replies.length).toBe(3)
 
-        it 'should have emptied the reply box input', ->
-          expect(@replyBox.commentValue()).toBe('')
+        it 'should remove the reply box after reply submit', ->
+          expect(@replyTo.$('.reply-box').length).toBe(0)
     
     describe 'making a reply to a reply', ->
       beforeEach ->

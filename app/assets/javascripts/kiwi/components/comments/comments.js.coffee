@@ -81,8 +81,11 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'click [data-action="comment"]': 'click:add:comment'
 
     clearInput: () =>
-      @$('textarea').val('')
-      @enableButton(0)
+      if @collection.hasParent()
+        @close()
+      else
+        @$('textarea').val('')
+        @enableButton(0)
 
     commentValue: () =>
       @$('textarea').val()
