@@ -1,73 +1,55 @@
 FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
+
   @create = (options) ->
-    @event = options.event
-    @username = options.username
-
-    @domLocation = options.domLocation
-
-    @collection = @event.fetchComments()
-    @collection.username = @username
-
-    @layout =  new Comments.Layout
-      collection: @collection
-      el: @domLocation
-
-    @commentViews = {}
-
-    @commentsReplyView = new Comments.ReplyBox(collection: @collection)
-    @commentsListView = new Comments.CommentsListView(collection: @collection)
-
-    @commentsListView.on 'after:item:added', @registerCommentView
-
-    @listenTo @commentsReplyView, 'click:add:comment', @comment
-
-    @instance = new Comments.Controller
-      collection: @collection
-      layout: @layout
-
-    @layout.on 'render', () =>
-      if (@collection.knowsUser())
-        @layout.comment_new.show(@commentsReplyView)
-      @layout.comment_list.show(@commentsListView)
-
-    #Put its root view into the dom
-    @layout.render()
-
-    return @instance
-
-  @registerCommentView = (commentView) =>
-    @commentViews[commentView.model.cid] = commentView
-    replyViews = new Comments.CommentsListView collection: commentView.model.replies
-    @listenTo commentView, 'click:reply', @openReply
-    @listenTo replyViews, 'after:item:added', @registerCommentView
-    commentView.repliesRegion.show replyViews
-
-  @comment = (args) =>
-    view = args.view
-    collection = args.collection
-    collection.comment(view.commentValue())
-    view.clearInput()
-
-  @openReply = (args) =>
-    model = args.model
-    view = args.view
-    collection = model.replies
-    replyBox = new Comments.ReplyBox({ collection: collection })
-
-    @listenTo replyBox, 'click:add:comment', @comment
-    view.replyBoxRegion.show replyBox
+    return new Comments.Controller options
 
   class Comments.Controller extends Marionette.Controller
     initialize: (options) =>
-      @layout = options.layout
-      @collection = options.collection
+      @layout = new Comments.Layout
+        el: options.domLocation
+
+      @collection = options.event.fetchComments()
+      @collection.username = options.username
+
+      @commentViews = {}
+      @commentsListView = new Comments.CommentsListView(collection: @collection)
+      @commentsListView.on 'after:item:added', @registerCommentView
+
+      @layout.on 'render', () =>
+        if (@collection.knowsUser())
+          @openReply(@layout.commentNewRegion, @collection)
+        @layout.commentListRegion.show(@commentsListView)
+
+      #Put its root view into the dom
+      @layout.render()
+
+    registerCommentView: (commentView) =>
+      @commentViews[commentView.model.cid] = commentView
+      replyViews = new Comments.CommentsListView collection: commentView.model.replies
+      @listenTo commentView, 'click:reply', @openReplyFromView
+      @listenTo replyViews, 'after:item:added', @registerCommentView
+      commentView.repliesRegion.show replyViews
+
+    openReplyFromView: (args) =>
+      @openReply(args.view.replyBoxRegion, args.model.replies)
+
+    openReply: (region, collection) =>
+      replyBox = new Comments.ReplyBox({ collection: collection })
+      @listenTo replyBox, 'click:add:comment', @comment
+      region.show replyBox
+
+    comment: (args) =>
+      view = args.view
+      collection = args.collection
+      collection.comment(view.commentValue())
+      view.clearInput()
 
   #Pulls together all the things
   class Comments.Layout extends Marionette.Layout
     template: FK.Template('comments')
     regions:
-      comment_new: '#comment-new'
-      comment_list: '#comment-list'
+      commentNewRegion: '#comment-new'
+      commentListRegion: '#comment-list'
 
   #Renders the text box to create a new comment
   #Can be used either to create a top level comment or to reply
