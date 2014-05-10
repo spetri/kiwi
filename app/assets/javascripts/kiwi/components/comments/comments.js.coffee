@@ -102,6 +102,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     onRender: =>
       @enableButton(0)
 
+    onShow: =>
+      if (@collection.hasParent())
+        @$('textarea').focus()
+
   #Renders all the comment and all it's replies
   class Comments.CommentSingleView extends Marionette.Layout
     template: FK.Template('comment_single')
