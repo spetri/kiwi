@@ -824,7 +824,7 @@ form.event_form {
 
 /* COMMENTS */
 
-.comment {
+#event-comments-region {
   .user-comment {
     margin-bottom: 18px;
     display: inline-block;
@@ -859,6 +859,12 @@ form.event_form {
     cursor: pointer;
   }
 
+  .reply-box {
+    textarea {
+      border-radius: 0px;
+    }
+  }
+
   .tools {
     display: inline-block;
     color: #aaaaaa;
@@ -867,8 +873,16 @@ form.event_form {
 
   .nested-comments {
     margin-left: 18px;
-    border-left: dotted 1px #dddddd;
     padding-left: 10px;
+
+    .comment-list {
+      border-left: dotted 1px #dddddd;
+      padding-left: 14px;
+    }
+
+    .reply-box {
+      margin-top: 10px;
+    }
   }
 
   [data-action="cancel"] {

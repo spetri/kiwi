@@ -55,7 +55,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   #Can be used either to create a top level comment or to reply
   class Comments.ReplyBox extends Marionette.ItemView
     template: FK.Template('comments_reply_box')
-    class: 'col-md-12'
+    className: 'reply-box'
 
     templateHelpers: () =>
       return cancelButton: @collection.hasParent()
