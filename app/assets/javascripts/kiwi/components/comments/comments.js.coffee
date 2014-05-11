@@ -51,11 +51,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       view.clearInput()
 
     onClose: () =>
-      _.each(@commentViews, (view) =>
-        view.close()
-      )
-
-      @commentViews = []
+      @layout.close()
 
   #Pulls together all the things
   class Comments.Layout extends Marionette.Layout

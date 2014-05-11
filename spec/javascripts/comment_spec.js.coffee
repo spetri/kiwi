@@ -177,5 +177,8 @@ describe 'comments', ->
       beforeEach ->
         @controller.close()
 
-      it 'should empty the comments view registry', ->
-        expect(_.values(@controller.commentViews).length).toBe(0)
+      it 'should not have any comments shown', ->
+        expect(@controller.layout.$('.comment').length).toBe(0)
+
+      it 'should not have any reply or comment boxes shown', ->
+        expect(@controller.layout.$('.reply-box').length).toBe(0)
