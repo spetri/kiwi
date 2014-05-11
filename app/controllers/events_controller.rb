@@ -109,28 +109,11 @@ class EventsController < ApplicationController
   end
 
   def startup_events
-    start_date = DateTime.parse(params[:datetime])
-    end_date = start_date + 7.days
-    @events = []
+    @events = Event.get_starting_events(DateTime.parse(params[:datetime]), params[:zone_offset].to_i, params[:country], params[:subkasts], params[:howManyEventsMinimum].to_i, params[:howManyEventsPerDay].to_i, 0)
+  end
 
-    (1..5).each do |x|
-      @events = Event.get_events_by_range(
-        start_date,
-        end_date,
-        params[:zone_offset].to_i,
-        params[:country],
-        params[:subkasts]
-      )
-
-      dates = @events.collect { |event| event.relative_date(params[:zone_offset].to_i) }
-
-      if dates.length < 3
-        end_date = end_date + (3 * x * x).days
-      else
-        break
-      end
-    end
-
+  def events_after_date
+    @events = Event.get_events_after_date(DateTime.parse(params[:datetime]), params[:zone_offset].to_i, params[:country], params[:subkasts], params[:howManyEvents].to_i)
   end
 
   def events_by_date
