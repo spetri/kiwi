@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  authorize_resource :only => [:destroy]
 
   def show
   end

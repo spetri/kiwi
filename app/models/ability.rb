@@ -13,5 +13,8 @@ class Ability
     can :destroy, Event do |event|
       event.user == user.username
     end
+    can :destroy, Comment do |comment|
+      comment.authored_by.username = user.username
+    end
   end
 end
