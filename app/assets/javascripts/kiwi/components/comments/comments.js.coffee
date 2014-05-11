@@ -113,6 +113,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   class Comments.CommentSingleView extends Marionette.Layout
     template: FK.Template('comment_single')
     className: 'comment'
+    templateHelpers: () =>
+      return {
+        canDelete: @collection.knowsUser() and @collection.username == @model.get('username')
+      }
     regions:
       'replyBoxRegion': '.nested-comments:first > .replybox-region'
       'repliesRegion': '.nested-comments:first > .replies-region'
