@@ -861,6 +861,10 @@ form.event_form {
 
   .delete {
     cursor: pointer;
+    &.btn-xs {
+      padding: 0px 5px;
+      height: 19px;
+    }
   }
 
   .reply-box {

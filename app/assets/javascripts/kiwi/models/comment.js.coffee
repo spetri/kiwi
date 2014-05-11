@@ -1,7 +1,6 @@
 class FK.Models.Comment extends Backbone.Model
   idAttribute: '_id'
   defaults:
-    _id: ''
     username: null
     upvotes: 0
     message: ''

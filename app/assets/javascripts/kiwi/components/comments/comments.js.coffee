@@ -125,9 +125,21 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'replyBoxRegion': '.nested-comments:first > .replybox-region'
       'repliesRegion': '.nested-comments:first > .replies-region'
 
+    events:
+      'click .delete': 'deletePrep'
+
     triggers:
       'click .reply': 'click:reply'
-      'click .delete': 'click:delete'
+      'click .delete.btn': 'click:delete'
+
+    deletePrep: () =>
+      @$('.delete').addClass('btn btn-danger btn-xs')
+      @$('.delete').text('Confirm?')
+      _.delay(@deleteReset, 5000)
+
+    deleteReset: () =>
+      @$('.delete').removeClass('btn btn-danger btn-xs')
+      @$('.delete').text('Delete')
 
     initialize: =>
       @collection = @model.replies
