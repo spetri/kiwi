@@ -87,7 +87,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
       username: null
       country: 'CA'
       countryName: 'Canada'
-      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'HA', 'OTH']
+      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'EDU', 'HA', 'OTH']
 
     setCountry: (country) =>
       @set 'country', country
