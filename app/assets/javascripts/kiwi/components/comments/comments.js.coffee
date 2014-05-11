@@ -78,6 +78,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   class Comments.CommentSingleView extends Marionette.CompositeView
     template: FK.Template('comment_single')
     className: 'comment'
+    templateHelpers: () =>
+      return {
+        message_marked: marked(@model.get('message'))
+      }
     events:
       'click .reply': 'replyClicked'
 
