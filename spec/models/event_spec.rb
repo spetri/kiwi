@@ -128,6 +128,68 @@ describe Event do
       end
     end
 
+    describe "getting enough events" do
+      it "should be able to fill up easily when 9 events are selected and there are 3 events per day in the coming 3 days" do
+        create_list :event, 3, :in_1_day
+        create_list :event, 3, :in_2_days
+        create_list :event, 3, :in_3_days
+        events = Event.get_enough_events_from_day(DateTime.now(), 300, "CA", ["ST"], 9, 3)
+        events.size.should == 9
+        dates = events.collect { |event| event.relative_date(300) }
+        dates.uniq!
+        dates.size.should == 3
+      end
+
+      it "should be able to fill up easily when 9 events are selected and there are 3 events per day over the coming 3 days except tomorrow" do
+        create_list :event, 3, :in_2_days
+        create_list :event, 3, :in_3_days
+        create_list :event, 3, :in_4_days
+        events = Event.get_enough_events_from_day(DateTime.now(), 300, "CA", ["ST"], 9, 3)
+        events.size.should == 9
+        dates = events.collect { |event| event.relative_date(300) }
+        dates.uniq!
+        dates.size.should == 3
+      end
+
+      it "should be able to fill up using 5 days where there are not enough events in each day to get to the minimum" do
+        create_list :event, 2, :in_1_day
+        create_list :event, 2, :in_2_days
+        create_list :event, 2, :in_3_days
+        create_list :event, 2, :in_4_days
+        create_list :event, 2, :in_5_days
+        events = Event.get_enough_events_from_day(DateTime.now(), 300, "CA", ["ST"], 9, 3)
+        events.size.should == 10
+        dates = events.collect { |event| event.relative_date(300) }
+        dates.uniq!
+        dates.size.should == 5
+      end
+
+      it "should not take more than the minimum for each day even if more events are available" do
+        create_list :event, 8, :in_1_day
+        create_list :event, 3, :in_2_days
+        create_list :event, 3, :in_3_days
+        events = Event.get_enough_events_from_day(DateTime.now(), 300, "CA", ["ST"], 9, 3)
+        events.size.should == 9
+        dates = events.collect { |event| event.relative_date(300) }
+        dates.uniq!
+        dates.size.should == 3
+      end
+
+      it "should be able to fill up over an irregular pattern of events on days" do
+        create_list :event, 2, :in_1_day
+        create_list :event, 1, :in_2_days
+        create_list :event, 3, :in_3_days
+        create_list :event, 4, :in_4_days
+        create_list :event, 7, :in_5_days
+        create_list :event, 2, :in_6_days
+        events = Event.get_enough_events_from_day(DateTime.now(), 300, "CA", ["ST"], 12, 3)
+        events.size.should == 12
+        dates = events.collect { |event| event.relative_date(300) }
+        dates.uniq!
+        dates.size.should == 5
+      end
+    end
+
     describe "should be able to get events after a certain date" do
       before(:each) do
         create_list :event, 2, :in_1_week, :with_2_upvotes
