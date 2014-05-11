@@ -182,3 +182,25 @@ describe 'comments', ->
 
       it 'should not have any reply or comment boxes shown', ->
         expect(@controller.layout.$('.reply-box').length).toBe(0)
+
+  describe 'without a username', ->
+    beforeEach ->
+      loadFixtures 'comment_fixture'
+      @event = new FK.Models.Event
+        _id: @event_id
+
+      @controller = FK.App.Comments.create({
+        domLocation: '#comment-spot',
+        event: @event
+      })
+
+      @controller.collection.set [
+        { _id: 1, message: 'Hello world', event_id: @event_id, username: 'sam' }
+        { _id: 3, message: 'Hello... planet?', event_id: @event_id, username: 'jeff' }
+      ]
+
+    it 'should not have a comment box', ->
+      expect(@controller.layout.$('.reply-box').length).toBe(0)
+
+    it 'should have all the comments in the collection listed', ->
+      expect(@controller.layout.$('.comment').length).toBe(2)

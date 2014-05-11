@@ -35,7 +35,7 @@ class FK.Collections.Comments extends Backbone.Collection
         skip: 0
 
   knowsUser: =>
-    return @username.length > 0
+    return @username and @username.length > 0
 
   hasParent: =>
     return !! @parent_id
