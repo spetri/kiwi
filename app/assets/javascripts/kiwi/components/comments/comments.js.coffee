@@ -34,6 +34,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @commentViews[commentView.model.cid] = commentView
       commentView.model.replies.username = @username
       @listenTo commentView, 'click:reply', @openReplyFromView
+      @listenTo commentView, 'click:delete', @deleteComment
 
     showReplies: (commentView) =>
       replyViews = new Comments.CommentsListView collection: commentView.model.replies
@@ -56,6 +57,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collection = args.collection
       collection.comment(view.commentValue())
       view.clearInput()
+
+    deleteComment: (args) =>
+      args.model.destroy()
 
     onClose: () =>
       @layout.close()
@@ -123,6 +127,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     triggers:
       'click .reply': 'click:reply'
+      'click .delete': 'click:delete'
 
     initialize: =>
       @collection = @model.replies

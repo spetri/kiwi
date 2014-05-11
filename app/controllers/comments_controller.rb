@@ -14,6 +14,13 @@ class CommentsController < ApplicationController
     render action: 'show', status: :created, location: @comment 
   end
 
+  def destroy
+    Comment.find(params[:id]).destroy
+    respond_to do |format|
+      format.json { head :no_content }
+    end
+  end
+
   def comment_params
       params.permit(:message,
                     :event_id,

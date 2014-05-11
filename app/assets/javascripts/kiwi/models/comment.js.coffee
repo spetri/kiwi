@@ -1,4 +1,5 @@
 class FK.Models.Comment extends Backbone.Model
+  idAttribute: '_id'
   defaults:
     _id: ''
     username: null
@@ -13,6 +14,7 @@ class FK.Models.Comment extends Backbone.Model
 
   initialize: (attrs) =>
     @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
+    @url = Backbone.Model.prototype.url
 
   isReply: () =>
     !! @get('parent_id')
