@@ -98,8 +98,14 @@ FK.App.reqres.setHandler 'countryName', (countryCode) ->
 FK.App.reqres.setHandler 'easternOffset', () ->
   moment().tz('America/New_York').zone()
 
+FK.App.reqres.setHandler 'scrollPosition', () ->
+  FK.App.scrollPosition
+
 FK.App.commands.setHandler 'signInPage', () ->
   window.location.href = '/users/sign_in'
+
+FK.App.commands.setHandler 'saveScrollPosition', (position) ->
+  FK.App.scrollPosition = position
 
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
