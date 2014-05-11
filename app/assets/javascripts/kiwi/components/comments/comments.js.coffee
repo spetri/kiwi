@@ -17,7 +17,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
       @commentViews = {}
       @commentsListView = new Comments.CommentsListView(collection: @collection)
-      @commentsListView.on 'after:item:added', @registerCommentView
+      @commentsListView.on 'before:item:added', @registerCommentView
+      @commentsListView.on 'after:item:added', @showReplies
 
       @layout.on 'render', () =>
         @commentBox = @openReply(@layout.commentNewRegion, @collection)
@@ -32,9 +33,12 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
       commentView.model.replies.username = @username
-      replyViews = new Comments.CommentsListView collection: commentView.model.replies
       @listenTo commentView, 'click:reply', @openReplyFromView
-      @listenTo replyViews, 'after:item:added', @registerCommentView
+
+    showReplies: (commentView) =>
+      replyViews = new Comments.CommentsListView collection: commentView.model.replies
+      @listenTo replyViews, 'before:item:added', @registerCommentView
+      @listenTo replyViews, 'after:item:added', @showReplies
       commentView.repliesRegion.show replyViews
 
     openReplyFromView: (args) =>
