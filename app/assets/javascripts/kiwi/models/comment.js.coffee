@@ -12,7 +12,7 @@ class FK.Models.Comment extends Backbone.Model
     '/comments'
 
   initialize: (attrs) =>
-    @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id'), username: @get('username') })
+    @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
 
   isReply: () =>
     !! @get('parent_id')
@@ -25,7 +25,6 @@ class FK.Collections.Comments extends Backbone.Collection
   initialize: (models, options) =>
     @event_id = options.event_id
     @parent_id = options.parent_id
-    @username = options.username
 
   fetchForEvent: () =>
     @fetch

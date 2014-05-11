@@ -2,7 +2,8 @@ describe 'comments', ->
   describe 'comment models', ->
     describe 'without a parent', ->
       beforeEach ->
-        @comments = new FK.Collections.Comments([], event_id: '1234', username: 'pizza' )
+        @comments = new FK.Collections.Comments([], event_id: '1234' )
+        @comments.username = 'pizza'
 
       describe 'when writing a comment', ->
         beforeEach ->
@@ -13,8 +14,6 @@ describe 'comments', ->
             @requests.push xhr
 
           @comments.comment('Warbling in the dark')
-
-          @requests[0].respond(200, { "Content-Type: application/json" }, JSON.stringify({ message: 'Warbling in the dark', username: 'pizza' }))
 
         afterEach ->
           @xhr.restore()
@@ -204,3 +203,11 @@ describe 'comments', ->
 
     it 'should have all the comments in the collection listed', ->
       expect(@controller.layout.$('.comment').length).toBe(2)
+
+    describe 'replying', ->
+      beforeEach ->
+        @commentView = @controller.commentViews[@controller.collection.first().cid]
+        @commentView.$('.reply').click()
+
+      it 'should not open a reply box', ->
+        expect(@commentView.$('.reply-box').length).toBe(0)

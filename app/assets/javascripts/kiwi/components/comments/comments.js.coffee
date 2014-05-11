@@ -10,6 +10,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @layout = new Comments.Layout
         el: options.domLocation
 
+      @username = options.username
+
       @collection = options.event.comments
       @collection.username = options.username
 
@@ -18,8 +20,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @commentsListView.on 'after:item:added', @registerCommentView
 
       @layout.on 'render', () =>
-        if (@collection.knowsUser())
-          @commentBox = @openReply(@layout.commentNewRegion, @collection)
+        @commentBox = @openReply(@layout.commentNewRegion, @collection)
         @layout.commentListRegion.show(@commentsListView)
 
       #Put its root view into the dom
@@ -30,6 +31,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
+      commentView.model.replies.username = @username
       replyViews = new Comments.CommentsListView collection: commentView.model.replies
       @listenTo commentView, 'click:reply', @openReplyFromView
       @listenTo replyViews, 'after:item:added', @registerCommentView
@@ -39,6 +41,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @openReply(args.view.replyBoxRegion, args.model.replies)
 
     openReply: (region, collection) =>
+      return if not collection.knowsUser()
       replyBox = new Comments.ReplyBox({ collection: collection })
       @listenTo replyBox, 'click:add:comment', @comment
       region.show replyBox
@@ -118,6 +121,12 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
+
+    onShow: () =>
+      if not @collection.knowsUser()
+        @$('.reply').tooltip(
+          title: 'Login to reply.'
+        )
 
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentSingleView
