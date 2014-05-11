@@ -6,8 +6,8 @@
       <span class="error" data-field="name"></span>
     </div>
     <div class="col-sm-9">
-      <input class="form-control" type="text" name="name_length" id="name" maxlength="100"></input>
-      <span class="counter-label"><span>100</span> of 100 characters used</span>
+      <input class="form-control" type="text" name="name" id="name" maxlength="100"></input>
+      <span class="counter-label"><span>100</span> of 100 characters remaining</span>
     </div>
   </div>
   <div class="form-group event_form_subkast">
