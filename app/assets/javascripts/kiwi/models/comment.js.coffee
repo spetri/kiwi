@@ -13,6 +13,10 @@ class FK.Models.Comment extends Backbone.Model
 
   initialize: (attrs) =>
     @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
+    @on 'change:_id', @updateRepliesParent
+
+  updateRepliesParent: (model, id) =>
+    @replies.setParent(id)
 
   isReply: () =>
     !! @get('parent_id')
@@ -38,6 +42,9 @@ class FK.Collections.Comments extends Backbone.Collection
 
   knowsUser: =>
     return @username and @username.length > 0
+
+  setParent: (parent_id) =>
+    @parent_id = parent_id
 
   hasParent: =>
     return !! @parent_id
