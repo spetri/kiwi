@@ -19,11 +19,15 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @view.on 'show', =>
       @view.sidebar.show @sidebar.layout
       @view.event_block.show @eventBlocksView
+      @resumePosition()
 
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
+    @listenTo @events, 'remove reset', @resetPosition
 
     @view.onClose = () =>
       @stop()
+
+    @position = App.request('scrollPosition')
 
     Backbone.history.navigate('events/all', trigger : false)
 
@@ -31,12 +35,24 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     #TODO this spams on the MAC when scrolling the bottom of the pags
     $(document).scroll (e) =>
+      @savePosition()
       $doc = $(e.target)
       $window = $(window)
 
       percentage = $doc.scrollTop() / ($doc.height() - $window.height())
 
       @fetchMoreBlocks() if percentage > 0.9
+
+  @savePosition = () =>
+    @position = $(document).scrollTop()
+
+  @resumePosition = () =>
+    # - 5 because if you come back to a page on exactly the same place, chrome tries to handle 
+    # bringing back the scroll position, which conflicts with this logic
+    $(document).scrollTop(@position - 5) if @position > 0
+
+  @resetPosition = () =>
+    @position = undefined
 
   @triggerShowEventDeep = (block, event) ->
     App.vent.trigger 'container:show', event.model
@@ -55,6 +71,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     @sidebar.close()
     @stopListening
+    App.execute('saveScrollPosition', @position)
+    @position = undefined
 
   class EventList.ListLayout extends Backbone.Marionette.Layout
     className: "container"
