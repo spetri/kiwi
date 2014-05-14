@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     @comment.event = Event.find(params[:event_id])
-    if not comment_params[:parent_id].nil?
+    unless comment_params[:parent_id].nil?
       Comment.find(comment_params[:parent_id]).new_comment @comment
     end
     @comment.save
