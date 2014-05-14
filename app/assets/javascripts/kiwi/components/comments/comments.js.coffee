@@ -117,6 +117,11 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'replyBoxRegion': '.nested-comments:first > .replybox-region'
       'repliesRegion': '.nested-comments:first > .replies-region'
 
+    templateHelpers: () =>
+      return {
+        message_marked: marked(@model.get('message'))
+      }
+
     triggers:
       'click .reply': 'click:reply'
 
