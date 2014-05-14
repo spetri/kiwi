@@ -33,6 +33,36 @@ FactoryGirl.define do
       upvote_names ["eventlover1", "eventlover2", "eventlover3", "eventlover4", "eventlover5", "eventlover6", "eventlover7"]
     end
 
+    trait :in_1_day do
+      datetime 1.day.from_now - 1.second
+      local_date 1.day.from_now.to_date
+    end
+
+    trait :in_2_days do
+      datetime 2.day.from_now - 1.second
+      local_date 2.day.from_now.to_date
+    end
+
+    trait :in_3_days do
+      datetime 3.day.from_now - 1.second
+      local_date 3.day.from_now.to_date
+    end
+
+    trait :in_4_days do
+      datetime 4.day.from_now - 1.second
+      local_date 4.day.from_now.to_date
+    end
+
+    trait :in_5_days do
+      datetime 5.day.from_now - 1.second
+      local_date 5.day.from_now.to_date
+    end
+
+    trait :in_6_days do
+      datetime 6.day.from_now - 1.second
+      local_date 6.day.from_now.to_date
+    end
+
     trait :in_1_week do
       datetime 1.week.from_now - 1.second
       local_date 1.week.from_now.to_date
