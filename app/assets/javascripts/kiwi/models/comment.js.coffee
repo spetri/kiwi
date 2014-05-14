@@ -17,6 +17,9 @@ class FK.Models.Comment extends Backbone.Model
   isReply: () =>
     !! @get('parent_id')
 
+  setUsername: (username) =>
+    @replies.username = username
+
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
   url:

@@ -32,7 +32,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
-      commentView.model.replies.username = @username
+      commentView.model.setUsername(@username)
       @listenTo commentView, 'click:reply', @openReplyFromView
 
     showReplies: (commentView) =>
