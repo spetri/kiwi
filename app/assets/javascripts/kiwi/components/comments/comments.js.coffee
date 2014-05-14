@@ -1,91 +1,124 @@
 FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
+
   @create = (options) ->
-    @event = options.event
-    @domLocation = options.domLocation
-    @collection = @event.fetchComments()
-    @collection.username = options.username
-    @layout =  new Comments.Layout
-      collection: @collection
-      event: @event
-      el: @domLocation
-
-    @instance = new Comments.Controller
-      collection: @collection
-      layout: @layout
-
-    #Put its root view into the dom
-    @layout.render()
-
+    @instance = new Comments.Controller options
+    @instance.fetch()
     return @instance
 
   class Comments.Controller extends Marionette.Controller
     initialize: (options) =>
-      @layout = options.layout
-      @collection = options.collection
+      @layout = new Comments.Layout
+        el: options.domLocation
+
+      @username = options.username
+
+      @collection = options.event.comments
+      @collection.username = options.username
+
+      @commentViews = {}
+      @commentsListView = new Comments.CommentsListView(collection: @collection)
+      @commentsListView.on 'before:item:added', @registerCommentView
+      @commentsListView.on 'after:item:added', @showReplies
+
+      @layout.on 'render', () =>
+        @commentBox = @openReply(@layout.commentNewRegion, @collection)
+        @layout.commentListRegion.show(@commentsListView)
+
+      #Put its root view into the dom
+      @layout.render()
+
+    fetch: () =>
+      @collection.fetchForEvent()
+
+    registerCommentView: (commentView) =>
+      @commentViews[commentView.model.cid] = commentView
+      commentView.model.setUsername(@username)
+      @listenTo commentView, 'click:reply', @openReplyFromView
+
+    showReplies: (commentView) =>
+      replyViews = new Comments.CommentsListView collection: commentView.model.replies
+      @listenTo replyViews, 'before:item:added', @registerCommentView
+      @listenTo replyViews, 'after:item:added', @showReplies
+      commentView.repliesRegion.show replyViews
+
+    openReplyFromView: (args) =>
+      @openReply(args.view.replyBoxRegion, args.model.replies)
+
+    openReply: (region, collection) =>
+      return if not collection.knowsUser()
+      replyBox = new Comments.ReplyBox({ collection: collection })
+      @listenTo replyBox, 'click:add:comment', @comment
+      region.show replyBox
+      replyBox
+
+    comment: (args) =>
+      view = args.view
+      collection = args.collection
+      collection.comment(view.commentValue())
+      view.clearInput()
+
+    onClose: () =>
+      @layout.close()
 
   #Pulls together all the things
   class Comments.Layout extends Marionette.Layout
     template: FK.Template('comments')
     regions:
-      comment_new: '#comment-new'
-      comment_list: '#comment-list'
-
-    initialize: (options) =>
-      @model = new FK.Models.Comment(event_id: options.event.get('_id'))
-      @commentsReplyView = new Comments.ReplyBox(collection: @collection, is_root: true)
-      @commentsListView = new Comments.CommentsListView(collection: @collection)
-
-    onRender: =>
-      if (@collection.knowsUser())
-        @comment_new.show(@commentsReplyView)
-      @comment_list.show(@commentsListView)
+      commentNewRegion: '#comment-new'
+      commentListRegion: '#comment-list'
 
   #Renders the text box to create a new comment
   #Can be used either to create a top level comment or to reply
   class Comments.ReplyBox extends Marionette.ItemView
-
-    initialize: (options) =>
-      @is_root = false
-      if options.is_root
-        @is_root = options.is_root
-
     template: FK.Template('comments_reply_box')
-    class: 'col-md-12'
+    className: 'reply-box'
+
+    templateHelpers: () =>
+      return cancelButton: @collection.hasParent()
 
     events:
-      'click button': 'createClicked'
       'keyup textarea': 'writingComment'
+      'click [data-action="cancel"]': 'close'
 
-    createClicked: (e) =>
-      e.preventDefault()
-      @collection.comment(@$('textarea').val())
-      @$('textarea').val('')
-      @enableButton(0)
+    triggers:
+      'click [data-action="comment"]': 'click:add:comment'
+
+    clearInput: () =>
+      if @collection.hasParent()
+        @close()
+      else
+        @$('textarea').val('')
+        @enableButton(0)
+
+    commentValue: () =>
+      @$('textarea').val()
 
     writingComment: (e) =>
       @enableButton(@$('textarea').val().length)
 
     enableButton: (numCharacters) =>
       if (numCharacters > 0)
-        @$('button').removeClass('disabled')
+        @$('[data-action="comment"]').removeClass('disabled')
       else
-        @$('button').addClass('disabled')
+        @$('[data-action="comment"]').addClass('disabled')
 
     onRender: =>
       @enableButton(0)
 
+    onShow: =>
+      if (@collection.hasParent())
+        @$('textarea').focus()
+
   #Renders all the comment and all it's replies
-  class Comments.CommentSingleView extends Marionette.CompositeView
+  class Comments.CommentSingleView extends Marionette.Layout
     template: FK.Template('comment_single')
     className: 'comment'
-    events:
-      'click .reply': 'replyClicked'
+    regions:
+      'replyBoxRegion': '.nested-comments:first > .replybox-region'
+      'repliesRegion': '.nested-comments:first > .replies-region'
 
-    replyClicked: (e) =>
-      e.preventDefault()
-      model = new FK.Models.Comment(parent_id: @model.get('_id'))
-      reply_box = new Comments.ReplyBox(model: model,collection: @model.getRepliesCollection())
-      @$('.replybox').html(reply_box.render().el)
+    triggers:
+      'click .reply': 'click:reply'
 
     initialize: =>
       @collection = @model.replies
@@ -93,5 +126,12 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
 
+    onShow: () =>
+      if not @collection.knowsUser()
+        @$('.reply').tooltip(
+          title: 'Login to reply.'
+        )
+
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentSingleView
+    className: 'comment-list'

@@ -824,10 +824,9 @@ form.event_form {
 
 /* COMMENTS */
 
-.comment {
-  margin-bottom: 18px;
-
+#event-comments-region {
   .user-comment {
+    margin-bottom: 18px;
     display: inline-block;
     float: left;
   }
@@ -856,14 +855,38 @@ form.event_form {
     color: #333333;
   }
 
+  .reply {
+    cursor: pointer;
+  }
+
+  .reply-box {
+    textarea {
+      border-radius: 0px;
+    }
+  }
+
   .tools {
     display: inline-block;
     color: #aaaaaa;
     font-size: 13px;
   }
 
-  .comment-text {
-    max-width: 40em;
+  .nested-comments {
+    margin-left: 18px;
+    padding-left: 10px;
+
+    .comment-list {
+      border-left: dotted 1px #dddddd;
+      padding-left: 14px;
+    }
+
+    .reply-box {
+      margin-top: 10px;
+    }
+  }
+
+  [data-action="cancel"] {
+    margin-right: 5px;
   }
 }
 

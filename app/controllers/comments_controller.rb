@@ -6,6 +6,9 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     @comment.event = Event.find(params[:event_id])
+    unless comment_params[:parent_id].nil?
+      Comment.find(comment_params[:parent_id]).new_comment @comment
+    end
     @comment.save
     render action: 'show', status: :created, location: @comment 
   end
