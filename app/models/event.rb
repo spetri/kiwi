@@ -31,6 +31,8 @@ class Event
   has_many :reminders
   has_many :comments
 
+  validates_length_of :name, minimum: 1, maximum: 100
+
   has_mongoid_attached_file :image, :styles =>
     {
       :thumb => "80x60^",
@@ -99,9 +101,9 @@ class Event
 
   def relative_date(zone_offset)
     if self.is_all_day == true || self.time_format == "recurring" || self.time_format == "tv_show"
-      return self.local_date
+      return self.local_date.to_date
     else
-      return (self.datetime - zone_offset.minutes).beginning_of_day
+      return (self.datetime - zone_offset.minutes).beginning_of_day.to_date
     end
   end
 
@@ -134,27 +136,17 @@ class Event
   def self.get_enough_events_from_day(datetime, zone_offset, country, subkasts, minimum, eventsPerDay)
     date = (datetime - zone_offset.minutes).beginning_of_day
 
-    map = %Q[
-      function () {
-        if (this.location_type == 'international' || ( this.location_type == 'national' && this.country == '#{country}'))
-          emit(this._id, this);
-      }
-    ]
+    possible_events = self.any_of(
+      { is_all_day: false, time_format: '', :datetime.gte => datetime, location_type: 'national', country: country },
+      { is_all_day: false, time_format: '', :datetime.gte => datetime, location_type: 'international' },
+      { is_all_day: false, time_format: 'recurring', :local_date.gte => date, location_type: 'national', country: country },
+      { is_all_day: false, time_format: 'recurring', :local_date.gte => date, location_type: 'international' },
+      { is_all_day: false, time_format: 'tv_show', :local_date.gte => date, location_type: 'national', country: country },
+      { is_all_day: false, time_format: 'tv_show', :local_date.gte => date, location_type: 'international' },
+      { is_all_day: true, :local_date.gte => date, location_type: 'national', country: country },
+      { is_all_day: true, :local_date.gte => date, location_type: 'international' }
+    ).any_in({subkast: subkasts}).to_a
 
-    reduce = %Q[
-      function (key, values) {
-        return values;
-      }
-    ]
-
-    possible_events_mr = self.any_of(
-      { is_all_day: false, time_format: '', :datetime.gte => datetime },
-      { is_all_day: false, time_format: 'recurring', :local_date.gte => date },
-      { is_all_day: false, time_format: 'tv_show', :local_date.gte => date },
-      { is_all_day: true, :local_date.gte => date }
-    ).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
-
-    possible_events = possible_events_mr.find.to_a.map { |kv| Event.new(kv["value"]) }
     sorted_possible_events = possible_events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
 
     events = []
@@ -176,26 +168,16 @@ class Event
     startDate = (startDatetime - zone_offset.minutes).beginning_of_day
     endDate = (endDatetime - zone_offset.minutes).beginning_of_day
 
-    map = %Q[
-      function () {
-        if (this.location_type == 'international' || ( this.location_type == 'national' && this.country == '#{country}'))
-          emit(this._id, this);
-      }
-    ]
-
-    reduce = %Q[
-      function (key, values) {
-        return values;
-      }
-    ]
-
-    done = self.any_of(
-      { is_all_day: false, time_format: '', datetime: (startDatetime..endDatetime) },
-      { is_all_day: false, time_format: 'recurring', local_date: (startDate..endDate) },
-      { is_all_day: false, time_format: 'tv_show', local_date: (startDate..endDate) },
-      { is_all_day: true, local_date: (startDate..endDate) }
-    ).any_in({subkast: subkasts }).map_reduce(map, reduce).out(inline: 1)
-    events = done.find.to_a.map { |kv| Event.new(kv["value"]) }
+    events = self.any_of(
+      { is_all_day: false, time_format: '', datetime: (startDatetime..endDatetime), location_type: 'international', country: country },
+      { is_all_day: false, time_format: '', datetime: (startDatetime..endDatetime), location_type: 'national', country: country },
+      { is_all_day: false, time_format: 'recurring', local_date: (startDate..endDate), location_type: 'international' },
+      { is_all_day: false, time_format: 'recurring', local_date: (startDate..endDate), location_type: 'national', country: country },
+      { is_all_day: false, time_format: 'tv_show', local_date: (startDate..endDate), location_type: 'international' },
+      { is_all_day: false, time_format: 'tv_show', local_date: (startDate..endDate), location_type: 'national', country: country },
+      { is_all_day: true, local_date: (startDate..endDate), location_type: 'international' },
+      { is_all_day: true, local_date: (startDate..endDate), location_type: 'national', country: country }
+    ).any_in({subkast: subkasts }).to_a
 
     sortedEvents = events.sort_by { |event| - (event.upvote_count.nil? ? 0 : event.upvote_count) }
     howMany = sortedEvents.size if howMany == 0

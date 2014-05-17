@@ -32,7 +32,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
-      commentView.model.replies.username = @username
+      commentView.model.setUsername(@username)
       @listenTo commentView, 'click:reply', @openReplyFromView
       @listenTo commentView, 'click:delete', @deleteComment
 
@@ -120,7 +120,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     templateHelpers: () =>
       return {
         canDelete: @collection.knowsUser() and @collection.username == @model.get('username')
+        message_marked: marked(@model.get('message'))
       }
+
     regions:
       'replyBoxRegion': '.nested-comments:first > .replybox-region'
       'repliesRegion': '.nested-comments:first > .replies-region'

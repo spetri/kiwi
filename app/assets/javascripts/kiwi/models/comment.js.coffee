@@ -14,9 +14,16 @@ class FK.Models.Comment extends Backbone.Model
   initialize: (attrs) =>
     @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
     @url = Backbone.Model.prototype.url
+    @on 'change:_id', @updateRepliesParent
+
+  updateRepliesParent: (model, id) =>
+    @replies.setParent(id)
 
   isReply: () =>
     !! @get('parent_id')
+
+  setUsername: (username) =>
+    @replies.username = username
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
@@ -36,6 +43,9 @@ class FK.Collections.Comments extends Backbone.Collection
 
   knowsUser: =>
     return @username and @username.length > 0
+
+  setParent: (parent_id) =>
+    @parent_id = parent_id
 
   hasParent: =>
     return !! @parent_id

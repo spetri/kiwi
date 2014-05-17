@@ -8,12 +8,23 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     events:
       'change input[name=location_type]': 'renderLocation'
+      'keyup input[name=name]': 'refreshNameCounter'
 
     renderLocation: (e) =>
       if @$el.find('input[name=location_type]:checked').val() is "international"
         @$el.find('select[name=country]').attr('disabled','disabled')
       else
         @$el.find('select[name=country]').removeAttr('disabled')
+
+    refreshNameCounter: (e) =>
+      input = @$el.find('input[name=name]')
+      remaining = @model.remainder_count - input.val().length
+      input.next('span').text "#{remaining} of #{@model.remainder_count} characters remaining"
+      if remaining < 20
+        input.next('span').css("color", "#8a6d3b")
+      else
+        input.next('span').css("color", "black")
+
 
     modelEvents:
       'change:name': 'refreshName'

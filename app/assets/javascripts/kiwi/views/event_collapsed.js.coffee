@@ -20,9 +20,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       'mouseover .upvote-container': 'showX'
       'mouseout .upvote-container': 'hideX'
 
-    triggers:
-      'click .event-name,img': 'click:open'
-
     toggleUpvote: (e) =>
       @model.upvoteToggle()
 

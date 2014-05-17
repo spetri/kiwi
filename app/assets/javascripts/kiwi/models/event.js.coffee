@@ -28,6 +28,7 @@ class FK.Models.Event extends Backbone.GSModel
     #forced to have that url, undo that here
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
+    @remainder_count = 100
 
     @on 'change:time_format', @update_tv_time
 
@@ -66,7 +67,7 @@ class FK.Models.Event extends Backbone.GSModel
     errors = []
 
     errors.push({field: 'name', message: 'Event must have a name.'}) if not attrs.name
-    errors.push({field: 'name', message: 'Event name must be less than 100 characters long.'}) if attrs.name and attrs.name.length > 100
+    errors.push({field: 'name', message: 'Event name must be less than ' + @remainder_count + ' characters long.'}) if attrs.name and attrs.name.length > @remainder_count
 
     errors.push({field: 'datetime', message: 'Event must have a datetime.'}) if not attrs.datetime
 
