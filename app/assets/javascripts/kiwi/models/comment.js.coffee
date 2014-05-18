@@ -25,6 +25,13 @@ class FK.Models.Comment extends Backbone.Model
   setUsername: (username) =>
     @replies.username = username
 
+  deleteComment: () =>
+    $.ajax
+      url: @url()
+      type: 'DELETE'
+      success: (resp) =>
+        @set resp
+
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
   url:

@@ -15,10 +15,10 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    Comment.find(params[:id]).destroy
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    @comment = Comment.find(params[:id])
+    @comment.deleted_by = current_user
+    @comment.save
+    render action: 'show', status: :ok, location: @comment
   end
 
   def comment_params
