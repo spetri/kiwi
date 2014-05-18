@@ -15,7 +15,6 @@ var block = {
   code: /^( {4}[^\n]+\n*)+/,
   fences: noop,
   hr: /^( *[-*_]){3,} *(?:\n+|$)/,
-  heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
   nptable: noop,
   lheading: /^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,
   blockquote: /^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,
@@ -57,7 +56,6 @@ block.html = replace(block.html)
 
 block.paragraph = replace(block.paragraph)
   ('hr', block.hr)
-  ('heading', block.heading)
   ('lheading', block.lheading)
   ('blockquote', block.blockquote)
   ('tag', '<' + block._tag)
@@ -189,17 +187,6 @@ Lexer.prototype.token = function(src, top, bq) {
         type: 'code',
         lang: cap[2],
         text: cap[3]
-      });
-      continue;
-    }
-
-    // heading
-    if (cap = this.rules.heading.exec(src)) {
-      src = src.substring(cap[0].length);
-      this.tokens.push({
-        type: 'heading',
-        depth: cap[1].length,
-        text: cap[2]
       });
       continue;
     }
@@ -450,7 +437,7 @@ var inline = {
   autolink: /^<([^ >]+(@|:\/)[^ >]+)>/,
   url: noop,
   tag: /^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,
-  link: /^!?\[(inside)\]\(href\)/,
+  link: /^\[(inside)\]\(href\)/,
   reflink: /^!?\[(inside)\]\s*\[([^\]]*)\]/,
   nolink: /^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,
   strong: /^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,
@@ -699,9 +686,7 @@ InlineLexer.prototype.outputLink = function(cap, link) {
   var href = escape(link.href)
     , title = link.title ? escape(link.title) : null;
 
-  return cap[0].charAt(0) !== '!'
-    ? this.renderer.link(href, title, this.output(cap[1]))
-    : this.renderer.image(href, title, escape(cap[1]));
+  return this.renderer.link(href, title, this.output(cap[1]))
 };
 
 /**
@@ -783,19 +768,6 @@ Renderer.prototype.blockquote = function(quote) {
 
 Renderer.prototype.html = function(html) {
   return html;
-};
-
-Renderer.prototype.heading = function(text, level, raw) {
-  return '<h'
-    + level
-    + ' id="'
-    + this.options.headerPrefix
-    + raw.toLowerCase().replace(/[^\w]+/g, '-')
-    + '">'
-    + text
-    + '</h'
-    + level
-    + '>\n';
 };
 
 Renderer.prototype.hr = function() {
@@ -880,15 +852,6 @@ Renderer.prototype.link = function(href, title, text) {
   return out;
 };
 
-Renderer.prototype.image = function(href, title, text) {
-  var out = '<img src="' + href + '" alt="' + text + '"';
-  if (title) {
-    out += ' title="' + title + '"';
-  }
-  out += this.options.xhtml ? '/>' : '>';
-  return out;
-};
-
 /**
  * Parsing & Compiling
  */
@@ -968,12 +931,6 @@ Parser.prototype.tok = function() {
     }
     case 'hr': {
       return this.renderer.hr();
-    }
-    case 'heading': {
-      return this.renderer.heading(
-        this.inline.output(this.token.text),
-        this.token.depth,
-        this.token.text);
     }
     case 'code': {
       return this.renderer.code(this.token.text,

@@ -119,7 +119,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     templateHelpers: () =>
       return {
-        message_marked: marked(@model.get('message'))
+        message_marked: marked(@model.escape('message'))
       }
 
     triggers:
