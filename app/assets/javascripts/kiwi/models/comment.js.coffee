@@ -1,6 +1,6 @@
 class FK.Models.Comment extends Backbone.Model
+  idAttribute: '_id'
   defaults:
-    _id: ''
     username: null
     upvotes: 0
     message: ''
@@ -13,6 +13,7 @@ class FK.Models.Comment extends Backbone.Model
 
   initialize: (attrs) =>
     @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
+    @url = Backbone.Model.prototype.url
     @on 'change:_id', @updateRepliesParent
 
   updateRepliesParent: (model, id) =>
@@ -23,6 +24,13 @@ class FK.Models.Comment extends Backbone.Model
 
   setUsername: (username) =>
     @replies.username = username
+
+  deleteComment: () =>
+    $.ajax
+      url: @url()
+      type: 'DELETE'
+      success: (resp) =>
+        @set resp
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment

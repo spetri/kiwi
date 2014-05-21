@@ -34,6 +34,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @commentViews[commentView.model.cid] = commentView
       commentView.model.setUsername(@username)
       @listenTo commentView, 'click:reply', @openReplyFromView
+      @listenTo commentView, 'click:delete', @deleteComment
 
     showReplies: (commentView) =>
       replyViews = new Comments.CommentsListView collection: commentView.model.replies
@@ -56,6 +57,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collection = args.collection
       collection.comment(view.commentValue())
       view.clearInput()
+
+    deleteComment: (args) =>
+      args.model.deleteComment()
 
     onClose: () =>
       @layout.close()
@@ -113,23 +117,49 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   class Comments.CommentSingleView extends Marionette.Layout
     template: FK.Template('comment_single')
     className: 'comment'
+
+    getTemplate: () =>
+      if @model.get('status') is 'deleted'
+        FK.Template('comment_deleted')
+      else
+        FK.Template('comment_single')
+
+    templateHelpers: () =>
+      return {
+        canDelete: @collection.knowsUser() and @collection.username == @model.get('username')
+        message: () =>
+          return marked(@model.get('message'))
+      }
+
     regions:
       'replyBoxRegion': '.nested-comments:first > .replybox-region'
       'repliesRegion': '.nested-comments:first > .replies-region'
 
-    templateHelpers: () =>
-      return {
-        message_marked: marked(@model.get('message'))
-      }
+    events:
+      'click .delete': 'deletePrep'
 
     triggers:
       'click .reply': 'click:reply'
+      'click .delete.btn': 'click:delete'
+
+    deletePrep: (e) =>
+      e.stopPropagation()
+      $(e.target).addClass('btn btn-danger btn-xs')
+      $(e.target).text('Confirm?')
+      _.delay(@deleteReset, 5000)
+
+    deleteReset: () =>
+      @$('.delete:first').removeClass('btn btn-danger btn-xs')
+      @$('.delete:first').text('Delete')
 
     initialize: =>
       @collection = @model.replies
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
+
+    modelEvents:
+      'change': 'render'
 
     onShow: () =>
       if not @collection.knowsUser()

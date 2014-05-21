@@ -869,6 +869,14 @@ form.event_form {
     cursor: pointer;
   }
 
+  .delete {
+    cursor: pointer;
+    &.btn-xs {
+      padding: 0px 5px;
+      height: 19px;
+    }
+  }
+
   .reply-box {
     textarea {
       border-radius: 0px;
@@ -879,6 +887,10 @@ form.event_form {
     display: inline-block;
     color: #aaaaaa;
     font-size: 13px;
+  }
+
+  .deleted .comment-text {
+    font-style: italic;
   }
 
   .nested-comments {
