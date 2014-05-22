@@ -188,7 +188,6 @@ class Event
     self.order_by([:local_date, :desc])[0].local_date
   end
 
-
   def root_comments
     self.comments.where(:parent => nil)
   end

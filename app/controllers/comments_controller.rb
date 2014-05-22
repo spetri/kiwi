@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  authorize_resource :only => [:destroy]
 
   def show
   end
@@ -11,6 +12,13 @@ class CommentsController < ApplicationController
     end
     @comment.save
     render action: 'show', status: :created, location: @comment 
+  end
+
+  def destroy
+    @comment = Comment.find(params[:id])
+    @comment.deleted_by = current_user
+    @comment.save
+    render action: 'show', status: :ok, location: @comment
   end
 
   def comment_params
