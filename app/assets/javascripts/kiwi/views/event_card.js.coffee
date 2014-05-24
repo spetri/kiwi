@@ -6,7 +6,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       templateHelpers: () =>
         return {
-          prettyDateTime: () => @model.get('datetimeAsString')
+          prettyDateTime: () => @model.escape('datetimeAsString')
           editAllowed: () => @model.editAllowed()
           description: () => @model.descriptionParsed()
         }

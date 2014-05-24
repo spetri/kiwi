@@ -126,9 +126,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     templateHelpers: () =>
       return {
+        message_marked: marked(@model.escape('message'))
         canDelete: @collection.knowsUser() and @collection.username == @model.get('username')
-        message: () =>
-          return marked(@model.get('message'))
       }
 
     regions:
