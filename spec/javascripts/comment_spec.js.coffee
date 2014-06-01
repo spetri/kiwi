@@ -1,4 +1,8 @@
 describe 'comments', ->
+  Comments = null
+  beforeEach ->
+    Comments = FK.App.Comments
+
   describe 'comment models', ->
     describe 'without a parent', ->
       beforeEach ->
@@ -211,3 +215,15 @@ describe 'comments', ->
 
       it 'should not open a reply box', ->
         expect(@commentView.$('.reply-box').length).toBe(0)
+
+  describe 'deleting', ->
+    beforeEach ->
+      @comment = new FK.Models.Comment
+      @commentView = new Comments.CommentSingleView
+        model: @comment
+      @commentView.render()
+      @comment.set('status', 'deleted')
+      @comment.set('deleter', 'comment-destroyer')
+
+    it 'should change the comment view to a delete view when the deleter changes and the status changes to deleted', ->
+      expect(@commentView.$('.comment-text').html()).toContain('Deleted')

@@ -158,7 +158,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collectionView.$("div.comment").append(itemView.el)
 
     modelEvents:
-      'change': 'render'
+      'change:deleter': 'render'
 
     onShow: () =>
       if not @collection.knowsUser()
