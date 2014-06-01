@@ -10,6 +10,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @navbarViewModel.set('username', null) if not @currentUser.get('logged_in')
 
     @listenTo App.vent, 'container:all', @showSubkastView
+    @listenTo App.vent, 'filter:subkast', @showSubkast
 
     @navbarView = new Navbar.NavbarView
       username: @currentUser.get('username')
@@ -27,12 +28,18 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @layout.navbarSubkastRegion.show @subkastNavView
     @layout.grow()
 
+  @showSubkast = (subkast) =>
+    @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[subkast]
+
   @close = () ->
     @view.close()
 
   class Navbar.NavbarSubkastView extends Marionette.ItemView
     className: 'navbar-subkast'
     template: FK.Template('navbar_subkast')
+
+    showSubkast: (subkast) =>
+      @$('.subkast').text(subkast)
 
   class Navbar.NavbarViewModel extends Backbone.Model
     defaults:
