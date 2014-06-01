@@ -165,7 +165,7 @@ class FK.Models.Event extends Backbone.GSModel
     easternHours += 12 if @get('local_ampm') is 'PM' && easternHours != 12
     zone = '-0' + (FK.App.request('easternOffset') / 60) + ':00'
     moment.parseZone("#{moment(@get('local_date')).format('YYYY-MM-DD')}T00:00:00#{zone}").
-    add( hours: easternHours, minutes: easternMinutes )
+      add( hours: easternHours, minutes: easternMinutes )
 
   datetimeAllDay: () =>
     moment(moment(@get('local_date')).format('YYYY-MM-DD'))
