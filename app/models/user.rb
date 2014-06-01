@@ -37,6 +37,10 @@ class User
   validates :username, uniqueness: true, :length => { :minimum => 3, :maximum => 200 }
   validates :email, uniqueness: true
 
+  after_create do |user|
+    HipChatNotification.new_user(user)
+  end
+
   ## Confirmable
   # field :confirmation_token,   :type => String
   # field :confirmed_at,         :type => Time

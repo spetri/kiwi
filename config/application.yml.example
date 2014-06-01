@@ -6,6 +6,7 @@ defaults: &defaults
   facebook_secret:123123123j1
   hipchat_api_token: 
   hipchat_room:
+  hipchat_notifications_room:
 
 development:
   <<: *defaults
