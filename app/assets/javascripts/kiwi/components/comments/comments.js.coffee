@@ -51,15 +51,21 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     openReply: (region, collection) =>
       return if not App.request('currentUser').get('logged_in')
       replyBox = new Comments.ReplyBox({ collection: collection })
-      @listenTo replyBox, 'click:add:comment', @comment
+      @listenTo replyBox, 'click:add:comment', @commentFromView
       region.show replyBox
       replyBox
 
-    comment: (args) =>
+    commentFromView: (args) =>
       view = args.view
       collection = args.collection
-      collection.comment(view.commentValue(), App.request('currentUser').get('username'))
+      @comment(view.commentValue(), App.request('currentUser').get('username'), collection)
       view.clearInput()
+
+    comment: (message, user, list = @collection) =>
+      list.comment(message, user)
+
+    commentViewByModel: (comment) =>
+      @commentViews[comment.cid]
 
     deleteComment: (args) =>
       args.model.deleteComment()

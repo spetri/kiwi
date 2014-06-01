@@ -242,13 +242,39 @@ describe 'comments', ->
       expect($('.delete', @view.render().el).length).toBe(1)
 
   describe 'deleting', ->
-    beforeEach ->
+    describe 'replies of a nested comment', ->
+      beforeEach ->
+        xhr = sinon.useFakeXMLHttpRequest()
+
+        @event = new FK.Models.Event
+          _id: @event_id
+
+        @controller = FK.App.Comments.create({
+          domLocation: '#comment-spot',
+          event: @event
+        })
+
+        @comment = @controller.comment('wow, awesome', 'grayden')
+        @reply = @controller.comment('very', 'grayden', @comment.replies)
+        reply2 = @controller.comment('lots', 'grayden', @reply.replies)
+
+
+      it 'should be able to restore replies to a comment after a comment is deleted', ->
+        @comment.set('deleter', 'grayden')
+        commentView = @controller.commentViewByModel(@comment)
+        expect(commentView.$('.nested-comments:first .comment').length).toBe(2)
+
+      it 'should be able to restore replies to a nested comment after the nested comment is deleted', ->
+        @reply.set('deleter', 'grayden')
+        replyView = @controller.commentViewByModel(@reply)
+        expect(replyView.$('.nested-comments:first .comment').length).toBe(1)
+
+
+    it 'should change the comment view to a delete view when the deleter changes and the status changes to deleted', ->
       @comment = new FK.Models.Comment
       @commentView = new Comments.CommentSingleView
         model: @comment
       @commentView.render()
       @comment.set('status', 'deleted')
       @comment.set('deleter', 'comment-destroyer')
-
-    it 'should change the comment view to a delete view when the deleter changes and the status changes to deleted', ->
       expect(@commentView.$('.comment-text').html()).toContain('Deleted')

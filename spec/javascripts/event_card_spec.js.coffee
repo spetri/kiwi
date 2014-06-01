@@ -4,8 +4,7 @@ describe "Events.EventCard", ->
     @event.set 'upvote_allowed', true
     @view = new FK.App.Events.EventPage.EventCard
       model: @event
-    loadFixtures "testbed"
-    $('#testbed').html @view.render().el
+    @view.render().el
     @xhr = sinon.useFakeXMLHttpRequest()
 
   afterEach ->
@@ -13,5 +12,5 @@ describe "Events.EventCard", ->
     @view.close()
 
   it "should be able to trigger an upvote", ->
-    $('.event-upvotes').click()
-    expect($('.event-upvotes').html()).toContain(1)
+    @view.$('.event-upvotes').click()
+    expect(@view.$('.event-upvotes').html()).toContain(1)
