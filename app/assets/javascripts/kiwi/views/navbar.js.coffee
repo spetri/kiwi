@@ -9,10 +9,11 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @navbarViewModel.set('username', null) if not @currentUser.get('logged_in')
 
+    @listenTo App.vent, 'container:all', @showSubkastView
+
     @navbarView = new Navbar.NavbarView
       username: @currentUser.get('username')
       model: @navbarViewModel
-
 
     @layout = new Navbar.NavbarLayout
     @layout.on 'show', =>
@@ -21,21 +22,33 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   @show = () ->
     App.navbarRegion.show @layout
 
+  @showSubkastView = () =>
+    @subkastNavView = new Navbar.NavbarSubkastView
+    @layout.navbarSubkastRegion.show @subkastNavView
+    @layout.grow()
+
   @close = () ->
     @view.close()
+
+  class Navbar.NavbarSubkastView extends Marionette.ItemView
+    className: 'navbar-subkast'
+    template: FK.Template('navbar_subkast')
 
   class Navbar.NavbarViewModel extends Backbone.Model
     defaults:
       username: null
 
-
   class Navbar.NavbarLayout extends Marionette.Layout
     template: FK.Template('navbar_layout')
     regions:
       navbar: '#navbar-region'
+      navbarSubkastRegion: '#navbar-subkast-region'
     className: 'navbar-container'
 
-  class Navbar.NavbarView extends Backbone.Marionette.ItemView
+    grow: =>
+      @$el.parent().css('height', '90px')
+
+  class Navbar.NavbarView extends Marionette.Layout
     className: "navbar navbar-fixed-top"
     template: FK.Template('navbar')
     events:
@@ -49,8 +62,6 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     goToForm: (e) =>
       e.preventDefault()
       App.vent.trigger 'container:new'
-
-
 
     initialize: () =>
       @listenTo App.vent, 'container:new', @refreshHighlightNew
