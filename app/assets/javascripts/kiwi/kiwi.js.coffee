@@ -61,7 +61,6 @@ FK.App.addInitializer (prefetch) ->
       howManyStartingBlocks: 10,
       vent: FK.App.vent
       country: FK.CurrentUser.get('country')
-      subkasts: FK.CurrentUser.get('subkasts')
 
   FK.Data.EventStore.fetchStartupEvents()
 
