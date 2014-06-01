@@ -47,7 +47,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       url = _.invert(FK.Data.urlToSubkast)[subkast]
       Backbone.history.navigate(url, trigger: false)
     else
-      Backbone.history.navigate('events/all', trigger : false)
+      Backbone.history.navigate('/', trigger : false)
 
 
   @savePosition = () =>

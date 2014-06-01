@@ -88,7 +88,7 @@ FK.Controllers.MainController = {
      FK.App.vent.trigger('container:new')
 
   default: ->
-    Backbone.history.navigate('events/all', trigger: true)
+    @events('all')
 
   subkast: (subkast) =>
     subkastCode = FK.Data.urlToSubkast[subkast]
