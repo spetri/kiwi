@@ -52,27 +52,18 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     regions:
       event_list: '#sidebar-event-list'
       country_filter: '#country-filter'
-      subkast_filter: '#subkast-filter'
 
     initialize: =>
       @eventListView = new Sidebar.EventList
         collection: @collection
-      @subkastFilterView = new Sidebar.SubkastFilterView
-        model: @model
-
       @countryFilterView = new Sidebar.CountryFilterView
         model: @model
 
       # listen to filtering changes in the rest of the application:
-      @listenTo App.vent, 'filter:subkasts', @model.setSubkasts
       @listenTo App.vent, 'filter:country', @model.setCountry
 
       # notify the rest of the application:
-      @listenTo @model, 'change:subkasts', @notifySubkastChange
       @listenTo @model, 'change:country', @notifyCountryChange
-
-    notifySubkastChange: (model, subkasts) =>
-      App.vent.trigger 'filter:subkasts', subkasts
 
     notifyCountryChange: (model, country) =>
       App.vent.trigger 'filter:country', country
@@ -80,19 +71,13 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     onRender: =>
       @event_list.show @eventListView
       @country_filter.show @countryFilterView
-      @subkast_filter.show @subkastFilterView
 
   class Sidebar.ViewModel extends Backbone.Model
     defaults:
       username: null
       country: 'CA'
       countryName: 'Canada'
-      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'EDU', 'HA', 'OTH']
 
     setCountry: (country) =>
       @set 'country', country
       @set 'countryName', App.request('countryName', country)
-
-    setSubkasts: (subkasts) =>
-      @set 'subkasts', subkasts
-
