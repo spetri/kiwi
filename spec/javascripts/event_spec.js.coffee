@@ -1,6 +1,5 @@
 # use require to load any .js file available to the asset pipeline
 #= require application
-
 describe "Event", ->
   loadFixtures 'event_fixture' # located at 'spec/javascripts/fixtures/event_fixture.html.erb'
   it "Default country to be US", ->
@@ -14,14 +13,14 @@ describe "Event", ->
     describe "normal datetime", ->
       describe "today in the future", ->
         beforeEach ->
-          @datetime = moment().add(minutes: 1)
+          @datetime = moment('16-jan-2015 12:00').add(minutes: 1)
           @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
         it "should be in the future", ->
           expect(@event.inFuture()).toBeTruthy()
 
         it "should be on the current date", ->
-          expect(@event.isOnDate(moment())).toBeTruthy()
+          expect(@event.isOnDate(moment(@datetime))).toBeTruthy()
 
         it "should provide the correct datetime date", ->
           expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe(@datetime.format('YYYY-MM-DD'))
@@ -30,14 +29,14 @@ describe "Event", ->
           expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe(@datetime.format('HH:mm:SS'))
 
         it "should provide the date in the forekast format", ->
-          expect(@event.get('dateAsString')).toEqual('Thursday, Jan 16th, 2014')
+          expect(@event.get('dateAsString')).toEqual('Friday, Jan 16th, 2015')
 
         it "should provide the time in the forekast format", ->
           expect(@event.get('timeAsString')).toEqual('12:01 PM')
 
       describe "in the past", ->
         beforeEach ->
-          @datetime = moment().add(minutes : -1)
+          @datetime = moment('16 jan 2013 12:00').add(minutes : -1)
           @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
         it "should not be in the future", ->
@@ -130,7 +129,7 @@ describe "Event", ->
     describe "tv time", ->
       describe "setting time format after", ->
         beforeEach ->
-          @datetime = moment()
+          @datetime = moment('16 jan 2015 12:00')
           @event.set(time_format: 'tv_show')
           @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
@@ -139,20 +138,21 @@ describe "Event", ->
 
       describe "today in the future pm", ->
         beforeEach ->
-          @datetime = moment().add( hours: 7, minutes: 20 )
+          @datetime = moment('16 jan 2015 19:20')
           @event.set(time_format: 'tv_show')
           @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
         it "should be on today's date", ->
-          expect(@event.isOnDate(moment())).toBeTruthy()
+          expect(@event.isOnDate(moment('16 jan 2015 19:20'))).toBeTruthy()
 
         it "should use the date of the event as the relative date", ->
-          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2014-01-16')
+          expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2015-01-16')
 
         it "should use the time of the event as the relative time", ->
           expect(@event.get('fk_datetime').format('HH:mm:SS')).toBe('19:20:00')
 
         it "should use eastern time as the relative timezone", ->
+          console.log @event.get('fk_datetime').toString()
           expect(@event.get('fk_datetime').format('ZZ')).toBe('-0500')
 
         it "should be in the future", ->
@@ -162,11 +162,11 @@ describe "Event", ->
           expect(@event.get('timeAsString')).toBe('7:20/6:20c')
 
         it "should have the fk date format for the as date string", ->
-          expect(@event.get('dateAsString')).toBe('Thursday, Jan 16th, 2014')
+          expect(@event.get('dateAsString')).toBe('Friday, Jan 16th, 2015')
 
         describe "today in the future am", ->
           beforeEach ->
-            @datetime = moment().subtract({ hours: 2 })
+            @datetime = moment('16 jan 2015 22:00')
             @event.set(time_format: 'tv_show')
             @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
@@ -175,7 +175,7 @@ describe "Event", ->
 
         describe "today in the future at 1pm", ->
           beforeEach ->
-            @datetime = moment().add(hours: 1)
+            @datetime = moment('16 jan 2015 1:00')
             @event.set(time_format: 'tv_show')
             @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
@@ -196,15 +196,12 @@ describe "Event", ->
 
     describe "recurring events later today", ->
       beforeEach ->
-        @datetime = moment().add(hours: 9)
+        @datetime = moment(hour:21)
         @event.set(time_format: 'recurring')
         @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
       it "should be on the current date", ->
         expect(@event.isOnDate(@datetime)).toBeTruthy()
-
-      it "should be in the future", ->
-        expect(@event.inFuture()).toBeTruthy()
 
       it "should have today as its date", ->
         expect(@event.get('fk_datetime').format('YYYY-MM-DD')).toBe('2014-01-16')
@@ -220,7 +217,7 @@ describe "Event", ->
 
     describe "recurring events in the past", ->
       beforeEach ->
-        @datetime = moment().add(days: -2, hours: -9)
+        @datetime = moment(hour: 3).add(days: -2)
         @event.set(time_format: 'recurring')
         @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
@@ -244,7 +241,7 @@ describe "Event", ->
 
     describe "recurring events at 12 PM", ->
       beforeEach ->
-        @datetime = moment()
+        @datetime = moment(hour: 12)
         @event.set(time_format: 'recurring')
         @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('HH:mm A'))
 
@@ -254,8 +251,9 @@ describe "Event", ->
     it "can get a datetime in the local timezone without changing it", ->
       v = new FK.Models.Event
         datetime: moment().zone(0)
-      expect(v.in_my_timezone(v.get('fk_datetime')).hour()).toBe(moment().hour())
-      expect(v.get('fk_datetime').hour()).toBe(12)
+      hours = v.get('fk_datetime').clone().zone(moment().zone()).hour()
+      expect(v.in_my_timezone(v.get('fk_datetime')).hour()).toBe(hours)
+
 
   describe "when upvoting", ->
     beforeEach ->
