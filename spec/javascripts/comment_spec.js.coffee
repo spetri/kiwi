@@ -5,8 +5,11 @@ logIn = (username) =>
     logged_in: !! username
 
 describe 'comments', ->
+  Comments = null
+
   beforeEach ->
     logIn('mr. x')
+    Comments = FK.App.Comments
 
   describe 'comment models', ->
     describe 'without a parent', ->
@@ -238,3 +241,14 @@ describe 'comments', ->
       @view.setModeratorMode(true)
       expect($('.delete', @view.render().el).length).toBe(1)
 
+  describe 'deleting', ->
+    beforeEach ->
+      @comment = new FK.Models.Comment
+      @commentView = new Comments.CommentSingleView
+        model: @comment
+      @commentView.render()
+      @comment.set('status', 'deleted')
+      @comment.set('deleter', 'comment-destroyer')
+
+    it 'should change the comment view to a delete view when the deleter changes and the status changes to deleted', ->
+      expect(@commentView.$('.comment-text').html()).toContain('Deleted')

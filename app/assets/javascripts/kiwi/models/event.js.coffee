@@ -255,7 +255,7 @@ class FK.Models.Event extends Backbone.GSModel
     return FK.Data.subkastOptions[@get('subkast')]
 
   descriptionParsed: () =>
-    marked(@get('description'))
+    marked(@escape('description'))
 
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>

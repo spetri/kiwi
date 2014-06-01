@@ -18,7 +18,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @commentViews = {}
       @commentsListView = new Comments.CommentsListView(collection: @collection)
       @commentsListView.on 'before:item:added', @registerCommentView
-      @commentsListView.on 'after:item:added', @showReplies
+      @commentsListView.on 'itemview:dom:refresh', @showReplies
 
       @layout.on 'render', () =>
         @commentBox = @openReply(@layout.commentNewRegion, @collection)
@@ -42,7 +42,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     showReplies: (commentView) =>
       replyViews = new Comments.CommentsListView collection: commentView.model.replies
       @listenTo replyViews, 'before:item:added', @registerCommentView
-      @listenTo replyViews, 'after:item:added', @showReplies
+      @listenTo replyViews, 'itemview:dom:refresh', @showReplies
       commentView.repliesRegion.show replyViews
 
     openReplyFromView: (args) =>
@@ -130,7 +130,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     templateHelpers: () =>
       return {
         canDelete: (@username == @model.get('username')) || @moderatorMode
-        message: () => return marked(@model.get('message'))
+        message_marked: marked(@model.escape('message'))
       }
 
     regions:
@@ -161,7 +161,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collectionView.$("div.comment").append(itemView.el)
 
     modelEvents:
-      'change': 'render'
+      'change:deleter': 'render'
 
     onShow: () =>
       if not @username
