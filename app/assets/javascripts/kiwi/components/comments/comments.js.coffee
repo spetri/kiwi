@@ -124,6 +124,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     events:
       'click .fa-arrow-up': 'upvote'
+      'click .fa-arrow-down': 'downvote'
 
     triggers:
       'click .reply': 'click:reply'
@@ -133,6 +134,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     upvote: =>
       @model.upvoteToggle()
+
+    downvote: =>
+      @model.downvoteToggle()
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)

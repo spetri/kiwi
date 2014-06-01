@@ -51,6 +51,12 @@ class Comment
     end
   end  
 
+  def remove_upvote(username)
+    if not self.upvote_names.nil?
+      self.upvote_names.delete username
+    end
+  end
+
 #  def upvote(user)
 #    upvoted_by << user
 #    inc :upvotes => 1

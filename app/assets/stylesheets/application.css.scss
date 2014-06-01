@@ -856,6 +856,14 @@ form.event_form {
     }
   }
 
+  .upvote-marked {
+    color: green;
+  }
+
+  .downvote-marked {
+    color: red;
+  }
+
   .info {
     margin-bottom: 3px;
   }

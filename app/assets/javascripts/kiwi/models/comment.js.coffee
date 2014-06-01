@@ -30,6 +30,7 @@ class FK.Models.Comment extends Backbone.Model
   setUsername: (username) =>
     @replies.username = username
 
+  # upvoting
   upvotes: =>
     @get 'upvotes'
 
@@ -50,8 +51,25 @@ class FK.Models.Comment extends Backbone.Model
       @set 'upvotes', @upvotes() + 1
     @toggleUserUpvoted() 
     @save null,
+      success: (data) ->
+        console.log data
+        # ask how to access data attributes
+        if @$('.up-vote i.fa-arrow-down').hasClass('downvote-marked')
+           @$('.up-vote i.fa-arrow-down').removeClass('downvote-marked')
+        @$('.up-vote i.fa-arrow-up').addClass('upvote-marked')
+
+  # downvoting
+  downvoteToggle: (e) =>
+    if !@userHasUpvoted()
+      @set 'upvotes', @upvotes() + 1
+    else
+      @set 'upvotes', @upvotes() - 1
+    
+    @save null,
       success: ->
-        @$('.up-vote i.fa-arrow-up').css('color', 'green')
+        if @$('.up-vote i.fa-arrow-up').hasClass('upvote-marked')
+          @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
+        @$('.up-vote i.fa-arrow-down').addClass('downvote-marked')
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
