@@ -38,8 +38,10 @@ class User
   validates :email, uniqueness: true
 
   after_create -> {
-    mc = Mailchimp::API.new(CONFIG['mailchimp_api'])
-    mc.lists.subscribe(CONFIG['mailchimp_list_id'], {'email' => email }, {}, 'html', false, true, false, false)
+    if CONFIG['mailchimp_api'].present?
+      mc = Mailchimp::API.new(CONFIG['mailchimp_api'])
+      mc.lists.subscribe(CONFIG['mailchimp_list_id'], {'email' => email }, {}, 'html', false, true, false, false)
+    end
   }
 
   ## Confirmable
