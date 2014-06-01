@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  before_action :set_comment, only: [:show, :update]
+
   def new
     @comment = Comment.new
   end
@@ -43,19 +45,20 @@ class CommentsController < ApplicationController
   def update
     params = comment_params.dup
     have_i_upvoted = params.delete :have_i_upvoted
+
     @comment.message = params[:message]
     @comment.parent_id = params[:parent_id]
     @comment.event_id = params[:event_id]
     
     if ( user_signed_in? )
-      if ( have_i_upvoted == "true" )
+      if ( have_i_upvoted == true )
         @comment.add_upvote(current_user.username)
       end
     end
 
     respond_to do |format|
       if @comment.save
-        format.json { render action: 'show', status: :created, location: @comment }
+        format.json { render action: 'show', status: :ok, location: @comment }
       else
         format.json { render json: comment.errors, status: :unprocessable_entity }
       end
@@ -63,12 +66,18 @@ class CommentsController < ApplicationController
 
   end
 
-  def comment_params
-      params.permit(:message,
-                    :event_id,
-                    :parent_id,
-                    :have_i_upvoted
-      ).merge(authored_by: current_user)
-  end
+  private
 
+    # Use callbacks to share common setup or constraints between actions.
+    def set_comment
+      @comment = Comment.find(params[:id])
+    end
+
+    def comment_params
+        params.permit(:message,
+                      :event_id,
+                      :parent_id,
+                      :have_i_upvoted
+        ).merge(authored_by: current_user)
+    end
 end

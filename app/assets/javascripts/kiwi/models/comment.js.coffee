@@ -2,7 +2,6 @@ class FK.Models.Comment extends Backbone.Model
   idAttribute: "_id"
 
   defaults:
-    _id: ''
     username: null
     upvotes: 0
     have_i_upvoted: false
@@ -50,9 +49,9 @@ class FK.Models.Comment extends Backbone.Model
     else
       @set 'upvotes', @upvotes() + 1
     @toggleUserUpvoted() 
-    @save
+    @save null,
       success: ->
-        console.log "adwa"
+        @$('.up-vote i.fa-arrow-up').css('color', 'green')
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
