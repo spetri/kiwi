@@ -1,9 +1,17 @@
+logIn = (username) =>
+  FK.CurrentUser = new FK.Models.User
+    moderator: false
+    username: username
+    logged_in: !! username
+
 describe 'comments', ->
+  beforeEach ->
+    logIn('mr. x')
+
   describe 'comment models', ->
     describe 'without a parent', ->
       beforeEach ->
         @comments = new FK.Collections.Comments([], event_id: '1234' )
-        @comments.username = 'pizza'
 
       describe 'when writing a comment', ->
         beforeEach ->
@@ -13,7 +21,7 @@ describe 'comments', ->
           @xhr.onCreate = (xhr) =>
             @requests.push xhr
 
-          @comments.comment('Warbling in the dark')
+          @comments.comment('Warbling in the dark', 'pizza')
 
         afterEach ->
           @xhr.restore()
@@ -32,9 +40,6 @@ describe 'comments', ->
 
       it 'should know that it does not have a parent', ->
         expect(@comments.hasParent()).toBeFalsy()
-
-      it 'should know that it has a user', ->
-        expect(@comments.knowsUser()).toBeTruthy()
 
     describe 'with a parent', ->
       beforeEach ->
@@ -75,7 +80,6 @@ describe 'comments', ->
 
       @controller = FK.App.Comments.create({
         domLocation: '#comment-spot',
-        username: 'event-lover',
         event: @event
       })
 
@@ -185,6 +189,7 @@ describe 'comments', ->
   describe 'without a username', ->
     beforeEach ->
       loadFixtures 'comment_fixture'
+      logIn(null)
       @event = new FK.Models.Event
         _id: @event_id
 
@@ -211,3 +216,25 @@ describe 'comments', ->
 
       it 'should not open a reply box', ->
         expect(@commentView.$('.reply-box').length).toBe(0)
+
+  describe 'comment views', ->
+    beforeEach ->
+      @comment = new FK.Models.Comment
+        message: 'anything'
+        username: 'mr. x'
+      @view = new FK.App.Comments.CommentSingleView
+        model: @comment
+
+    it 'should have a delete button while the user that wrote the comment is currently logged in', ->
+      @view.setCurrentUser('mr. x')
+      expect($('.delete', @view.render().el).length).toBe(1)
+
+    it 'should not have a delete button when the username of the current logged in user is different from the username of the event submitter', ->
+      @view.setCurrentUser('mr. y')
+      expect($('.delete', @view.render().el).length).toBe(0)
+
+    it 'should have the delete button when the current user is a moderator even when the usernames of the current user and the event submitter are different', ->
+      @view.setCurrentUser('mr. y')
+      @view.setModeratorMode(true)
+      expect($('.delete', @view.render().el).length).toBe(1)
+

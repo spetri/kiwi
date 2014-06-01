@@ -10,10 +10,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @layout = new Comments.Layout
         el: options.domLocation
 
-      @username = options.username
+      @username = App.request('currentUser').get('username')
+      @event = options.event
 
-      @collection = options.event.comments
-      @collection.username = options.username
+      @collection = @event.comments
 
       @commentViews = {}
       @commentsListView = new Comments.CommentsListView(collection: @collection)
@@ -32,7 +32,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
-      commentView.model.setUsername(@username)
+
+      commentView.setModeratorMode(App.request('isModerator'))
+      commentView.setCurrentUser(App.request('currentUser').get('username'))
+
       @listenTo commentView, 'click:reply', @openReplyFromView
       @listenTo commentView, 'click:delete', @deleteComment
 
@@ -46,7 +49,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @openReply(args.view.replyBoxRegion, args.model.replies)
 
     openReply: (region, collection) =>
-      return if not collection.knowsUser()
+      return if not App.request('currentUser').get('logged_in')
       replyBox = new Comments.ReplyBox({ collection: collection })
       @listenTo replyBox, 'click:add:comment', @comment
       region.show replyBox
@@ -55,7 +58,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     comment: (args) =>
       view = args.view
       collection = args.collection
-      collection.comment(view.commentValue())
+      collection.comment(view.commentValue(), App.request('currentUser').get('username'))
       view.clearInput()
 
     deleteComment: (args) =>
@@ -126,9 +129,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     templateHelpers: () =>
       return {
-        canDelete: @collection.knowsUser() and @collection.username == @model.get('username')
-        message: () =>
-          return marked(@model.get('message'))
+        canDelete: (@username == @model.get('username')) || @moderatorMode
+        message: () => return marked(@model.get('message'))
       }
 
     regions:
@@ -162,10 +164,16 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'change': 'render'
 
     onShow: () =>
-      if not @collection.knowsUser()
+      if not @username
         @$('.reply').tooltip(
           title: 'Login to reply.'
         )
+
+    setCurrentUser: (username) =>
+      @username = username
+
+    setModeratorMode: (moderator) =>
+      @moderatorMode = moderator
 
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentSingleView

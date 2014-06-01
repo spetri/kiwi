@@ -12,7 +12,7 @@ class FK.Models.Comment extends Backbone.Model
     '/comments'
 
   initialize: (attrs) =>
-    @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
+    @replies = new FK.Collections.Comments(@get('replies'), { event_id: @get('event_id'), parent_id: @get('_id') })
     @url = Backbone.Model.prototype.url
     @on 'change:_id', @updateRepliesParent
 
@@ -21,9 +21,6 @@ class FK.Models.Comment extends Backbone.Model
 
   isReply: () =>
     !! @get('parent_id')
-
-  setUsername: (username) =>
-    @replies.username = username
 
   deleteComment: () =>
     $.ajax
@@ -48,16 +45,13 @@ class FK.Collections.Comments extends Backbone.Collection
       data:
         skip: 0
 
-  knowsUser: =>
-    return @username and @username.length > 0
-
   setParent: (parent_id) =>
     @parent_id = parent_id
 
   hasParent: =>
     return !! @parent_id
 
-  comment: (message) =>
-    params = { message: message, event_id: @event_id, username: @username }
+  comment: (message, username) =>
+    params = { message: message, event_id: @event_id, username: username }
     params.parent_id = @parent_id
     @create params
