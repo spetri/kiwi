@@ -14,7 +14,7 @@ describe "Event", ->
     describe "normal datetime", ->
       describe "today in the future", ->
         beforeEach ->
-          @datetime = moment().add(minutes: 1)
+          @datetime = moment('1-jan-2014 12:00').add(minutes: 1)
           @event.moveToDateTime(@datetime.format('YYYY-MM-DD'), @datetime.format('hh:mm A'))
 
         it "should be in the future", ->
