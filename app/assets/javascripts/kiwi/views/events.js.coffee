@@ -29,7 +29,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     @position = App.request('scrollPosition')
 
-    Backbone.history.navigate('events/all', trigger : false)
 
     App.mainRegion.show @view
 
@@ -42,6 +41,15 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       percentage = $doc.scrollTop() / ($doc.height() - $window.height())
 
       @fetchMoreBlocks() if percentage > 0.8
+
+  @setUrl = () =>
+    subkast = @eventStore.getSingleSubkast()
+    if subkast
+      url = _.invert(FK.Data.urlToSubkast)[subkast]
+      Backbone.history.navigate(url, trigger: false)
+    else
+      Backbone.history.navigate('events/all', trigger : false)
+
 
   @savePosition = () =>
     @position = $(document).scrollTop()

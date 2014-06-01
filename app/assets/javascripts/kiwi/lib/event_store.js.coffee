@@ -61,6 +61,12 @@ class FK.EventStore extends Marionette.Controller
     @subkasts = subkasts
     @refresh()
 
+  getSingleSubkast: () =>
+    if @subkasts.length == 1
+      return @subkasts[0]
+    else
+      return false
+
   refresh: () =>
     @events.reset()
     @topRanked.reset()
