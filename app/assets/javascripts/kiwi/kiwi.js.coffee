@@ -16,16 +16,29 @@ FK.Uri = (uri) ->
   Backbone.history.fragment is uri
 
 FK.Data.subkastOptions = {
-      'TVM': 'TV and Movies'
-      'SE': 'Sports'
-      'ST': 'Science and Technology'
-      'PRP': 'Product Releases / Promotions'
-      'HA': 'Holidays and Anniversaries'
-      'EDU': 'Education'
-      'MA': 'Music / Arts'
-      'GM': 'Gaming'
-      'OTH': 'Other'
-    }
+  'TVM': 'TV and Movies'
+  'SE': 'Sports'
+  'ST': 'Science and Technology'
+  'PRP': 'Product Releases / Promotions'
+  'HA': 'Holidays and Anniversaries'
+  'EDU': 'Education'
+  'MA': 'Music / Arts'
+  'GM': 'Gaming'
+  'OTH': 'Other'
+}
+
+FK.Data.urlToSubkast = {
+  'tvandmovies': 'TVM'
+  'sports': 'SE'
+  'scienceandtechnology': 'ST'
+  'productreleasespromotions': 'PRP'
+  'holidaysandanniversaires': 'HA'
+  'education': 'EDU'
+  'musicarts': 'MA'
+  'gaming': 'GM'
+  'other': 'OTH'
+}
+
 
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({
@@ -76,6 +89,12 @@ FK.Controllers.MainController = {
 
   default: ->
     Backbone.history.navigate('events/all', trigger: true)
+
+  subkast: (subkast) =>
+    subkastCode = FK.Data.urlToSubkast[subkast]
+    if subkastCode
+      FK.App.vent.trigger('container:all')
+      FK.App.vent.trigger('filter:subkast', subkastCode)
 }
 
 FK.App.reqres.setHandler 'events', () ->
@@ -117,6 +136,7 @@ class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
     'events/edit/:id':  'edit'
     'events/new/': 'new'
     'events/:action': 'events'
+    ':subkast': 'subkast'
   }
 
 moment.lang('en', {
