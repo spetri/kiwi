@@ -122,11 +122,17 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
         message_marked: marked(@model.get('message'))
       }
 
+    events:
+      'click .fa-arrow-up': 'upvote'
+
     triggers:
       'click .reply': 'click:reply'
 
     initialize: =>
       @collection = @model.replies
+
+    upvote: =>
+      @model.upvoteToggle()
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
