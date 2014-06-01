@@ -130,13 +130,13 @@ FK.App.commands.setHandler 'saveScrollPosition', (position) ->
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {
-    '':               'default'
-    '_=_':            'default' # facebook callback route
     'events/show/:id':    'show'
     'events/edit/:id':  'edit'
     'events/new/': 'new'
     'events/:action': 'events'
     ':subkast': 'subkast'
+    '': 'default'
+    '_=_': 'default' #facebook callback route
   }
 
 moment.lang('en', {

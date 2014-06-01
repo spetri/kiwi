@@ -29,7 +29,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     @position = App.request('scrollPosition')
 
-
     App.mainRegion.show @view
 
     #TODO this spams on the MAC when scrolling the bottom of the pags
