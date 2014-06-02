@@ -40,11 +40,14 @@ class Event
     },
     :processors => [:cropper]
 
+  after_create do |event|
+    HipChatNotification.new_event(event)
+  end
+
   before_save do |event|
     if not event.upvote_names.nil?
       event.upvote_count = event.upvote_names.size
     end
-
   end
 
   def image_from_url(url)
@@ -187,7 +190,6 @@ class Event
   def self.get_last_date
     self.order_by([:local_date, :desc])[0].local_date
   end
-
 
   def root_comments
     self.comments.where(:parent => nil)

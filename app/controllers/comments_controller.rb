@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:show, :update]
+  authorize_resource :only => [:destroy]
 
   def new
     @comment = Comment.new
@@ -44,6 +45,7 @@ class CommentsController < ApplicationController
     end
   end
 
+<<<<<<< HEAD
   def update
     params = comment_params.dup
     have_i_upvoted = params.delete :have_i_upvoted
@@ -68,6 +70,20 @@ class CommentsController < ApplicationController
       end
     end
 
+=======
+  def destroy
+    @comment = Comment.find(params[:id])
+    @comment.deleted_by = current_user
+    @comment.save
+    render action: 'show', status: :ok, location: @comment
+  end
+
+  def comment_params
+      params.permit(:message,
+                    :event_id,
+                    :parent_id
+      ).merge(authored_by: current_user)
+>>>>>>> upstream/master
   end
 
   private

@@ -19,6 +19,7 @@ class FK.Models.Comment extends Backbone.Model
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
     @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
+    @url = Backbone.Model.prototype.url
     @on 'change:_id', @updateRepliesParent
 
   updateRepliesParent: (model, id) =>
@@ -53,7 +54,7 @@ class FK.Models.Comment extends Backbone.Model
     @save null,
       success: (data) ->
         console.log data
-        # ask how to access data attributes
+        # TODO: access data attributes
         if @$('.up-vote i.fa-arrow-down').hasClass('downvote-marked')
            @$('.up-vote i.fa-arrow-down').removeClass('downvote-marked')
         @$('.up-vote i.fa-arrow-up').addClass('upvote-marked')
@@ -70,6 +71,13 @@ class FK.Models.Comment extends Backbone.Model
         if @$('.up-vote i.fa-arrow-up').hasClass('upvote-marked')
           @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
         @$('.up-vote i.fa-arrow-down').addClass('downvote-marked')
+
+  deleteComment: () =>
+    $.ajax
+      url: @url()
+      type: 'DELETE'
+      success: (resp) =>
+        @set resp
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment

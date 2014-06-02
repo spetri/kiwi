@@ -163,9 +163,9 @@ class FK.Models.Event extends Backbone.GSModel
     easternMinutes = parseInt @get('local_minute')
 
     easternHours += 12 if @get('local_ampm') is 'PM' && easternHours != 12
-    zone = ' -0' + (FK.App.request('easternOffset') / 60) + '00'
-    moment(moment(@get('local_date')).format('YYYY-MM-DD') + zone, 'YYYY-MM-DD ZZ').
-    add( hours: easternHours, minutes: easternMinutes )
+    zone = '-0' + (FK.App.request('easternOffset') / 60) + ':00'
+    moment.parseZone("#{moment(@get('local_date')).format('YYYY-MM-DD')}T00:00:00#{zone}").
+      add( hours: easternHours, minutes: easternMinutes )
 
   datetimeAllDay: () =>
     moment(moment(@get('local_date')).format('YYYY-MM-DD'))
@@ -255,7 +255,7 @@ class FK.Models.Event extends Backbone.GSModel
     return FK.Data.subkastOptions[@get('subkast')]
 
   descriptionParsed: () =>
-    marked(@get('description'))
+    marked(@escape('description'))
 
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>
