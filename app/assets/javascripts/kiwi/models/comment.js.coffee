@@ -51,7 +51,7 @@ class FK.Models.Comment extends Backbone.Model
     else
       @set 'upvotes', @upvotes() + 1
     @toggleUserUpvoted() 
-    @save null,
+    @save
       success: (data) ->
         console.log data
         # TODO: access data attributes
@@ -66,7 +66,7 @@ class FK.Models.Comment extends Backbone.Model
     else
       @set 'upvotes', @upvotes() - 1
     
-    @save null,
+    @save
       success: ->
         if @$('.up-vote i.fa-arrow-up').hasClass('upvote-marked')
           @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
