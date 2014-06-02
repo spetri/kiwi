@@ -19,6 +19,8 @@ gem 'cancan'
 #Server
 gem 'puma'
 
+gem 'mailchimp-api', require: 'mailchimp'
+
 group :assets do
   gem 'sass-rails',   '~> 4.0.0'
   gem 'coffee-rails', '~> 4.0.0'

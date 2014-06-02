@@ -37,6 +37,13 @@ class User
   validates :username, uniqueness: true, :length => { :minimum => 3, :maximum => 200 }
   validates :email, uniqueness: true
 
+  after_create -> {
+    if CONFIG['mailchimp_api'].present?
+      mc = Mailchimp::API.new(CONFIG['mailchimp_api'])
+      mc.lists.subscribe(CONFIG['mailchimp_list_id'], {'email' => email }, {}, 'html', false, true, false, false)
+    end
+  }
+
   ## Confirmable
   # field :confirmation_token,   :type => String
   # field :confirmed_at,         :type => Time
