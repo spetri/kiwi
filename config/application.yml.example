@@ -4,7 +4,9 @@ defaults: &defaults
   twitter_secret: 1234214124124
   facebook_key:  12345142141
   facebook_secret:123123123j1
-  hipchat_api_token: 
+  mailchimp_api:
+  mailchimp_list_id:
+  hipchat_api_token:
   hipchat_room:
   hipchat_notifications_room:
 

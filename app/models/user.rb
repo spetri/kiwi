@@ -39,6 +39,10 @@ class User
 
   after_create do |user|
     HipChatNotification.new_user(user)
+    if CONFIG['mailchimp_api'].present?
+      mc = Mailchimp::API.new(CONFIG['mailchimp_api'])
+      mc.lists.subscribe(CONFIG['mailchimp_list_id'], {'email' => email }, {}, 'html', false, true, false, false)
+    end
   end
 
   ## Confirmable
