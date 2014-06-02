@@ -19,7 +19,10 @@ gem 'cancan'
 #Server
 gem 'puma'
 
+# External APIs:
 gem 'mailchimp-api', require: 'mailchimp'
+gem 'hipchat'
+gem 'aws-sdk'
 
 group :assets do
   gem 'sass-rails',   '~> 4.0.0'
@@ -38,8 +41,8 @@ gem 'less-rails'
 
 gem 'jbuilder', '~> 1.2'
 gem 'paperclip', '~> 3.0'
-gem 'aws-sdk'
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -48,7 +51,6 @@ end
 
 group :development, :test do
   gem 'mina'
-  gem 'hipchat'
   gem 'timecop'
   gem 'debugger', '1.6.6'
   gem 'guard'
