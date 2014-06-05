@@ -10,15 +10,15 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @layout = new Comments.Layout
         el: options.domLocation
 
-      @username = options.username
+      @username = App.request('currentUser').get('username')
+      @event = options.event
 
-      @collection = options.event.comments
-      @collection.username = options.username
+      @collection = @event.comments
 
       @commentViews = {}
       @commentsListView = new Comments.CommentsListView(collection: @collection)
       @commentsListView.on 'before:item:added', @registerCommentView
-      @commentsListView.on 'after:item:added', @showReplies
+      @commentsListView.on 'itemview:dom:refresh', @showReplies
 
       @layout.on 'render', () =>
         @commentBox = @openReply(@layout.commentNewRegion, @collection)
@@ -32,31 +32,40 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
-      commentView.model.setUsername(@username)
+
+      commentView.setModeratorMode(App.request('isModerator'))
+      commentView.setCurrentUser(App.request('currentUser').get('username'))
+
       @listenTo commentView, 'click:reply', @openReplyFromView
       @listenTo commentView, 'click:delete', @deleteComment
 
     showReplies: (commentView) =>
       replyViews = new Comments.CommentsListView collection: commentView.model.replies
       @listenTo replyViews, 'before:item:added', @registerCommentView
-      @listenTo replyViews, 'after:item:added', @showReplies
+      @listenTo replyViews, 'itemview:dom:refresh', @showReplies
       commentView.repliesRegion.show replyViews
 
     openReplyFromView: (args) =>
       @openReply(args.view.replyBoxRegion, args.model.replies)
 
     openReply: (region, collection) =>
-      return if not collection.knowsUser()
+      return if not App.request('currentUser').get('logged_in')
       replyBox = new Comments.ReplyBox({ collection: collection })
-      @listenTo replyBox, 'click:add:comment', @comment
+      @listenTo replyBox, 'click:add:comment', @commentFromView
       region.show replyBox
       replyBox
 
-    comment: (args) =>
+    commentFromView: (args) =>
       view = args.view
       collection = args.collection
-      collection.comment(view.commentValue())
+      @comment(view.commentValue(), App.request('currentUser').get('username'), collection)
       view.clearInput()
+
+    comment: (message, user, list = @collection) =>
+      list.comment(message, user)
+
+    commentViewByModel: (comment) =>
+      @commentViews[comment.cid]
 
     deleteComment: (args) =>
       args.model.deleteComment()
@@ -126,8 +135,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     templateHelpers: () =>
       return {
+        canDelete: (@username == @model.get('username')) || @moderatorMode
         message_marked: marked(@model.escape('message'))
-        canDelete: @collection.knowsUser() and @collection.username == @model.get('username')
       }
 
     regions:
@@ -158,13 +167,19 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       collectionView.$("div.comment").append(itemView.el)
 
     modelEvents:
-      'change': 'render'
+      'change:deleter': 'render'
 
     onShow: () =>
-      if not @collection.knowsUser()
+      if not @username
         @$('.reply').tooltip(
           title: 'Login to reply.'
         )
+
+    setCurrentUser: (username) =>
+      @username = username
+
+    setModeratorMode: (moderator) =>
+      @moderatorMode = moderator
 
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentSingleView

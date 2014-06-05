@@ -7,6 +7,7 @@ class FK.Models.User extends Backbone.Model
     logged_in: false
     username: ''
     country: 'US'
+    moderator: false
     subkasts: _.keys(FK.Data.subkastOptions)
 
   sync: (method, model, options) =>
