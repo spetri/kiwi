@@ -10,6 +10,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @navbarViewModel.set('username', null) if not @currentUser.get('logged_in')
 
     @listenTo App.vent, 'container:all', @showSubkastView
+    @listenTo App.vent, 'container:show container:new', @hideSubkastView
     @listenTo App.vent, 'filter:subkast', @showSubkast
 
     @navbarView = new Navbar.NavbarView
@@ -27,6 +28,10 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @subkastNavView = new Navbar.NavbarSubkastView
     @layout.navbarSubkastRegion.show @subkastNavView
     @layout.grow()
+
+  @hideSubkastView = () =>
+    @layout.navbarSubkastRegion.close()
+    @layout.shrink()
 
   @showSubkast = (subkast) =>
     @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[subkast]
@@ -54,6 +59,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     grow: =>
       @$el.parent().css('height', '90px')
+
+    shrink: =>
+      @$el.parent().css('height', '')
 
   class Navbar.NavbarView extends Marionette.Layout
     className: "navbar navbar-fixed-top"
