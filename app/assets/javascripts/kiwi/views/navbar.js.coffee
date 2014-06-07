@@ -14,6 +14,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @listenTo App.vent, 'container:all', @showSubkastView
     @listenTo App.vent, 'container:show container:new', @hideSubkastView
     @listenTo @config, 'change:subkasts', @showSubkast
+    @listenTo @config, 'change:subkasts', @refreshHomeLink
 
     @navbarView = new Navbar.NavbarView
       username: @currentUser.get('username')
@@ -30,6 +31,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @subkastNavView = new Navbar.NavbarSubkastView
     @layout.navbarSubkastRegion.show @subkastNavView
     @layout.grow()
+    @showSubkast(@config)
 
   @hideSubkastView = () =>
     @layout.navbarSubkastRegion.close()
@@ -37,6 +39,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
   @showSubkast = (model) =>
     @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
+
+  @refreshHomeLink = (model) =>
+    @navbarView.refreshHomeLink _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
 
   @close = () ->
     @view.close()
@@ -68,6 +73,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   class Navbar.NavbarView extends Marionette.Layout
     className: "navbar navbar-fixed-top"
     template: FK.Template('navbar')
+
     events:
       'click .navbar-brand': 'goHome'
       'click .add-new': 'goToForm'
@@ -90,6 +96,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
+
+    refreshHomeLink: (link) =>
+      @$('a').attr('href', '/' + link)
 
     onShow: () =>
       @sidebar = App.Sidebar.create(@sidebarConfig)
