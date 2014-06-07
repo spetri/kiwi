@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     return if user.nil?
 
-    can :manage, :all if user.admin?
+    can :manage, :all if user.moderator?
 
     can :create, Event
     can :update, Event do |event|

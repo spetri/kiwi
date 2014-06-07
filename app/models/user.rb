@@ -63,6 +63,8 @@ class User
   field :country,   :type => String
   field :subkasts,  :type => Array
 
+  field :moderator, :type => Boolean
+
   include Mongoid::Timestamps
 
   def login=(login)
@@ -112,6 +114,10 @@ class User
 
   def email_required?
     super && provider.blank?
+  end
+
+  def moderator?
+    moderator
   end
 
   def admin?

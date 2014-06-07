@@ -102,6 +102,9 @@ FK.App.reqres.setHandler 'easternOffset', () ->
 FK.App.reqres.setHandler 'scrollPosition', () ->
   FK.App.scrollPosition
 
+FK.App.reqres.setHandler 'isModerator', () ->
+  return FK.CurrentUser.get('moderator')
+
 FK.App.commands.setHandler 'signInPage', () ->
   window.location.href = '/users/sign_in'
 
