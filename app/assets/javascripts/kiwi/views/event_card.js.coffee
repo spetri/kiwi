@@ -21,13 +21,23 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       events:
         'click .event-upvotes': 'upvoteToggle'
-        'click [data-action="destroy"]': 'destroy'
+        'click [data-action="destroy"]': 'prepareDelete'
+        'click .btn[data-action="destroy"]': 'destroy'
 
       upvoteToggle: =>
         @model.upvoteToggle()
 
+      prepareDelete: =>
+        @$('[data-action="destroy"]').addClass('btn btn-xs btn-danger')
+        @$('[data-action="destroy"]').text('Confirm?')
+        _.delay(@resetDelete, 5000)
+
       destroy: =>
         @model.destroy()
+
+      resetDelete: () =>
+        @$('[data-action="destroy"]').removeClass('btn btn-xs btn-danger')
+        @refreshDeleteEventText()
 
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
