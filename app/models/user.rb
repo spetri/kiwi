@@ -37,6 +37,14 @@ class User
   validates :username, uniqueness: true, :length => { :minimum => 3, :maximum => 200 }
   validates :email, uniqueness: true
 
+  after_create do |user|
+    HipChatNotification.new_user(user)
+    if CONFIG['mailchimp_api'].present?
+      mc = Mailchimp::API.new(CONFIG['mailchimp_api'])
+      mc.lists.subscribe(CONFIG['mailchimp_list_id'], {'email' => email }, {}, 'html', false, true, false, false)
+    end
+  end
+
   ## Confirmable
   # field :confirmation_token,   :type => String
   # field :confirmed_at,         :type => Time
@@ -54,6 +62,8 @@ class User
   ## Forekast
   field :country,   :type => String
   field :subkasts,  :type => Array
+
+  field :moderator, :type => Boolean
 
   include Mongoid::Timestamps
 
@@ -104,6 +114,10 @@ class User
 
   def email_required?
     super && provider.blank?
+  end
+
+  def moderator?
+    moderator
   end
 
   def admin?

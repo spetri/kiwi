@@ -100,6 +100,7 @@ GEM
     ejs (1.1.1)
     erubis (2.7.0)
     eventmachine (1.0.3)
+    excon (0.34.0)
     execjs (2.0.2)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
@@ -178,6 +179,9 @@ GEM
       skinny (>= 0.1.2)
       sqlite3-ruby
       thin
+    mailchimp-api (2.0.4)
+      excon (>= 0.16.0)
+      json (>= 1.7.7)
     method_source (0.8.2)
     mime-types (1.25.1)
     mina (0.3.0)
@@ -381,6 +385,7 @@ DEPENDENCIES
   jquery-ui-rails
   less-rails
   mailcatcher
+  mailchimp-api
   mina
   mongoid (= 4.0.0.beta1)
   mongoid-paperclip
