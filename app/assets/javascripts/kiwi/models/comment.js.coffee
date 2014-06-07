@@ -46,18 +46,14 @@ class FK.Models.Comment extends Backbone.Model
     @set 'have_i_upvoted', not @userHasUpvoted()
 
   upvoteToggle: (e) =>
-    if @userHasUpvoted()
-      @set 'upvotes', @upvotes() - 1
-    else
+    if @userHasUpvoted() # has upvoted
+      @set 'upvotes', @upvotes()
+    else # has not upvoted
       @set 'upvotes', @upvotes() + 1
     @toggleUserUpvoted() 
-    @save
-      success: (data) ->
-        console.log data
-        # TODO: access data attributes
-        if @$('.up-vote i.fa-arrow-down').hasClass('downvote-marked')
-           @$('.up-vote i.fa-arrow-down').removeClass('downvote-marked')
-        @$('.up-vote i.fa-arrow-up').addClass('upvote-marked')
+    @save {},
+      success: (resp) ->
+        console.log resp
 
   # downvoting
   downvoteToggle: (e) =>
@@ -65,12 +61,10 @@ class FK.Models.Comment extends Backbone.Model
       @set 'upvotes', @upvotes() + 1
     else
       @set 'upvotes', @upvotes() - 1
-    
+    @toggleUserUpvoted()
     @save
-      success: ->
-        if @$('.up-vote i.fa-arrow-up').hasClass('upvote-marked')
-          @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
-        @$('.up-vote i.fa-arrow-down').addClass('downvote-marked')
+      success: (resp) ->
+        console.log resp
 
   deleteComment: () =>
     $.ajax

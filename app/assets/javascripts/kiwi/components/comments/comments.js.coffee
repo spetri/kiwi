@@ -159,11 +159,23 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     upvote: =>
       @model.upvoteToggle()
 
+    addUpvote: =>
+      if @$('.up-vote i.fa-arrow-down').hasClass('downvote-marked')
+         @$('.up-vote i.fa-arrow-down').removeClass('downvote-marked')
+      if (@model.get('have_i_upvoted') is true )       
+        @$('.up-vote i.fa-arrow-up').addClass('upvote-marked')
+
     downvote: =>
       @model.downvoteToggle()
+      if @$('.up-vote i.fa-arrow-up').hasClass('upvote-marked')
+        @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
+      @$('.up-vote i.fa-arrow-down').addClass('downvote-marked')
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
+
+    onRender: =>
+      @addUpvote()
 
     modelEvents:
       'change': 'render'

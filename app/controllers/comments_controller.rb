@@ -60,7 +60,7 @@ class CommentsController < ApplicationController
         @comment.remove_upvote(current_user.username)
       end
     end
-
+    
     respond_to do |format|
       if @comment.save
         format.json { render action: 'show', status: :ok, location: @comment }
@@ -68,6 +68,8 @@ class CommentsController < ApplicationController
         format.json { render json: comment.errors, status: :unprocessable_entity }
       end
     end
+
+  end
 
   def destroy
     @comment = Comment.find(params[:id])
@@ -86,6 +88,8 @@ class CommentsController < ApplicationController
     def comment_params
         params.permit(:message,
                       :event_id,
+                      :upvotes,
+                      :comment,
                       :parent_id,
                       :have_i_upvoted
         ).merge(authored_by: current_user)
