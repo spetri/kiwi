@@ -128,10 +128,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     className: 'comment'
 
     getTemplate: () =>
-      if @model.get('status') is 'deleted'
-        FK.Template('comment_deleted')
-      else
-        FK.Template('comment_single')
+      return FK.Template('comment_deleted') if @model.get('status') is 'deleted'
+      return FK.Template('comment_muted') if @model.get('status') is 'muted'
+      return FK.Template('comment_single')
 
     templateHelpers: () =>
       return {
@@ -144,11 +143,11 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'repliesRegion': '.nested-comments:first > .replies-region'
 
     events:
-      'click .delete': 'deletePrep'
+      'click .mute-delete': 'deletePrep'
 
     triggers:
       'click .reply': 'click:reply'
-      'click .delete.btn': 'click:delete'
+      'click .mute-delete.btn': 'click:delete'
 
     deletePrep: (e) =>
       e.stopPropagation()
@@ -157,8 +156,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       _.delay(@deleteReset, 5000)
 
     deleteReset: () =>
-      @$('.delete:first').removeClass('btn btn-danger btn-xs')
-      @$('.delete:first').text('Delete')
+      @$('.mute-delete:first').removeClass('btn btn-danger btn-xs')
+      @$('.mute-delete:first').text(@muteDeleteText())
 
     initialize: =>
       @collection = @model.replies
@@ -168,12 +167,20 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     modelEvents:
       'change:deleter': 'render'
+      'change:muter': 'render'
+
+    muteDeleteText: () =>
+      if @username is @model.get('username')
+        'Delete'
+      else
+        'Mute'
 
     onShow: () =>
       if not @username
         @$('.reply').tooltip(
           title: 'Login to reply.'
         )
+      @$('.mute-delete:first').text(@muteDeleteText())
 
     setCurrentUser: (username) =>
       @username = username

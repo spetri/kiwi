@@ -38,6 +38,7 @@ class User
   validates :email, uniqueness: true
 
   after_create do |user|
+    return if Rails.env == "test"
     HipChatNotification.new_user(user)
     if CONFIG['mailchimp_api'].present?
       mc = Mailchimp::API.new(CONFIG['mailchimp_api'])
