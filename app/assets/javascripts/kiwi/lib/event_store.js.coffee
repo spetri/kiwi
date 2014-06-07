@@ -100,7 +100,9 @@ class FK.EventStoreConfig extends Backbone.Model
       return false
 
   setSubkast: (subkast) =>
-    @set 'subkasts', [ subkast ]
+    subkasts = [ subkast ]
+    subkasts = _.keys(FK.Data.subkastOptions) if subkast is 'ALL'
+    @set 'subkasts', subkasts
 
   setCountry: (country) =>
     @set 'country', country
