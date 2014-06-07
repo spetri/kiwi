@@ -37,6 +37,7 @@ FK.Data.urlToSubkast = {
   'musicarts': 'MA'
   'gaming': 'GM'
   'other': 'OTH'
+  '': 'ALL'
 }
 
 
@@ -57,10 +58,10 @@ FK.App.addInitializer (prefetch) ->
   FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
   FK.Data.EventStore = new FK.EventStore
-      events: prefetch.events,
-      howManyStartingBlocks: 10,
-      vent: FK.App.vent
-      country: FK.CurrentUser.get('country')
+    events: prefetch.events,
+    howManyStartingBlocks: 10,
+    vent: FK.App.vent
+    country: FK.CurrentUser.get('country')
 
   FK.Data.EventStore.fetchStartupEvents()
 
@@ -93,7 +94,7 @@ FK.Controllers.MainController = {
     subkastCode = FK.Data.urlToSubkast[subkast]
     if subkastCode
       FK.App.vent.trigger('container:all')
-      FK.App.vent.trigger('filter:subkast', subkastCode)
+      FK.App.request('eventStore').filterBySubkasts(subkastCode)
 }
 
 FK.App.reqres.setHandler 'events', () ->
@@ -102,8 +103,14 @@ FK.App.reqres.setHandler 'events', () ->
 FK.App.reqres.setHandler 'eventStore', () ->
   FK.Data.EventStore
 
+FK.App.reqres.setHandler 'eventConfig', () ->
+  FK.Data.EventStore.configModel()
+
 FK.App.reqres.setHandler 'currentUser', () ->
   FK.CurrentUser
+
+FK.App.reqres.setHandler 'currentSubkast', () ->
+  Fk.Data.EventStore.getSingleSubkast()
 
 FK.App.reqres.setHandler 'subkastOptionsAsArray', () ->
   _.map(FK.Data.subkastOptions, (val, key) -> { value: key, option: val })

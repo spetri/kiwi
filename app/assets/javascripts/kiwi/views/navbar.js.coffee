@@ -4,6 +4,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @listenTo App, 'start', @show
     @currentUser = App.request 'currentUser'
 
+    @config = App.request 'eventConfig'
+
     @navbarViewModel = new Navbar.NavbarViewModel
        username: @currentUser.get('username')
 
@@ -11,7 +13,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @listenTo App.vent, 'container:all', @showSubkastView
     @listenTo App.vent, 'container:show container:new', @hideSubkastView
-    @listenTo App.vent, 'filter:subkast', @showSubkast
+    @listenTo @config, 'change:subkasts', @showSubkast
 
     @navbarView = new Navbar.NavbarView
       username: @currentUser.get('username')
@@ -33,8 +35,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @layout.navbarSubkastRegion.close()
     @layout.shrink()
 
-  @showSubkast = (subkast) =>
-    @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[subkast]
+  @showSubkast = (model) =>
+    @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
 
   @close = () ->
     @view.close()

@@ -5,12 +5,12 @@ class FK.EventStore extends Marionette.Controller
     @blocks = new FK.Collections.EventBlockList()
     @topRanked = new FK.Collections.TopRankedEventList()
 
-    @howManyDaysInBlocks = 3
-    @country = 'US'
-    @subkasts = _.keys(FK.Data.subkastOptions)
+    @config = new FK.EventStoreConfig
 
-    @country = options.country if options.country
-    @subkasts = options.subkasts if options.subkasts
+    @config.set('country', options.country) if options.country
+    @config.set('subkasts', options.subkasts) if options.subkasts
+
+    @howManyDaysInBlocks = 3
 
     @vent = options.vent
 
@@ -18,57 +18,90 @@ class FK.EventStore extends Marionette.Controller
     @listenTo @events, 'add', @addEventToBlock
     @listenTo @blocks, 'change:event_limit', @loadNextEventsForBlock
 
-    @listenTo @vent, 'filter:country', @filterByCountry
-    @listenTo @vent, 'filter:subkasts', @filterBySubkasts
+    @listenTo @config, 'change:country', @refresh
+    @listenTo @config, 'change:subkasts', @refresh
 
     @events.add options.events
 
   fetchStartupEvents: () =>
-    @events.fetchStartupEvents(@country, @subkasts, 10, 5, 12)
+    @events.fetchStartupEvents(@country(), @subkasts(), 10, 5, 12)
 
   loadNextEvents: (howManyMoreEvents) =>
     date = @blocks.last().relativeDate().add('days', 1)
-    @events.fetchMoreEventsAfterDate(date, @country, @subkasts, howManyMoreEvents)
+    @events.fetchMoreEventsAfterDate(date, @country(), @subkasts(), howManyMoreEvents)
 
   loadNextEventsForBlock: (block, newLimit) =>
     howManyMoreEvents = newLimit - block.events.length
     date = block.relativeDate()
-    events = @events.eventsByDate(date, @country, @subkasts, howManyMoreEvents, block.events.models)
+    events = @events.eventsByDate(date, @country(), @subkasts(), howManyMoreEvents, block.events.models)
 
     _.each(events, @addEventToBlock)
 
     @events.fetchMoreEventsByDate(
       date,
-      @country,
-      @subkasts,
+      @country(),
+      @subkasts(),
       howManyMoreEvents,
       block.events.length
     )
 
   resetTopRanked: () =>
-    @topRanked.reset @events.topRanked(10, moment().startOf('day'), moment().add('days', 6).endOf('day'), @country, @subkasts)
+    @topRanked.reset @events.topRanked(10, moment().startOf('day'), moment().add('days', 6).endOf('day'), @country(), @subkasts())
 
   addEventToBlock: (event) =>
-    return if (event.get('country') isnt @country and event.get('location_type') is 'national')
-    return if (not _.contains(@subkasts, event.get('subkast')))
-    @blocks.addEventToBlock moment(event.get('fk_datetime').startOf('day')), @country, @subkasts, event, @events
+    return if (event.get('country') isnt @country() and event.get('location_type') is 'national')
+    return if (not _.contains(@subkasts(), event.get('subkast')))
+    @blocks.addEventToBlock moment(event.get('fk_datetime').startOf('day')), @country(), @subkasts(), event, @events
 
   filterByCountry: (country) =>
-    @country = country
-    @refresh()
+    @config.set('country', country)
 
   filterBySubkasts: (subkasts) =>
-    @subkasts = subkasts
-    @refresh()
-
-  getSingleSubkast: () =>
-    if @subkasts.length == 1
-      return @subkasts[0]
-    else
-      return false
+    subkasts = [ subkasts ] if not _.isArray(subkasts)
+    @config.set('subkasts', subkasts)
 
   refresh: () =>
     @events.reset()
     @topRanked.reset()
     @blocks.reset()
     @fetchStartupEvents()
+
+  configModel: () =>
+    @config
+
+  getSingleSubkast: () =>
+    @config.getSingleSubkast()
+
+  country: () =>
+    @config.get('country')
+
+  subkasts: () =>
+    @config.get('subkasts')
+
+class FK.EventStoreConfig extends Backbone.Model
+  defaults: () =>
+    return {
+      country: 'US'
+      countryName: 'United States'
+      subkasts: _.keys(FK.Data.subkastOptions)
+    }
+
+  initialize: =>
+    @on('change:subkasts', @setSingleSubkast)
+
+  setSingleSubkast: (model, subkasts) =>
+    @set('subkast', subkasts[0])
+
+  getSingleSubkast: () =>
+    return 'ALL' if @get('subkasts').length == _.keys(FK.Data.subkastOptions).length
+    if @get('subkasts').length == 1
+      return @get('subkasts')[0]
+    else
+      return false
+
+  setSubkast: (subkast) =>
+    @set 'subkasts', [ subkast ]
+
+  setCountry: (country) =>
+    @set 'country', country
+    @set 'countryName', App.request('countryName', country)
