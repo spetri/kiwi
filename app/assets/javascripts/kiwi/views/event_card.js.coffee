@@ -7,7 +7,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       templateHelpers: () =>
         return {
           prettyDateTime: () => @model.escape('datetimeAsString')
-          editAllowed: () => @model.editAllowed()
+          myEvent: () => @myEvent()
+          moderator: () => @moderatorMode
           description: () => @model.descriptionParsed()
         }
 
@@ -50,7 +51,22 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
           @$('.event-upvotes').tooltip
             title: 'Login to upvote.'
 
+      refreshDeleteEventText: =>
+        text ="(Delete event)"
+        text = "(Delete my event)" if @myEvent()
+        @$('[data-action="destroy"]').text(text)
+
+      myEvent: =>
+        @username == @model.get('user')
+
+      setUsername: (username) =>
+        @username = username
+
+      setModeratorMode: (mode) =>
+        @moderatorMode = mode
+
       onRender: =>
         @refreshUpvotes(@model)
         @refreshUpvoted(@model)
         @refreshUpvoteAllowed(@model)
+        @refreshDeleteEventText()
