@@ -1,4 +1,8 @@
 class RemindersController < ApplicationController
+  def index
+    @reminders = Reminder.where(user_id: params[:user_id], event_id: params[:event_id])
+  end
+
   def create
     @reminder = Reminder.new(reminder_params)
 

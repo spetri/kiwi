@@ -31,7 +31,10 @@ class FK.Collections.Reminders extends Backbone.Collection
     @remove reminder
 
   fetchForUserAndEvent: (user, event) =>
-
+    @fetch
+      data:
+        user_id: user.user_id()
+        event_id: event.get('_id')
       
   times: () =>
     @pluck 'time_to_event'
