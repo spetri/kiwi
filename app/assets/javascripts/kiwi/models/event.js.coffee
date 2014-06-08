@@ -31,6 +31,7 @@ class FK.Models.Event extends Backbone.GSModel
     @remainder_count = 100
 
     @on 'change:time_format', @update_tv_time
+    @on 'change:_id', @updateCommentsEvent
 
   sync: (action, model, options) =>
     methodMap =
@@ -256,6 +257,9 @@ class FK.Models.Event extends Backbone.GSModel
 
   descriptionParsed: () =>
     marked(@escape('description'))
+
+  updateCommentsEvent: (model, id) =>
+    @comments.setEvent id
 
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>

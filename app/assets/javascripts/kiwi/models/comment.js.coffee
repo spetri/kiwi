@@ -39,6 +39,7 @@ class FK.Collections.Comments extends Backbone.Collection
     @parent_id = options.parent_id
 
   fetchForEvent: () =>
+    return if not @event_id
     @fetch
       url: "api/events/#{@event_id}/comments"
       remove: false
@@ -47,6 +48,10 @@ class FK.Collections.Comments extends Backbone.Collection
 
   setParent: (parent_id) =>
     @parent_id = parent_id
+
+  setEvent: (event_id) =>
+    @event_id = event_id
+    @fetchForEvent()
 
   hasParent: =>
     return !! @parent_id
