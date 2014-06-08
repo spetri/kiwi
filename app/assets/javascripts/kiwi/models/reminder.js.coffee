@@ -10,31 +10,37 @@ class FK.Collections.Reminders extends Backbone.Collection
   model: FK.Models.Reminder
   url: '/reminders'
 
-  addReminders: (user, event, times_to_event) =>
-    reminders = _.map(times_to_event, (time_to_event) =>
-        user_id: user.user_id()
+  addReminders: (user, event, timesToEvent) =>
+    reminders = _.map(timesToEvent, (timeToEvent) =>
+        user_id: user.userId()
         event_id: event.get('_id')
-        time_to_event: time_to_event
+        time_to_event: timeToEvent
         time_offset: moment().zone()
     )
 
     _.each(reminders, (reminder) =>
-      @create reminder
+      @create reminder if not @findReminder(user, event, reminder.time_to_event)
     )
 
-  removeReminder: (user, timeToEvent, event) ->
-    reminder = @findWhere
-      user: user
-      time_to_event: timeToEvent
-      event: event
+  removeReminders: (user, event, timesToEvent) ->
+    _.each(timesToEvent, (timeToEvent) =>
+      reminder = @findReminder(user, event, timeToEvent)
+      reminder.destroy() if reminder
+    )
 
-    @remove reminder
+  findReminder: (user, event, timeToEvent) =>
+    @findWhere
+      user_id: user.userId()
+      time_to_event: timeToEvent
+      event_id: event.get('_id')
 
   fetchForUserAndEvent: (user, event) =>
     @fetch
       data:
-        user_id: user.user_id()
+        user_id: user.userId()
         event_id: event.get('_id')
+      success: () =>
+        @trigger 'fetched'
       
   times: () =>
     @pluck 'time_to_event'
