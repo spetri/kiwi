@@ -5,8 +5,11 @@
 <div class='image-container pull-left'>
   <a href="#events/show/<%=_id%>"><img src='<%=thumbUrl%>' /></a>
 </div>
-<div class='meta-container'>
+<div class='meta-container pull-left'>
   <a class='event-name' href="#events/show/<%=_id%>"><%=name%></a><span class="event-info"> - <%=time()%><% if (location_type == 'international') { %> - Global <% } %> </span><br />
   <span class='event-meta'>Added by <%=user%> - <%=fullSubkastName()%></span>
+</div>
+<div class="pull-right reminder-container">
+  <span class="fa fa-clock-o"></span>
 </div>
 <div class='clearfix'></div>
