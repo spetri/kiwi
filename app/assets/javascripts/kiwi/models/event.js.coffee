@@ -233,16 +233,16 @@ class FK.Models.Event extends Backbone.GSModel
     @unset 'height'
     @unset 'image'
 
-  addReminder: (timeToEvent) ->
+  addReminder: (user, timeToEvent) ->
     reminder = new FK.Models.Reminder
-      user: @get('current_user')
+      user: user
       time_to_event: timeToEvent
       event: @get('_id')
     @reminders.add reminder
     reminder
 
-  removeReminder: (timeToEvent) ->
-    @reminders.removeReminder @get('current_user'), timeToEvent, @get('_id')
+  removeReminder: (user, timeToEvent) ->
+    @reminders.removeReminder user, timeToEvent, @get('_id')
 
   reminderTimes: () ->
     @reminders.times()
