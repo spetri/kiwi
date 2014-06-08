@@ -15,4 +15,20 @@ class HipChatNotification
     message = "New event posted: #{event.name} - <a href='#{uri}'>#{uri}</a>"
     client[CONFIG['hipchat_notifications_room']].send('kiwibot', message, :color => 'yellow')
   end
+
+  def self.new_comment(comment)
+    return unless CONFIG['hipchat_comments_notifications_room'].present?
+    return unless CONFIG['hipchat_api_token'].present?
+    client = HipChat::Client.new(CONFIG['hipchat_api_token'])
+    uri = "http://beta.forekast.com/#events/show/#{comment.event.id}"
+
+    if comment.message.size > 30
+      comment_message = comment.message[0..29] + "..."
+    else
+      comment_message = comment.message
+    end
+
+    message = "New comment posted on event (#{comment.event.name}) - <a href='#{uri}'>#{uri}</a> by #{comment.authored_by.username}: \"#{comment_message}\""
+    client[CONFIG['hipchat_comments_notifications_room']].send('kiwibot', message, :color => 'purple')
+  end
 end
