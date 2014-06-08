@@ -8,9 +8,19 @@ class FK.Models.Reminder extends Backbone.GSModel
 
 class FK.Collections.Reminders extends Backbone.Collection
   model: FK.Models.Reminder
+  url: '/reminders'
 
-  times: () =>
-    @pluck 'time_to_event'
+  addReminders: (user, event, times_to_event) =>
+    reminders = _.map(times_to_event, (time_to_event) =>
+        user_id: user.user_id()
+        event_id: event.get('_id')
+        time_to_event: time_to_event
+        time_offset: moment().zone()
+    )
+
+    _.each(reminders, (reminder) =>
+      @create reminder
+    )
 
   removeReminder: (user, timeToEvent, event) ->
     reminder = @findWhere
@@ -19,4 +29,9 @@ class FK.Collections.Reminders extends Backbone.Collection
       event: event
 
     @remove reminder
+
+  fetchForUserAndEvent: (user, event) =>
+
       
+  times: () =>
+    @pluck 'time_to_event'

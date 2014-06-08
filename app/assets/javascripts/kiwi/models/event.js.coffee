@@ -22,7 +22,6 @@ class FK.Models.Event extends Backbone.GSModel
     '/events'
 
   initialize: () =>
-    @reminders = new FK.Collections.Reminders()
     @comments = new FK.Collections.Comments([], {event_id: @get('_id')})
     #Backbone thing: when collection fetches from another url, models are
     #forced to have that url, undo that here
@@ -232,20 +231,6 @@ class FK.Models.Event extends Backbone.GSModel
     @unset 'width'
     @unset 'height'
     @unset 'image'
-
-  addReminder: (user, timeToEvent) ->
-    reminder = new FK.Models.Reminder
-      user: user
-      time_to_event: timeToEvent
-      event: @get('_id')
-    @reminders.add reminder
-    reminder
-
-  removeReminder: (user, timeToEvent) ->
-    @reminders.removeReminder user, timeToEvent, @get('_id')
-
-  reminderTimes: () ->
-    @reminders.times()
 
   editAllowed: (username) ->
     username = @get('current_user') if not username

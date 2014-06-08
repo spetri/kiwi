@@ -8,13 +8,22 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
   class Reminders.Controller extends Marionette.Controller
     initialize: (options) =>
       @event = options.event
+      @user = App.request('currentUser')
+
+      @reminders = new FK.Collections.Reminders
+
       @region = new Reminders.RemindersRegion
         attachTo: options.attachTo
         el: options.container
 
       @view = new Reminders.RemindersView
 
+      @listenTo @view, 'click:set-reminder', @setReminder
       @listenTo @view, 'click:cancel', @close
+
+    setReminder: () =>
+      times = @view.getTimes()
+      @reminders.addReminders(@user, @event, times)
 
     show: () =>
       @region.show @view
@@ -37,4 +46,10 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
     className: 'event-reminders-super-container'
 
     triggers:
+      'click [data-action="set-reminder"]': 'click:set-reminder'
       'click [data-action="cancel"]': 'click:cancel'
+
+    getTimes: () =>
+      $.map($('input:checked'), (box, i) =>
+        $(box).data('time')
+      )
