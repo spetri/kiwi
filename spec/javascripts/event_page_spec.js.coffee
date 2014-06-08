@@ -1,6 +1,6 @@
 #= require application
 
-describe "Events.EventPage", () ->
+xdescribe "Events.EventPage", () ->
   beforeEach () ->
     @event = new FK.Models.Event
       name: 'Ball Drop'

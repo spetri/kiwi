@@ -230,16 +230,16 @@ describe 'comments', ->
 
     it 'should have a delete button while the user that wrote the comment is currently logged in', ->
       @view.setCurrentUser('mr. x')
-      expect($('.delete', @view.render().el).length).toBe(1)
+      expect($('.mute-delete', @view.render().el).length).toBe(1)
 
     it 'should not have a delete button when the username of the current logged in user is different from the username of the event submitter', ->
       @view.setCurrentUser('mr. y')
-      expect($('.delete', @view.render().el).length).toBe(0)
+      expect($('.mute-delete', @view.render().el).length).toBe(0)
 
     it 'should have the delete button when the current user is a moderator even when the usernames of the current user and the event submitter are different', ->
       @view.setCurrentUser('mr. y')
       @view.setModeratorMode(true)
-      expect($('.delete', @view.render().el).length).toBe(1)
+      expect($('.mute-delete', @view.render().el).length).toBe(1)
 
   describe 'deleting', ->
     describe 'replies of a nested comment', ->
