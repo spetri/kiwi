@@ -6,7 +6,7 @@ describe "Events.EventForm", ->
   afterEach () ->
     FK.App.Events.EventForm.stop()
 
-  describe "when shown with an event model", () ->
+  xdescribe "when shown with an event model", () ->
 
     beforeEach () ->
       @event = new FK.Models.Event
