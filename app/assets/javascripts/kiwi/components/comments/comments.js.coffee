@@ -28,7 +28,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @layout.render()
 
     fetch: () =>
-      @collection.fetchForEvent()
+      @collection.fetchForEvent() if @collection.event_id
 
     registerCommentView: (commentView) =>
       @commentViews[commentView.model.cid] = commentView
