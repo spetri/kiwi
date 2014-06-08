@@ -12,8 +12,15 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
         attachTo: options.attachTo
         el: options.container
 
+      @view = new Reminders.RemindersView
+
+      @listenTo @view, 'click:cancel', @close
+
     show: () =>
-      @region.show new Reminders.RemindersView
+      @region.show @view
+
+    onClose: () =>
+      @region.close()
 
   class Reminders.RemindersRegion extends Marionette.Region
     initialize: (options) =>
@@ -28,3 +35,6 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
   class Reminders.RemindersView extends Marionette.ItemView
     template: FK.Template('event_reminders')
     className: 'event-reminders-super-container'
+
+    triggers:
+      'click [data-action="cancel"]': 'click:cancel'
