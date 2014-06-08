@@ -20,11 +20,15 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
 
       @listenTo @view, 'click:set-reminder', @setReminder
       @listenTo @view, 'click:cancel', @close
-      @listenTo @reminders, 'sync', @show
+      @listenTo @reminders, 'fetched', @show
 
     setReminder: () =>
       times = @view.getTimes()
+
       @reminders.addReminders(@user, @event, times)
+      @reminders.removeReminders(@user, @event, _.difference(['15m', '1h', '4h', '1d' ], times))
+
+      @region.close()
 
     show: () =>
       @region.show @view

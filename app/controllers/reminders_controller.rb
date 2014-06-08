@@ -11,10 +11,10 @@ class RemindersController < ApplicationController
     end
   end
 
-  def self.reminders_for
-
+  def destroy
+    @reminder = Reminder.find(params[:id]).destroy
+    render nothing: true
   end
-
   private
 
   def reminder_params

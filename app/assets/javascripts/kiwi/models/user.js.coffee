@@ -25,5 +25,5 @@ class FK.Models.User extends Backbone.Model
 
       xhr.send(formData)
 
-  user_id: () =>
+  userId: () =>
     @get('_id')["$oid"]
