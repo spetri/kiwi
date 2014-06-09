@@ -2,15 +2,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
   @create = (sidebarConfig) ->
     sidebarConfig = {} if not sidebarConfig
 
-    @user = App.request('currentUser')
-
-    @model = new Sidebar.ViewModel
-      username: @user
-
-    _.defaults(sidebarConfig, @user.pick('country', 'subkasts'))
-
-    # if we have a configuration, load it:
-    @model.set(sidebarConfig)
+    @model = App.request('eventConfig')
 
     @layout =  new Sidebar.Layout
       collection: App.request('eventStore').topRanked,
@@ -57,42 +49,14 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     initialize: =>
       @eventListView = new Sidebar.EventList
         collection: @collection
-      @subkastFilterView = new Sidebar.SubkastFilterView
-        model: @model
 
       @countryFilterView = new Sidebar.CountryFilterView
         model: @model
 
-      # listen to filtering changes in the rest of the application:
-      @listenTo App.vent, 'filter:subkasts', @model.setSubkasts
-      @listenTo App.vent, 'filter:country', @model.setCountry
+      @subkastFilterView = new Sidebar.SubkastFilterView
+        model: @model
 
-      # notify the rest of the application:
-      @listenTo @model, 'change:subkasts', @notifySubkastChange
-      @listenTo @model, 'change:country', @notifyCountryChange
-
-    notifySubkastChange: (model, subkasts) =>
-      App.vent.trigger 'filter:subkasts', subkasts
-
-    notifyCountryChange: (model, country) =>
-      App.vent.trigger 'filter:country', country
-
-    onRender: =>
+    onShow: =>
       @event_list.show @eventListView
       @country_filter.show @countryFilterView
       @subkast_filter.show @subkastFilterView
-
-  class Sidebar.ViewModel extends Backbone.Model
-    defaults:
-      username: null
-      country: 'CA'
-      countryName: 'Canada'
-      subkasts: ['TVM', 'SE', 'ST', 'PRP', 'EDU', 'HA', 'OTH']
-
-    setCountry: (country) =>
-      @set 'country', country
-      @set 'countryName', App.request('countryName', country)
-
-    setSubkasts: (subkasts) =>
-      @set 'subkasts', subkasts
-

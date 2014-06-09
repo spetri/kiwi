@@ -4,8 +4,6 @@ describe "Event Store", ->
     beforeEach ->
       @vent = _.clone(Backbone.Events)
       @store = new FK.EventStore(events: FK.SpecHelpers.Events.UpvotedEvents, howManyStartingBlocks: 3, vent: @vent, country: "CA", subkasts: ["ST", "SE"])
-      @store.country = "CA"
-      @store.subkasts = ['ST', 'SE']
       @store.events.trigger "sync"
       @topRanked = @store.topRanked
 
@@ -44,7 +42,7 @@ describe "Event Store", ->
         @vent = _.clone(Backbone.Events)
         @store = new FK.EventStore vent: @vent, country: "CA"
 
-        @store.filterByCountry("CA")
+        @store.refresh()
 
         @requests[0].respond(200, "Content-Type": "application/json", JSON.stringify(
           FK.SpecHelpers.Events.UpvotedEventsWithCountries

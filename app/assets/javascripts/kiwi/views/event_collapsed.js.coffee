@@ -15,6 +15,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       upvotesIcon: '.upvote-container i'
       upvotesContainer: '.upvote-container'
 
+    triggers:
+      'click .event-name': 'click:open'
+
     events:
       'click .upvote-container': 'toggleUpvote'
       'mouseover .upvote-container': 'showX'

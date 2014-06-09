@@ -169,8 +169,15 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 }
 
 /* NAVBAR */
+.navbar-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
 body .navbar {
-  background-color: #fff;
+  background-color: #626682;
   border-bottom: 1px dotted #F0F0F0;
   margin: 0;
   z-index: 1;
@@ -184,7 +191,7 @@ body .navbar {
     font-size:35px;
     letter-spacing:1px;
     text-transform:uppercase;
-    color:#222;
+    color: #fff;
   }
   ul.nav a {
     cursor: pointer;
@@ -235,6 +242,25 @@ body .navbar {
     }
   }
 }
+
+.navbar-subkast {
+
+  padding: 5px 5px 5px 34px;
+  background-color: #97b6c4;
+
+  .subkast-header {
+    color: #5c829b;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  .subkast {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+  }
+}
+
 .omniauth-sign-up {
   border-left: 1px solid #CCC;
   ul {

@@ -16,16 +16,30 @@ FK.Uri = (uri) ->
   Backbone.history.fragment is uri
 
 FK.Data.subkastOptions = {
-      'TVM': 'TV and Movies'
-      'SE': 'Sports'
-      'ST': 'Science and Technology'
-      'PRP': 'Product Releases / Promotions'
-      'HA': 'Holidays and Anniversaries'
-      'EDU': 'Education'
-      'MA': 'Music / Arts'
-      'GM': 'Gaming'
-      'OTH': 'Other'
-    }
+  'TVM': 'TV and Movies'
+  'SE': 'Sports'
+  'ST': 'Science and Technology'
+  'PRP': 'Product Releases / Promotions'
+  'HA': 'Holidays and Anniversaries'
+  'EDU': 'Education'
+  'MA': 'Music / Arts'
+  'GM': 'Gaming'
+  'OTH': 'Other'
+}
+
+FK.Data.urlToSubkast = {
+  'tvandmovies': 'TVM'
+  'sports': 'SE'
+  'scienceandtechnology': 'ST'
+  'productreleasespromotions': 'PRP'
+  'holidaysandanniversaires': 'HA'
+  'education': 'EDU'
+  'musicarts': 'MA'
+  'gaming': 'GM'
+  'other': 'OTH'
+  '': 'ALL'
+}
+
 
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({
@@ -44,11 +58,10 @@ FK.App.addInitializer (prefetch) ->
   FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
   FK.Data.EventStore = new FK.EventStore
-      events: prefetch.events,
-      howManyStartingBlocks: 10,
-      vent: FK.App.vent
-      country: FK.CurrentUser.get('country')
-      subkasts: FK.CurrentUser.get('subkasts')
+    events: prefetch.events,
+    howManyStartingBlocks: 10,
+    vent: FK.App.vent
+    country: FK.CurrentUser.get('country')
 
   FK.Data.EventStore.fetchStartupEvents()
 
@@ -75,7 +88,13 @@ FK.Controllers.MainController = {
      FK.App.vent.trigger('container:new')
 
   default: ->
-    Backbone.history.navigate('events/all', trigger: true)
+    @events('all')
+
+  subkast: (subkast) =>
+    subkastCode = FK.Data.urlToSubkast[subkast]
+    if subkastCode
+      FK.App.vent.trigger('container:all')
+      FK.App.request('eventStore').filterBySubkasts(subkastCode)
 }
 
 FK.App.reqres.setHandler 'events', () ->
@@ -84,8 +103,14 @@ FK.App.reqres.setHandler 'events', () ->
 FK.App.reqres.setHandler 'eventStore', () ->
   FK.Data.EventStore
 
+FK.App.reqres.setHandler 'eventConfig', () ->
+  FK.Data.EventStore.configModel()
+
 FK.App.reqres.setHandler 'currentUser', () ->
   FK.CurrentUser
+
+FK.App.reqres.setHandler 'currentSubkast', () ->
+  Fk.Data.EventStore.getSingleSubkast()
 
 FK.App.reqres.setHandler 'subkastOptionsAsArray', () ->
   _.map(FK.Data.subkastOptions, (val, key) -> { value: key, option: val })
@@ -114,12 +139,13 @@ FK.App.commands.setHandler 'saveScrollPosition', (position) ->
 class FK.Routers.AppRouter extends Backbone.Marionette.AppRouter
   controller: FK.Controllers.MainController
   appRoutes: {
-    '':               'default'
-    '_=_':            'default' # facebook callback route
     'events/show/:id':    'show'
     'events/edit/:id':  'edit'
     'events/new/': 'new'
     'events/:action': 'events'
+    ':subkast': 'subkast'
+    '': 'default'
+    '_=_': 'default' #facebook callback route
   }
 
 moment.lang('en', {

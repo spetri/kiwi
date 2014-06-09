@@ -32,7 +32,7 @@
         user: <%= user_signed_in? ? raw(current_user.to_json()) : 'null' %>
       });
       if (!Backbone.History.started)
-        Backbone.history.start()
+        Backbone.history.start({pushState: true})
     });
   </script>
   <%= render :partial => 'layouts/uservoice' %>
