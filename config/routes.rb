@@ -4,7 +4,7 @@ Kiwi::Application.routes.draw do
     :omniauth_callbacks => "omniauth_callbacks"
   }
   resources :users
-  resources :events, :only => [:show, :update, :create, :delete]
+  resources :events, :only => [:show, :update, :create, :destroy]
   resources :comments
 
   get '/change_password',        :to => 'passwords#change_password',  :as => 'change_password'
