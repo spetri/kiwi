@@ -15,11 +15,16 @@ class Comment
   has_and_belongs_to_many :upvoted_by, class_name: 'User', inverse_of: nil
   field :message, type: String
   field :upvotes, type: Integer
+  field :downvotes, type: Integer
   field :upvote_names, type: Array
+  field :downvote_names, type: Array
 
   before_save do |comment|
     if not comment.upvote_names.nil?
       comment.upvotes = comment.upvote_names.size
+    end
+    if not comment.downvote_names.nil?
+      comment.downvotes = comment.downvote_names.size
     end
   end
 
@@ -42,6 +47,14 @@ class Comment
     end
   end  
 
+  def have_i_downvoted(username)
+    if self.downvote_names.nil?
+      return false
+    else
+      self.downvote_names.include? username
+    end
+  end
+
   def add_upvote(username)
     if self.upvote_names.nil?
       self.upvote_names = Array.new
@@ -57,6 +70,21 @@ class Comment
     end
   end
 
+  def add_downvote(username)
+    if self.downvote_names.nil?
+      self.downvote_names = Array.new
+    end
+    if ! self.downvote_names.include? username
+      self.downvote_names.push username
+    end
+  end  
+
+  def remove_downvote(username)
+    if not self.downvote_names.nil?
+      self.downvote_names.delete username
+    end
+  end
+  
 #  def upvote(user)
 #    upvoted_by << user
 #    inc :upvotes => 1

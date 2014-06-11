@@ -12,9 +12,9 @@ class CommentsController < ApplicationController
   def create
     params = comment_params.dup
     have_i_upvoted = params.delete :have_i_upvoted
+    have_i_downvoted = params.delete :have_i_downvoted
 
     @comment = Comment.new(params)
-
 
     @comment.message = params[:message]
     @comment.parent_id = params[:parent_id]
@@ -48,19 +48,24 @@ class CommentsController < ApplicationController
   def update
     params = comment_params.dup
     have_i_upvoted = params.delete :have_i_upvoted
+    have_i_downvoted = params.delete :have_i_downvoted
 
     @comment.message = params[:message]
     @comment.parent_id = params[:parent_id]
     @comment.event_id = params[:event_id]
-    
-    if ( user_signed_in? )
-      if ( have_i_upvoted == true )
-        @comment.add_upvote(current_user.username)
-      else
+
+    return if !user_signed_in?  
+
+    if ( have_i_upvoted )
+        @comment.remove_downvote(current_user.username)
+        @comment.add_upvote(current_user.username)      
+    elsif ( have_i_downvoted )
         @comment.remove_upvote(current_user.username)
-      end
+        @comment.add_downvote(current_user.username)
+    else
+      puts "next"
     end
-    
+
     respond_to do |format|
       if @comment.save
         format.json { render action: 'show', status: :ok, location: @comment }
@@ -91,6 +96,7 @@ class CommentsController < ApplicationController
                       :upvotes,
                       :comment,
                       :parent_id,
+                      :have_i_downvoted,
                       :have_i_upvoted
         ).merge(authored_by: current_user)
     end

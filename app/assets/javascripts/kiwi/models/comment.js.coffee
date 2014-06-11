@@ -4,7 +4,9 @@ class FK.Models.Comment extends Backbone.Model
   defaults:
     username: null
     upvotes: 0
+    downvotes: 0
     have_i_upvoted: false
+    have_i_downvoted: false
     message: ''
     event_id: null,
     parent_id: null,
@@ -38,30 +40,37 @@ class FK.Models.Comment extends Backbone.Model
   userHasUpvoted: =>
     @get 'have_i_upvoted'
 
-  initialUpvote: =>
-    @set 'upvotes', 1
-    @set 'have_i_upvoted', true
-
   toggleUserUpvoted: =>
     @set 'have_i_upvoted', not @userHasUpvoted()
 
   upvoteToggle: (e) =>
-    if @userHasUpvoted() # has upvoted
-      @set 'upvotes', @upvotes()
-    else # has not upvoted
-      @set 'upvotes', @upvotes() + 1
-    @toggleUserUpvoted() 
+    if @userHasUpvoted() then return
+    if @userHasDownvoted() # has not upvoted
+      @set 'downvotes', @downvotes() - 1
+      @toggleUserDownvoted()
+    @set 'upvotes', @upvotes() + 1
+    @toggleUserUpvoted()
     @save {},
       success: (resp) ->
         console.log resp
 
   # downvoting
+  downvotes: =>
+    @get 'downvotes'
+
+  userHasDownvoted: =>
+    @get 'have_i_downvoted'
+
+  toggleUserDownvoted: =>
+    @set 'have_i_downvoted', not @userHasDownvoted()
+
   downvoteToggle: (e) =>
-    if !@userHasUpvoted()
-      @set 'upvotes', @upvotes() + 1
-    else
+    if @userHasDownvoted() then return
+    if @userHasUpvoted()
       @set 'upvotes', @upvotes() - 1
-    @toggleUserUpvoted()
+      @toggleUserUpvoted()
+    @set 'downvotes', @downvotes() + 1
+    @toggleUserDownvoted()
     @save
       success: (resp) ->
         console.log resp
