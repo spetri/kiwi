@@ -170,7 +170,6 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     downvote: =>
       @model.downvoteToggle()
 
-
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
 

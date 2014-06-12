@@ -48,9 +48,8 @@ class FK.Models.Comment extends Backbone.Model
     if @userHasDownvoted() # has not upvoted
       @set 'downvotes', @downvotes() - 1
       @toggleUserDownvoted()
-    else
-      @set 'upvotes', @upvotes() + 1
-      @toggleUserUpvoted()
+    @set 'upvotes', @upvotes() + 1
+    @toggleUserUpvoted()
     @save {}
 
   # downvoting
@@ -68,9 +67,8 @@ class FK.Models.Comment extends Backbone.Model
     if @userHasUpvoted()
       @set 'upvotes', @upvotes() - 1
       @toggleUserUpvoted()
-    else
-      @set 'downvotes', @downvotes() + 1
-      @toggleUserDownvoted()
+    @set 'downvotes', @downvotes() + 1
+    @toggleUserDownvoted()
     @save {}
 
   deleteComment: () =>
