@@ -26,13 +26,6 @@ class CommentsController < ApplicationController
     end
 
     @comment.update_attributes(params)
-    if ( user_signed_in? )
-      if ( have_i_upvoted == "true" )
-        @comment.add_upvote(current_user.username)
-      else
-        @comment.remove_upvote(current_user.username)
-      end
-    end
 
     @comment.save
     

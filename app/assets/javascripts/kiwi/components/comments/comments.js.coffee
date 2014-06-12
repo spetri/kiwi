@@ -157,31 +157,25 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @collection = @model.replies
 
     upvote: =>
-      @addUpvote()
       @model.upvoteToggle()
 
-    addUpvote: =>
-      if @$('.up-vote i.fa-arrow-down').hasClass('downvote-marked')
-         @$('.up-vote i.fa-arrow-down').removeClass('downvote-marked')
-      if @model.get('have_i_upvoted')       
+    updateArrow: =>
+      @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
+      @$('.up-vote i.fa-arrow-down').removeClass('downvote-marked')
+      if @model.get('have_i_upvoted') 
         @$('.up-vote i.fa-arrow-up').addClass('upvote-marked')
-
-    downvote: =>
-      @addDownvote()
-      @model.downvoteToggle()
-
-    addDownvote: =>
-      if @$('.up-vote i.fa-arrow-up').hasClass('upvote-marked')
-        @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
       if @model.get('have_i_downvoted')
         @$('.up-vote i.fa-arrow-down').addClass('downvote-marked')
+
+    downvote: =>
+      @model.downvoteToggle()
+
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
 
     onRender: =>
-      @addUpvote()
-      @addDownvote()
+      @updateArrow()
 
     modelEvents:
       'change': 'render'
@@ -195,3 +189,4 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
   class Comments.CommentsListView extends Marionette.CollectionView
     itemView: Comments.CommentSingleView
     className: 'comment-list'
+
