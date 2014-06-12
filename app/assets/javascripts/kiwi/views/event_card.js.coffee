@@ -7,7 +7,8 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       templateHelpers: () =>
         return {
           prettyDateTime: () => @model.escape('datetimeAsString')
-          editAllowed: () => @model.editAllowed()
+          myEvent: () => @myEvent()
+          moderator: () => @moderatorMode
           description: () => @model.descriptionParsed()
         }
 
@@ -20,13 +21,23 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       events:
         'click .event-upvotes': 'upvoteToggle'
-        'click [data-action="destroy"]': 'destroy'
+        'click [data-action="destroy"]': 'prepareDelete'
+        'click .btn[data-action="destroy"]': 'destroy'
 
       upvoteToggle: =>
         @model.upvoteToggle()
 
+      prepareDelete: =>
+        @$('[data-action="destroy"]').addClass('btn btn-xs btn-danger')
+        @$('[data-action="destroy"]').text('Confirm?')
+        _.delay(@resetDelete, 5000)
+
       destroy: =>
         @model.destroy()
+
+      resetDelete: () =>
+        @$('[data-action="destroy"]').removeClass('btn btn-xs btn-danger')
+        @refreshDeleteEventText()
 
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
@@ -50,7 +61,22 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
           @$('.event-upvotes').tooltip
             title: 'Login to upvote.'
 
+      refreshDeleteEventText: =>
+        text ="(Delete event)"
+        text = "(Delete my event)" if @myEvent()
+        @$('[data-action="destroy"]').text(text)
+
+      myEvent: =>
+        @username == @model.get('user')
+
+      setUsername: (username) =>
+        @username = username
+
+      setModeratorMode: (mode) =>
+        @moderatorMode = mode
+
       onRender: =>
         @refreshUpvotes(@model)
         @refreshUpvoted(@model)
         @refreshUpvoteAllowed(@model)
+        @refreshDeleteEventText()

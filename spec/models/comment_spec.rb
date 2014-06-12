@@ -31,8 +31,8 @@ describe Comment do
   end
 
   it "should be hidable" do
-    c = create :hidden_comment
-    c.status.should == "hidden"
+    c = create :muted_comment
+    c.status.should == "muted"
   end
 
   it "should support upvoting comments" do

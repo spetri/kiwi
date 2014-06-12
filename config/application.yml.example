@@ -9,6 +9,7 @@ defaults: &defaults
   hipchat_api_token:
   hipchat_room:
   hipchat_notifications_room:
+  hipchat_comments_notifications_room:
 
 development:
   <<: *defaults

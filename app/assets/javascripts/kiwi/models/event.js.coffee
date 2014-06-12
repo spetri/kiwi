@@ -31,6 +31,7 @@ class FK.Models.Event extends Backbone.GSModel
     @remainder_count = 100
 
     @on 'change:time_format', @update_tv_time
+    @on 'change:_id', @updateCommentsEvent
 
   sync: (action, model, options) =>
     methodMap =
@@ -257,6 +258,9 @@ class FK.Models.Event extends Backbone.GSModel
   descriptionParsed: () =>
     marked(@escape('description'))
 
+  updateCommentsEvent: (model, id) =>
+    @comments.setEvent id
+
 class FK.Models.EventBlock extends Backbone.Model
   defaults: () =>
     return {
@@ -341,7 +345,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
   fetchStartupEvents: (country, subkasts, howManyTopRanked, howManyEventsPerDay, howManyEventsMinimum) =>
     @fetch
-      url: 'api' + @url + 'startupEvents'
+      url: '/api' + @url + 'startupEvents'
       data:
         datetime: moment().startOf('day').add('minutes', moment().zone()).format('YYYY-MM-DD HH:mm:ss')
         zone_offset: moment().zone()
@@ -353,7 +357,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
   fetchMoreEventsByDate: (date, country, subkasts, howManyEvents, skip) =>
     @fetch
-      url: 'api' + @url + 'eventsByDate'
+      url: '/api' + @url + 'eventsByDate'
       remove: false
       data:
         datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')
@@ -365,7 +369,7 @@ class FK.Collections.EventList extends FK.Collections.BaseEventList
 
   fetchMoreEventsAfterDate: (date, country, subkasts, howManyEvents) =>
     @fetch
-      url: 'api' + @url + 'eventsAfterDate'
+      url: '/api' + @url + 'eventsAfterDate'
       remove: false
       data:
         datetime: moment(date).format('YYYY-MM-DD HH:mm:SS')

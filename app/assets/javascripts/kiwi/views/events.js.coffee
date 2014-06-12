@@ -7,6 +7,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @events = App.request('events')
     @eventStore = App.request('eventStore')
     @eventBlocks = App.request('eventStore').blocks
+    @eventConfig = App.request('eventConfig')
 
     # creating the views:
     @view = new EventList.ListLayout()
@@ -23,15 +24,16 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
     @listenTo @events, 'remove reset', @resetPosition
+    @listenTo @eventConfig, 'change:subkast', @setUrl
 
     @view.onClose = () =>
       @stop()
 
     @position = App.request('scrollPosition')
 
-    Backbone.history.navigate('events/all', trigger : false)
-
     App.mainRegion.show @view
+
+    @setUrl()
 
     #TODO this spams on the MAC when scrolling the bottom of the pags
     $(document).scroll (e) =>
@@ -42,6 +44,15 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       percentage = $doc.scrollTop() / ($doc.height() - $window.height())
 
       @fetchMoreBlocks() if percentage > 0.8
+
+  @setUrl = () =>
+    subkast = @eventStore.getSingleSubkast()
+    if subkast
+      url = _.invert(FK.Data.urlToSubkast)[subkast]
+      Backbone.history.navigate(url, trigger: false)
+    else
+      Backbone.history.navigate('/', trigger : false)
+
 
   @savePosition = () =>
     @position = $(document).scrollTop()

@@ -3,7 +3,6 @@ class FK.UserMediator extends Marionette.Controller
     @user = options.user
     @vent = options.vent
 
-    @listenTo @vent, 'filter:subkasts', @saveSubkasts
     @listenTo @vent, 'filter:country', @saveCountry
 
     @getUserLocation() if not FK.CurrentUser.get('country') and FK.CurrentUser.get('logged_in')

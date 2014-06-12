@@ -8,8 +8,8 @@ FactoryGirl.define do
       factory :deleted_comment do
         deleted_by { create(:user) }
       end
-      factory :hidden_comment do
-        hidden_by { create(:user) }
+      factory :muted_comment do
+        muted_by { create(:user) }
       end
     end
   end

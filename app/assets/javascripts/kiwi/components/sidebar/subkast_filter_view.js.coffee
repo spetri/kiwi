@@ -1,29 +1,25 @@
 FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
   class Sidebar.SubkastFilterView extends Marionette.ItemView
-    className: 'filter subkast-filter'
     template: FK.Template('subkast_filter')
+    className: 'subkast-filter filter'
     events:
-      'change input': 'save'
-
-    modelEvents:
-      'change:subkasts': 'refreshChosenSubkast'
+      'change select': 'save'
 
     save: (e) =>
-      subkasts = @$('[type="checkbox"]:checked').map((i, subkast) =>
-        $(subkast).attr('name')
-      ).toArray()
-      @model.setSubkasts subkasts
+      subkast = @$('option:selected').val()
+      @model.setSubkast subkast
+
+    modelEvents:
+      'change:subkast': 'refreshChosenSubkast'
+
+    refreshChosenSubkast: (model) =>
+      @$('select').val model.getSingleSubkast()
 
     renderSubkastOptions: () =>
-      FK.Utils.RenderHelpers.populate_checkboxes_from_array(@,
-        '.checkbox-container',
-        App.request('subkastOptionsAsArray'), 'subkast-option')
-
-    refreshChosenSubkast: (model, subkasts) =>
-      @$("input[type=checkbox]").prop('checked', false)
-      _.each subkasts, (subkast) =>
-        @$("[name=\"#{subkast}\"]").prop('checked', true)
+      _.each(App.request('subkastOptionsAsArray'), (option) =>
+        @$('[name="subkast"]').append('<option value="' + option.value + '">' + option.option + '</option>')
+      )
 
     onRender: =>
       @renderSubkastOptions()
-      @refreshChosenSubkast @model, @model.get('subkasts')
+      @refreshChosenSubkast(@model)

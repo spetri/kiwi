@@ -38,6 +38,8 @@ class User
   validates :email, uniqueness: true
 
   after_create do |user|
+    #TODO: FIXME
+    return if Rails.env == "test"
     HipChatNotification.new_user(user)
     if CONFIG['mailchimp_api'].present?
       mc = Mailchimp::API.new(CONFIG['mailchimp_api'])
@@ -62,6 +64,8 @@ class User
   ## Forekast
   field :country,   :type => String
   field :subkasts,  :type => Array
+
+  field :moderator, :type => Boolean
 
   include Mongoid::Timestamps
 
@@ -112,6 +116,10 @@ class User
 
   def email_required?
     super && provider.blank?
+  end
+
+  def moderator?
+    moderator
   end
 
   def admin?

@@ -71,7 +71,11 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment = Comment.find(params[:id])
-    @comment.deleted_by = current_user
+    if current_user == @comment.authored_by
+      @comment.deleted_by = current_user
+    else
+      @comment.muted_by = current_user
+    end
     @comment.save
     render action: 'show', status: :ok, location: @comment
   end

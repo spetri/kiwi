@@ -5,13 +5,15 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
   @addInitializer (event) ->
     @event = event
     @loadSocialNetworking()
-    @event.set 'current_user', App.request('currentUser').get('username')
     if @event.get('location_type') is 'national'
       @event.set 'country_full_name', App.request('countryName', @event.get('country'))
 
     @view = new EventPage.EventPageLayout
     @eventCardView = new EventPage.EventCard
       model: @event
+
+    @eventCardView.setUsername(App.request('currentUser').get('username'))
+    @eventCardView.setModeratorMode(App.request('currentUser').get('moderator'))
 
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
     @listenTo @eventCardView, 'click:reminders', @toggleShowReminders
@@ -24,7 +26,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     #TODO Find out WHY!?
     @view.onShow = () =>
       @view.eventCardRegion.show @eventCardView
-      @commentsModule = App.Comments.create(event: @event, domLocation: "#event-comments-region", username: App.request('currentUser').get('username'))
+      @commentsModule = App.Comments.create(event: @event, domLocation: "#event-comments-region")
 
     @view.onClose = () =>
       @stop()

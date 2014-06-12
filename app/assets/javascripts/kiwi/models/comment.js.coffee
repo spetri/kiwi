@@ -21,7 +21,6 @@ class FK.Models.Comment extends Backbone.Model
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
     @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
-    @url = Backbone.Model.prototype.url
     @on 'change:_id', @updateRepliesParent
 
   updateRepliesParent: (model, id) =>
@@ -87,22 +86,24 @@ class FK.Collections.Comments extends Backbone.Collection
     @parent_id = options.parent_id
 
   fetchForEvent: () =>
+    return if not @event_id
     @fetch
       url: "api/events/#{@event_id}/comments"
       remove: false
       data:
         skip: 0
 
-  knowsUser: =>
-    return @username and @username.length > 0
-
   setParent: (parent_id) =>
     @parent_id = parent_id
+
+  setEvent: (event_id) =>
+    @event_id = event_id
+    @fetchForEvent()
 
   hasParent: =>
     return !! @parent_id
 
-  comment: (message) =>
-    params = { message: message, event_id: @event_id, username: @username }
+  comment: (message, username) =>
+    params = { message: message, event_id: @event_id, username: username }
     params.parent_id = @parent_id
     @create params
