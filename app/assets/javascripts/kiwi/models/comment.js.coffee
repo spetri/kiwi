@@ -43,11 +43,9 @@ class FK.Models.Comment extends Backbone.Model
     @set 'have_i_upvoted', not @userHasUpvoted()
 
   upvoteToggle: (e) =>
-    if @userHasUpvoted() then return
-    if @userHasDownvoted()
-      @changeDownvote(false)
-    else
-      @changeUpvote(true)
+    return if @userHasUpvoted() 
+    if @userHasDownvoted() then @changeDownvote(false)
+    else @changeUpvote(true)
     @save {}
 
   # downvoting
@@ -61,26 +59,20 @@ class FK.Models.Comment extends Backbone.Model
     @set 'have_i_downvoted', not @userHasDownvoted()
 
   downvoteToggle: (e) =>
-    if @userHasDownvoted() then return
-    if @userHasUpvoted()
-      @changeUpvote(false)
-    else
-      @changeDownvote(true)
+    return if @userHasDownvoted()
+    if @userHasUpvoted() then @changeUpvote(false)
+    else @changeDownvote(true)
     @save {}
 
-  changeDownvote: (bool) =>
-    if bool 
-      @set 'downvotes', @downvotes() + 1
-    else
-      @set 'downvotes', @downvotes() - 1
-    @set 'have_i_downvoted', bool
-
   changeUpvote: (bool) =>
-    if bool
-      @set 'upvotes', @upvotes() + 1
-    else
-      @set 'upvotes', @upvotes() - 1
-    @set 'have_i_upvoted', bool     
+    if bool then @set 'upvotes', @upvotes() + 1
+    else @set 'upvotes', @upvotes() - 1
+    @set 'have_i_upvoted', bool   
+
+  changeDownvote: (bool) =>
+    if bool then @set 'downvotes', @downvotes() + 1
+    else @set 'downvotes', @downvotes() - 1
+    @set 'have_i_downvoted', bool  
 
   deleteComment: () =>
     $.ajax

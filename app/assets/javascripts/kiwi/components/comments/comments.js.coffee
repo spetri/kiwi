@@ -151,6 +151,14 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'click .reply': 'click:reply'
       'click .mute-delete.btn': 'click:delete'
 
+    upvote: (e) =>
+      e.stopPropagation()
+      @model.upvoteToggle()
+
+    downvote: (e) =>
+      e.stopPropagation()
+      @model.downvoteToggle()
+
     deletePrep: (e) =>
       e.stopPropagation()
       $(e.target).addClass('btn btn-danger btn-xs')
@@ -161,42 +169,35 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @$('.mute-delete:first').removeClass('btn btn-danger btn-xs')
       @$('.mute-delete:first').text(@muteDeleteText())
 
+    muteDeleteText: () =>
+      if @username is @model.get('username')
+        'Delete'
+      else
+        'Mute'
+
     initialize: =>
       @collection = @model.replies
 
-    upvote: (e) =>
-      e.stopPropagation()
-      @model.upvoteToggle()
-
-    updateArrow: =>
+    updateVotes: =>
       @$('.up-vote:first i.fa-arrow-up').removeClass('upvote-marked')
       @$('.up-vote:first i.fa-arrow-down').removeClass('downvote-marked')
       if @model.get('have_i_upvoted') 
         @$('.up-vote:first i.fa-arrow-up').addClass('upvote-marked')
       if @model.get('have_i_downvoted')
         @$('.up-vote:first i.fa-arrow-down').addClass('downvote-marked')
-
-    downvote: (e) =>
-      e.stopPropagation()
-      @model.downvoteToggle()
+      @$('.user-comment:first .upvotes').text(@model.get('upvotes'))
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
 
     onRender: =>
-      @updateArrow()
+      @updateVotes()
 
     modelEvents:
       'change:deleter': 'render'
       'change:muter': 'render'
-      'change:have_i_upvoted': 'render'
-      'change:have_i_downvoted': 'render'
-
-    muteDeleteText: () =>
-      if @username is @model.get('username')
-        'Delete'
-      else
-        'Mute'
+      'change:have_i_upvoted': 'updateVotes'
+      'change:have_i_downvoted': 'updateVotes'
 
     onShow: () =>
       if not @username
