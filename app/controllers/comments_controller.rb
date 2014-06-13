@@ -56,7 +56,8 @@ class CommentsController < ApplicationController
         @comment.remove_upvote(current_user.username)
         @comment.add_downvote(current_user.username)
     else
-      puts "next"
+        @comment.remove_downvote(current_user.username)
+        @comment.remove_upvote(current_user.username)
     end
 
     respond_to do |format|

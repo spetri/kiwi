@@ -44,11 +44,10 @@ class FK.Models.Comment extends Backbone.Model
 
   upvoteToggle: (e) =>
     if @userHasUpvoted() then return
-    if @userHasDownvoted() # has not upvoted
-      @set 'downvotes', @downvotes() - 1
-      @toggleUserDownvoted()
-    @set 'upvotes', @upvotes() + 1
-    @toggleUserUpvoted()
+    if @userHasDownvoted()
+      @changeDownvote(false)
+    else
+      @changeUpvote(true)
     @save {}
 
   # downvoting
@@ -64,11 +63,24 @@ class FK.Models.Comment extends Backbone.Model
   downvoteToggle: (e) =>
     if @userHasDownvoted() then return
     if @userHasUpvoted()
-      @set 'upvotes', @upvotes() - 1
-      @toggleUserUpvoted()
-    @set 'downvotes', @downvotes() + 1
-    @toggleUserDownvoted()
+      @changeUpvote(false)
+    else
+      @changeDownvote(true)
     @save {}
+
+  changeDownvote: (bool) =>
+    if bool 
+      @set 'downvotes', @downvotes() + 1
+    else
+      @set 'downvotes', @downvotes() - 1
+    @set 'have_i_downvoted', bool
+
+  changeUpvote: (bool) =>
+    if bool
+      @set 'upvotes', @upvotes() + 1
+    else
+      @set 'upvotes', @upvotes() - 1
+    @set 'have_i_upvoted', bool     
 
   deleteComment: () =>
     $.ajax
@@ -88,7 +100,7 @@ class FK.Collections.Comments extends Backbone.Collection
   fetchForEvent: () =>
     return if not @event_id
     @fetch
-      url: "api/events/#{@event_id}/comments"
+      url: "/api/events/#{@event_id}/comments"
       remove: false
       data:
         skip: 0

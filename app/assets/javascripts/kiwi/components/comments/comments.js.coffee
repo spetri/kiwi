@@ -122,7 +122,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       if (@collection.hasParent())
         @$('textarea').focus()
 
-  #Renders all the comment and all it's replies
+  #Renders all the comment and all its replies
   class Comments.CommentSingleView extends Marionette.Layout
     template: FK.Template('comment_single')
     className: 'comment'
@@ -164,18 +164,20 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     initialize: =>
       @collection = @model.replies
 
-    upvote: =>
+    upvote: (e) =>
+      e.stopPropagation()
       @model.upvoteToggle()
 
     updateArrow: =>
-      @$('.up-vote i.fa-arrow-up').removeClass('upvote-marked')
-      @$('.up-vote i.fa-arrow-down').removeClass('downvote-marked')
+      @$('.up-vote:first i.fa-arrow-up').removeClass('upvote-marked')
+      @$('.up-vote:first i.fa-arrow-down').removeClass('downvote-marked')
       if @model.get('have_i_upvoted') 
-        @$('.up-vote i.fa-arrow-up').addClass('upvote-marked')
+        @$('.up-vote:first i.fa-arrow-up').addClass('upvote-marked')
       if @model.get('have_i_downvoted')
-        @$('.up-vote i.fa-arrow-down').addClass('downvote-marked')
+        @$('.up-vote:first i.fa-arrow-down').addClass('downvote-marked')
 
-    downvote: =>
+    downvote: (e) =>
+      e.stopPropagation()
       @model.downvoteToggle()
 
     appendHtml: (collectionView, itemView) =>
@@ -187,6 +189,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     modelEvents:
       'change:deleter': 'render'
       'change:muter': 'render'
+      'change:have_i_upvoted': 'render'
+      'change:have_i_downvoted': 'render'
 
     muteDeleteText: () =>
       if @username is @model.get('username')
