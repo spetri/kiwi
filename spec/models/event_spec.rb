@@ -99,7 +99,7 @@ describe Event do
           create :event, :split_datetime, :recurring
         end
         it "should be able to get recurring timezone events on its local date" do
-          Event.get_events_by_date(5.week.from_now + 300.minutes, 300, "CA", ["ST"]).size.should == 1
+          Event.get_events_by_date(5.week.from_now, 300, "CA", ["ST"]).size.should == 1
         end
       end
 

@@ -20,6 +20,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     triggers:
       'click .reminder-container .fa': 'click:reminders'
 
+    triggers:
+      'click .event-name': 'click:open'
+
     events:
       'click .upvote-container': 'toggleUpvote'
       'mouseover .upvote-container': 'showX'

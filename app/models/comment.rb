@@ -14,6 +14,10 @@ class Comment
   field :message, type: String
   field :upvotes, type: Integer, default: 0
 
+  after_create do |comment|
+    HipChatNotification.new_comment(comment)
+  end
+
   def status
     return 'deleted' if deleted_by.kind_of? User
     return 'muted' if muted_by.kind_of? User
