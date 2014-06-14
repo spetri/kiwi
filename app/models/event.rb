@@ -66,6 +66,23 @@ class Event
     end
   end
 
+  def get_local_datetime(timezone)
+    return local_date.to_datetime if is_all_day == true
+
+    tz = TZInfo::Timezone.get(timezone)
+
+    if time_format == 'tv_show'
+      tz_east = TZInfo::Timezone.get('America/New_York')
+      return tz_east.local_to_utc(tz.utc_to_local(local_datetime))
+    end
+
+    if time_format == 'recurring'
+      return local_datetime
+    end
+      
+    return tz.utc_to_local(datetime)
+  end
+
   def local_datetime
     Time.parse(local_date.to_s + " " + local_time)
   end

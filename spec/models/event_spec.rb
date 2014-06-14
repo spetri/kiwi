@@ -16,25 +16,46 @@ describe Event do
     Event.all.size.should == 1
   end
 
-  describe 'get datetime' do
-    it 'should be able to get the utc datetime of an all day event' do
-      event = create :event, local_date: Time.local(2014, 1, 24).to_date, is_all_day: true
-      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 5, 0, 0)
+  describe 'datetime getters' do
+    let(:all_day_event) { create :event, local_date: Time.local(2014, 1, 24).to_date, is_all_day: true }
+    let(:relative_time_event) { create :event, datetime: Time.local(2014, 1, 24, 3, 0, 0) }
+    let(:tv_show_event) { create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'tv_show' }
+    let(:recurring_time_event) { create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'recurring' }
+
+    describe 'get utc datetime' do
+      it 'should be able to get the utc datetime of an all day event' do
+        all_day_event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 5, 0, 0)
+      end
+
+      it 'should be able to get the utc datetime of a normal time format event' do
+        relative_time_event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 3, 0, 0)
+      end
+
+      it 'should be able to get the utc datetime of a eastern time tv show event' do
+        tv_show_event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 23, 0, 0)
+      end
+
+      it 'should be able to get the utc datetime of a recurring time zone event' do
+        recurring_time_event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 23, 0, 0)
+      end
     end
 
-    it 'should be able to get the utc datetime of a normal time format event' do
-      event = create :event, datetime: Time.local(2014, 1, 24, 3, 0, 0)
-      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 3, 0, 0)
-    end
+    describe 'get local datetime' do
+      it 'should be able to get the local datetime of an all day event' do
+        all_day_event.get_local_datetime('America/New_York').should == Time.local(2014, 1, 24, 0, 0, 0)
+      end
 
-    it 'should be able to get the utc datetime of a eastern time tv show event' do
-      event = create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'tv_show'
-      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 23, 0, 0)
-    end
+      it 'should be able to get the local datetime of a normal time format event' do
+        relative_time_event.get_local_datetime('America/New_York').should == Time.local(2014, 1, 23, 22, 0, 0)
+      end
 
-    it 'should be able to get the utc datetime of a recurring time zone event' do
-      event = create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'recurring'
-      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 23, 0, 0)
+      it 'should be able to get the local datetime of an eastern time tv show event' do
+        tv_show_event.get_local_datetime("America/Los_Angeles").should == Time.local(2014, 1, 24, 15, 0, 0)
+      end
+
+      it 'should be able to get the local datetime of a recurring time zone event' do
+        recurring_time_event.get_local_datetime('America/New_York').should == Time.local(2014, 1, 24, 18, 0, 0)
+      end
     end
   end
 
