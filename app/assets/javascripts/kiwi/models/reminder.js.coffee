@@ -15,7 +15,7 @@ class FK.Collections.Reminders extends Backbone.Collection
         user_id: user.userId()
         event_id: event.get('_id')
         time_to_event: timeToEvent
-        time_offset: moment().zone()
+        recipient_time_zone: jstz.determine().name()
     )
 
     _.each(reminders, (reminder) =>

@@ -21,12 +21,21 @@ class Reminder
     self.send_at = event_time - 1.day if time_to_event == '1d'
   end
 
+  def reminder_time
+    return "15 minutes" if time_to_event == '15m'
+    return "1 hour" if time_to_event == '1h'
+    return "4 hours" if time_to_event == '4h'
+    return "1 day" if time_to_event == '1d'
+  end
+
   def self.lookup_reminders_to_send
     where(status: 'PENDING', send_at: Time.now.utc)
   end
 
   def self.send_reminders
     logger.info "SEND REMINDERS!"
-    ReminderMailer.welcome.deliver!
+    all.each do |reminder|
+      ReminderMailer.reminder(reminder).deliver
+    end
   end
 end

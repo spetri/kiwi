@@ -19,6 +19,6 @@ class RemindersController < ApplicationController
   private
 
   def reminder_params
-    params.permit(:user_id, :event_id, :time_to_event, :time_offset)
+    params.permit(:user_id, :event_id, :time_to_event, :recipient_time_zone)
   end
 end
