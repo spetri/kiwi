@@ -32,7 +32,7 @@ FK.Data.urlToSubkast = {
   'sports': 'SE'
   'scienceandtechnology': 'ST'
   'productreleasespromotions': 'PRP'
-  'holidaysandanniversaires': 'HA'
+  'holidaysandanniversaries': 'HA'
   'education': 'EDU'
   'musicarts': 'MA'
   'gaming': 'GM'
