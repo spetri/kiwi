@@ -16,6 +16,28 @@ describe Event do
     Event.all.size.should == 1
   end
 
+  describe 'get datetime' do
+    it 'should be able to get the utc datetime of an all day event' do
+      event = create :event, local_date: Time.local(2014, 1, 24).to_date, is_all_day: true
+      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 5, 0, 0)
+    end
+
+    it 'should be able to get the utc datetime of a normal time format event' do
+      event = create :event, datetime: Time.local(2014, 1, 24, 3, 0, 0)
+      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 3, 0, 0)
+    end
+
+    it 'should be able to get the utc datetime of a eastern time tv show event' do
+      event = create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'tv_show'
+      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 23, 0, 0)
+    end
+
+    it 'should be able to get the utc datetime of a recurring time zone event' do
+      event = create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'recurring'
+      event.get_utc_datetime('America/New_York').should == Time.utc(2014, 1, 24, 23, 0, 0)
+    end
+  end
+
   describe "Event fetching" do
     describe "by date" do
       before(:each) do

@@ -50,6 +50,26 @@ class Event
     end
   end
 
+  def get_utc_datetime(timezone)
+    if is_all_day == true or time_format == 'recurring' or time_format == 'tv_show'
+      tz = TZInfo::Timezone.get(timezone)
+
+      return tz.local_to_utc(local_date.to_datetime) if is_all_day
+      return tz.local_to_utc(local_datetime) if time_format == 'recurring'
+
+      if time_format == 'tv_show'
+        tz = TZInfo::Timezone.get('America/New_York')
+        return tz.local_to_utc(local_datetime)
+      end
+    else
+      return datetime
+    end
+  end
+
+  def local_datetime
+    Time.parse(local_date.to_s + " " + local_time)
+  end
+
   def image_from_url(url)
     if url
       self.image = open(url)
