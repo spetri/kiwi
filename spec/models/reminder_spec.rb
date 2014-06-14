@@ -36,4 +36,17 @@ describe Reminder do
       tv_show_reminder.send_at.should == Time.utc(2014, 2, 14, 21, 0, 0)
     end
   end
+
+  describe 'looking up reminders that need to be sent right now' do
+    before(:each) do
+      create :reminder, :fifteen_m_before
+      create_list :reminder, 4, :one_h_before
+      create :reminder, :four_h_before
+      Timecop.freeze(Time.utc(2014, 1, 10, 11, 0, 0))
+    end
+
+    it 'should be able to lookup all reminders that are due now' do
+      Reminder.lookup_reminders_to_send.size.should == 4
+    end
+  end
 end

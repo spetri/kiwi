@@ -21,9 +21,11 @@ class Reminder
     self.send_at = event_time - 1.day if time_to_event == '1d'
   end
 
+  def self.lookup_reminders_to_send
+    where(status: 'PENDING', send_at: Time.now.utc)
+  end
+
   def self.send_reminders
-    #TODO stuff here
-    # test business logic here to see if status = PENDING, and the time is right
     logger.info "SEND REMINDERS!"
     ReminderMailer.welcome.deliver!
   end
