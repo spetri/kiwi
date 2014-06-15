@@ -11,7 +11,6 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @navbarViewModel.set('username', null) if not @currentUser.get('logged_in')
 
-    @listenTo App.vent, 'container:all', @showSubkastView
     @listenTo App.vent, 'container:show container:new', @hideSubkastView
     @listenTo @config, 'change:subkasts', @showSubkast
 
@@ -19,25 +18,22 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       username: @currentUser.get('username')
       model: @navbarViewModel
 
+    @subkastNavView = new Navbar.NavbarSubkastView
+
     @listenTo @navbarView, 'click:home', @goHome
-    @listenTo @navbarView, 'click:subkast', @goToEventList
+    @listenTo @subkastNavView, 'click:subkast', @goToEventList
 
     @layout = new Navbar.NavbarLayout
     @layout.on 'show', =>
       @layout.navbar.show @navbarView
+      @layout.navbarSubkastRegion.show @subkastNavView
+      @showSubkastView()
 
   @show = () ->
     App.navbarRegion.show @layout
 
   @showSubkastView = () =>
-    @subkastNavView = new Navbar.NavbarSubkastView
-    @layout.navbarSubkastRegion.show @subkastNavView
-    @layout.grow()
     @showSubkast(@config)
-
-  @hideSubkastView = () =>
-    @layout.navbarSubkastRegion.close()
-    @layout.shrink()
 
   @showSubkast = (model) =>
     @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
@@ -76,12 +72,6 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       navbar: '#navbar-region'
       navbarSubkastRegion: '#navbar-subkast-region'
     className: 'navbar-container'
-
-    grow: =>
-      @$el.parent().css('height', '90px')
-
-    shrink: =>
-      @$el.parent().css('height', '')
 
   class Navbar.NavbarView extends Marionette.Layout
     className: "navbar navbar-fixed-top"
