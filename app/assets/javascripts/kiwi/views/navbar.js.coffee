@@ -14,13 +14,13 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @listenTo App.vent, 'container:all', @showSubkastView
     @listenTo App.vent, 'container:show container:new', @hideSubkastView
     @listenTo @config, 'change:subkasts', @showSubkast
-    @listenTo @config, 'change:subkasts', @refreshHomeLink
 
     @navbarView = new Navbar.NavbarView
       username: @currentUser.get('username')
       model: @navbarViewModel
 
     @listenTo @navbarView, 'click:home', @goHome
+    @listenTo @navbarView, 'click:subkast', @goToEventList
 
     @layout = new Navbar.NavbarLayout
     @layout.on 'show', =>
@@ -41,13 +41,14 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
   @showSubkast = (model) =>
     @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
-
-  @refreshHomeLink = (model) =>
-    @navbarView.refreshHomeLink _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
+    @subkastNavView.refreshSubkastLink('/' + _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()])
 
   @goHome = () =>
     App.vent.trigger 'container:all'
     App.request('eventStore').filterBySubkasts('ALL')
+
+  @goToEventList = () =>
+    App.vent.trigger 'container:all'
 
   @close = () ->
     @view.close()
@@ -56,8 +57,14 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     className: 'navbar-subkast'
     template: FK.Template('navbar_subkast')
 
+    triggers:
+      'click .subkast-header-link': 'click:subkast'
+
     showSubkast: (subkast) =>
       @$('.subkast').text(subkast)
+
+    refreshSubkastLink: (link) =>
+      @$('.subkast-header-link').attr('href', link)
 
   class Navbar.NavbarViewModel extends Backbone.Model
     defaults:
@@ -100,9 +107,6 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
-
-    refreshHomeLink: (link) =>
-      @$('a').attr('href', '/' + link)
 
     onShow: () =>
       @sidebar = App.Sidebar.create(@sidebarConfig)

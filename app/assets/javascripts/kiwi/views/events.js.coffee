@@ -24,7 +24,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
     @listenTo @events, 'remove reset', @resetPosition
-    @listenTo @eventConfig, 'change:subkast', @setUrl
+    @listenTo @eventConfig, 'change:subkasts', @setUrl
 
     @view.onClose = () =>
       @stop()
