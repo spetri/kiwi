@@ -2,14 +2,12 @@ describe "Reminder", ->
 
   it 'should be able to remove a reminder by event, time and user', ->
     eventId = 'abc123'
-    user = 'grayden'
     @reminders = new FK.Collections.Reminders()
+    event = new FK.Models.Event _id: eventId
+    user = new FK.Models.User username: 'grayden', _id: { "$oid": 'asdf' }
 
-    reminders = _.map ['15m', '1h', '24h'], (time) ->
-      {event: eventId, user: user, time_to_event: time}
+    @reminders.addReminders(user, event, ['15m', '1h', '6h'])
 
-    @reminders.add reminders
-
-    @reminders.removeReminder(user, '15m', eventId)
+    @reminders.removeReminders(user, event, ['15m'])
     expect(@reminders.length).toBe(2)
     expect(@reminders.times()).not.toContain('15m')
