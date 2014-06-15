@@ -20,6 +20,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       username: @currentUser.get('username')
       model: @navbarViewModel
 
+    @listenTo @navbarView, 'click:home', @goHome
+
     @layout = new Navbar.NavbarLayout
     @layout.on 'show', =>
       @layout.navbar.show @navbarView
@@ -42,6 +44,10 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
   @refreshHomeLink = (model) =>
     @navbarView.refreshHomeLink _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
+
+  @goHome = () =>
+    App.vent.trigger 'container:all'
+    App.request('eventStore').filterBySubkasts('ALL')
 
   @close = () ->
     @view.close()
@@ -74,13 +80,11 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     className: "navbar navbar-fixed-top"
     template: FK.Template('navbar')
 
-    events:
-      'click .navbar-brand': 'goHome'
-      'click .add-new': 'goToForm'
+    triggers:
+      'click .navbar-brand': 'click:home'
 
-    goHome: (e) =>
-      e.preventDefault()
-      App.vent.trigger 'container:all'
+    events:
+      'click .add-new': 'goToForm'
 
     goToForm: (e) =>
       e.preventDefault()

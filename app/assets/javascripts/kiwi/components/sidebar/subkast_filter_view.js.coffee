@@ -10,7 +10,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
       @model.setSubkast subkast
 
     modelEvents:
-      'change:subkast': 'refreshChosenSubkast'
+      'change:subkasts': 'refreshChosenSubkast'
 
     refreshChosenSubkast: (model) =>
       @$('select').val model.getSingleSubkast()
