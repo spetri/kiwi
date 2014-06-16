@@ -1,58 +1,87 @@
 require 'spec_helper'
 
 describe Comment do
-  it "should create comments" do
-    c = create :comment
-    c.should be_kind_of Comment
-    c.event.should be_kind_of Event
-    c.status.should == "active"
+  before :each do
+    @comment = build :comment
+  end
+  
+  describe "Creating and Setting Comments" do
+
+    it "should create comments" do
+      @comment.should be_kind_of Comment
+      @comment.event.should be_kind_of Event
+      @comment.status.should == "active"
+    end
+
+    it "should have an author" do
+      @comment.authored_by.should be_kind_of User
+    end
+
+    it "should create trees of comments" do
+      @comment.new_comment(create(:comment))
+      @comment.new_comment(create(:comment))
+      @comment.children.length.should == 2
+    end
+
   end
 
-  it "should have an author" do
-    c = create :comment
-    c.authored_by.should be_kind_of User
+  describe "Setting Comment Statuses" do
+    
+    it "should have a flagged status" do
+      c = create :flagged_comment
+      c.status.should == "flagged"
+    end
+
+    it "should be deletable" do
+      c = create :deleted_comment
+      c.status.should == "deleted"
+    end
+
+    it "should be hidable" do
+      c = create :muted_comment
+      c.status.should == "muted"
+    end
+
   end
 
-  it "should create trees of comments" do
-    root = create :comment
-    root.new_comment(create(:comment))
-    root.new_comment(create(:comment))
-    root.children.length.should == 2
+  describe "Comment Voting" do
+
+    before :each do
+      @user = build :user
+    end
+
+    it "should upvote comment" do
+      @comment.add_upvote(@user)
+      @comment.upvote_names[0].should equal(@user)
+      @comment.remove_upvote(@user)
+      @comment.upvote_names[0].should be_nil
+    end
+
+    it "should downvote comment" do
+      @comment.add_downvote(@user)
+      @comment.downvote_names[0].should equal(@user)
+      @comment.remove_downvote(@user)
+      @comment.downvote_names[0].should be_nil
+    end
+
+    it "was previously upvoted, it should now downvote comment" do
+      @comment.add_upvote(@user)
+      @comment.upvote_names[0].should equal(@user)
+      @comment.remove_upvote(@user)
+      @comment.add_downvote(@user)
+      @comment.upvote_names[0].should be_nil
+      @comment.downvote_names[0].should equal(@user)
+    end
+
+    it "was previously downvoted, it should now upvote comment" do
+      @comment.add_downvote(@user)
+      @comment.downvote_names[0].should equal(@user)
+      @comment.remove_downvote(@user)
+      @comment.add_upvote(@user)
+      @comment.downvote_names[0].should be_nil
+      @comment.upvote_names[0].should equal(@user)
+    end
+    
   end
 
-  it "should have a flagged status" do
-    c = create :flagged_comment
-    c.status.should == "flagged"
-  end
-
-  it "should be deletable" do
-    c = create :deleted_comment
-    c.status.should == "deleted"
-  end
-
-  it "should be hidable" do
-    c = create :muted_comment
-    c.status.should == "muted"
-  end
-
-  it "should support upvoting comments" do
-    c = create :comment
-    boring_comment = create :comment, message: 'boring'
-    good_comment = create :comment, message: 'good'
-    meh_comment = create :comment, message: 'meh'
-    c.new_comment(boring_comment)
-    c.new_comment(create(:comment, message: 'boring2'))
-    c.new_comment(create(:comment, message: 'boring3'))
-    c.new_comment(create(:comment, message: 'boring4'))
-    c.new_comment(good_comment)
-    c.new_comment(meh_comment)
-    c.children.first.message.should == "boring"
-    meh_comment.upvote(create(:user))
-    meh_comment.upvote(create(:user))
-    good_comment.upvote(create(:user))
-    good_comment.upvote(create(:user))
-    good_comment.upvote(create(:user))
-
-    Comment.ordered_by_votes(c.event).first.children.first.message.should == "good"
-  end
 end
