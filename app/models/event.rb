@@ -191,6 +191,10 @@ class Event
     self.order_by([:local_date, :desc])[0].local_date
   end
 
+  def comment_count
+    Comment.where(event_id: id).count
+  end
+
   def root_comments
     self.comments.where(:parent => nil)
   end

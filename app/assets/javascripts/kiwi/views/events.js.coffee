@@ -58,7 +58,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @position = $(document).scrollTop()
 
   @resumePosition = () =>
-    # - 5 because if you come back to a page on exactly the same place, chrome tries to handle 
+    # - 5 because if you come back to a page on exactly the same place, chrome tries to handle
     # bringing back the scroll position, which conflicts with this logic
     $(document).scrollTop(@position - 5) if @position > 0
 

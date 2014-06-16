@@ -16,6 +16,13 @@ describe Event do
     Event.all.size.should == 1
   end
 
+  it 'should get comment count' do
+    c = create :comment
+    create :comment, :event => c.event
+
+    c.event.comment_count.should == 2
+  end
+
   describe "Event fetching" do
     describe "by date" do
       before(:each) do
