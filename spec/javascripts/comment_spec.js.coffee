@@ -132,6 +132,9 @@ describe 'comments', ->
         it 'should have a new node in the comment view list', ->
           expect(_.values(@controller.commentViews).length).toBe(6)
 
+        it 'should update the comment count locally', ->
+          expect(@controller.event.get('comment_count')).toBe(1)
+
         it 'should have the comment box emptied', ->
           expect(@commentBox.commentValue()).toBe('')
 
@@ -164,7 +167,7 @@ describe 'comments', ->
 
         it 'should remove the reply box after reply submit', ->
           expect(@replyTo.$('.reply-box').length).toBe(0)
-    
+
     describe 'making a reply to a reply', ->
       beforeEach ->
         @reply = @controller.collection.first().replies.first()

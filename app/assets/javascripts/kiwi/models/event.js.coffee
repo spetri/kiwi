@@ -4,6 +4,7 @@ class FK.Models.Event extends Backbone.GSModel
     return {
       location_type: 'international'
       country: 'US'
+      comment_count: 0
       name: ''
       user: ''
       description: ''
@@ -29,6 +30,7 @@ class FK.Models.Event extends Backbone.GSModel
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
     @remainder_count = 100
+
 
     @on 'change:time_format', @update_tv_time
     @on 'change:_id', @updateCommentsEvent

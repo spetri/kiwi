@@ -13,6 +13,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @username = App.request('currentUser').get('username')
       @event = options.event
 
+      @on 'comment_count:changed', (comment_delta) =>
+        @event.set('comment_count', @event.get('comment_count') + comment_delta)
+
       @collection = @event.comments
 
       @commentViews = {}
@@ -62,7 +65,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       view.clearInput()
 
     comment: (message, user, list = @collection) =>
-      list.comment(message, user)
+      comment = list.comment(message, user)
+      @.trigger('comment_count:changed', 1)
+      comment
 
     commentViewByModel: (comment) =>
       @commentViews[comment.cid]

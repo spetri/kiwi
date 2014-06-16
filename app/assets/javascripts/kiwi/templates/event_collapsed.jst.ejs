@@ -7,6 +7,6 @@
 </div>
 <div class='meta-container'>
   <a class='event-name' href="events/show/<%=_id%>"><%=name%></a><span class="event-info"> - <%=time()%><% if (location_type == 'international') { %> - Global <% } %> </span><br />
-  <span class='event-meta'>Added by <%=user%> - <%=fullSubkastName()%></span>
+  <span class='event-meta'>Added by <%=user%> - <%=fullSubkastName()%> - <%= commentCountText() %></span>
 </div>
 <div class='clearfix'></div>

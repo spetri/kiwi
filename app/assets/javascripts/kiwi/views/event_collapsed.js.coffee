@@ -7,6 +7,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     templateHelpers: () =>
       return {
+        commentCountText: =>
+          return "#{@model.get('comment_count')} comments" if @model.get('comment_count') isnt 1
+          "#{@model.get('comment_count')} comment"
         fullSubkastName: => @model.fullSubkastName()
         time: => @model.get('timeAsString')
       }
