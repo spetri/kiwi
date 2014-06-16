@@ -261,6 +261,8 @@ describe 'comments', ->
         @reply = @controller.comment('very', 'grayden', @comment.replies)
         reply2 = @controller.comment('lots', 'grayden', @reply.replies)
 
+      xit 'should update comment count after deletion', ->
+        expect(@controller.event.get('comment_count')).toBe(2)
 
       it 'should be able to restore replies to a comment after a comment is deleted', ->
         @comment.set('deleter', 'grayden')

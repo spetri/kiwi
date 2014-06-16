@@ -73,7 +73,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @commentViews[comment.cid]
 
     deleteComment: (args) =>
-      args.model.deleteComment()
+      comment = args.model.deleteComment()
+      @.trigger('comment_count:changed', -1)
+      comment
 
     onClose: () =>
       @layout.close()
