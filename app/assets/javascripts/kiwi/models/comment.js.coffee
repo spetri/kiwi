@@ -41,7 +41,7 @@ class FK.Collections.Comments extends Backbone.Collection
   fetchForEvent: () =>
     return if not @event_id
     @fetch
-      url: "api/events/#{@event_id}/comments"
+      url: "/api/events/#{@event_id}/comments"
       remove: false
       data:
         skip: 0
