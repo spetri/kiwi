@@ -211,6 +211,12 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       padding: 10px;
     }
 
+    /* Override strong bootstrap styles */
+    .dropdown-toggle:hover {
+      border-bottom: none !important;
+      background-color: white !important;
+    }
+
     .navbar-nav .active a.add-new,
     .navbar-nav a.add-new {
       border:1px solid #ccc;
@@ -226,6 +232,16 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       max-height: 500px;
       li {
         padding: 10px 30px;
+      }
+
+      .dropdown-menu {
+        a {
+          background-color: #ebebeb;
+
+          &:hover {
+            background-color: white;
+          }
+        }
       }
     }
   }
