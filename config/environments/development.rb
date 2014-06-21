@@ -30,4 +30,6 @@ Kiwi::Application.configure do
   config.assets.debug = true
 
   Paperclip.options[:command_path] = '/usr/bin/'
+
+  BetterErrors::Middleware.allow_ip! "10.0.2.2"
 end
