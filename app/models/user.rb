@@ -76,6 +76,11 @@ class User
     return my_subkasts.present? ? my_subkasts : []
   end
 
+  def update_subkasts(subkast_codes)
+    self.my_subkasts = subkast_codes
+    self.save
+  end
+
   def login=(login)
     @login = login
   end

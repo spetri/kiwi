@@ -13,7 +13,7 @@ class RegistrationsController < Devise::RegistrationsController
   def update
     @user = User.find(current_user.id)
 
-    if @user.update_without_password(account_update_params)
+    if @user.update_without_password(account_update_params) and @user.update_subkasts(params[:user][:subkast_codes])
       set_flash_message :notice, :updated
       sign_in @user, :bypass => true
       redirect_to after_update_path_for(@user)
