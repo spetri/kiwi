@@ -171,21 +171,43 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 /* NAVBAR */
 
 #navbar-container-region {
-  height: 90px;
 }
 
-.navbar-container {
+.navbar-indom-container {
+  height: 60px;
+}
+
+body .navbar-container {
+
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
-}
-
-body .navbar {
-  background-color: #626682;
-  border-bottom: 1px dotted #F0F0F0;
   margin: 0;
-  z-index: 1;
+  z-index: 2000;
+
+  .forekast-navbar {
+    background-color: #626682;
+  }
+
+  .subkast-navbar {
+    top: 52px;
+    min-height: 42px;
+    padding: 5px 5px 5px 34px;
+    background-color: #97b6c4;
+
+    .subkast-header {
+      color: #5c829b;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .subkast {
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+    }
+  }
 
   a.navbar-brand {
     display: block;
@@ -212,7 +234,6 @@ body .navbar {
   .filter-region {
     position: fixed;
     top: 50px;
-    z-index: 1000;
 
     &.country {
       left: 230px;
@@ -248,24 +269,6 @@ body .navbar {
     &.country-filter {
       width: 215px;
     }
-  }
-}
-
-.navbar-subkast {
-
-  padding: 5px 5px 5px 34px;
-  background-color: #97b6c4;
-
-  .subkast-header {
-    color: #5c829b;
-    font-size: 22px;
-    font-weight: bold;
-  }
-
-  .subkast {
-    color: white;
-    font-size: 22px;
-    font-weight: bold;
   }
 }
 

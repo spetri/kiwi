@@ -11,14 +11,14 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     @navbarViewModel.set('username', null) if not @currentUser.get('logged_in')
 
-    @listenTo App.vent, 'container:show container:new', @hideSubkastView
-    @listenTo @config, 'change:subkasts', @showSubkast
+    @listenTo @config, 'change:subkasts', @hideShowSubkastView
 
     @navbarView = new Navbar.NavbarView
       username: @currentUser.get('username')
       model: @navbarViewModel
 
     @subkastNavView = new Navbar.NavbarSubkastView
+      model: @config
 
     @listenTo @navbarView, 'click:home', @goHome
     @listenTo @subkastNavView, 'click:subkast', @goToEventList
@@ -26,18 +26,10 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @layout = new Navbar.NavbarLayout
     @layout.on 'show', =>
       @layout.navbar.show @navbarView
-      @layout.navbarSubkastRegion.show @subkastNavView
-      @showSubkastView()
+      @hideShowSubkastView(@config)
 
   @show = () ->
     App.navbarRegion.show @layout
-
-  @showSubkastView = () =>
-    @showSubkast(@config)
-
-  @showSubkast = (model) =>
-    @subkastNavView.showSubkast _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
-    @subkastNavView.refreshSubkastLink('/' + _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()])
 
   @goHome = () =>
     App.vent.trigger 'container:all'
@@ -46,35 +38,32 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   @goToEventList = () =>
     App.vent.trigger 'container:all'
 
+  @hideShowSubkastView = (config) =>
+    if config.getSingleSubkast() is 'ALL'
+      @layout.navbarSubkastRegion.close()
+      @layout.shrink()
+    else
+      @layout.navbarSubkastRegion.show @subkastNavView
+      @layout.grow()
+
   @close = () ->
     @view.close()
-
-  class Navbar.NavbarSubkastView extends Marionette.ItemView
-    className: 'navbar-subkast'
-    template: FK.Template('navbar_subkast')
-
-    triggers:
-      'click .subkast-header-link': 'click:subkast'
-
-    showSubkast: (subkast) =>
-      @$('.subkast').text(subkast)
-
-    refreshSubkastLink: (link) =>
-      @$('.subkast-header-link').attr('href', link)
-
-  class Navbar.NavbarViewModel extends Backbone.Model
-    defaults:
-      username: null
 
   class Navbar.NavbarLayout extends Marionette.Layout
     template: FK.Template('navbar_layout')
     regions:
-      navbar: '#navbar-region'
+      navbar: '#navbar-navbar-region'
       navbarSubkastRegion: '#navbar-subkast-region'
-    className: 'navbar-container'
+    className: 'navbar-indom-container'
+
+    grow: () =>
+      @$el.css('height', '105px')
+
+    shrink: () =>
+      @$el.css('height', '')
 
   class Navbar.NavbarView extends Marionette.Layout
-    className: "navbar navbar-fixed-top"
+    className: "navbar navbar-fixed-top forekast-navbar"
     template: FK.Template('navbar')
 
     triggers:
@@ -101,3 +90,23 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     onShow: () =>
       @sidebar = App.Sidebar.create(@sidebarConfig)
       @$("#mobile-sidebar").html(@sidebar.layout.render().el)
+      
+  class Navbar.NavbarSubkastView extends Marionette.ItemView
+    className: 'navbar navbar-fixed-top subkast-navbar'
+    template: FK.Template('navbar_subkast')
+
+    triggers:
+      'click .subkast-header-link': 'click:subkast'
+
+    modelEvents:
+      'change:subkasts': 'refreshSubkast'
+
+    refreshSubkast: (model, subkast) =>
+      link = '/' + _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
+      @$('.subkast-header-link').attr('href', link)
+      subkastText = _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
+      @$('.subkast').text(subkastText)
+
+  class Navbar.NavbarViewModel extends Backbone.Model
+    defaults:
+      username: null
