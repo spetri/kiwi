@@ -198,10 +198,6 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       color: #fff;
     }
 
-    a.subkast-header-link {
-      text-decoration: none;
-    }
-
     ul.nav a {
       cursor: pointer;
       padding:5px 10px;
@@ -263,6 +259,11 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       font-size: 22px;
       font-weight: bold;
     }
+
+    a.subkast-header-link {
+      text-decoration: none;
+    }
+
   }
 
   .filter-region {

@@ -49,6 +49,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       @layout.shrink()
     else
       @layout.navbarSubkastRegion.show @subkastNavView
+      @subkastNavView.refreshSubkast(@config)
+      @subkastNavView.delegateEvents()
       @layout.grow()
 
   @close = () ->
@@ -94,7 +96,6 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
-
       
   class Navbar.NavbarSubkastView extends Marionette.ItemView
     className: 'navbar navbar-fixed-top subkast-navbar'
