@@ -6,6 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def edit
+    @subkasts = Subkast.all.to_a
     render :edit
   end
 

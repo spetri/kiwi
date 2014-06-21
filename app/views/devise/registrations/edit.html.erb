@@ -34,13 +34,31 @@
 
     <hr />
 
-    <div class="col-md-6">
+    <div class="col-md-10 subkast-edit-container">
       <div class="row">
         <label>Edit Your Subkasts</label>
       </div>
-      <div class="row">
-        <div class="col-md-6" id="subkast-list-1"></div>
-        <div class="col-md-6" id="subkast-list-2"></div>
+      <div class="row subkast-list-container">
+        <div class="col-md-6" id="subkast-list-1">
+          <% for subkast in @subkasts[0..(@subkasts.length / 2).ceil] %>
+            <div class="checkbox">
+              <label>
+                <%= check_box_tag "user[subkast_codes][]", subkast.code, resource.get_my_subkasts.include?(subkast.code) %>
+                <%= subkast.name %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-md-6" id="subkast-list-2">
+          <% for subkast in @subkasts[((@subkasts.length / 2).ceil + 1)..(@subkasts.length - 1)] %>
+            <div class="checkbox">
+              <label>
+                <%= check_box_tag "user[subkast_codes][]", subkast.code, resource.get_my_subkasts.include?(subkast.code) %>
+                <%= subkast.name %>
+              </label>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
 
