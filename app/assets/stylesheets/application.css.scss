@@ -181,10 +181,11 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   right: 0;
   left: 0;
   margin: 0;
-  z-index: 2000;
+  z-index: 1000;
 
   .forekast-navbar {
     background-color: #626682;
+    z-index: 1050;
 
     a.navbar-brand {
       display: block;
