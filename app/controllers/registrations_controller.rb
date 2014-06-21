@@ -5,6 +5,10 @@ class RegistrationsController < Devise::RegistrationsController
     respond_with self.resource
   end
 
+  def edit
+    render :edit
+  end
+
   def update
     @user = User.find(current_user.id)
 
