@@ -69,4 +69,16 @@ namespace :db do
       event.save
     }
   end
+
+  task :seed_subkasts => :environment do
+    Subkast.create! name: "TV and Movies", code: "TVM", url: "tvandmovies"
+    Subkast.create! name: "Sports", code: "SE", url: "sports"
+    Subkast.create! name: "Science and Technology", code: "ST", url: "scienceandtechnology"
+    Subkast.create! name: "Production Releases / Promotions", code: "PRP", url: "productreleasespromotions"
+    Subkast.create! name: "Holidays and Anniversaries", code: "HA", url: "holidaysandanniversaries"
+    Subkast.create! name: "Education", code: "EDU", url: "education"
+    Subkast.create! name: "Music / Arts", code: "MA", url: "musicarts"
+    Subkast.create! name: "Gaming", code: "GM", url: "gaming"
+    Subkast.create! name: "Other", code: "OTH", url: "other"
+  end
 end
