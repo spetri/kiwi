@@ -20,6 +20,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @subkastNavView = new Navbar.NavbarSubkastView
       model: @config
 
+    @sidebar = App.Sidebar.create(@sidebarConfig)
+
     @listenTo @navbarView, 'click:home', @goHome
     @listenTo @subkastNavView, 'click:subkast', @goToEventList
 
@@ -27,6 +29,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @layout.on 'show', =>
       @layout.navbar.show @navbarView
       @hideShowSubkastView(@config)
+
+    @navbarView.on 'show', =>
+      @navbarView.mobileSidebarRegion.show @sidebar.layout
 
   @show = () ->
     App.navbarRegion.show @layout
@@ -66,6 +71,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     className: "navbar navbar-fixed-top forekast-navbar"
     template: FK.Template('navbar')
 
+    regions:
+      'mobileSidebarRegion': '#mobile-sidebar'
+
     triggers:
       'click .navbar-brand': 'click:home'
 
@@ -87,9 +95,6 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
 
-    onShow: () =>
-      @sidebar = App.Sidebar.create(@sidebarConfig)
-      @$("#mobile-sidebar").html(@sidebar.layout.render().el)
       
   class Navbar.NavbarSubkastView extends Marionette.ItemView
     className: 'navbar navbar-fixed-top subkast-navbar'
