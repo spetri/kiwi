@@ -1,6 +1,7 @@
 FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
-  @create = (sidebarConfig) ->
-    sidebarConfig = {} if not sidebarConfig
+  @create = (startupData) ->
+
+    @subkasts = startupData.subkasts
 
     @model = App.request('eventConfig')
 

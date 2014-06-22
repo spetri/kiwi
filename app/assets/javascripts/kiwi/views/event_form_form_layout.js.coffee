@@ -85,8 +85,8 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       )
 
     renderSubkastOptions: () =>
-      _.each(App.request('subkastOptionsAsArray'), (option) =>
-        @$('[name="subkast"]').append('<option value="' + option.value + '">' + option.option + '</option>')
+      _.each(EventForm.subkasts.namesAndCodes(), (option) =>
+        @$('[name="subkast"]').append('<option value="' + option.code + '">' + option.name + '</option>')
       )
 
     onRender: =>

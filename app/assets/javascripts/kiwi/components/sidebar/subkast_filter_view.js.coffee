@@ -16,8 +16,8 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
       @$('select').val model.getSingleSubkast()
 
     renderSubkastOptions: () =>
-      _.each(App.request('subkastOptionsAsArray'), (option) =>
-        @$('[name="subkast"]').append('<option value="' + option.value + '">' + option.option + '</option>')
+      _.each(Sidebar.subkasts.namesAndCodes(), (option) =>
+        @$('[name="subkast"]').append('<option value="' + option.code + '">' + option.name + '</option>')
       )
 
     onRender: =>

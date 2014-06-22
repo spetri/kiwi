@@ -2,19 +2,23 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   @startWithParent = false
 
-  @addInitializer () ->
+  @addInitializer (startupData) ->
     # get the dependencies:
-    @events = App.request('events')
-    @eventStore = App.request('eventStore')
-    @eventBlocks = App.request('eventStore').blocks
-    @eventConfig = App.request('eventConfig')
+    @eventStore = startupData.eventStore
+    @events = @eventStore.events
+    @eventBlocks = @eventStore.blocks
+    @eventConfig = @eventStore.config
+      
+    @subkasts = startupData.subkasts
+
+    sidebarOptions = @sidebarStartupData()
 
     # creating the views:
     @view = new EventList.ListLayout()
     @eventBlocksView = new EventList.EventBlocks
       collection: @eventBlocks
 
-    @sidebar = App.Sidebar.create(@sidebarConfig)
+    @sidebar = App.Sidebar.create(sidebarOptions)
 
     # binding the events:
     @view.on 'show', =>
@@ -44,6 +48,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       percentage = $doc.scrollTop() / ($doc.height() - $window.height())
 
       @fetchMoreBlocks() if percentage > 0.8
+
+  @sidebarStartupData = () =>
+    {
+      subkasts: @subkasts
+    }
 
   @setUrl = () =>
     subkast = @eventStore.getSingleSubkast()
@@ -75,10 +84,6 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     $(document).off('scroll')
     @view.close()
     @eventBlocksView.close()
-
-    # keep a copy of the sidebar configuration:
-    # TODO: where do we refactor this to?
-    @sidebarConfig = @sidebar.value()
 
     @sidebar.close()
     @stopListening
