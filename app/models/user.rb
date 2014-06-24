@@ -62,10 +62,11 @@ class User
   # field :authentication_token, :type => String
 
   ## Forekast
-  field :country,   :type => String
-  field :subkasts,  :type => Array
+  field :country,                       :type => String
+  field :subkasts,                      :type => Array
 
-  field :moderator, :type => Boolean
+  field :moderator,                     :type => Boolean
+  field :receive_comment_notifications, :type => Boolean
 
   include Mongoid::Timestamps
 
