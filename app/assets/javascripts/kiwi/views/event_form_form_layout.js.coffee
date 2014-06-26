@@ -23,7 +23,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       if remaining < 20
         input.next('span').css("color", "#8a6d3b")
       else
-        input.next('span').css("color", "black")
+        input.next('span').css("color", "gray")
 
 
     modelEvents:
