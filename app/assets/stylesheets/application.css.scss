@@ -915,15 +915,23 @@ form.event_form {
     display: inline-block;
     float: left;
     margin-right: 8px;
-    margin-top: 11px;
+    margin-top: 6px;
     color: #888888;
 
     i {
       cursor: pointer;
       display: block;
-      height: 10px;
+      height: 20px;
       font-size: 20px;
     }
+  }
+
+  .upvote-marked {
+    color: #009159;
+  }
+
+  .downvote-marked {
+    color: #A61407;
   }
 
   .info {
