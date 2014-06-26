@@ -20,6 +20,8 @@ class Comment
   field :downvote_names, type: Array
 
   before_save do |comment|
+    comment.upvotes = 0
+    comment.downvotes = 0
     if not comment.upvote_names.nil?
       comment.upvotes = comment.upvote_names.size
     end
