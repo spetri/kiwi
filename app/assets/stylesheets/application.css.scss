@@ -188,6 +188,20 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   margin: 0;
   z-index: 1000;
 
+  a.logo { 
+    display: block;
+    position: absolute;
+    left: 18px;
+    width: 327px;
+    height: 52px;
+    background: transparent url(asset-path('forekast_logo.png')) no-repeat;
+    background-size: 52%;
+
+      &:hover {
+      opacity:1;
+      }
+  }
+
   .forekast-navbar {
     background-color: #3e4252;
     z-index: 1050;
@@ -212,6 +226,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       li > .dropdown-toggle {
         background-color: #3e4252;
         color: white;
+        border:1px solid #606880;
 
         &:hover {
           background:#3e4252;
@@ -225,15 +240,15 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
     /* Override strong bootstrap styles */
     .dropdown-toggle:hover {
-      border-bottom: none !important;
+      border-bottom:1px solid #606880;      
     }
 
     .navbar-nav .active a.add-new,
     .navbar-nav a.add-new {
       border:1px solid #606880;
       color: white;
-      background-color: #606880;
-      margin: 10px 0px;
+      background-color: #3e4252;
+      margin: 10px 0 0 200px;
 
       &:hover{
       background:#3e4252;
@@ -749,9 +764,45 @@ form.event_form {
 @media (min-width:992px) { 
   body .navbar { 
     opacity:0.95;
+    
+      a.logo { 
+      display: block;
+      position: absolute;
+      left: 18px;
+      width: 327px;
+      height: 52px;
+      background: transparent url(asset-path('forekast_logo.png')) no-repeat;
+      background-size: 52%;
+
+        &:hover {
+        opacity:1;
+        }
+    }  
   }
 }
 @media (max-width:991px) {
+
+  body .navbar {
+    opacity:0.95;
+
+    a.logo { 
+      display: block;
+      position: absolute;
+      left: 18px;
+      width: 327px;
+      height: 52px;
+      background: transparent url(asset-path('forekast_logo.png')) no-repeat;
+      background-size: 52%;
+
+        &:hover {
+        opacity:1;
+        }
+    }
+
+    .add-new { background-color: olive;}
+
+  }
+
   form.event_form {
     .form-group {
       min-height: 40px;
@@ -1048,10 +1099,24 @@ form.event_form {
   }
   .navbar {
     margin-bottom:20px;
+
     .checkbox-container {
       padding-bottom: 20px;
     }
   }
+  a.logo { 
+  display: block;
+  position: absolute;
+  left: 18px;
+  width: 327px;
+  height: 52px;
+  background: transparent url(asset-path('forekast_logo.png')) no-repeat;
+  background-size: 52%;
+
+    &:hover {
+    opacity:1;
+    }
+}  
   .navbar-collapse.in {
     overflow: visible;
   }
