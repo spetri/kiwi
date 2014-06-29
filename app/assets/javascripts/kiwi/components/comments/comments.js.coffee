@@ -201,9 +201,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'change:have_i_downvoted': 'updateVotes'
 
     onShow: () =>
-      @$('.reply').tooltip(title: 'Login to reply.') unless @username 
-      @$('.fa-arrow-up').tooltip(title: 'Login to upvote.') unless @username
-      @$('.fa-arrow-down').tooltip(title: 'Login to downvote.') unless @username
+      if not @username
+        @$('.reply').tooltip(title: 'Login to reply.')
+        @$('.fa-arrow-up').tooltip(title: 'Login to upvote.') 
+        @$('.fa-arrow-down').tooltip(title: 'Login to downvote.')
       @$('.mute-delete:first').text(@muteDeleteText())
 
     setCurrentUser: (username) =>
