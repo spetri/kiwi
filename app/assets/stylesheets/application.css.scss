@@ -181,21 +181,14 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
 .navbar-container {
 
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  margin: 0;
-  z-index: 1000;
-
   a.logo { 
+    margin: 0px 20px;
     display: block;
-    position: absolute;
     left: 18px;
-    width: 327px;
+    width: 220px;
     height: 52px;
     background: transparent url(asset-path('forekast_logo.png')) no-repeat;
-    background-size: 52%;
+    background-size: 80%;
 
       &:hover {
       opacity:1;
@@ -248,7 +241,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       border:1px solid #606880;
       color: white;
       background-color: #3e4252;
-      margin: 10px 0 0 200px;
+      margin: 10px 0 0 0;
 
       &:hover{
       background:#3e4252;
@@ -1064,6 +1057,12 @@ form.event_form {
     color: #333a3d;
     font-size: 13px;
     float: right;
+
+    a:first-child { color: lightblue; }
+    a:nth-child(2) { color: blue; }
+    a:nth-child(3) { color: gray; }
+    a:nth-child(4) { color: red; }
+
   }
 }
 
@@ -1076,13 +1075,14 @@ form.event_form {
 
   .navbar-container {
     a.logo { 
+    margin: 0px 20px;
     display: block;
     position: absolute;
     left: 18px;
-    width: 327px;
+    width: 220px;
     height: 52px;
     background: transparent url(asset-path('forekast_logo.png')) no-repeat;
-    background-size: 52%;
+    background-size: 80%;
 
     &:hover {
     opacity:1;
