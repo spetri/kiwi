@@ -3,4 +3,5 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     template: FK.Template('subkast_filter')
     itemViewContainer: '.subkast-list'
     itemView: Sidebar.SingleSubkastView
+    itemViewEventPrefix: 'subkast'
     className: 'subkast-filter filter'

@@ -2,21 +2,20 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
   @create = (startupData) ->
 
     @subkasts = startupData.subkasts
-
-    @model = App.request('eventConfig')
+    @config = App.request('eventConfig')
 
     @layout = new Sidebar.Layout
       collection: App.request('eventStore').topRanked,
-      model: @model
+      model: @config
 
     @eventListView = new Sidebar.EventList
       collection: @collection
 
     @countryFilterView = new Sidebar.CountryFilterView
-      model: @model
+      model: @config
 
     @subkastFilterView = new Sidebar.SubkastFilterView
-      model: @model
+      model: @config
       collection: @subkasts
 
     @layout.on 'show', =>
@@ -25,21 +24,19 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
       @layout.subkast_filter.show @subkastFilterView
 
     @instance = new Sidebar.Controller
-      model: @model
       layout: @layout
 
     @listenTo @eventListView, 'itemview:clicked:event', (event) ->
       App.vent.trigger 'container:show', event.model
 
+    @listenTo @subkastFilterView, 'subkast:clicked', (args) ->
+      @config.setSubkast(args.model.get('code'))
+
     return @instance
 
   class Sidebar.Controller extends Marionette.Controller
     initialize: (options) =>
-      @model = options.model
       @layout = options.layout
-
-    value: () =>
-      @.model.toJSON()
 
   class Sidebar.EventName extends Marionette.ItemView
     template: FK.Template('event_name')
