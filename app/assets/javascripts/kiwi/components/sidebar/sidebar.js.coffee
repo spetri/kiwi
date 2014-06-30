@@ -5,7 +5,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
 
   class Sidebar.Controller extends Marionette.Controller
     initialize: (options) =>
-      @subkasts = options.subkasts
+      @subkasts = options.mySubkasts
       @config = options.config
       @topRanked = options.topRanked
 

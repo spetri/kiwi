@@ -9,6 +9,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @eventBlocks = @eventStore.blocks
     @eventConfig = startupData.config
     @subkasts = startupData.subkasts
+    @mySubkasts = startupData.mySubkasts
     @topRanked = startupData.topRanked
 
     sidebarOptions = @sidebarStartupData()
@@ -51,7 +52,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   @sidebarStartupData = () =>
     {
-      subkasts: @subkasts
+      mySubkasts: @mySubkasts
       config: @eventConfig
       topRanked: App.request('eventStore').topRanked
     }

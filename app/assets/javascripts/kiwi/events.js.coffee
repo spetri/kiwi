@@ -12,6 +12,7 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
     {
       eventStore: App.request('eventStore')
       subkasts: App.request('subkasts')
+      mySubkasts: App.request('mySubkasts')
       config: App.request('eventConfig')
       topRanked: App.request('eventStore').topRanked
     }

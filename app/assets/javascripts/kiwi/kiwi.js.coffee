@@ -31,6 +31,7 @@ FK.App.addInitializer (prefetch) ->
 
   FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
   FK.Data.Subkasts = new FK.Collections.SubkastList(prefetch.subkasts)
+  FK.Data.MySubkasts = new FK.Collections.SubkastList(prefetch.mySubkasts)
 
   FK.Data.EventStore = new FK.EventStore
     events: prefetch.events,
@@ -89,6 +90,9 @@ FK.App.reqres.setHandler 'currentSubkast', () ->
 
 FK.App.reqres.setHandler 'subkasts', () ->
   FK.Data.Subkasts
+
+FK.App.reqres.setHandler 'mySubkasts', () ->
+  FK.Data.MySubkasts
 
 FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()
