@@ -1,6 +1,8 @@
 # Force all test cases to use Jan 16 at 2:20 pm as the current date time
 sinon.useFakeTimers(1389891600000, "Date")
 
+# EVENTS
+
 FK.SpecHelpers =
   Events:
     SimpleEvents: [
@@ -77,3 +79,20 @@ FK.SpecHelpers =
       { name: 'event 3', country: 'US', subkast: 'SE', datetime: moment(), location_type: 'national' }
       { name: 'event 4', country: 'CA', subkast: 'SE', datetime: moment(), location_type: 'national' }
     ]
+
+# SUBKASTS
+  Subkasts:
+    SimpleSubkasts: [
+      { name: 'Production Releases / Promotions', code: 'PRP', url: 'productionreleasespromotions' }
+      { name: 'Science and Technology', code: 'ST', url: 'scienceandtechnology' }
+      { name: 'Holidays and Anniversaries', code: 'HA', url: 'holidaysandanniversaries' }
+      { name: 'TV and Movies', code: 'TVM', url: 'tvandmovies' }
+      { name: 'Other', code: 'OTH', url: 'other' }
+    ]
+
+
+
+
+# STARTUP
+
+FK.Data.Subkasts = new FK.Collections.SubkastList(FK.SpecHelpers.Subkasts.SimpleSubkasts)

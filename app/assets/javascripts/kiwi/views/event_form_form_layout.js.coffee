@@ -19,11 +19,11 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     refreshNameCounter: (e) =>
       input = @$el.find('input[name=name]')
       remaining = @model.remainder_count - input.val().length
-      input.next('span').text "#{remaining} of #{@model.remainder_count} characters remaining"
+      input.next('span').text "#{remaining} characters remaining"
       if remaining < 20
         input.next('span').css("color", "#8a6d3b")
       else
-        input.next('span').css("color", "black")
+        input.next('span').css("color", "gray")
 
 
     modelEvents:
@@ -85,8 +85,8 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       )
 
     renderSubkastOptions: () =>
-      _.each(App.request('subkastOptionsAsArray'), (option) =>
-        @$('[name="subkast"]').append('<option value="' + option.value + '">' + option.option + '</option>')
+      _.each(EventForm.subkasts.namesAndCodes(), (option) =>
+        @$('[name="subkast"]').append('<option value="' + option.code + '">' + option.name + '</option>')
       )
 
     onRender: =>

@@ -474,27 +474,48 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   ol {
     padding-left: 22px;
   }
-  
+
   #subkast-filter {
     h5 {
       padding-top: 14px;
     }
+
+    .subkasts-container {
+
+      margin-left: 10px;
+
+      .subkast-list {
+        margin-bottom: 10px;
+
+        a {
+          color: black;
+          text-decoration: underline;
+        }
+      }
+
+      .subkast-edit-link {
+        color: #049ADA;
+        font-weight: 800;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
   }
-  
+
   #country-filter {
     padding-bottom: 20px;
-    
+
     sup {
       font-size:10px;
       color:#428bca;
       cursor: pointer;
     }
-    
+
     .tooltip {
       font-family: Helvetica, Arial, sans-serif !important;
       font-weight:normal !important;
     }
-    
+
   }
   .sidebar-element {
     ul {
@@ -545,7 +566,8 @@ form.event_form {
 
     #name + span {
       margin-left: 10px;
-      font-weight: bold;
+      font-weight: 100;
+      color: gray;
     }
   }
   .event_form_subkast {
@@ -756,8 +778,8 @@ form.event_form {
     }
   }
 }
-@media (min-width:992px) { 
-  body .navbar { 
+@media (min-width:992px) {
+  body .navbar {
     opacity:0.95;
     
   }
@@ -943,15 +965,23 @@ form.event_form {
     display: inline-block;
     float: left;
     margin-right: 8px;
-    margin-top: 11px;
+    margin-top: 6px;
     color: #888888;
 
     i {
       cursor: pointer;
       display: block;
-      height: 10px;
+      height: 20px;
       font-size: 20px;
     }
+  }
+
+  .upvote-marked {
+    color: #009159;
+  }
+
+  .downvote-marked {
+    color: #A61407;
   }
 
   .info {
@@ -1195,5 +1225,23 @@ form.event_form {
   li.facebook a:hover {
     background: darken(#7690BC,5%);
     text-decoration: none;
+  }
+}
+
+/* USER EDIT PAGE */
+
+div.label {
+  font-weight: bold;
+}
+
+.subkast-edit-container {
+
+  .row {
+    margin-left: 0px;
+  }
+
+  div.subkast-list-container {
+    margin-top: 20px;
+    margin-bottom: 70px;
   }
 }
