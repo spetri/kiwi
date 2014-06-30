@@ -115,7 +115,7 @@ a.uservoice {
   bottom: 5px;
   right: 5px;
   width: 80px;
-  height: 80px;
+  height: 110px;
   background: transparent url(asset-path('feedback.png')) no-repeat;
   opacity:0.8;
     &:hover {
@@ -166,6 +166,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 .dropdown-toggle {
   border:none;
   border-radius:0;
+  font-weight: 100;
 
     &:hover {
     background:none !important;
@@ -175,21 +176,28 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
 /* NAVBAR */
 
-.navbar-indom-container {
-  height: 60px;
+.navbar-fixed-top {
+  border-width: 0 0 2px;
 }
 
 .navbar-container {
 
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  margin: 0;
-  z-index: 1000;
+  a.logo { 
+    margin: -2px 20px;
+    display: block;
+    left: 18px;
+    width: 256px;
+    height: 52px;
+    background: transparent url(asset-path('forekast_world_cup_logo.png')) no-repeat;
+    background-size: 80%;
+
+      &:hover {
+      opacity:1;
+      }
+  }
 
   .forekast-navbar {
-    background-color: #626682;
+    background-color: #3e4252;
     z-index: 1050;
 
     a.navbar-brand {
@@ -206,8 +214,19 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
     ul.nav a {
       cursor: pointer;
-      padding:5px 10px;
+      padding:4px 10px;
     }
+
+      li > .dropdown-toggle {
+        background-color: #3e4252;
+        color: white;
+
+        &:hover {
+          border-bottom: 1px solid #3e4252;
+          background:#3e4252;
+          opacity:0.7;
+        }
+      }
 
     .navbar-right li {
       padding: 10px;
@@ -215,18 +234,21 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
     /* Override strong bootstrap styles */
     .dropdown-toggle:hover {
-      border-bottom: none !important;
-      background-color: white !important;
+      border-bottom:1px solid #606880;      
     }
 
     .navbar-nav .active a.add-new,
     .navbar-nav a.add-new {
-      border:1px solid #ccc;
-      color: #369DD6;
-      margin: 10px 0px;
+      border:1px solid #606880;
+      color: white;
+      background-color: #3e4252;
+      margin: 10px 0 0 0;
+      font-weight: 100;
+      background-color: #6e7690;
 
       &:hover{
-      background:#fbfbfb;
+      background:#3e4252;
+      opacity:0.7;
       }
     }
 
@@ -248,8 +270,27 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     }
   }
 
+  .outer {
+    margin-top: 50px;
+
+    div:first-child {background: #d4bda4; float:left; width:9.09%; height:4px;}
+    div:nth-child(2) {background: #9eb8a4; float:left; width:9.09%; height:4px;}
+    div:nth-child(3) {background: #7d9aa2; float:left; width:9.09%; height:4px;}
+    div:nth-child(4) {background: #616981; float:left; width:9.09%; height:4px;}
+    div:nth-child(5) {background: #a898b2; float:left; width:9.09%; height:4px;}
+    div:nth-child(6) {background: #be93ac; float:left; width:9.09%; height:4px;}
+    div:nth-child(7) {background: #a38381; float:left; width:9.09%; height:4px;}
+    div:nth-child(8) {background: #beb1a2; float:left; width:9.09%; height:4px;}
+    div:nth-child(9) {background: #acb9a8; float:left; width:9.09%; height:4px;}
+    div:nth-child(10) {background: #799e88; float:left; width:9.09%; height:4px;}
+    div:nth-child(11) {background: #8293a6; float:left; width:9.09%; height:4px;}
+
+    #clearer {height:1px; overflow:hidden; clear:both; margin-top:-1px;}
+
+  }
+
   .subkast-navbar {
-    top: 52px;
+    top: 54px;
     min-height: 42px;
     padding: 5px 5px 5px 34px;
     background-color: #97b6c4;
@@ -321,7 +362,6 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   margin-right:130px;
   margin-top:10px;
   }
-
 
 #home-page {
   margin-left:26px;
@@ -760,9 +800,28 @@ form.event_form {
 @media (min-width:992px) {
   body .navbar {
     opacity:0.95;
+    
   }
 }
 @media (max-width:991px) {
+
+  body .navbar {
+    opacity:0.95;
+
+  }
+
+  .navbar-container { 
+    .forekast-navbar {
+      li > .dropdown-toggle {
+          border:1px solid #606880;
+
+        &:hover {
+          border-bottom:1px solid #606880;
+        }          
+      }
+    }
+  }
+
   form.event_form {
     .form-group {
       min-height: 40px;
@@ -1046,18 +1105,73 @@ form.event_form {
   }
   display: none;
 }
+
+#footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 35px;
+  background-color: #f5f5f5;
+  opacity: 0.9;
+  border-top: 1px solid lightgray;
+
+  .footer-text {
+    padding: 7px 50px 0 0;
+    color: #333a3d;
+    font-size: 13px;
+    float: right;
+
+    a:first-child { color: lightblue; }
+    a:nth-child(2) { color: blue; }
+    a:nth-child(3) { color: gray; }
+    a:nth-child(4) { color: red; }
+
+  }
+}
+
 @media (max-width: 991px) {
   body .navbar ul.navbar-right {
     li {
       padding: 5px 0;
     }
   }
+
+  .navbar-container {
+    a.logo { 
+    margin: -2px 20px;
+    position: absolute;
+    display: block;
+    left: 18px;
+    width: 256px;
+    height: 52px;
+    background: transparent url(asset-path('forekast_world_cup_logo.png')) no-repeat;
+    background-size: 80%;
+
+    &:hover {
+    opacity:1;
+    }
+  }  
+
+  .forekast-navbar {
+    .navbar-nav .active a.add-new,
+      .navbar-nav a.add-new {
+          border:1px solid #606880;
+          color: white;
+          background-color: #3e4252;
+          margin: 10px 0 0 0px;
+          font-weight: 100;
+          background-color: #6e7690;
+      }
+    }
+  }
   .navbar {
     margin-bottom:20px;
+
     .checkbox-container {
       padding-bottom: 20px;
     }
   }
+
   .navbar-collapse.in {
     overflow: visible;
   }
