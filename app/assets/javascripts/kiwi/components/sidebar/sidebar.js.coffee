@@ -5,15 +5,30 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
 
     @model = App.request('eventConfig')
 
-    @layout =  new Sidebar.Layout
+    @layout = new Sidebar.Layout
       collection: App.request('eventStore').topRanked,
       model: @model
+
+    @eventListView = new Sidebar.EventList
+      collection: @collection
+
+    @countryFilterView = new Sidebar.CountryFilterView
+      model: @model
+
+    @subkastFilterView = new Sidebar.SubkastFilterView
+      model: @model
+      collection: @subkasts
+
+    @layout.on 'show', =>
+      @layout.event_list.show @eventListView
+      @layout.country_filter.show @countryFilterView
+      @layout.subkast_filter.show @subkastFilterView
 
     @instance = new Sidebar.Controller
       model: @model
       layout: @layout
 
-    @listenTo @layout.eventListView, 'itemview:clicked:event', (event) ->
+    @listenTo @eventListView, 'itemview:clicked:event', (event) ->
       App.vent.trigger 'container:show', event.model
 
     return @instance
@@ -46,18 +61,3 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
       event_list: '#sidebar-event-list'
       country_filter: '#country-filter'
       subkast_filter: '#subkast-filter'
-
-    initialize: =>
-      @eventListView = new Sidebar.EventList
-        collection: @collection
-
-      @countryFilterView = new Sidebar.CountryFilterView
-        model: @model
-
-      @subkastFilterView = new Sidebar.SubkastFilterView
-        model: @model
-
-    onShow: =>
-      @event_list.show @eventListView
-      @country_filter.show @countryFilterView
-      @subkast_filter.show @subkastFilterView

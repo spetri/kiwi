@@ -1,5 +1,5 @@
-<h5 class="filter-title">Viewing subkast:</h5>
-<select class="form-control" name="subkast">
-  <option value="ALL">All</option>
-</select>
-<div class="clearfix"></div>
+<h5 class="filter-title">Your subkasts:</h5>
+<div class="subkasts-container">
+  <div class="subkast-list"></div>
+  <a href="/users/edit" class="subkast-edit-link">+ Edit Your Subkasts</a>
+</div>
