@@ -63,12 +63,22 @@ class User
 
   ## Forekast
   field :country,                       :type => String
-  field :subkasts,                      :type => Array
 
   field :moderator,                     :type => Boolean
   field :receive_comment_notifications, :type => Boolean
 
+  field :my_subkasts,                   :type => Array
+
   include Mongoid::Timestamps
+
+  def get_my_subkasts
+    return my_subkasts.present? ? my_subkasts : []
+  end
+
+  def update_subkasts(subkast_codes)
+    self.my_subkasts = subkast_codes
+    self.save
+  end
 
   def login=(login)
     @login = login

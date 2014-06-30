@@ -7,6 +7,15 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
 
   @addFinalizer () ->
     @stopListening()
+
+  @eventsListStartupData = () =>
+    {
+      eventStore: App.request('eventStore')
+      subkasts: App.request('subkasts')
+      mySubkasts: App.request('mySubkasts')
+      config: App.request('eventConfig')
+      topRanked: App.request('eventStore').topRanked
+    }
     
   @startForm = (event) ->
     Events.stop()
@@ -21,4 +30,4 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
   @startList = () ->
     Events.stop()
     Events.start()
-    Events.EventList.start()
+    Events.EventList.start(@eventsListStartupData())
