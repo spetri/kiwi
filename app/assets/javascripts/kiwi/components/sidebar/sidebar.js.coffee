@@ -1,41 +1,42 @@
 FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
   @create = (startupData) ->
-
-    @subkasts = startupData.subkasts
-    @config = startupData.config
-    @topRanked = App.request('eventStore').topRanked
-
-    @layout = new Sidebar.Layout
-
-    @eventListView = new Sidebar.EventList
-      collection: @topRanked
-
-    @countryFilterView = new Sidebar.CountryFilterView
-      model: @config
-
-    @subkastFilterView = new Sidebar.SubkastFilterView
-      model: @config
-      collection: @subkasts
-
-    @layout.on 'show', =>
-      @layout.event_list.show @eventListView
-      @layout.country_filter.show @countryFilterView
-      @layout.subkast_filter.show @subkastFilterView
-
-    @instance = new Sidebar.Controller
-      layout: @layout
-
-    @listenTo @eventListView, 'itemview:clicked:event', (event) ->
-      App.vent.trigger 'container:show', event.model
-
-    @listenTo @subkastFilterView, 'subkast:clicked', (args) ->
-      @config.setSubkast(args.model.get('code'))
-
+    @instance = new Sidebar.Controller(startupData)
     return @instance
 
   class Sidebar.Controller extends Marionette.Controller
     initialize: (options) =>
-      @layout = options.layout
+      @subkasts = options.subkasts
+      @config = options.config
+      @topRanked = App.request('eventStore').topRanked
+
+      @layout = new Sidebar.Layout
+
+      @eventListView = new Sidebar.EventList
+        collection: @topRanked
+
+      @countryFilterView = new Sidebar.CountryFilterView
+        model: @config
+
+      @subkastFilterView = new Sidebar.SubkastFilterView
+        model: @config
+        collection: @subkasts
+
+      @listenTo @eventListView, 'itemview:clicked:event', (args) ->
+        @toEvent(args.model)
+
+      @listenTo @subkastFilterView, 'subkast:clicked', (args) ->
+        @switchSubkast(args.model)
+
+      @layout.on 'show', =>
+        @layout.event_list.show @eventListView
+        @layout.country_filter.show @countryFilterView
+        @layout.subkast_filter.show @subkastFilterView
+
+    toEvent: (event) =>
+      App.vent.trigger 'container:show', event
+
+    switchSubkast: (subkast) =>
+      @config.setSubkast(subkast.get('code'))
 
   class Sidebar.EventName extends Marionette.ItemView
     template: FK.Template('event_name')
