@@ -183,10 +183,10 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 .navbar-container {
 
   a.logo { 
-    margin: 0px 20px;
+    margin: -4px 20px;
     display: block;
     left: 18px;
-    width: 220px;
+    width: 256px;
     height: 52px;
     background: transparent url(asset-path('forekast_logo.png')) no-repeat;
     background-size: 80%;
@@ -214,15 +214,15 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
     ul.nav a {
       cursor: pointer;
-      padding:5px 10px;
+      padding:4px 10px;
     }
 
       li > .dropdown-toggle {
         background-color: #3e4252;
         color: white;
-        border:1px solid #606880;
 
         &:hover {
+          border-bottom: 1px solid #3e4252;
           background:#3e4252;
           opacity:0.7;
         }
@@ -271,7 +271,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 
   .subkast-navbar {
-    top: 52px;
+    top: 51px;
     min-height: 42px;
     padding: 5px 5px 5px 34px;
     background-color: #97b6c4;
@@ -791,6 +791,18 @@ form.event_form {
 
   }
 
+  .navbar-container { 
+    .forekast-navbar {
+      li > .dropdown-toggle {
+          border:1px solid #606880;
+
+        &:hover {
+          border-bottom:1px solid #606880;
+        }          
+      }
+    }
+  }
+
   form.event_form {
     .form-group {
       min-height: 40px;
@@ -1107,11 +1119,11 @@ form.event_form {
 
   .navbar-container {
     a.logo { 
-    margin: 0px 20px;
-    display: block;
+    margin: -4px 20px;
     position: absolute;
+    display: block;
     left: 18px;
-    width: 220px;
+    width: 256px;
     height: 52px;
     background: transparent url(asset-path('forekast_logo.png')) no-repeat;
     background-size: 80%;
