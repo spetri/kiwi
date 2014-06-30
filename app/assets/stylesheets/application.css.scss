@@ -166,6 +166,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 .dropdown-toggle {
   border:none;
   border-radius:0;
+  font-weight: 100;
 
     &:hover {
     background:none !important;
@@ -242,6 +243,8 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       color: white;
       background-color: #3e4252;
       margin: 10px 0 0 0;
+      font-weight: 100;
+      background-color: #6e7690;
 
       &:hover{
       background:#3e4252;
@@ -340,7 +343,6 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   margin-right:130px;
   margin-top:10px;
   }
-
 
 #home-page {
   margin-left:26px;
@@ -1096,6 +1098,8 @@ form.event_form {
           color: white;
           background-color: #3e4252;
           margin: 10px 0 0 0px;
+          font-weight: 100;
+          background-color: #6e7690;
       }
     }
   }
