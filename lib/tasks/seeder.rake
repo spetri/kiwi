@@ -77,7 +77,7 @@ namespace :db do
     Subkast.create! name: "Science", code: "ST", url: "science"
     Subkast.create! name: "Technology", code: "TE", url: "technology"
     Subkast.create! name: "HowAboutWe", code: "HAW", url: "howaboutwe"
-    Subkast.create! name: "ProductionReleases", code: "PRP", url: "productreleases"
+    Subkast.create! name: "ProductReleases", code: "PRP", url: "productreleases"
     Subkast.create! name: "Holidays", code: "HA", url: "holidays"
     Subkast.create! name: "Education", code: "EDU", url: "education"
     Subkast.create! name: "Music", code: "MA", url: "music"
