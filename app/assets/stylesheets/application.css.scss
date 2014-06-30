@@ -183,12 +183,12 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 .navbar-container {
 
   a.logo { 
-    margin: -4px 20px;
+    margin: -2px 20px;
     display: block;
     left: 18px;
     width: 256px;
     height: 52px;
-    background: transparent url(asset-path('forekast_logo.png')) no-repeat;
+    background: transparent url(asset-path('forekast_world_cup_logo.png')) no-repeat;
     background-size: 80%;
 
       &:hover {
@@ -1138,13 +1138,13 @@ form.event_form {
 
   .navbar-container {
     a.logo { 
-    margin: -4px 20px;
+    margin: -2px 20px;
     position: absolute;
     display: block;
     left: 18px;
     width: 256px;
     height: 52px;
-    background: transparent url(asset-path('forekast_logo.png')) no-repeat;
+    background: transparent url(asset-path('forekast_world_cup_logo.png')) no-repeat;
     background-size: 80%;
 
     &:hover {
