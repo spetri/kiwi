@@ -93,7 +93,7 @@ class FK.EventStoreConfig extends Backbone.Model
       return false
 
   setSubkast: (subkast) =>
-    subkast = FK.Data.subkast.codes() if subkast is 'ALL'
+    subkast = FK.Data.Subkasts.codes() if subkast is 'ALL'
     subkast = [ subkast ] if not _.isArray(subkast)
     @set 'subkasts', subkast
 
