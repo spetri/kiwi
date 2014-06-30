@@ -1,4 +1,4 @@
-<h5 class="filter-title">Your subkasts:</h5>
+<h5 class="filter-title">Your Subkasts:</h5>
 <div class="subkasts-container">
   <div class="subkast-list"></div>
   <a href="/users/edit" class="subkast-edit-link">+ Edit Your Subkasts</a>
