@@ -85,4 +85,11 @@ namespace :db do
     Subkast.create! name: "Gaming", code: "GM", url: "gaming"
     Subkast.create! name: "Other", code: "OTH", url: "other"
   end
+
+  task :all_users_to_default => :environment do
+    User.all.each do |user|
+      user.defaults
+      user.save
+    end
+  end
 end
