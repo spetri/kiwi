@@ -72,6 +72,7 @@ namespace :db do
 
   task :seed_subkasts => :environment do
     Subkast.delete_all
+    Subkast.create! name: "TV", code: "TV", url: "tv"
     Subkast.create! name: "Movies", code: "TVM", url: "movies"
     Subkast.create! name: "Sports", code: "SE", url: "sports"
     Subkast.create! name: "Science", code: "ST", url: "science"

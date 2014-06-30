@@ -40,7 +40,7 @@
       </div>
       <div class="row subkast-list-container">
         <div class="col-md-6" id="subkast-list-1">
-          <% for subkast in @subkasts[0..((@subkasts.length / 2).ceil - 1)] %>
+          <% for subkast in @subkasts[0..(@subkasts.length / 2)] %>
             <div class="checkbox">
               <label>
                 <%= check_box_tag "user[subkast_codes][]", subkast.code, resource.get_my_subkasts.include?(subkast.code) %>
@@ -50,7 +50,7 @@
           <% end %>
         </div>
         <div class="col-md-6" id="subkast-list-2">
-          <% for subkast in @subkasts[((@subkasts.length / 2).ceil)..(@subkasts.length - 1)] %>
+          <% for subkast in @subkasts[((@subkasts.length / 2) + 1)..(@subkasts.length - 1)] %>
             <div class="checkbox">
               <label>
                 <%= check_box_tag "user[subkast_codes][]", subkast.code, resource.get_my_subkasts.include?(subkast.code) %>
