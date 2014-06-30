@@ -180,6 +180,10 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   height: 60px;
 }
 
+.navbar-fixed-top {
+  border-width: 0 0 2px;
+}
+
 .navbar-container {
 
   a.logo { 
@@ -270,8 +274,27 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     }
   }
 
+  .outer {
+    margin-top: 50px;
+
+    div:first-child {background: #d4bda4; float:left; width:9.09%; height:4px;}
+    div:nth-child(2) {background: #9eb8a4; float:left; width:9.09%; height:4px;}
+    div:nth-child(3) {background: #7d9aa2; float:left; width:9.09%; height:4px;}
+    div:nth-child(4) {background: #616981; float:left; width:9.09%; height:4px;}
+    div:nth-child(5) {background: #a898b2; float:left; width:9.09%; height:4px;}
+    div:nth-child(6) {background: #be93ac; float:left; width:9.09%; height:4px;}
+    div:nth-child(7) {background: #a38381; float:left; width:9.09%; height:4px;}
+    div:nth-child(8) {background: #beb1a2; float:left; width:9.09%; height:4px;}
+    div:nth-child(9) {background: #acb9a8; float:left; width:9.09%; height:4px;}
+    div:nth-child(10) {background: #799e88; float:left; width:9.09%; height:4px;}
+    div:nth-child(11) {background: #8293a6; float:left; width:9.09%; height:4px;}
+
+    #clearer {height:1px; overflow:hidden; clear:both; margin-top:-1px;}
+
+  }
+
   .subkast-navbar {
-    top: 51px;
+    top: 54px;
     min-height: 42px;
     padding: 5px 5px 5px 34px;
     background-color: #97b6c4;

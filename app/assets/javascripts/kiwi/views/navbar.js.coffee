@@ -19,6 +19,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       username: @currentUser.get('username')
       model: @navbarViewModel
 
+    @navbarSeparator = new Navbar.NavbarSeparatorView
+
     @subkastNavView = new Navbar.NavbarSubkastView
       model: @config
 
@@ -31,6 +33,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     @layout.on 'show', =>
       @layout.navbar.show @navbarView
       @hideShowSubkastView(@config)
+
+    @layout.on 'show', =>
+      @layout.navbarSeparatorView.show @navbarSeparator
 
     @navbarView.on 'show', =>
       @navbarView.mobileSidebarRegion.show @sidebar.layout
@@ -69,6 +74,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     template: FK.Template('navbar_layout')
     regions:
       navbar: '#navbar-navbar-region'
+      navbarSeparatorView: '#navbar-separator-region'
       navbarSubkastRegion: '#navbar-subkast-region'
     className: 'navbar-indom-container'
 
@@ -105,7 +111,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
-      
+
+
+  class Navbar.NavbarSeparatorView extends Marionette.ItemView
+    className: "outer"
+    template: FK.Template('navbar_separator')
+
   class Navbar.NavbarSubkastView extends Marionette.ItemView
     className: 'navbar navbar-fixed-top subkast-navbar'
     template: FK.Template('navbar_subkast')
