@@ -7,7 +7,7 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
     initialize: (options) =>
       @subkasts = options.subkasts
       @config = options.config
-      @topRanked = App.request('eventStore').topRanked
+      @topRanked = options.topRanked
 
       @layout = new Sidebar.Layout
 

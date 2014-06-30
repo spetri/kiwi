@@ -53,16 +53,16 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     {
       subkasts: @subkasts
       config: @eventConfig
-      topRanked: @topRanked
+      topRanked: App.request('eventStore').topRanked
     }
 
   @setUrl = () =>
     subkast = @eventStore.getSingleSubkast()
-    if subkast
-      url = _.invert(FK.Data.urlToSubkast)[subkast]
-      Backbone.history.navigate(url, trigger: false)
-    else
+    if not subkast or subkast is 'ALL'
       Backbone.history.navigate('/', trigger : false)
+    else
+      url = @subkasts.getUrlByCode(subkast)
+      Backbone.history.navigate(url, trigger: false)
 
 
   @savePosition = () =>
