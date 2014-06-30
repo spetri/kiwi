@@ -63,7 +63,6 @@ class User
 
   ## Forekast
   field :country,                       :type => String
-  field :subkasts,                      :type => Array
 
   field :moderator,                     :type => Boolean
   field :receive_comment_notifications, :type => Boolean
