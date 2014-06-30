@@ -2,14 +2,13 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
   @create = (startupData) ->
 
     @subkasts = startupData.subkasts
-    @config = App.request('eventConfig')
+    @config = startupData.config
+    @topRanked = App.request('eventStore').topRanked
 
     @layout = new Sidebar.Layout
-      collection: App.request('eventStore').topRanked,
-      model: @config
 
     @eventListView = new Sidebar.EventList
-      collection: @collection
+      collection: @topRanked
 
     @countryFilterView = new Sidebar.CountryFilterView
       model: @config

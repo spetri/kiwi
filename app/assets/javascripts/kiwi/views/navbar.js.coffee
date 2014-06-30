@@ -38,6 +38,8 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   @buildSubkastConfig = () =>
     {
       subkasts: @subkasts
+      config: @config
+      topRanked: @eventStore.topRanked
     }
 
   @show = () ->

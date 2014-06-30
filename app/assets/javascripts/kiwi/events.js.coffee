@@ -12,6 +12,8 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
     {
       eventStore: App.request('eventStore')
       subkasts: App.request('subkasts')
+      config: App.request('eventConfig')
+      topRanked: App.request('eventStore').topRanked
     }
     
   @startForm = (event) ->

@@ -3,13 +3,13 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @startWithParent = false
 
   @addInitializer (startupData) ->
-    # get the dependencies:
+
     @eventStore = startupData.eventStore
     @events = @eventStore.events
     @eventBlocks = @eventStore.blocks
-    @eventConfig = @eventStore.config
-      
+    @eventConfig = startupData.config
     @subkasts = startupData.subkasts
+    @topRanked = startupData.topRanked
 
     sidebarOptions = @sidebarStartupData()
 
@@ -52,6 +52,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
   @sidebarStartupData = () =>
     {
       subkasts: @subkasts
+      config: @eventConfig
+      topRanked: @topRanked
     }
 
   @setUrl = () =>
