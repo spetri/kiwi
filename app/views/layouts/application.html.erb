@@ -31,7 +31,7 @@
           },
         user: <%= user_signed_in? ? raw(current_user.to_json()) : 'null' %>,
         subkasts: <%= raw Subkast.all.to_json() %>,
-        mySubkasts: <%= raw Subkast.in(code: current_user.my_subkasts).to_json() %>
+        mySubkasts: <%= raw Subkast.by_user(current_user).to_json() %>
       });
       if (!Backbone.History.started)
         Backbone.history.start({pushState: true})
