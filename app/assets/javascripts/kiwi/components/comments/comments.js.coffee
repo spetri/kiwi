@@ -184,11 +184,19 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       return unless @username
       @$('.up-vote:first i.fa-arrow-up').removeClass('upvote-marked')
       @$('.up-vote:first i.fa-arrow-down').removeClass('downvote-marked')
+      @displayVote()
+      @toggleUpvote()
+
+    displayVote: =>
       if @model.get('have_i_upvoted') 
         @$('.up-vote:first i.fa-arrow-up').addClass('upvote-marked')
       if @model.get('have_i_downvoted')
         @$('.up-vote:first i.fa-arrow-down').addClass('downvote-marked')
       @$('.user-comment:first .upvotes').text(@model.get('upvotes'))
+
+    toggleUpvote: =>
+      if @model.get('upvotes') == 1 then @$('.user-comment:first .upvote-toggle').text('upvote')
+      else @$('.user-comment:first .upvote-toggle').text('upvotes')      
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
