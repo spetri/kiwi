@@ -176,6 +176,10 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
 /* NAVBAR */
 
+.navbar-indom-container {
+  height: 60px;
+}
+
 .navbar-fixed-top {
   border-width: 0 0 2px;
 }
@@ -272,6 +276,9 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
   .outer {
     margin-top: 50px;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
 
     div:first-child {background: #d4bda4; float:left; width:9.09%; height:4px;}
     div:nth-child(2) {background: #9eb8a4; float:left; width:9.09%; height:4px;}

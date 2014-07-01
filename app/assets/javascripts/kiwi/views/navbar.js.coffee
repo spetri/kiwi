@@ -79,7 +79,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     className: 'navbar-indom-container'
 
     grow: () =>
-      @$el.css('height', '65px')
+      @$el.css('height', '105px')
 
     shrink: () =>
       @$el.css('height', '')
