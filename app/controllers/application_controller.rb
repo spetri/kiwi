@@ -30,7 +30,8 @@ class ApplicationController < ActionController::Base
       u.permit(:username, :name, :email,
                :provider, :uid, :oauth_token, :oauth_expires_at,
                :password, :password_confirmation,
-               :receive_comment_notifications)
+               :receive_comment_notifications,
+               :subkast_codes)
     end
   end
 end
