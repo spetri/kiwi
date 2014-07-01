@@ -153,10 +153,12 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     upvote: (e) =>
       e.stopPropagation()
+      return unless @username
       @model.upvoteToggle()
 
     downvote: (e) =>
       e.stopPropagation()
+      return unless @username
       @model.downvoteToggle()
 
     deletePrep: (e) =>
@@ -179,6 +181,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @collection = @model.replies
 
     updateVotes: =>
+      return unless @username
       @$('.up-vote:first i.fa-arrow-up').removeClass('upvote-marked')
       @$('.up-vote:first i.fa-arrow-down').removeClass('downvote-marked')
       if @model.get('have_i_upvoted') 
@@ -200,10 +203,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       'change:have_i_downvoted': 'updateVotes'
 
     onShow: () =>
-      if not @username
-        @$('.reply').tooltip(
-          title: 'Login to reply.'
-        )
+      unless @username
+        @$('.reply').tooltip(title: 'Login to reply.')
+        @$('.fa-arrow-up').tooltip(title: 'Login to upvote.') 
+        @$('.fa-arrow-down').tooltip(title: 'Login to downvote.')
       @$('.mute-delete:first').text(@muteDeleteText())
 
     setCurrentUser: (username) =>
