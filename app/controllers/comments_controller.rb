@@ -27,6 +27,19 @@ class CommentsController < ApplicationController
 
     @comment.update_attributes(params)
 
+    return if !user_signed_in?  
+
+    if ( have_i_upvoted )
+        @comment.remove_downvote(current_user.username)
+        @comment.add_upvote(current_user.username)      
+    elsif ( have_i_downvoted )
+        @comment.remove_upvote(current_user.username)
+        @comment.add_downvote(current_user.username)
+    else
+        @comment.remove_downvote(current_user.username)
+        @comment.remove_upvote(current_user.username)
+    end
+
     @comment.save
     
     respond_to do |format|

@@ -91,19 +91,4 @@ class Comment
     end
   end
   
-#  def upvote(user)
-#    upvoted_by << user
-#    inc :upvotes => 1
-#    more_votes = siblings.where({:upvotes => upvotes})
-#    if more_votes.size > 0
-#      move_up
-#    else
-#      move_to_top
-#    end
-#    save!
-#  end
-
-  def self.ordered_by_votes(event)
-    where :event => event
-  end
 end
