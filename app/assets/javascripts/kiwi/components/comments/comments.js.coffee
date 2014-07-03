@@ -195,8 +195,10 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @$('.user-comment:first .upvotes').text(@model.get('upvotes'))
 
     toggleUpvote: =>
-      if @model.get('upvotes') == 1 then @$('.user-comment:first .upvote-toggle').text('upvote')
-      else @$('.user-comment:first .upvote-toggle').text('upvotes')      
+      if @model.get('upvotes') == 1 
+        @$('.user-comment:first .upvote-toggle').text('upvote')
+      else 
+        @$('.user-comment:first .upvote-toggle').text('upvotes')      
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
