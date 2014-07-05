@@ -8,9 +8,12 @@ class Reminder
   belongs_to :user
   belongs_to :event
 
+  STATUS_PENDING = "PENDING"
+  STATUS_DELIVERED = "DELIVERED"
+
   before_create do |reminder|
     reminder.refresh_send_at
-    reminder.status = "PENDING"
+    reminder.status = STATUS_PENDING
   end
 
   def refresh_send_at
@@ -29,18 +32,24 @@ class Reminder
   end
 
   def self.lookup_reminders_to_send
-    where(status: 'PENDING', send_at: Time.now.utc)
+    start_time = Time.now.utc - 30.seconds
+    end_time = Time.now.utc + 30.seconds
+    where(status: STATUS_PENDING, :send_at.gt => start_time, :send_at.lt => end_time)
   end
 
   def self.send_reminders
-    logger.info "SEND REMINDERS!"
     count = 0
-    lookup_reminders_to_send.each do |reminder|
-      ReminderMailer.reminder_email(reminder).deliver
-      reminder.status = 'DELIVERED'
-      reminder.save
+
+    reminders_to_send = lookup_reminders_to_send
+
+    logger.info "SEND REMINDERS! (#{reminders_to_send.count})"
+
+    reminders_to_send.each do |reminder|
+      ReminderMailer.reminder(reminder).deliver!
+      reminder.update_attributes(status: STATUS_DELIVERED)
       count = count + 1
     end
+
     ::NewRelic::Agent.record_metric('Custom/Reminders/emails_sent', count)
   end
 end
