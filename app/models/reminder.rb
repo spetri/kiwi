@@ -34,10 +34,13 @@ class Reminder
 
   def self.send_reminders
     logger.info "SEND REMINDERS!"
+    count = 0
     lookup_reminders_to_send.each do |reminder|
       ReminderMailer.reminder_email(reminder).deliver
       reminder.status = 'DELIVERED'
       reminder.save
+      count = count + 1
     end
+    ::NewRelic::Agent.record_metric('Custom/Reminders/emails_sent', count)
   end
 end
