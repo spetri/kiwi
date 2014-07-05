@@ -82,7 +82,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     App.vent.trigger 'container:show', event.model
 
   @showReminders = (blockView, eventView, args) =>
-    @remindersComponent = FK.App.Reminders.create({event: args.model, attachTo: eventView.ui.remindersIcon, container: eventView.ui.remindersContainer, relativeTo: $(eventView.ui.remindersContainer).closest('#event-blocks-region') })
+    @remindersComponent = FK.App.Reminders.create({event: args.model, container: eventView.ui.remindersContainer })
 
   @fetchMoreBlocks = () =>
     @eventStore.loadNextEvents(10)

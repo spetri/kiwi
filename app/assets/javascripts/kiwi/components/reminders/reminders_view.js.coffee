@@ -15,9 +15,7 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
       @reminders = new FK.Collections.Reminders
       @reminders.fetchForUserAndEvent(@user, @event)
 
-      @region = new Reminders.RemindersRegion
-        attachTo: options.attachTo
-        relativeTo: options.relativeTo
+      @region = new Marionette.Region
         el: options.container
 
       @view = new Reminders.RemindersView
@@ -40,26 +38,6 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
 
     onClose: () =>
       @region.close()
-
-  class Reminders.RemindersRegion extends Marionette.Region
-    initialize: (options) =>
-      @attachTo = options.attachTo
-      @relativeTo = options.relativeTo
-
-    onShow: (view) =>
-      attachToHeight = $(@attachTo).outerHeight()
-      attachToOffset = $(@attachTo).offset()
-      relativeToOffset = $(@relativeTo).offset()
-      @el.css('position', 'absolute')
-      @el.css('z-index', 2000)
-      @el.css('left', attachToOffset.left + 'px')
-      @el.css('top', (attachToOffset.top - relativeToOffset.top + attachToHeight) + 'px')
-
-    onClose: () =>
-      @el.css('position', '')
-      @el.css('z-index', 0)
-      @el.css('left', '')
-      @el.css('top', '')
 
   class Reminders.RemindersView extends Marionette.ItemView
     template: FK.Template('event_reminders')
