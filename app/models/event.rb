@@ -192,6 +192,6 @@ class Event
   end
 
   def root_comments
-    self.comments.where(:parent => nil).sort_by{|comment| -comment.upvotes}
+    self.comments.where(:parent => nil)
   end
 end

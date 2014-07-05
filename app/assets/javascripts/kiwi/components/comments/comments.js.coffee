@@ -180,6 +180,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     initialize: =>
       @collection = @model.replies
 
+
     updateVotes: =>
       return unless @username
       @$('.up-vote:first i.fa-arrow-up').removeClass('upvote-marked')
@@ -229,3 +230,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     itemView: Comments.CommentSingleView
     className: 'comment-list'
 
+    appendHtml: (collectionView, itemView, index) =>
+      return collectionView.$el.prepend(itemView.el) if index is 0
+      atIndex = collectionView.$el.children().eq(index)
+      return atIndex.before(itemView.el) if atIndex.length
+      return collectionView.$el.append(itemView.el)

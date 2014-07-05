@@ -84,6 +84,10 @@ class FK.Models.Comment extends Backbone.Model
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
   url: "/comments/"
+  comparator: (event1, event2) =>
+    return -1 if event1.upvotes() > event2.upvotes()
+    return 0 if event1.upvotes() == event2.upvotes()
+    return 1 if event1.upvotes() < event2.upvotes()
 
   initialize: (models, options) =>
     @event_id = options.event_id
