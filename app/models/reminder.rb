@@ -35,7 +35,7 @@ class Reminder
   def self.send_reminders
     logger.info "SEND REMINDERS!"
     lookup_reminders_to_send.each do |reminder|
-      ReminderMailer.reminder(reminder).deliver
+      ReminderMailer.reminder_email(reminder).deliver
       reminder.status = 'DELIVERED'
       reminder.save
     end

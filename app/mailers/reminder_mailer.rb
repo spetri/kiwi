@@ -7,7 +7,7 @@ class ReminderMailer < ActionMailer::Base
     mail(to: @user.email, subject: 'Welcome to My Awesome Site')
   end
 
- def reminder(reminder)
+ def reminder_email(reminder)
    @reminder = reminder
    @event = reminder.event
    @user = reminder.user 

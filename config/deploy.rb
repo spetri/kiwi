@@ -142,6 +142,12 @@ task :move_to_local_date => :environment do
   queue "cd #{deploy_to}/current ; bundle exec rake db:move_date_to_local_date RAILS_ENV=production"
 end
 
+desc 'Populate crontab of this server with recurring tasks'
+task :update_cron => :environemnt do
+  notify("#{ENV['host'} - updating crontab ", "blue")
+  queue "cd #{deploy_to}/current; bundle exec whenever --update-crontab kiwi --set 'environment=production&path=#{deploy_to}/#{current_path}"
+end
+
 desc 'Prime db for production'
 task :prime_db => :environment do
   notify("#{ENV['host']} - priming database! ", 'green')
