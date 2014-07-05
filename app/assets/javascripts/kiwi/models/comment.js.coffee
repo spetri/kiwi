@@ -1,8 +1,12 @@
 class FK.Models.Comment extends Backbone.Model
-  idAttribute: '_id'
+  idAttribute: "_id"
+
   defaults:
     username: null
     upvotes: 0
+    downvotes: 0
+    have_i_upvoted: false
+    have_i_downvoted: false
     message: ''
     event_id: null,
     parent_id: null,
@@ -12,8 +16,11 @@ class FK.Models.Comment extends Backbone.Model
     '/comments'
 
   initialize: (attrs) =>
-    @replies = new FK.Collections.Comments(@get('replies'), { event_id: @get('event_id'), parent_id: @get('_id') })
+    #Backbone thing: when collection fetches from another url, models are
+    #forced to have that url, undo that here
+    #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
+    @replies = new FK.Collections.Comments(@get('replies'), {event_id: @get('event_id'), parent_id: @get('_id') })
     @on 'change:_id', @updateRepliesParent
 
   updateRepliesParent: (model, id) =>
@@ -21,6 +28,51 @@ class FK.Models.Comment extends Backbone.Model
 
   isReply: () =>
     !! @get('parent_id')
+
+  setUsername: (username) =>
+    @replies.username = username
+
+  # upvoting
+  upvotes: =>
+    @get 'upvotes'
+
+  userHasUpvoted: =>
+    @get 'have_i_upvoted'
+
+  toggleUserUpvoted: =>
+    @set 'have_i_upvoted', not @userHasUpvoted()
+
+  upvoteToggle: (e) =>
+    return if @userHasUpvoted() 
+    if @userHasDownvoted() then @changeDownvote(false)
+    else @changeUpvote(true)
+    @save {}
+
+  # downvoting
+  downvotes: =>
+    @get 'downvotes'
+
+  userHasDownvoted: =>
+    @get 'have_i_downvoted'
+
+  toggleUserDownvoted: =>
+    @set 'have_i_downvoted', not @userHasDownvoted()
+
+  downvoteToggle: (e) =>
+    return if @userHasDownvoted()
+    if @userHasUpvoted() then @changeUpvote(false)
+    else @changeDownvote(true)
+    @save {}
+
+  changeUpvote: (bool) =>
+    if bool then @set 'upvotes', @upvotes() + 1
+    else @set 'upvotes', @upvotes() - 1
+    @set 'have_i_upvoted', bool   
+
+  changeDownvote: (bool) =>
+    if bool then @set 'downvotes', @downvotes() + 1
+    else @set 'downvotes', @downvotes() - 1
+    @set 'have_i_downvoted', bool  
 
   deleteComment: () =>
     $.ajax
@@ -31,8 +83,7 @@ class FK.Models.Comment extends Backbone.Model
 
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
-  url:
-    "/comments/"
+  url: "/comments/"
 
   initialize: (models, options) =>
     @event_id = options.event_id
@@ -41,7 +92,7 @@ class FK.Collections.Comments extends Backbone.Collection
   fetchForEvent: () =>
     return if not @event_id
     @fetch
-      url: "api/events/#{@event_id}/comments"
+      url: "/api/events/#{@event_id}/comments"
       remove: false
       data:
         skip: 0

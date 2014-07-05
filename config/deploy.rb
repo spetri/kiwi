@@ -154,6 +154,15 @@ task :prime_db => :environment do
   queue "cd #{deploy_to}/current ; bundle exec rake db:empty_seed RAILS_ENV=production"
 end
 
+desc 'Seed subkasts'
+task :seed_subkasts => :environment do
+  queue "cd #{deploy_to}/current; bundle exec rake db:seed_subkasts RAILS_ENV=production"
+end
+
+task :all_users_to_default => :environment do
+  queue "cd #{deploy_to}/current; bundle exec rake db:all_users_to_default RAILS_ENV=production"
+end
+
 desc "Cold Deploy the application for the first time"
 task :cold_deploy => :environment do
   notify("#{ENV['host']} - cold deploy! ", 'green')

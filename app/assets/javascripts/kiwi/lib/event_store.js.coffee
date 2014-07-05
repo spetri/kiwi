@@ -56,9 +56,8 @@ class FK.EventStore extends Marionette.Controller
   filterByCountry: (country) =>
     @config.set('country', country)
 
-  filterBySubkasts: (subkasts) =>
-    subkasts = [ subkasts ] if not _.isArray(subkasts)
-    @config.set('subkasts', subkasts)
+  filterBySubkasts: (subkast) =>
+    @config.setSubkast(subkast)
 
   refresh: () =>
     @events.reset()
@@ -83,26 +82,20 @@ class FK.EventStoreConfig extends Backbone.Model
     return {
       country: 'US'
       countryName: 'United States'
-      subkasts: _.keys(FK.Data.subkastOptions)
+      subkasts: FK.Data.Subkasts.codes()
     }
 
-  initialize: =>
-    @on('change:subkasts', @setSingleSubkast)
-
-  setSingleSubkast: (model, subkasts) =>
-    @set('subkast', subkasts[0])
-
   getSingleSubkast: () =>
-    return 'ALL' if @get('subkasts').length == _.keys(FK.Data.subkastOptions).length
+    return 'ALL' if @get('subkasts').length == FK.Data.Subkasts.length
     if @get('subkasts').length == 1
       return @get('subkasts')[0]
     else
       return false
 
   setSubkast: (subkast) =>
-    subkasts = [ subkast ]
-    subkasts = _.keys(FK.Data.subkastOptions) if subkast is 'ALL'
-    @set 'subkasts', subkasts
+    subkast = FK.Data.Subkasts.codes() if subkast is 'ALL'
+    subkast = [ subkast ] if not _.isArray(subkast)
+    @set 'subkasts', subkast
 
   setCountry: (country) =>
     @set 'country', country

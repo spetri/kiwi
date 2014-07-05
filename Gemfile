@@ -66,4 +66,6 @@ group :development, :test do
   gem 'mailcatcher'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end

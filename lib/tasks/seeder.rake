@@ -1,5 +1,5 @@
 namespace :db do
-  task :empty_seed => :environment do
+  task :empty_seed => [:environment, :seed_subkasts] do
     Country.delete_all
     Event.create! time_format: '', datetime: 2.weeks.ago, local_date: 2.weeks.ago, name: "The once loved", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine', 'github', 'backbone', 'marionette', 'ruby'], country: 'CA', location_type: 'national', is_all_day: false, subkast: 'ST'
     Event.delete_all
@@ -39,14 +39,14 @@ namespace :db do
     Event.create! time_format: '', datetime: 8.days.from_now, local_date: 8.days.from_now, name: "Mystery party", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine'], location_type: 'international', is_all_day: false, subkast: 'ST'
     Event.create! time_format: '', datetime: 9.days.from_now, local_date: 9.days.from_now, name: "Magical event", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'ruby', 'php', 'jasmine'], country: 'CA', location_type: 'national', is_all_day: false, subkast: 'ST'
     Event.create! time_format: '', datetime: 9.days.from_now, local_date: 9.days.from_now, name: "Predictable hurricane", description:"lorem ipsum", user: "rails", upvote_names: ['rails', 'jasmine'], country: 'CA', location_type: 'national', is_all_day: false, subkast: 'ST'
-  end 
+  end
 
   task :resave => :environment do
     Event.all.each { |event| event.save }
   end
 
   task :cleanup_all_day => :environment do
-    Event.all.each { |event| 
+    Event.all.each { |event|
       if event.is_all_day == "1" or event.is_all_day == "true" or event.is_all_day == true
         event.is_all_day = true;
       else
@@ -68,5 +68,29 @@ namespace :db do
       event.subkast = "OTH" if event.subkast.to_s == ''
       event.save
     }
+  end
+
+  task :seed_subkasts => :environment do
+    Subkast.delete_all
+    Subkast.create! name: "TV", code: "TV", url: "tv"
+    Subkast.create! name: "Movies", code: "TVM", url: "movies"
+    Subkast.create! name: "Sports", code: "SE", url: "sports"
+    Subkast.create! name: "Science", code: "ST", url: "science"
+    Subkast.create! name: "Technology", code: "TE", url: "technology"
+    Subkast.create! name: "HowAboutWe", code: "HAW", url: "howaboutwe"
+    Subkast.create! name: "ProductReleases", code: "PRP", url: "productreleases"
+    Subkast.create! name: "Holidays", code: "HA", url: "holidays"
+    Subkast.create! name: "Education", code: "EDU", url: "education"
+    Subkast.create! name: "Music", code: "MA", url: "music"
+    Subkast.create! name: "Arts", code: "ART", url: "arts"
+    Subkast.create! name: "Gaming", code: "GM", url: "gaming"
+    Subkast.create! name: "Other", code: "OTH", url: "other"
+  end
+
+  task :all_users_to_default => :environment do
+    User.all.each do |user|
+      user.defaults
+      user.save
+    end
   end
 end

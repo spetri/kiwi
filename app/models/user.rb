@@ -37,6 +37,10 @@ class User
   validates :username, uniqueness: true, :length => { :minimum => 3, :maximum => 200 }
   validates :email, uniqueness: true
 
+  before_create do |user|
+    user.defaults
+  end
+
   after_create do |user|
     #TODO: FIXME
     return if Rails.env == "test"
@@ -62,12 +66,28 @@ class User
   # field :authentication_token, :type => String
 
   ## Forekast
-  field :country,   :type => String
-  field :subkasts,  :type => Array
+  field :country,                       :type => String
 
-  field :moderator, :type => Boolean
+  field :moderator,                     :type => Boolean
+  field :receive_comment_notifications, :type => Boolean
+
+  field :my_subkasts,                   :type => Array
 
   include Mongoid::Timestamps
+
+  def defaults
+    self.receive_comment_notifications = true
+    self.my_subkasts = Subkast.pluck('code')
+  end
+
+  def get_my_subkasts
+    return my_subkasts.present? ? my_subkasts : []
+  end
+
+  def update_subkasts(subkast_codes)
+    self.my_subkasts = subkast_codes
+    self.save
+  end
 
   def login=(login)
     @login = login

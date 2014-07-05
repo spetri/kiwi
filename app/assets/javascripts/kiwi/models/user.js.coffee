@@ -1,14 +1,13 @@
 class FK.Models.User extends Backbone.Model
   idAttribute: "_id"
   url: () => return (if @isNew() then '/users/' else 'users/' + @get('_id')["$oid"])
-  defaults:
+  defaults: () =>
     email: ''
     provider: ''
     logged_in: false
     username: ''
     country: 'US'
     moderator: false
-    subkasts: _.keys(FK.Data.subkastOptions)
 
   sync: (method, model, options) =>
 
