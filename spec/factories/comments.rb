@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :comment do
+    message "Wow, events!"
     event
     authored_by { create(:user) }
 

@@ -114,4 +114,7 @@ class Comment
     parent_id.present? ? "replied to one of your comments" : "commented on one of your events" 
   end
 
+  def url
+    "asdfasd"
+  end
 end
