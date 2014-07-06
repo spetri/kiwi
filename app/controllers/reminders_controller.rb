@@ -7,7 +7,6 @@ class RemindersController < ApplicationController
     @reminder = Reminder.new(reminder_params)
 
     if @reminder.save
-      pp @reminder
       render 'show'
     end
   end
