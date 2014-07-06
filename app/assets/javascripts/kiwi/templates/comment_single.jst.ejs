@@ -6,7 +6,7 @@
   <div class="info">
     <span class="username"> <%= username %> </span>
     <div class="tools">
-      <span class="upvotes"><%= upvotes %></span> <span class="upvote-toggle">upvotes</span> - <span class="reply">Reply</span>- Report <% if (canDelete) { %>- <span class="mute-delete"></span><% } %></div>
+      <span class="upvotes"><%= voteCount %></span> <span class="upvote-toggle">upvotes</span> - <span class="reply">Reply</span>- Report <% if (canDelete) { %>- <span class="mute-delete"></span><% } %></div>
   </div>
   <div class="comment-text"><%= message_marked %></div>
 </div>

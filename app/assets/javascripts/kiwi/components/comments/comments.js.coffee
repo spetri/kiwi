@@ -94,7 +94,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     className: 'reply-box'
 
     templateHelpers: () =>
-      return cancelButton: @collection.hasParent()
+      return {
+        cancelButton: @collection.hasParent()
+      }
 
     events:
       'keyup textarea': 'writingComment'
@@ -143,6 +145,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       return {
         canDelete: (@username == @model.get('username')) || @moderatorMode
         message_marked: marked(@model.escape('message'))
+        voteCount: @model.netvotesWithMin()
       }
 
     events:
@@ -196,17 +199,17 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @toggleUpvote()
 
     displayVote: =>
-      if @model.get('have_i_upvoted') 
+      if @model.get('have_i_upvoted')
         @$('.up-vote:first i.fa-arrow-up').addClass('upvote-marked')
       if @model.get('have_i_downvoted')
         @$('.up-vote:first i.fa-arrow-down').addClass('downvote-marked')
-      @$('.user-comment:first .upvotes').text(@model.get('upvotes'))
+      @$('.user-comment:first .upvotes').text(@model.netvotesWithMin())
 
     toggleUpvote: =>
-      if @model.get('upvotes') == 1 
+      if @model.netvotes() == 1
         @$('.user-comment:first .upvote-toggle').text('upvote')
-      else 
-        @$('.user-comment:first .upvote-toggle').text('upvotes')      
+      else
+        @$('.user-comment:first .upvote-toggle').text('upvotes')
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
@@ -223,7 +226,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     onShow: () =>
       unless @username
         @$('.reply').tooltip(title: 'Login to reply.')
-        @$('.fa-arrow-up').tooltip(title: 'Login to upvote.') 
+        @$('.fa-arrow-up').tooltip(title: 'Login to upvote.')
         @$('.fa-arrow-down').tooltip(title: 'Login to downvote.')
       @$('.mute-delete:first').text(@muteDeleteText())
 
