@@ -45,6 +45,12 @@ class Comment
     comment.parent = self
   end
 
+  def setup_params(params)
+    self.message = params[:message]
+    self.parent_id = params[:parent_id]
+    self.event_id = params[:event_id]
+  end
+
   def have_i_upvoted(username)
     if self.upvote_names.nil?
       return false
@@ -91,19 +97,17 @@ class Comment
     end
   end
   
-#  def upvote(user)
-#    upvoted_by << user
-#    inc :upvotes => 1
-#    more_votes = siblings.where({:upvotes => upvotes})
-#    if more_votes.size > 0
-#      move_up
-#    else
-#      move_to_top
-#    end
-#    save!
-#  end
-
-  def self.ordered_by_votes(event)
-    where :event => event
+  def vote(upvoted, downvoted, username)
+    if ( upvoted )
+        self.remove_downvote(username)
+        self.add_upvote(username)      
+    elsif ( downvoted )
+        self.remove_upvote(username)
+        self.add_downvote(username)
+    else
+        self.remove_downvote(username)
+        self.remove_upvote(username)
+    end
   end
+
 end
