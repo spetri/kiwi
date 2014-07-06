@@ -495,7 +495,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   height: 20px;
 
   .fa.highlight {
-    color: #75dbc7;
+    color: $active;
   }
 }
 
@@ -535,6 +535,11 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     .checkbox {
       margin-top: 0px;
       margin-bottom: 3px;
+    }
+
+    .btn.highlight {
+      background-color: $active;
+      color: #FFF;
     }
 
     .btn:hover {
