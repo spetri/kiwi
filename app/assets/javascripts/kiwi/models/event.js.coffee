@@ -74,7 +74,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     errors.push({field: 'datetime', message: 'Event must have a datetime.'}) if not attrs.datetime
 
-    errors.push({field: 'subkast', message: 'Event must have a subkast.'}) if not _.contains(FK.App.request('subkastKeys'), attrs.subkast)
+    errors.push({field: 'subkast', message: 'Event must have a subkast.'}) if not _.contains(FK.Data.Subkasts.codes(), attrs.subkast)
 
     if errors.length == 0 then false else errors
 
@@ -255,7 +255,7 @@ class FK.Models.Event extends Backbone.GSModel
 
   fullSubkastName: =>
     return 'Other' if not @has('subkast')
-    return FK.Data.subkastOptions[@get('subkast')]
+    return FK.Data.Subkasts.getNameByCode(@get('subkast'))
 
   descriptionParsed: () =>
     marked(@escape('description'))
