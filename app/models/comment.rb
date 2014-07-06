@@ -1,6 +1,7 @@
 require './lib/kiwi_ordering'
 
 class Comment
+  include Rails.application.routes.url_helpers
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Tree
@@ -115,6 +116,6 @@ class Comment
   end
 
   def url
-    "asdfasd"
+    url_for(controller: 'home', action: 'index', only_path: true) + "events/show/#{event.id.to_s}/#{id.to_s}"
   end
 end
