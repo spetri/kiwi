@@ -84,6 +84,11 @@ class FK.Models.Comment extends Backbone.Model
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
   url: "/comments/"
+  
+  comparator: (comment1, comment2) =>
+    return -1 if comment1.upvotes() > comment2.upvotes()
+    return 0 if comment1.upvotes() == comment2.upvotes()
+    return 1 if comment1.upvotes() < comment2.upvotes()
 
   initialize: (models, options) =>
     @event_id = options.event_id
@@ -108,6 +113,6 @@ class FK.Collections.Comments extends Backbone.Collection
     return !! @parent_id
 
   comment: (message, username) =>
-    params = { message: message, event_id: @event_id, username: username }
+    params = { message: message, event_id: @event_id, username: username, have_i_upvoted: true, upvotes: 1 }
     params.parent_id = @parent_id
     @create params
