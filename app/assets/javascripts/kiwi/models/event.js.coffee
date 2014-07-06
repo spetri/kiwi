@@ -4,6 +4,7 @@ class FK.Models.Event extends Backbone.GSModel
     return {
       location_type: 'international'
       country: 'US'
+      comment_count: 0
       name: ''
       user: ''
       description: ''
@@ -22,13 +23,13 @@ class FK.Models.Event extends Backbone.GSModel
     '/events'
 
   initialize: () =>
-    @reminders = new FK.Collections.Reminders()
     @comments = new FK.Collections.Comments([], {event_id: @get('_id')})
     #Backbone thing: when collection fetches from another url, models are
     #forced to have that url, undo that here
     #TODO: Report backbone bug?
     @url = Backbone.Model.prototype.url
     @remainder_count = 100
+
 
     @on 'change:time_format', @update_tv_time
     @on 'change:_id', @updateCommentsEvent
@@ -62,6 +63,7 @@ class FK.Models.Event extends Backbone.GSModel
   parse: (resp) ->
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
     resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
+    @reminders = new FK.Collections.Reminders(resp.reminders)
     resp
 
   validate: (attrs, options) =>
@@ -72,7 +74,7 @@ class FK.Models.Event extends Backbone.GSModel
 
     errors.push({field: 'datetime', message: 'Event must have a datetime.'}) if not attrs.datetime
 
-    errors.push({field: 'subkast', message: 'Event must have a subkast.'}) if not _.contains(FK.App.request('subkastKeys'), attrs.subkast)
+    errors.push({field: 'subkast', message: 'Event must have a subkast.'}) if not _.contains(FK.Data.Subkasts.codes(), attrs.subkast)
 
     if errors.length == 0 then false else errors
 
@@ -233,27 +235,13 @@ class FK.Models.Event extends Backbone.GSModel
     @unset 'height'
     @unset 'image'
 
-  addReminder: (timeToEvent) ->
-    reminder = new FK.Models.Reminder
-      user: @get('current_user')
-      time_to_event: timeToEvent
-      event: @get('_id')
-    @reminders.add reminder
-    reminder
-
-  removeReminder: (timeToEvent) ->
-    @reminders.removeReminder @get('current_user'), timeToEvent, @get('_id')
-
-  reminderTimes: () ->
-    @reminders.times()
-
   editAllowed: (username) ->
     username = @get('current_user') if not username
     @get('user') is '' || @get('user') == username
 
   fullSubkastName: =>
     return 'Other' if not @has('subkast')
-    return FK.Data.subkastOptions[@get('subkast')]
+    return FK.Data.Subkasts.getNameByCode(@get('subkast'))
 
   descriptionParsed: () =>
     marked(@escape('description'))

@@ -45,6 +45,12 @@ class Comment
     comment.parent = self
   end
 
+  def setup_params(params)
+    self.message = params[:message]
+    self.parent_id = params[:parent_id]
+    self.event_id = params[:event_id]
+  end
+
   def have_i_upvoted(username)
     if self.upvote_names.nil?
       return false
@@ -91,4 +97,17 @@ class Comment
     end
   end
   
+  def vote(upvoted, downvoted, username)
+    if ( upvoted )
+        self.remove_downvote(username)
+        self.add_upvote(username)      
+    elsif ( downvoted )
+        self.remove_upvote(username)
+        self.add_downvote(username)
+    else
+        self.remove_downvote(username)
+        self.remove_upvote(username)
+    end
+  end
+
 end

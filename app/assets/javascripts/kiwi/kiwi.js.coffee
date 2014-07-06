@@ -15,32 +15,6 @@ FK.Template = (file) ->
 FK.Uri = (uri) ->
   Backbone.history.fragment is uri
 
-FK.Data.subkastOptions = {
-  'TVM': 'TV and Movies'
-  'SE': 'Sports'
-  'ST': 'Science and Technology'
-  'PRP': 'Product Releases / Promotions'
-  'HA': 'Holidays and Anniversaries'
-  'EDU': 'Education'
-  'MA': 'Music / Arts'
-  'GM': 'Gaming'
-  'OTH': 'Other'
-}
-
-FK.Data.urlToSubkast = {
-  'tvandmovies': 'TVM'
-  'sports': 'SE'
-  'scienceandtechnology': 'ST'
-  'productreleasespromotions': 'PRP'
-  'holidaysandanniversaries': 'HA'
-  'education': 'EDU'
-  'musicarts': 'MA'
-  'gaming': 'GM'
-  'other': 'OTH'
-  '': 'ALL'
-}
-
-
 FK.App = new Backbone.Marionette.Application()
 FK.App.addRegions({
   navbarRegion: '#navbar-container-region'
@@ -53,15 +27,18 @@ FK.App.addInitializer (prefetch) ->
   FK.CurrentUser = new FK.Models.User(prefetch.user)
   FK.CurrentUser.set(logged_in: true, silent: true) if prefetch.user != null
 
-  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, vent: FK.App.vent
-
-  FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
+  FK.Data.Subkasts = new FK.Collections.SubkastList(prefetch.subkasts)
+  FK.Data.MySubkasts = new FK.Collections.SubkastList(prefetch.mySubkasts)
 
   FK.Data.EventStore = new FK.EventStore
     events: prefetch.events,
     howManyStartingBlocks: 10,
     vent: FK.App.vent
     country: FK.CurrentUser.get('country')
+
+  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, config: FK.Data.EventStore.configModel()
+
+  FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
   FK.Data.EventStore.fetchStartupEvents()
 
@@ -91,7 +68,7 @@ FK.Controllers.MainController = {
     @events('all')
 
   subkast: (subkast) =>
-    subkastCode = FK.Data.urlToSubkast[subkast]
+    subkastCode = FK.Data.Subkasts.getCodeByUrl(subkast)
     if subkastCode
       FK.App.vent.trigger('container:all')
       FK.App.request('eventStore').filterBySubkasts(subkastCode)
@@ -112,11 +89,11 @@ FK.App.reqres.setHandler 'currentUser', () ->
 FK.App.reqres.setHandler 'currentSubkast', () ->
   Fk.Data.EventStore.getSingleSubkast()
 
-FK.App.reqres.setHandler 'subkastOptionsAsArray', () ->
-  _.map(FK.Data.subkastOptions, (val, key) -> { value: key, option: val })
+FK.App.reqres.setHandler 'subkasts', () ->
+  FK.Data.Subkasts
 
-FK.App.reqres.setHandler 'subkastKeys', () ->
-  _.keys(FK.Data.subkastOptions)
+FK.App.reqres.setHandler 'mySubkasts', () ->
+  FK.Data.MySubkasts
 
 FK.App.reqres.setHandler 'countryName', (countryCode) ->
   FK.Data.countries.get(countryCode).get('en_name').trim()

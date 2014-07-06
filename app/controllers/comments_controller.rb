@@ -15,10 +15,7 @@ class CommentsController < ApplicationController
     have_i_downvoted = params.delete :have_i_downvoted
 
     @comment = Comment.new(params)
-
-    @comment.message = params[:message]
-    @comment.parent_id = params[:parent_id]
-    @comment.event_id = params[:event_id]
+    @comment.setup_params(params)
 
     @comment.event = Event.find(params[:event_id])
     unless params[:parent_id].nil?
@@ -26,6 +23,9 @@ class CommentsController < ApplicationController
     end
 
     @comment.update_attributes(params)
+
+    return if !user_signed_in?  
+    @comment.vote(have_i_upvoted, have_i_downvoted, current_user.username)
 
     @comment.save
     
@@ -43,22 +43,10 @@ class CommentsController < ApplicationController
     have_i_upvoted = params.delete :have_i_upvoted
     have_i_downvoted = params.delete :have_i_downvoted
 
-    @comment.message = params[:message]
-    @comment.parent_id = params[:parent_id]
-    @comment.event_id = params[:event_id]
+    @comment.setup_params(params)
 
     return if !user_signed_in?  
-
-    if ( have_i_upvoted )
-        @comment.remove_downvote(current_user.username)
-        @comment.add_upvote(current_user.username)      
-    elsif ( have_i_downvoted )
-        @comment.remove_upvote(current_user.username)
-        @comment.add_downvote(current_user.username)
-    else
-        @comment.remove_downvote(current_user.username)
-        @comment.remove_upvote(current_user.username)
-    end
+    @comment.vote(have_i_upvoted, have_i_downvoted, current_user.username)
 
     respond_to do |format|
       if @comment.save

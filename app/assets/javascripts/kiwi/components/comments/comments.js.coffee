@@ -13,6 +13,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       @username = App.request('currentUser').get('username')
       @event = options.event
 
+      @on 'comment_count:changed', (comment_delta) =>
+        @event.set('comment_count', @event.get('comment_count') + comment_delta)
+
       @collection = @event.comments
 
       @commentViews = {}
@@ -62,13 +65,17 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       view.clearInput()
 
     comment: (message, user, list = @collection) =>
-      list.comment(message, user)
+      comment = list.comment(message, user)
+      @.trigger('comment_count:changed', 1)
+      comment
 
     commentViewByModel: (comment) =>
       @commentViews[comment.cid]
 
     deleteComment: (args) =>
-      args.model.deleteComment()
+      comment = args.model.deleteComment()
+      @.trigger('comment_count:changed', -1)
+      comment
 
     onClose: () =>
       @layout.close()
@@ -87,7 +94,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     className: 'reply-box'
 
     templateHelpers: () =>
-      return cancelButton: @collection.hasParent()
+      return {
+        cancelButton: @collection.hasParent()
+      }
 
     events:
       'keyup textarea': 'writingComment'
@@ -136,6 +145,7 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       return {
         canDelete: (@username == @model.get('username')) || @moderatorMode
         message_marked: marked(@model.escape('message'))
+        voteCount: @model.netvotesWithMin()
       }
 
     events:
@@ -153,10 +163,12 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
     upvote: (e) =>
       e.stopPropagation()
+      return unless @username
       @model.upvoteToggle()
 
     downvote: (e) =>
       e.stopPropagation()
+      return unless @username
       @model.downvoteToggle()
 
     deletePrep: (e) =>
@@ -178,15 +190,26 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     initialize: =>
       @collection = @model.replies
 
+
     updateVotes: =>
       return unless @username
       @$('.up-vote:first i.fa-arrow-up').removeClass('upvote-marked')
       @$('.up-vote:first i.fa-arrow-down').removeClass('downvote-marked')
-      if @model.get('have_i_upvoted') 
+      @displayVote()
+      @toggleUpvote()
+
+    displayVote: =>
+      if @model.get('have_i_upvoted')
         @$('.up-vote:first i.fa-arrow-up').addClass('upvote-marked')
       if @model.get('have_i_downvoted')
         @$('.up-vote:first i.fa-arrow-down').addClass('downvote-marked')
-      @$('.user-comment:first .upvotes').text(@model.get('upvotes'))
+      @$('.user-comment:first .upvotes').text(@model.netvotesWithMin())
+
+    toggleUpvote: =>
+      if @model.netvotes() == 1
+        @$('.user-comment:first .upvote-toggle').text('upvote')
+      else
+        @$('.user-comment:first .upvote-toggle').text('upvotes')
 
     appendHtml: (collectionView, itemView) =>
       collectionView.$("div.comment").append(itemView.el)
@@ -217,3 +240,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     itemView: Comments.CommentSingleView
     className: 'comment-list'
 
+    appendHtml: (collectionView, itemView, index) =>
+      return collectionView.$el.prepend(itemView.el) if index is 0
+      atIndex = collectionView.$el.children().eq(index)
+      return atIndex.before(itemView.el) if atIndex.length
+      return collectionView.$el.append(itemView.el)

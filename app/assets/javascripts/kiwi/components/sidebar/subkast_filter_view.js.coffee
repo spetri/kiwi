@@ -1,25 +1,7 @@
 FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
-  class Sidebar.SubkastFilterView extends Marionette.ItemView
+  class Sidebar.SubkastFilterView extends Marionette.CompositeView
     template: FK.Template('subkast_filter')
+    itemViewContainer: '.subkast-list'
+    itemView: Sidebar.SingleSubkastView
+    itemViewEventPrefix: 'subkast'
     className: 'subkast-filter filter'
-    events:
-      'change select': 'save'
-
-    save: (e) =>
-      subkast = @$('option:selected').val()
-      @model.setSubkast subkast
-
-    modelEvents:
-      'change:subkasts': 'refreshChosenSubkast'
-
-    refreshChosenSubkast: (model) =>
-      @$('select').val model.getSingleSubkast()
-
-    renderSubkastOptions: () =>
-      _.each(App.request('subkastOptionsAsArray'), (option) =>
-        @$('[name="subkast"]').append('<option value="' + option.value + '">' + option.option + '</option>')
-      )
-
-    onRender: =>
-      @renderSubkastOptions()
-      @refreshChosenSubkast(@model)

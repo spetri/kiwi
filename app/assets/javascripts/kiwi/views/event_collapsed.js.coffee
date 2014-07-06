@@ -7,6 +7,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
     templateHelpers: () =>
       return {
+        commentCountText: =>
+          return "#{@model.get('comment_count')} comments" if @model.get('comment_count') isnt 1
+          "#{@model.get('comment_count')} comment"
         fullSubkastName: => @model.fullSubkastName()
         time: => @model.get('timeAsString')
       }
@@ -14,8 +17,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     ui:
       upvotesIcon: '.upvote-container i'
       upvotesContainer: '.upvote-container'
+      remindersIcon: '.reminder-container .fa'
+      remindersContainer: '.reminder-container .sub-container'
 
     triggers:
+      'click .reminder-container .fa': 'click:reminders'
       'click .event-name': 'click:open'
 
     events:
@@ -37,6 +43,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       if @model.userHasUpvoted()
         @ui.upvotesIcon.removeClass('glyphicon-remove')
         @ui.upvotesIcon.addClass('glyphicon-ok')
+
+    initialize: () =>
+      @listenTo @model.reminders, 'add remove', @refreshReminderHighlight
 
     modelEvents:
       'change:upvotes': 'refreshUpvotes'
@@ -61,7 +70,14 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesContainer.tooltip
           title: 'Login to upvote'
 
+    refreshReminderHighlight: (model, collection) =>
+      if collection.length > 0
+        @ui.remindersIcon.addClass('highlight')
+      else
+        @ui.remindersIcon.removeClass('highlight')
+
     onRender: =>
       @refreshUpvotes @model
       @refreshUpvoted @model
       @refreshUpvoteAllowed @model
+      @refreshReminderHighlight null, @model.reminders

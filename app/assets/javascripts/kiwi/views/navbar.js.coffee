@@ -2,9 +2,11 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
   @addInitializer () ->
     @listenTo App, 'start', @show
-    @currentUser = App.request 'currentUser'
 
+    @currentUser = App.request 'currentUser'
+    @subkasts = App.request 'subkasts'
     @config = App.request 'eventConfig'
+    @eventStore = App.request 'eventStore'
 
     @navbarViewModel = new Navbar.NavbarViewModel
        username: @currentUser.get('username')
@@ -17,10 +19,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       username: @currentUser.get('username')
       model: @navbarViewModel
 
+    @navbarSeparator = new Navbar.NavbarSeparatorView
+
     @subkastNavView = new Navbar.NavbarSubkastView
       model: @config
 
-    @sidebar = App.Sidebar.create(@sidebarConfig)
+    @sidebar = App.Sidebar.create(@buildSubkastConfig())
 
     @listenTo @navbarView, 'click:home', @goHome
     @listenTo @subkastNavView, 'click:subkast', @goToEventList
@@ -30,15 +34,25 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       @layout.navbar.show @navbarView
       @hideShowSubkastView(@config)
 
+    @layout.on 'show', =>
+      @layout.navbarSeparatorView.show @navbarSeparator
+
     @navbarView.on 'show', =>
       @navbarView.mobileSidebarRegion.show @sidebar.layout
+
+  @buildSubkastConfig = () =>
+    {
+      subkasts: @subkasts
+      config: @config
+      topRanked: @eventStore.topRanked
+    }
 
   @show = () ->
     App.navbarRegion.show @layout
 
   @goHome = () =>
     App.vent.trigger 'container:all'
-    App.request('eventStore').filterBySubkasts('ALL')
+    @eventStore.filterBySubkasts('ALL')
 
   @goToEventList = () =>
     App.vent.trigger 'container:all'
@@ -60,6 +74,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     template: FK.Template('navbar_layout')
     regions:
       navbar: '#navbar-navbar-region'
+      navbarSeparatorView: '#navbar-separator-region'
       navbarSubkastRegion: '#navbar-subkast-region'
     className: 'navbar-indom-container'
 
@@ -77,7 +92,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       'mobileSidebarRegion': '#mobile-sidebar'
 
     triggers:
-      'click .navbar-brand': 'click:home'
+      'click .logo': 'click:home'
 
     events:
       'click .add-new': 'goToForm'
@@ -96,7 +111,12 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
 
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
-      
+
+
+  class Navbar.NavbarSeparatorView extends Marionette.ItemView
+    className: "outer"
+    template: FK.Template('navbar_separator')
+
   class Navbar.NavbarSubkastView extends Marionette.ItemView
     className: 'navbar navbar-fixed-top subkast-navbar'
     template: FK.Template('navbar_subkast')
@@ -108,10 +128,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       'change:subkasts': 'refreshSubkast'
 
     refreshSubkast: (model, subkast) =>
-      link = '/' + _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
-      @$('.subkast-header-link').attr('href', link)
-      subkastText = _.invert(FK.Data.urlToSubkast)[model.getSingleSubkast()]
-      @$('.subkast').text(subkastText)
+      link = Navbar.subkasts.getUrlByCode(model.getSingleSubkast())
+      @$('.subkast-header-link').attr('href', '/' + link)
+      @$('.subkast').text(link)
 
   class Navbar.NavbarViewModel extends Backbone.Model
     defaults:

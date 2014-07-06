@@ -21,5 +21,5 @@
 set :environment, ARGV[0]
 
 every 1.minutes do
-  runner "Reminder.send_reminders"
+  rake "reminders:send_reminders"
 end

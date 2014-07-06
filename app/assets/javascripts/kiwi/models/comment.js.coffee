@@ -43,7 +43,7 @@ class FK.Models.Comment extends Backbone.Model
     @set 'have_i_upvoted', not @userHasUpvoted()
 
   upvoteToggle: (e) =>
-    return if @userHasUpvoted() 
+    return if @userHasUpvoted()
     if @userHasDownvoted() then @changeDownvote(false)
     else @changeUpvote(true)
     @save {}
@@ -64,15 +64,24 @@ class FK.Models.Comment extends Backbone.Model
     else @changeDownvote(true)
     @save {}
 
+  netvotes: () =>
+    @upvotes() - @downvotes()
+
+  netvotesWithMin: () =>
+    if @netvotes() < 0
+      return 0
+    else
+      return @netvotes()
+
   changeUpvote: (bool) =>
     if bool then @set 'upvotes', @upvotes() + 1
     else @set 'upvotes', @upvotes() - 1
-    @set 'have_i_upvoted', bool   
+    @set 'have_i_upvoted', bool
 
   changeDownvote: (bool) =>
     if bool then @set 'downvotes', @downvotes() + 1
     else @set 'downvotes', @downvotes() - 1
-    @set 'have_i_downvoted', bool  
+    @set 'have_i_downvoted', bool
 
   deleteComment: () =>
     $.ajax
@@ -84,6 +93,11 @@ class FK.Models.Comment extends Backbone.Model
 class FK.Collections.Comments extends Backbone.Collection
   model: FK.Models.Comment
   url: "/comments/"
+
+  comparator: (comment1, comment2) =>
+    return -1 if comment1.netvotes() > comment2.netvotes()
+    return 0 if comment1.netvotes() == comment2.netvotes()
+    return 1 if comment1.netvotes() < comment2.netvotes()
 
   initialize: (models, options) =>
     @event_id = options.event_id
@@ -108,6 +122,6 @@ class FK.Collections.Comments extends Backbone.Collection
     return !! @parent_id
 
   comment: (message, username) =>
-    params = { message: message, event_id: @event_id, username: username }
+    params = { message: message, event_id: @event_id, username: username, have_i_upvoted: true, upvotes: 1 }
     params.parent_id = @parent_id
     @create params

@@ -12,5 +12,7 @@ FactoryGirl.define do
     email
     name "Mr. X" 
     password "secret1234"
+    country "CA"
+    receive_comment_notifications true
   end
 end

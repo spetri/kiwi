@@ -1,29 +1,42 @@
 FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
-  @create = (sidebarConfig) ->
-    sidebarConfig = {} if not sidebarConfig
-
-    @model = App.request('eventConfig')
-
-    @layout =  new Sidebar.Layout
-      collection: App.request('eventStore').topRanked,
-      model: @model
-
-    @instance = new Sidebar.Controller
-      model: @model
-      layout: @layout
-
-    @listenTo @layout.eventListView, 'itemview:clicked:event', (event) ->
-      App.vent.trigger 'container:show', event.model
-
+  @create = (startupData) ->
+    @instance = new Sidebar.Controller(startupData)
     return @instance
 
   class Sidebar.Controller extends Marionette.Controller
     initialize: (options) =>
-      @model = options.model
-      @layout = options.layout
+      @subkasts = options.mySubkasts
+      @config = options.config
+      @topRanked = options.topRanked
 
-    value: () =>
-      @.model.toJSON()
+      @layout = new Sidebar.Layout
+
+      @eventListView = new Sidebar.EventList
+        collection: @topRanked
+
+      @countryFilterView = new Sidebar.CountryFilterView
+        model: @config
+
+      @subkastFilterView = new Sidebar.SubkastFilterView
+        model: @config
+        collection: @subkasts
+
+      @listenTo @eventListView, 'itemview:clicked:event', (args) ->
+        @toEvent(args.model)
+
+      @listenTo @subkastFilterView, 'subkast:clicked', (args) ->
+        @switchSubkast(args.model)
+
+      @layout.on 'show', =>
+        @layout.event_list.show @eventListView
+        @layout.country_filter.show @countryFilterView
+        @layout.subkast_filter.show @subkastFilterView
+
+    toEvent: (event) =>
+      App.vent.trigger 'container:show', event
+
+    switchSubkast: (subkast) =>
+      @config.setSubkast(subkast.get('code'))
 
   class Sidebar.EventName extends Marionette.ItemView
     template: FK.Template('event_name')
@@ -45,18 +58,3 @@ FK.App.module "Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
       event_list: '#sidebar-event-list'
       country_filter: '#country-filter'
       subkast_filter: '#subkast-filter'
-
-    initialize: =>
-      @eventListView = new Sidebar.EventList
-        collection: @collection
-
-      @countryFilterView = new Sidebar.CountryFilterView
-        model: @model
-
-      @subkastFilterView = new Sidebar.SubkastFilterView
-        model: @model
-
-    onShow: =>
-      @event_list.show @eventListView
-      @country_filter.show @countryFilterView
-      @subkast_filter.show @subkastFilterView

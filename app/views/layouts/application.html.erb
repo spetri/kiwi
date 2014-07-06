@@ -29,7 +29,9 @@
            user_edit: '<%= edit_user_registration_path %>',
            register: '<%= new_user_registration_path %>'
           },
-        user: <%= user_signed_in? ? raw(current_user.to_json()) : 'null' %>
+        user: <%= user_signed_in? ? raw(current_user.to_json()) : 'null' %>,
+        subkasts: <%= raw Subkast.all.to_json() %>,
+        mySubkasts: <%= raw Subkast.by_user(current_user).to_json() %>
       });
       if (!Backbone.History.started)
         Backbone.history.start({pushState: true})
@@ -38,5 +40,17 @@
   <%= render :partial => 'layouts/uservoice' %>
   <!-- Ensure that font awesome is loaded!! -->
   <i style="color:white" class="fa fa-spinner"/></i>
+  <div id="footer">
+    <div class="footer-text">
+      <a href="#" target="_blank">About</a> | 
+      <a href="#" target="_blank">FAQ</a> | 
+      <a href="http://blog.forekast.com" target="_blank">Blog</a> | 
+      <a href="#" target="_blank">Follow Us:</a> 
+      <a href="https://twitter.com/theforekast" target="_blank" ><i class="fa fa-twitter"></i></a>
+      <a href="https://www.facebook.com/TheForekast" target="_blank"><i class="fa fa-facebook"></i></a> 
+      <a href="http://instagram.com/theforekast" target="_blank"><i class="fa fa-instagram"></i></a>
+      <a href="https://plus.google.com/+Forekast" target="_blank"><i class="fa fa-google-plus"></i></a>&nbsp; &nbsp; &nbsp; Let's talk: hello@forekast.com
+    </div>
+  </div>
 </body>
 </html>

@@ -142,10 +142,25 @@ task :move_to_local_date => :environment do
   queue "cd #{deploy_to}/current ; bundle exec rake db:move_date_to_local_date RAILS_ENV=production"
 end
 
+desc 'Populate crontab of this server with recurring tasks'
+task :update_cron => :environment do
+  notify("#{ENV['host']} - updating crontab ", "blue")
+  queue "cd #{deploy_to}/current; bundle exec whenever --update-crontab kiwi --set 'environment=production&path=#{deploy_to}/#{current_path}'"
+end
+
 desc 'Prime db for production'
 task :prime_db => :environment do
   notify("#{ENV['host']} - priming database! ", 'green')
   queue "cd #{deploy_to}/current ; bundle exec rake db:empty_seed RAILS_ENV=production"
+end
+
+desc 'Seed subkasts'
+task :seed_subkasts => :environment do
+  queue "cd #{deploy_to}/current; bundle exec rake db:seed_subkasts RAILS_ENV=production"
+end
+
+task :all_users_to_default => :environment do
+  queue "cd #{deploy_to}/current; bundle exec rake db:all_users_to_default RAILS_ENV=production"
 end
 
 desc "Cold Deploy the application for the first time"
@@ -175,4 +190,3 @@ end
 #  - http://nadarei.co/mina/tasks
 #  - http://nadarei.co/mina/settings
 #  - http://nadarei.co/mina/helpers
-

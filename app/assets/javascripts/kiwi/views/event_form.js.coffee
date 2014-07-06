@@ -6,6 +6,9 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @user = App.request('currentUser')
     return App.execute('signInPage') if @user.get('logged_in') == false
 
+    @events = App.request('events')
+    @subkasts = App.request('subkasts')
+
     @event = event || new FK.Models.Event()
     @eventComponents = []
 
@@ -48,10 +51,10 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     return if not @event.isValid()
 
     @showSpinner()
-    App.request('events').add(@event, merge: true)
+    @event.add(@event, merge: true)
 
   @getBaseView = () =>
-    if @event.editAllowed(App.request('currentUser').get('username'))
+    if @event.editAllowed(@user.get('username'))
       return @initFormView(@event)
     else
       return @initNotYourEventView()
