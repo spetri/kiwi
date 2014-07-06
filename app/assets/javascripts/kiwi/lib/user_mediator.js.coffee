@@ -1,9 +1,9 @@
 class FK.UserMediator extends Marionette.Controller
   initialize: (options) =>
     @user = options.user
-    @vent = options.vent
+    @config = options.config
 
-    @listenTo @vent, 'filter:country', @saveCountry
+    @listenTo @config, 'change:country', @saveCountry
 
     @getUserLocation() if not FK.CurrentUser.get('country') and FK.CurrentUser.get('logged_in')
 
@@ -20,8 +20,5 @@ class FK.UserMediator extends Marionette.Controller
       )
     )
 
-  saveSubkasts: (subkasts) =>
-    @user.save({subkasts: subkasts})
-
-  saveCountry: (country) =>
+  saveCountry: (model, country) =>
     @user.save({country: country})
