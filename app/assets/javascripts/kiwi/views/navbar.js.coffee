@@ -92,7 +92,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
       'mobileSidebarRegion': '#mobile-sidebar'
 
     triggers:
-      'click .navbar-brand': 'click:home'
+      'click .logo': 'click:home'
 
     events:
       'click .add-new': 'goToForm'

@@ -27,9 +27,6 @@ FK.App.addInitializer (prefetch) ->
   FK.CurrentUser = new FK.Models.User(prefetch.user)
   FK.CurrentUser.set(logged_in: true, silent: true) if prefetch.user != null
 
-  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, vent: FK.App.vent
-
-  FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
   FK.Data.Subkasts = new FK.Collections.SubkastList(prefetch.subkasts)
   FK.Data.MySubkasts = new FK.Collections.SubkastList(prefetch.mySubkasts)
 
@@ -38,6 +35,10 @@ FK.App.addInitializer (prefetch) ->
     howManyStartingBlocks: 10,
     vent: FK.App.vent
     country: FK.CurrentUser.get('country')
+
+  FK.Data.UserMediator = new FK.UserMediator user: FK.CurrentUser, config: FK.Data.EventStore.configModel()
+
+  FK.Data.countries = new FK.Collections.CountryList(prefetch.countries)
 
   FK.Data.EventStore.fetchStartupEvents()
 
