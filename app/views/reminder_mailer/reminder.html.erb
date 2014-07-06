@@ -11,7 +11,7 @@
   <% end %>
   </p>
   <% if @event.image.present? %>
-    <img src="<%=url_for(controller: 'home', action: 'index', only_path: false)%><%=@event.image.url(:medium)%>" />
+    <img src="<%=@event.image.url(:medium)%>" />
   <% end %>
 </td></tr></table>
 </div>
