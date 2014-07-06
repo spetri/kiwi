@@ -53,6 +53,9 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
       )
 
     setTimes: (times) =>
-      _.each(times, (time) =>
-        $('[data-time="' + time + '"]').prop('checked', true)
-      )
+      if times.length > 0
+        _.each(times, (time) =>
+          $('[data-time="' + time + '"]').prop('checked', true)
+        )
+      else
+        $('[data-time="1h"]').prop('checked', true)
