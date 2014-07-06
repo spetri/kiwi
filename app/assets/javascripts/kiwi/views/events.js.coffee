@@ -27,7 +27,8 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
       @view.event_block.show @eventBlocksView
       @resumePosition()
 
-    @listenTo @eventBlocksView,'block:event:click:open', @triggerShowEventDeep
+    @listenTo @eventBlocksView, 'block:event:click:open', @triggerShowEventDeep
+    @listenTo @eventBlocksView, 'block:event:click:reminders', @showReminders
     @listenTo @events, 'remove reset', @resetPosition
     @listenTo @eventConfig, 'change:subkasts', @setUrl
 
@@ -79,6 +80,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
 
   @triggerShowEventDeep = (block, event) ->
     App.vent.trigger 'container:show', event.model
+
+  @showReminders = (blockView, eventView, args) =>
+    @remindersComponent = FK.App.Reminders.create({event: args.model, container: eventView.ui.remindersContainer })
 
   @fetchMoreBlocks = () =>
     @eventStore.loadNextEvents(10)

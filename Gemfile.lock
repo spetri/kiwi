@@ -413,5 +413,6 @@ DEPENDENCIES
   spork-rails!
   therubyracer
   timecop
+  tzinfo
   uglifier (>= 1.0.3)
   whenever

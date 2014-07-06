@@ -50,6 +50,47 @@ class Event
     end
   end
 
+  def reminders_for_user(user)
+    reminders.where(user: user)
+  end
+
+  def get_utc_datetime(timezone)
+    if is_all_day == true or time_format == 'recurring' or time_format == 'tv_show'
+      tz = TZInfo::Timezone.get(timezone)
+
+      return tz.local_to_utc(local_date.to_datetime) if is_all_day
+      return tz.local_to_utc(local_datetime) if time_format == 'recurring'
+
+      if time_format == 'tv_show'
+        tz = TZInfo::Timezone.get('America/New_York')
+        return tz.local_to_utc(local_datetime)
+      end
+    else
+      return datetime
+    end
+  end
+
+  def get_local_datetime(timezone)
+    return local_date.to_datetime if is_all_day == true
+
+    tz = TZInfo::Timezone.get(timezone)
+
+    if time_format == 'tv_show'
+      tz_east = TZInfo::Timezone.get('America/New_York')
+      return tz_east.local_to_utc(tz.utc_to_local(local_datetime))
+    end
+
+    if time_format == 'recurring'
+      return local_datetime
+    end
+      
+    return tz.utc_to_local(datetime)
+  end
+
+  def local_datetime
+    Time.parse(local_date.to_s + " " + local_time)
+  end
+
   def image_from_url(url)
     if url
       self.image = open(url)
@@ -196,6 +237,6 @@ class Event
   end
 
   def root_comments
-    self.comments.where(:parent => nil).sort_by{|comment| -comment.upvotes}
+    self.comments.where(:parent => nil)
   end
 end

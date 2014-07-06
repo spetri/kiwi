@@ -8,6 +8,7 @@ describe User do
   end
 
   it 'should be able to get the user\'s list of subkast codes' do
+    user.update_attributes(my_subkasts: %w(SE ST))
     expect(user.get_my_subkasts).to eq ['SE', 'ST']
   end
 

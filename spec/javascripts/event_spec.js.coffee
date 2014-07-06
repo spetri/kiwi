@@ -329,32 +329,6 @@ describe "Event", ->
       expect(@event.get('height')).not.toBeDefined()
       expect(@event.get('image')).not.toBeDefined()
 
-  describe 'when working with reminders', ->
-    beforeEach ->
-      @event = new FK.Models.Event()
-      @event.set '_id', '1234asdf'
-      @event.set 'current_user', 'grayden'
-      @event.addReminder('15m')
-    
-    it 'should be able to add a reminder', ->
-      expect(@event.reminders.length).toBe(1)
-
-    it 'should return the reminder created with the event id on it', ->
-      reminder = @event.addReminder('15m')
-      expect(reminder.get('user')).toBe('grayden')
-      expect(reminder.get('time_to_event')).toBe('15m')
-      expect(reminder.get('event')).toBe(@event.id)
-
-    it 'should be able to get a list of the reminder times in the event', ->
-      @event.addReminder('1h')
-      @event.addReminder('24h')
-
-      expect(@event.reminderTimes()).toEqual(['15m', '1h', '24h'])
-
-    it 'should be able to remove a reminder', ->
-      @event.removeReminder '15m'
-      expect(@event.reminderTimes().length).toBe(0)
-
   describe 'authorization', ->
     beforeEach ->
       @event = new FK.Models.Event()

@@ -23,3 +23,6 @@ class FK.Models.User extends Backbone.Model
       xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
 
       xhr.send(formData)
+
+  userId: () =>
+    @get('_id')["$oid"]

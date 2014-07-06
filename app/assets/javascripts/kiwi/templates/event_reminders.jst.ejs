@@ -1,22 +1,28 @@
-<div class="checkbox">
-  <label>
-    <input type="checkbox" data-time="15m"/> 15 minutes before it starts
-  </label>
+<div class="up-arrow"></div>
+<div class="event-reminders-container">
+  <span>Email Reminders:</span>
+  <div class="checkbox-container">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" data-time="15m"/> 15 min. before
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" data-time="1h"/> 1 hr. before
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" data-time="4h"/> 4 hr. before
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" data-time="1d"/> 1 day before
+      </label>
+    </div>
+  </div>
+  <button data-action="set-reminder" class="btn btn-xs pull-right highlight">Set Reminder</button><button data-action="cancel" class="btn btn-xs pull-left">Cancel</button>
+  <div class="clearfix"></div>
 </div>
-<div class="checkbox">
-  <label>
-    <input type="checkbox" data-time="1h"/> 1 hour before it starts
-  </label>
-</div>
-<div class="checkbox">
-  <label>
-    <input type="checkbox" data-time="6h"/> 6 hours before it starts
-  </label>
-</div>
-<div class="checkbox">
-  <label>
-    <input type="checkbox" data-time="24h"/> 24 hours before it starts
-  </label>
-</div>
-<button class="btn btn-xs pull-right">Set Email Reminder</button>
-<div class="clearfix"></div>
