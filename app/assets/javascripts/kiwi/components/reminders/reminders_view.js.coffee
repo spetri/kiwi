@@ -4,16 +4,15 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
 
   @create = (options) =>
     @instance.close() if @instance
-    @instance = new Reminders.Controller options
+    @instance = new Reminders.DropdownController options
     @instance
 
-  class Reminders.Controller extends Marionette.Controller
+  class Reminders.DropdownController extends Marionette.Controller
     initialize: (options) =>
       @event = options.event
       @user = App.request('currentUser')
 
-      @reminders = new FK.Collections.Reminders
-      @reminders.fetchForUserAndEvent(@user, @event)
+      @reminders = @event.reminders
 
       @region = new Marionette.Region
         el: options.container
@@ -22,7 +21,8 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
 
       @listenTo @view, 'click:set-reminder', @setReminder
       @listenTo @view, 'click:cancel', @close
-      @listenTo @reminders, 'fetched', @show
+
+      @show()
 
     setReminder: () =>
       times = @view.getTimes()

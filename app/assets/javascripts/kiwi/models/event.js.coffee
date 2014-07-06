@@ -61,6 +61,7 @@ class FK.Models.Event extends Backbone.GSModel
   parse: (resp) ->
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
     resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
+    @reminders = new FK.Collections.Reminders(resp.reminders)
     resp
 
   validate: (attrs, options) =>

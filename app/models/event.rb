@@ -50,6 +50,10 @@ class Event
     end
   end
 
+  def reminders_for_user(user)
+    reminders.where(user: user)
+  end
+
   def get_utc_datetime(timezone)
     if is_all_day == true or time_format == 'recurring' or time_format == 'tv_show'
       tz = TZInfo::Timezone.get(timezone)

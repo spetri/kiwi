@@ -41,6 +41,9 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesIcon.removeClass('glyphicon-remove')
         @ui.upvotesIcon.addClass('glyphicon-ok')
 
+    initialize: () =>
+      @listenTo @model.reminders, 'add remove', @refreshReminderHighlight
+
     modelEvents:
       'change:upvotes': 'refreshUpvotes'
       'change:have_i_upvoted': 'refreshUpvoted'
@@ -64,7 +67,14 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesContainer.tooltip
           title: 'Login to upvote'
 
+    refreshReminderHighlight: (model, collection) =>
+      if collection.length > 0
+        @ui.remindersIcon.addClass('highlight')
+      else
+        @ui.remindersIcon.removeClass('highlight')
+
     onRender: =>
       @refreshUpvotes @model
       @refreshUpvoted @model
       @refreshUpvoteAllowed @model
+      @refreshReminderHighlight null, @model.reminders
