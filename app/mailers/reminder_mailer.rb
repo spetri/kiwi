@@ -11,6 +11,6 @@ class ReminderMailer < ActionMailer::Base
    @reminder = reminder
    @event = reminder.event
    @user = reminder.user
-   mail(to: @user.email, subject: "Your Forekast reminder: #{@event.name}")
+   mail(to: @user.email, subject: "Reminder: #{@event.name}")
   end
 end
