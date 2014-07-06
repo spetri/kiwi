@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
 
   def show
   end
-  
+
   def create
     params = comment_params.dup
     have_i_upvoted = params.delete :have_i_upvoted
@@ -24,11 +24,11 @@ class CommentsController < ApplicationController
 
     @comment.update_attributes(params)
 
-    return if !user_signed_in?  
+    return if !user_signed_in?
     @comment.vote(have_i_upvoted, have_i_downvoted, current_user.username)
 
     @comment.save
-    
+
     respond_to do |format|
       if @comment.save
         format.json { render action: 'show', status: :created, location: @comment }
@@ -45,7 +45,7 @@ class CommentsController < ApplicationController
 
     @comment.setup_params(params)
 
-    return if !user_signed_in?  
+    return if !user_signed_in?
     @comment.vote(have_i_upvoted, have_i_downvoted, current_user.username)
 
     respond_to do |format|
@@ -85,5 +85,17 @@ class CommentsController < ApplicationController
                       :have_i_downvoted,
                       :have_i_upvoted
         ).merge(authored_by: current_user)
+    end
+
+    def send_notifications
+      event_owner = User.where(username: @comment.event.user)
+
+      if @comment.parent.present?
+        CommentMailer.reply_notice(@comment, @comment.parent.authored_by)
+      end
+
+      unless @comment.parent.present? and @comment.parent.authored_by == event_owner
+        CommentMailer.comment_notice(@comment, event_owner)
+      end
     end
 end
