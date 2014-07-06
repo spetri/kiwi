@@ -110,4 +110,8 @@ class Comment
     end
   end
 
+  def comment_text
+    parent_id.present? ? "replied to one of your comments" : "commented on one of your events" 
+  end
+
 end
