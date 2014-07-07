@@ -9,7 +9,7 @@ class Event
   field :details, type: String
   field :name, type: String
   field :user, type: String
-  field :datetime, type: DateTime
+  field :datetime, type: Time
   field :width, type: Integer
   field :height, type: Integer
   field :crop_x, type: Integer

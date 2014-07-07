@@ -5,7 +5,7 @@
   <p>
     <a href="<%=url_for(controller: 'home', action: 'index', only_path: false)%>events/show/<%=@event.id.to_s%>"><%=@event.name%></a>
   </p>
-  <p><%=@event.get_local_datetime(@reminder.recipient_time_zone).to_time.strftime("%A, %b %e, %l:%M %p")%>
+  <p><%=@event.get_local_datetime(@reminder.recipient_time_zone).strftime("%A, %b %e, %l:%M %p")%>
   <% if @reminder.reminder_time.present? %>
     (in <%=@reminder.reminder_time%>)
   <% end %>
