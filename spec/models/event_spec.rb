@@ -25,7 +25,7 @@ describe Event do
 
   describe 'datetime getters' do
     let(:all_day_event) { create :event, local_date: Time.local(2014, 1, 24).to_date, is_all_day: true }
-    let(:relative_time_event) { create :event, datetime: Time.local(2014, 1, 24, 3, 0, 0) }
+    let(:relative_time_event) { create :event, datetime: Time.utc(2014, 1, 24, 3, 0, 0) }
     let(:tv_show_event) { create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'tv_show' }
     let(:recurring_time_event) { create :event, local_date: Time.local(2014, 1, 24).to_date, local_time: '6:00 PM', time_format: 'recurring' }
 
