@@ -46,6 +46,14 @@ class Comment
     comment.parent = self
   end
 
+  def parent_author
+    parent.authored_by
+  end
+
+  def reply?
+    parent.present?
+  end
+
   def setup_params(params)
     self.message = params[:message]
     self.parent_id = params[:parent_id]

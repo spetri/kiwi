@@ -4,12 +4,12 @@ class CommentMailer < ActionMailer::Base
   def send_notifications(comment)
     event_owner = User.where(username: comment.event.user).first
 
-    if comment.parent.present?
-      reply_notice(comment, comment.parent.authored_by).deliver!
+    if comment.reply?
+      reply_notice(comment, comment.parent_author).deliver! if comment.parent_author.receive_comment_notifications
     end
 
     unless (comment.parent.present? and comment.parent.authored_by == event_owner) or comment.authored_by == event_owner
-      comment_notice(comment, event_owner).deliver!
+      comment_notice(comment, event_owner).deliver! if event_owner.receive_comment_notifications
     end
   end
 
