@@ -48,6 +48,12 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
       'click [data-action="set-reminder"]': 'click:set-reminder'
       'click [data-action="cancel"]': 'click:cancel'
 
+    events:
+      'click': 'stopPropagate'
+
+    stopPropagate: (e) =>
+      e.stopPropagation()
+
     getTimes: () =>
       $.map($('input:checked'), (box, i) =>
         $(box).data('time')
