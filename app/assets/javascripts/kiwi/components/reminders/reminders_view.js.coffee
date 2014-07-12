@@ -21,6 +21,7 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
 
       @listenTo @view, 'click:set-reminder', @setReminder
       @listenTo @view, 'click:cancel', @close
+      @listenTo App.vent, 'app:click', @close
 
       @show()
 
