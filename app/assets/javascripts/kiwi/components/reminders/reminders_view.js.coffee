@@ -21,6 +21,7 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
 
       @listenTo @view, 'click:set-reminder', @setReminder
       @listenTo @view, 'click:cancel', @close
+      @listenTo App.vent, 'app:click', @close
 
       @show()
 
@@ -46,6 +47,18 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
     triggers:
       'click [data-action="set-reminder"]': 'click:set-reminder'
       'click [data-action="cancel"]': 'click:cancel'
+
+    templateHelpers: {
+      loggedIn: () =>
+        user = App.request('currentUser')
+        user.get('logged_in')
+    }
+
+    events:
+      'click': 'stopPropagate'
+
+    stopPropagate: (e) =>
+      e.stopPropagation()
 
     getTimes: () =>
       $.map($('input:checked'), (box, i) =>
