@@ -35,6 +35,10 @@
       });
       if (!Backbone.History.started)
         Backbone.history.start({pushState: true})
+
+      $('body').click(function() {
+        FK.App.vent.trigger('app:click')
+      });
     });
   </script>
   <%= render :partial => 'layouts/uservoice' %>
