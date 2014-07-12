@@ -124,6 +124,6 @@ class Comment
   end
 
   def url
-    url_for(controller: 'home', action: 'index', only_path: true) + "events/show/#{event.id.to_s}/#{id.to_s}"
+    url_for(controller: 'home', action: 'index', only_path: false) + "events/show/#{event.id.to_s}/#{id.to_s}"
   end
 end
