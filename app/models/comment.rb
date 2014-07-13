@@ -1,7 +1,6 @@
 require './lib/kiwi_ordering'
 
 class Comment
-  include Rails.application.routes.url_helpers
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Tree
@@ -123,7 +122,4 @@ class Comment
     parent_id.present? ? "replied to one of your comments" : "commented on one of your events" 
   end
 
-  def url
-    url_for(controller: 'home', action: 'index', only_path: false) + "events/show/#{event.id.to_s}/#{id.to_s}"
-  end
 end
