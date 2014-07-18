@@ -192,11 +192,11 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
 
     updateVotes: =>
+      @toggleUpvote()
       return unless @username
       @$('.up-vote:first i.fa-caret-up').removeClass('upvote-marked')
       @$('.up-vote:first i.fa-caret-down').removeClass('downvote-marked')
       @displayVote()
-      @toggleUpvote()
 
     displayVote: =>
       if @model.get('have_i_upvoted')
