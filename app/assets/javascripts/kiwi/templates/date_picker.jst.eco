@@ -26,7 +26,7 @@
       <option <% if @local_ampm() == "AM": %> selected="SELECTED" <% end %>  value="AM" >AM</option>
       <option <% if @local_ampm() == "PM": %> selected="SELECTED" <% end %> value="PM" >PM</option>
     </select>
-    <span class="timezone-display"></span>
+    <span class="zone-display">(Your timezone)</span>
   </div>
 </div>
 <div class="col-sm-9">

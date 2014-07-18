@@ -488,6 +488,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 }
 
 .reminder-container {
+  cursor: pointer;
   position: absolute;
   top: 25px;
   right: 20px;
@@ -754,9 +755,8 @@ form.event_form {
   .date_picker_time_group {
     padding-top: 5px;
 
-    .timezone-display {
+    .zone-display {
       color: #888;
-      font-size: 12px;
     }
   }
   .timedisplay {
@@ -1065,23 +1065,23 @@ form.event_form {
     display: inline-block;
     float: left;
     margin-right: 8px;
-    margin-top: 6px;
+    margin-top: 2px;
     color: #888888;
 
     i {
       cursor: pointer;
       display: block;
       height: 20px;
-      font-size: 20px;
+      font-size: 25px;
     }
   }
 
   .upvote-marked {
-    color: #009159;
+    color: #89e4d9;
   }
 
   .downvote-marked {
-    color: #A61407;
+    color: #ffa094;
   }
 
   .info {
