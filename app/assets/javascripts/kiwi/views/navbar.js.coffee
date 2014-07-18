@@ -53,6 +53,7 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
   @goHome = () =>
     App.vent.trigger 'container:all'
     @eventStore.filterBySubkasts('ALL')
+    App.request('eventStore').fetchStartupEvents()
 
   @goToEventList = () =>
     App.vent.trigger 'container:all'
