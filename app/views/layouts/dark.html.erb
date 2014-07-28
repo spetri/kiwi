@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render :partial => 'layouts/head_section' %>
+</head>
+<body class="dark">
+  <div id="navbar" class="navbar-container-region">
+    <div class="navbar-indom-container">
+      <div class="navbar-container">
+        <div id="navbar-navbar-region"><div class="navbar navbar-fixed-top forekast-navbar"><div class="navbar-header">
+        <a href="/" class="logo">Forekast</a>
+      </div>
+      <% if current_user.present? %>
+        <ul class="nav navbar-nav">
+          <li data-option="new">
+            <a href="/#/events/new" class="btn add-new">+ Add Event</a>
+          </li>
+        </ul>
+      <% end %>
+
+      <% if current_user.blank? %>
+        <ul class="nav navbar-nav navbar-right">
+              <li><a href="<%= new_user_registration_path %>" class="btn btn-focus">Join the community</a></li>
+              <li><a href="<%= new_user_session_path %> " class="btn btn-alt">Log in</a></li>
+        </ul>
+      <% else %>
+        <ul class="nav navbar-nav navbar-right">
+              <li class="">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><%= current_user.username %> <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="<%= edit_user_registration_path %>">Profile Settings</a></li>
+                    <li><a href="<%= destroy_user_session_path %>">Logout</a></li>
+                  </ul>
+              </li>
+        </ul>
+      <% end %>
+    </div>
+    <div id="navbar-separator-region">
+      <div class="outer">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div id="clearer"></div>
+        </div></div>  
+      </div>
+    </div>
+  </div>
+  <div id="container" class="container">
+    <div id="main_body" class="col-md-12 col-lg-12">
+      <%= yield %>
+    </div>
+  </div>
+  <footer></footer>
+</body>
+</html>
