@@ -11,7 +11,7 @@
         <a href="/" class="logo">Forekast</a>
       </div>
       <% if current_user.present? %>
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav hidden-xs">
           <li data-option="new">
             <a href="/#/events/new" class="btn add-new">+ Add Event</a>
           </li>
@@ -24,7 +24,7 @@
               <li><a href="<%= new_user_session_path %> " class="btn btn-alt">Log in</a></li>
         </ul>
       <% else %>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right hidden-xs">
               <li class="">
                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><%= current_user.username %> <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
@@ -49,7 +49,7 @@
         <div></div>
         <div></div>
         <div id="clearer"></div>
-        </div></div>  
+        </div></div>
       </div>
     </div>
   </div>
