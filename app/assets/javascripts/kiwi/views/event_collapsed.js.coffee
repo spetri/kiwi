@@ -17,11 +17,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     ui:
       upvotesIcon: '.upvote-container i'
       upvotesContainer: '.upvote-container'
-      remindersIcon: '.reminder-container .fa'
+      remindersIcon: '.reminder-container'
       remindersContainer: '.reminder-container .sub-container'
 
     triggers:
-      'click .reminder-container .fa': 'click:reminders'
+      'click .reminder-container': 'click:reminders'
       'click .event-name': 'click:open'
       'click .event-image': 'click:open'
 

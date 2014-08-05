@@ -494,8 +494,14 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   position: absolute;
   top: 25px;
   right: 20px;
-  width: 14px;
-  height: 20px;
+  width: 32px;
+  height: 31px;
+  background: url(asset-path('glyphicon-clock-icon.png')) no-repeat 0 0; 
+  background-size: 20px;
+
+  .clock-reminder {
+    margin-right: 1px;
+  }
 
   .fa.highlight {
     color: $active;
@@ -504,7 +510,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
 .event-reminders-super-container {
   position: absolute;
-  right: -85px;
+  right: -70px;
   z-index: 5;
 
   .up-arrow {
@@ -554,7 +560,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 @media (max-width:991px) {
 
   .event-reminders-super-container {
-    right: -13px;
+    right: 0;
     .up-arrow {
       margin-right: 10px;
     }
