@@ -271,29 +271,6 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     }
   }
 
-  .outer {
-    margin-top: 46px;
-    position: fixed;
-    width: 100%;
-    z-index: 100;
-    display:none;
-
-    div:first-child {background: #d4bda4; float:left; width:9.09%; height:8px;}
-    div:nth-child(2) {background: #9eb8a4; float:left; width:9.09%; height:8px;}
-    div:nth-child(3) {background: #7d9aa2; float:left; width:9.09%; height:8px;}
-    div:nth-child(4) {background: #616981; float:left; width:9.09%; height:8px;}
-    div:nth-child(5) {background: #a898b2; float:left; width:9.09%; height:8px;}
-    div:nth-child(6) {background: #be93ac; float:left; width:9.09%; height:8px;}
-    div:nth-child(7) {background: #a38381; float:left; width:9.09%; height:8px;}
-    div:nth-child(8) {background: #beb1a2; float:left; width:9.09%; height:8px;}
-    div:nth-child(9) {background: #acb9a8; float:left; width:9.09%; height:8px;}
-    div:nth-child(10) {background: #799e88; float:left; width:9.09%; height:8px;}
-    div:nth-child(11) {background: #8293a6; float:left; width:9.09%; height:8px;}
-
-    #clearer {height:1px; overflow:hidden; clear:both; margin-top:-1px;}
-
-  }
-
   .subkast-navbar {
     top: 54px;
     min-height: 24px;
