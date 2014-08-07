@@ -187,19 +187,14 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 .navbar-container {
 
   a.logo {
-    margin: -2px 20px;
+    margin: -1px 0px 2px 20px;
     display: block;
-    left: 18px;
     width: 256px;
     height: 52px;
     background: transparent url(asset-path('forekast_logo.png')) no-repeat;
     background-size: 80%;
-      text-indent: -999px;
-      overflow: hidden;
-
-      &:hover {
-      opacity:1;
-      }
+    text-indent: -999px;
+    overflow: hidden;
   }
 
   .forekast-navbar {
@@ -248,7 +243,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       border:1px solid #606880;
       color: white;
       background-color: #3e4252;
-      margin: 10px 0 0 0;
+      margin: 14px 0 0 0;
       font-weight: 100;
       background-color: #6e7690;
 
@@ -277,10 +272,11 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 
   .outer {
-    margin-top: 47px;
+    margin-top: 46px;
     position: fixed;
     width: 100%;
     z-index: 100;
+    display:none;
 
     div:first-child {background: #d4bda4; float:left; width:9.09%; height:8px;}
     div:nth-child(2) {background: #9eb8a4; float:left; width:9.09%; height:8px;}
@@ -299,21 +295,21 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 
   .subkast-navbar {
-    top: 55px;
-    min-height: 42px;
-    padding: 5px 5px 5px 34px;
-    background-color: #97b6c4;
+    top: 54px;
+    min-height: 24px;
+    padding: 2px 0px 2px 36px;
+    background-color: #B6C8CF;
 
     .subkast-header {
-      color: #5c829b;
-      font-size: 20px;
-      font-weight: bold;
+      color: #6A7E97;
+      font-size: 16px;
+      font-weight: 600;
     }
 
     .subkast {
       color: white;
-      font-size: 22px;
-      font-weight: bold;
+      font-size: 16px;
+      font-weight: 600;
     }
 
     a.subkast-header-link {
