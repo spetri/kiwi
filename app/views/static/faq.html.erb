@@ -1,0 +1,55 @@
+<div class="row top-row">
+  <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
+    <%= image_tag "forekast_logo.png", class: 'col-sm-12' %>
+    <p class="col-sm-12">Discover what's happening</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
+    <div class="title-container">
+      <div class="hr-title-scores"></div>
+      <h2 class="title">Frequently Asked Questions</h2>
+      <div class="hr-title-scores"></div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    <dl class="about-list">
+      <dt>1. How do I know what timezone an event's time is set to?</dt>
+        <dd style="margin: 25px 0 50px 0">Forekast knows what time zone you're in, so the time you see will be the time the event takes place in your time zone.</dd>
+      <dt>2. What's the difference between global and national events?</dt>
+        <dd style="margin: 25px 0 50px 0">Global events are those that can be seen or experienced by anyone around the world. National events are only accessible or of interest to a specific country. Every Forekast user sees all global events plus the events posted to the country to which their account is set.</dd>
+      <dt>3. Can I suggest the addition of a new category (subkast)?</dt>
+        <dd>Definitely!  Email us with your suggestion! hello@forekast.com</dd>
+      <dt>4. Why can't I downvote an event?</dt>
+        <dd>We want to encourage people to post all the events they find. If the community focuses on upvoting quality posts, then the good stuff will rise to the top. If there's questionable material on Forekast, it can be reported and, if necessary, removed.</dd>
+      <dt>5. How can I help build this community?</dt>
+        <dd>We want Forekast to become a vibrant community and for you to feel like a part of it all. Any contributions you can make would be awesome. You can help by giving feedback & suggestions, finding and sharing events, helping us spread the word, and even helping with the software development. Shoot us an email if you want to chat more about it. hello@forekast.com</dd>
+      <dt>6. Where did local and college events go?</dt>
+        <dd>Our focus is on making Forekast a global community first. As the community grows, we plan to allow people to post local and college events, so everyone can share and discover things going on in their city or on campus.</dd>
+      <dt>7. Can I have permission to re-blog your weekly event summary graphics?</dt>
+        <dd style="margin: 25px 0 50px 0">Please do!  Feel free to plaster those things on your blogs, websites, refrigerators, and/or pets. All that we ask is that you link back to Forekast as the source.</dd>
+      <dt>8. My question wasn't on here!</dt>
+        <dd>We'd love to hear from you! hello@forekast.com</dd>
+    </dl>
+  </div>
+</div>
+<div>
+  <p class="center">
+    Also check out our <a href="#">blog</a> or email us at <a href="mailto:hello@forekast.com">hello@forekast.com</a>.
+  </p>
+</div>
+
+<script type="text/javascript">
+$(window).on("scroll", function() {
+  var scroll = $(this).scrollTop()
+  var navbar = $('.navbar-title')
+  if (scroll > 190)
+    navbar.fadeIn(300, function() {
+      navbar.html('frequently asked questions')
+    })  
+  else 
+    navbar.fadeOut(300)
+});
+</script>

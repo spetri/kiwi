@@ -6,10 +6,10 @@
 </div>
 <div class="row">
   <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
-    <div style="width: 100%; position:relative; background; red; margin: 0 auto;">
-      <div class="hr-title-scores" style="width: 14%; float: left;"></div>
-      <h2 style="width: 70%;float:left;padding:0px 2%;">How it Works</h2>
-      <div class="hr-title-scores" style="width: 14%; float: left;"></div>
+    <div class="title-container">
+      <div class="hr-title-scores"></div>
+      <h2 class="title">How it Works</h2>
+      <div class="hr-title-scores"></div>
     </div>
   </div>
 </div>
@@ -52,10 +52,10 @@
 
 <div class="row">
   <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
-    <div style="width: 100%; position:relative; background; red; margin: 0 auto;">
-      <div class="hr-title-scores" style="width: 14%; float: left;"></div>
-      <h2 style="width: 70%;float:left;padding:0px 2%;">The Events</h2>
-      <div class="hr-title-scores" style="width: 14%; float: left;"></div>
+    <div class="title-container">
+      <div class="hr-title-scores"></div>
+      <h2 class="title">The Events</h2>
+      <div class="hr-title-scores"></div>
     </div>
   </div>
 </div>
@@ -101,3 +101,16 @@
 
   </div>
 </div>
+
+<script type="text/javascript">
+$(window).on("scroll", function() {
+  var scroll = $(this).scrollTop()
+  var navbar = $('.navbar-title')
+  if (scroll > 100)
+    navbar.fadeIn(300, function() {
+      navbar.html('about forekast')
+    })  
+  else 
+    navbar.fadeOut(300)
+});
+</script>
