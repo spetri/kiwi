@@ -687,6 +687,10 @@ form.event_form {
     height: 400px;
     font-weight: 300;
     color: darkslategray;
+
+    p:nth-child(3) {
+      color: orangered;
+    }
   }
   .event_form_description {
     height: 100px;
