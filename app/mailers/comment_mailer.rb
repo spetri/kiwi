@@ -1,5 +1,5 @@
 class CommentMailer < ActionMailer::Base
-  default from: "from@example.com"
+  default from: "Forekast <hello@forekast.com>"
   
   def send_notifications(comment)
     event_owner = User.where(username: comment.event.user).first
