@@ -176,7 +176,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
 .navbar-title {
   color: white;
-  padding-right: 200px;
+  padding-right: 315px;
   margin-top: 16px;
   display: none;
   text-align: center;
@@ -549,6 +549,9 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 }
 
+.navbar-title {
+  display: none;
+}
 
 /* NAVBAR Edit Page */
 #main_body {
@@ -896,6 +899,10 @@ form.event_form {
         }
       }
     }
+  }
+
+  .navbar-title {
+    display: none !important;
   }
 
   form.event_form {
