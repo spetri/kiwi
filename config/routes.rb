@@ -4,7 +4,7 @@ Kiwi::Application.routes.draw do
     :omniauth_callbacks => "omniauth_callbacks"
   }
   resources :users
-  resources :events, :only => [:show, :update, :create, :destroy]
+  resources :events, :except => [:new]
   resources :comments
   resources :reminders
 
