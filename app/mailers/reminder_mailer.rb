@@ -1,5 +1,5 @@
 class ReminderMailer < ActionMailer::Base
-  default from: "from@example.com"
+  default from: "Forekast <hello@forekast.com>"
 
   def welcome
     @user = User.first

@@ -1,6 +1,5 @@
 class CommentMailer < ActionMailer::Base
-  default from: "from@example.com"
-
+  default from: "Forekast <hello@forekast.com>"
   def send_notifications(comment)
 
     if comment.reply?
