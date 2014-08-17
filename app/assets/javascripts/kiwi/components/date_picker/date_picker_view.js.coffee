@@ -73,7 +73,6 @@ FK.App.module "DatePicker", (DatePicker, App, Backbone, Marionette, $, _) ->
     refreshTimezone: =>
       tz = jstz.determine()
       name = if @model.get('time_format') is 'tv_show' then 'America/New York' else tz.name()
-      @$('.timezone-display').text("(#{name.replace('_', ' ')})")
 
     onRender: () =>
       @refreshAllDay()

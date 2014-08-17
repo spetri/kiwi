@@ -149,8 +149,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
       }
 
     events:
-      'click .fa-arrow-up': 'upvote'
-      'click .fa-arrow-down': 'downvote'
+      'click .fa-caret-up': 'upvote'
+      'click .fa-caret-down': 'downvote'
       'click .mute-delete': 'deletePrep'
 
     regions:
@@ -192,17 +192,17 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
 
 
     updateVotes: =>
-      return unless @username
-      @$('.up-vote:first i.fa-arrow-up').removeClass('upvote-marked')
-      @$('.up-vote:first i.fa-arrow-down').removeClass('downvote-marked')
-      @displayVote()
       @toggleUpvote()
+      return unless @username
+      @$('.up-vote:first i.fa-caret-up').removeClass('upvote-marked')
+      @$('.up-vote:first i.fa-caret-down').removeClass('downvote-marked')
+      @displayVote()
 
     displayVote: =>
       if @model.get('have_i_upvoted')
-        @$('.up-vote:first i.fa-arrow-up').addClass('upvote-marked')
+        @$('.up-vote:first i.fa-caret-up').addClass('upvote-marked')
       if @model.get('have_i_downvoted')
-        @$('.up-vote:first i.fa-arrow-down').addClass('downvote-marked')
+        @$('.up-vote:first i.fa-caret-down').addClass('downvote-marked')
       @$('.user-comment:first .upvotes').text(@model.netvotesWithMin())
 
     toggleUpvote: =>
@@ -226,8 +226,8 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     onShow: () =>
       if not @username
         @$('.reply').tooltip(title: 'Login to reply.')
-        @$('.fa-arrow-up').tooltip(title: 'Login to upvote.') 
-        @$('.fa-arrow-down').tooltip(title: 'Login to downvote.')
+        @$('.fa-caret-up').tooltip(title: 'Login to upvote.') 
+        @$('.fa-caret-down').tooltip(title: 'Login to downvote.')
       @$('.mute-delete:first').text(@muteDeleteText())
 
     setCurrentUser: (username) =>

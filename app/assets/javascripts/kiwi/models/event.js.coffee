@@ -177,7 +177,25 @@ class FK.Models.Event extends Backbone.GSModel
     @in_my_timezone(datetime).format('h:mm A')
 
   in_my_timezone: (datetime) ->
-    datetime.clone().zone(moment().zone())
+    # account for when viewing a date that is outside of our current DST
+    client_is_in_dst = @dst(new Date())
+    event_is_during_client_dst = @dst(datetime.toDate())
+    if (event_is_during_client_dst and client_is_in_dst) or (!event_is_during_client_dst and !client_is_in_dst)
+      datetime.clone().zone(moment().zone())
+    else
+      if (client_is_in_dst) # go back one hour
+        datetime.clone().zone(moment().zone()).add(minutes: -30)
+      else #add one hour
+        datetime.clone().zone(moment().zone()).add(minutes: 30)
+
+  stdTimezoneOffset: ->
+    jan = new Date(new Date().getFullYear(), 0, 1)
+    jul = new Date(new Date().getFullYear(), 6, 1)
+    Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset())
+
+  dst: (date)->
+    date.getTimezoneOffset() < @stdTimezoneOffset()
+
 
   in_range: (startDate, endDate) ->
     if @get('is_all_day')

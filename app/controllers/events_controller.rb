@@ -4,13 +4,13 @@ class EventsController < ApplicationController
 
   def index
     @events = Event.where(:datetime.ne => nil)
+    respond_to do |format|
+      format.html { redirect_to root_url }
+      format.json
+    end
   end
 
   def show
-  end
-
-  def new
-    @event = Event.new
   end
 
   def edit
@@ -127,7 +127,10 @@ class EventsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      @event = Event.where(id: params[:id]).first
+      if @event.blank?
+        redirect_to "/#events/new"
+      end
     end
 
     def event_params

@@ -4,9 +4,13 @@ Kiwi::Application.routes.draw do
     :omniauth_callbacks => "omniauth_callbacks"
   }
   resources :users
-  resources :events, :only => [:show, :update, :create, :destroy]
+  resources :events, :except => [:new]
   resources :comments
   resources :reminders
+
+
+  get '/about', :to => 'static#about', :as => 'about'
+  get '/faq', :to => 'static#faq', :as => 'faq'
 
   get '/change_password',        :to => 'passwords#change_password',  :as => 'change_password'
   get '/api/events/startupEvents',   :to => 'events#startup_events', :as => 'startup_events'

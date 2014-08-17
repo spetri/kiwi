@@ -1,0 +1,116 @@
+<div class="row top-row">
+  <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
+    <%= image_tag "forekast_logo.png", class: 'col-sm-12' %>
+    <p class="col-sm-12">Discover what's happening</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
+    <div class="title-container">
+      <div class="hr-title-scores"></div>
+      <h2 class="title">How it Works</h2>
+      <div class="hr-title-scores"></div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
+    <dl class="about-list">
+      <dt class="upvote double">
+      Events on Forekast are posted and voted on by the community.
+      </dt>
+      <dd>
+      As votes accumulate, the most interesting events rise to the top, creating a clear timeline of the best  upcoming events.
+      </dd>
+      <dt class="knowledge double">
+      Users can then add comments to share even more knowledge.
+      </dt>
+      <dd>
+      Comments allow users to discuss and share interesting and helpful information which the original poster may not know.
+      </dd>
+      <dt class="subscribe double">
+      Subscribe or unsubscribe from various categories, to see only what you want.
+      </dt>
+      <dd>
+      All events belong to categories, called ‘subkasts’, which makes it easy to customize your experience.
+      </dd>
+      <dt class="reminder double">
+    Set reminders to keep track of the events you really don’t want to miss.
+      </dt>
+      <dd>
+    From the home page it’s easy to set email reminders so you never miss events you’re excited about.
+      </dd>
+      <dt class="calendar">
+    Get weekly emails of the top events.
+      </dt>
+      <dd>
+    Every week we send out an email detailing which events have gotten the most votes, and which are the most interesting, so you’re always in the loop.
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
+    <div class="title-container">
+      <div class="hr-title-scores"></div>
+      <h2 class="title">The Events</h2>
+      <div class="hr-title-scores"></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-9 col-md-offset-1 col-lg-7 col-lg-offset-3">
+    <p class="center">
+    <em>We focus on events that are accessible to you no matter where you live. </em> Below are some examples of events that aren’t restricted by location:
+    </p>
+    <%= image_tag "event-music.png",           class: 'music half left' %>
+    <%= image_tag "event-rocket-launch.png",   class: 'rocket half right' %>
+    <%= image_tag "event-sports.png",          class: 'sports half left' %>
+    <%= image_tag "event-technology.png",      class: 'technology clear' %>
+    <%= image_tag "event-movies-tv.png",       class: 'movies half left' %>
+    <%= image_tag "event-gaming.png",          class: 'gaming half left' %>
+    <%= image_tag "event-meetups.png",         class: 'meetups clear' %>
+
+    <p class="center"><em>
+      <br/>
+      And so many more:
+      <br/>
+    </em></p>
+    <p class="center">
+    National giveaways, online talks, Reddit AMAs, natural phenomena, Kickstarter deadlines, holidays and anniversaries, the list goes on.
+    </p>
+    <h2 class="local-events">
+      What About Local Events?
+    </h2>
+
+    <p class="center">
+    We love local events! Our goal is to first build a strong community around global events and do it really well. However, the idea for Forekast was born with local events in mind and we hope to build local functionality soon!
+    </p>
+    <p class="center">
+    Follow us and keep in touch: <br/>
+    <a href="https://twitter.com/theforekast" target="_blank" ><i class="fa fa-twitter"></i></a> |
+    <a href="https://www.facebook.com/TheForekast" target="_blank"><i class="fa fa-facebook"></i></a> |
+    <a href="http://instagram.com/theforekast" target="_blank"><i class="fa fa-instagram"></i></a> |
+    <a href="https://plus.google.com/+Forekast" target="_blank"><i class="fa fa-google-plus"></i></a>
+    </p>
+    <p class="center">
+      Also check out our <a href="#">blog</a> or email us at <a href="mailto:hello@forekast.com">hello@forekast.com</a>.
+    </p>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+$(window).on("scroll", function() {
+  var scroll = $(this).scrollTop()
+  var navbar = $('.navbar-title')
+  if (scroll > 100)
+    navbar.fadeIn(300, function() {
+      navbar.html('about forekast')
+    })  
+  else 
+    navbar.fadeOut(300)
+});
+</script>

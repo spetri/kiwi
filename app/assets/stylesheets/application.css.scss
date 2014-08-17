@@ -130,11 +130,11 @@ a.uservoice {
 $active: #75dbc7;
 $activeText: #FFF;
 body, h1, h2, h6, .h1, .h2, .h4, .h6, p, a, span, label, button {
-  font-family:Helvetica, sans-serif;
+  font-family:'Open Sans', Helvetica, sans-serif;
 }
 
 h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col-lg-3, .btn-more {
-  font-family:'Roboto Slab', Helvetica, sans-serif !important;
+  font-family:'Open Sans', Helvetica, sans-serif !important;
 }
 
 
@@ -174,6 +174,14 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     }
 }
 
+.navbar-title {
+  color: white;
+  padding-right: 200px;
+  margin-top: 16px;
+  display: none;
+  text-align: center;
+}
+
 /* NAVBAR */
 
 .navbar-indom-container {
@@ -187,17 +195,14 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 .navbar-container {
 
   a.logo {
-    margin: -2px 20px;
+    margin: -1px 0px 2px 20px;
     display: block;
-    left: 18px;
     width: 256px;
     height: 52px;
-    background: transparent url(asset-path('forekast_world_cup_logo.png')) no-repeat;
+    background: transparent url(asset-path('forekast_logo.png')) no-repeat;
     background-size: 80%;
-
-      &:hover {
-      opacity:1;
-      }
+    text-indent: -999px;
+    overflow: hidden;
   }
 
   .forekast-navbar {
@@ -218,7 +223,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
     ul.nav a {
       cursor: pointer;
-      padding:3px 10px;
+      padding:6px 10px;
     }
 
       li > .dropdown-toggle {
@@ -246,7 +251,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       border:1px solid #606880;
       color: white;
       background-color: #3e4252;
-      margin: 10px 0 0 0;
+      margin: 11px 0 0 0;
       font-weight: 100;
       background-color: #6e7690;
 
@@ -274,44 +279,22 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     }
   }
 
-  .outer {
-    margin-top: 47px;
-    position: fixed;
-    width: 100%;
-    z-index: 100;
-
-    div:first-child {background: #d4bda4; float:left; width:9.09%; height:8px;}
-    div:nth-child(2) {background: #9eb8a4; float:left; width:9.09%; height:8px;}
-    div:nth-child(3) {background: #7d9aa2; float:left; width:9.09%; height:8px;}
-    div:nth-child(4) {background: #616981; float:left; width:9.09%; height:8px;}
-    div:nth-child(5) {background: #a898b2; float:left; width:9.09%; height:8px;}
-    div:nth-child(6) {background: #be93ac; float:left; width:9.09%; height:8px;}
-    div:nth-child(7) {background: #a38381; float:left; width:9.09%; height:8px;}
-    div:nth-child(8) {background: #beb1a2; float:left; width:9.09%; height:8px;}
-    div:nth-child(9) {background: #acb9a8; float:left; width:9.09%; height:8px;}
-    div:nth-child(10) {background: #799e88; float:left; width:9.09%; height:8px;}
-    div:nth-child(11) {background: #8293a6; float:left; width:9.09%; height:8px;}
-
-    #clearer {height:1px; overflow:hidden; clear:both; margin-top:-1px;}
-
-  }
-
   .subkast-navbar {
-    top: 55px;
-    min-height: 42px;
-    padding: 5px 5px 5px 34px;
-    background-color: #97b6c4;
+    top: 54px;
+    min-height: 24px;
+    padding: 2px 0px 2px 36px;
+    background-color: #B6C8CF;
 
     .subkast-header {
-      color: #5c829b;
-      font-size: 20px;
-      font-weight: bold;
+      color: #6A7E97;
+      font-size: 16px;
+      font-weight: 600;
     }
 
     .subkast {
       color: white;
-      font-size: 22px;
-      font-weight: bold;
+      font-size: 16px;
+      font-weight: 600;
     }
 
     a.subkast-header-link {
@@ -380,6 +363,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     margin-top:20px;
     margin-bottom:0px;
     font-size:20px;
+      font-weight:600;
   }
 
   .button-container {
@@ -453,6 +437,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     .upvote-counter {
       font-size: 18px;
       line-height:1;
+      font-weight:700;
     }
   }
   img {
@@ -472,6 +457,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
     a.event-name {
       color: #049ADA;
       cursor: pointer;
+        font-weight:600;
       &:hover {
         text-decoration: none;
       }
@@ -488,12 +474,17 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 }
 
 .reminder-container {
+  cursor: pointer;
   position: absolute;
   top: 25px;
   right: 20px;
   width: 14px;
   height: 20px;
-
+    
+  .fa {
+    color:#888888;
+   }   
+    
   .fa.highlight {
     color: $active;
   }
@@ -559,6 +550,10 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 }
 
 
+/* NAVBAR Edit Page */
+#main_body {
+  margin-top: 90px;
+}
 
 
 /* SIDEBAR */
@@ -567,9 +562,10 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   margin-top:20px;
   padding: 5px 15px;
   h5 {
-    font-weight: bold;
+    font-weight: 600;
     font-size:16px;
     line-height:1.3;
+    color: #444444;
   }
 
   ol {
@@ -577,26 +573,28 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 
   #subkast-filter {
+    padding-bottom: 20px;
     h5 {
       padding-top: 14px;
     }
 
     .subkasts-container {
 
-      margin-left: 10px;
+      margin-left: 20px;
 
       .subkast-list {
         margin-bottom: 10px;
 
         a {
-          color: black;
+          color: #666666;
           text-decoration: underline;
+          font-weight:300;
         }
       }
 
       .subkast-edit-link {
         color: #049ADA;
-        font-weight: 800;
+        font-weight: 600;
         text-decoration: underline;
         cursor: pointer;
       }
@@ -608,8 +606,9 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
     sup {
       font-size:10px;
-      color:#428bca;
+      color:#049ada;
       cursor: pointer;
+      font-weight:600;
     }
 
     .tooltip {
@@ -621,9 +620,11 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   .sidebar-element {
     ul {
       margin-top: 0px;
-      margin-left: 30px;
+      margin-left: 10px;
       li {
         margin-left:10px;
+        line-height: 1.24;
+        margin-bottom: 6px;
       }
     }
   }
@@ -690,6 +691,10 @@ form.event_form {
     height: 400px;
     font-weight: 300;
     color: darkslategray;
+
+    p:nth-child(3) {
+      color: orangered;
+    }
   }
   .event_form_description {
     height: 100px;
@@ -754,9 +759,8 @@ form.event_form {
   .date_picker_time_group {
     padding-top: 5px;
 
-    .timezone-display {
+    .zone-display {
       color: #888;
-      font-size: 12px;
     }
   }
   .timedisplay {
@@ -1065,23 +1069,23 @@ form.event_form {
     display: inline-block;
     float: left;
     margin-right: 8px;
-    margin-top: 6px;
+    margin-top: 2px;
     color: #888888;
 
     i {
       cursor: pointer;
       display: block;
       height: 20px;
-      font-size: 20px;
+      font-size: 25px;
     }
   }
 
   .upvote-marked {
-    color: #009159;
+    color: #89e4d9;
   }
 
   .downvote-marked {
-    color: #A61407;
+    color: #ffa094;
   }
 
   .info {
@@ -1182,7 +1186,7 @@ form.event_form {
   height: 25px;
   background-color: #f5f5f5;
   opacity: 0.9;
-  border-top: 1px solid lightgray;
+  border-top: 1px solid #ebebeb;
 
   .footer-text {
     padding: 2px 50px 0 0;
@@ -1193,10 +1197,10 @@ form.event_form {
 
     a {
       font-size: 14px;
-      color: black;
+      color: #666666;
 
       :hover {
-        color: gray;
+        color: #222222;
       }
     }
 
@@ -1218,7 +1222,7 @@ form.event_form {
     left: 18px;
     width: 256px;
     height: 52px;
-    background: transparent url(asset-path('forekast_world_cup_logo.png')) no-repeat;
+    background: transparent url(asset-path('forekast_logo.png')) no-repeat;
     background-size: 80%;
 
     &:hover {
@@ -1275,10 +1279,10 @@ form.event_form {
 
     a {
       font-size: 14px;
-      color: black;
+      color: #666666;
 
       :hover {
-        color: gray;
+        color: #aaaaaaa;
       }
     }
 
@@ -1368,5 +1372,123 @@ div.label {
   div.subkast-list-container {
     margin-top: 20px;
     margin-bottom: 70px;
+  }
+}
+
+/* DARK THEME */
+
+$darkTitleColour: #D4D7F7;
+$darkBackground: #3f4253;
+$darkAccentColour: #7cddca;
+
+body.dark {
+  background: $darkBackground;
+  footer {
+    height: 200px;
+  }
+}
+body.dark .container {
+  font-family: 'Nunito', Helvetica, arial, sans-serif;
+  color: #FFF;
+  p {
+    font-size: 18px;
+  }
+  a,em {
+    color: $darkAccentColour;
+    font-style: normal;
+  }
+  h2 {
+    text-transform: uppercase;
+    color: $darkTitleColour;
+    font-weight: 300;
+    letter-spacing: 7px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  h2.local-events {
+    letter-spacing: 0px;
+    color: $darkAccentColour;
+    font-size: 22px;
+    margin-top: 20px;
+    background: url(asset-path('about-location-pins.png')) no-repeat 50% 0;
+    padding-top: 150px;
+    margin-bottom: 20px;
+  }
+  div.title-container {
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+  }
+  div.hr-title-scores {
+    background: $darkTitleColour;
+    height: 2px;
+    width: 14%;
+    margin-top: 33px;
+    float: left;
+  }
+  h2.title {
+    width: 70%;
+    float: left;
+    padding: 0px 2%;
+  }
+  .top-row {
+    margin-top: 50px;
+    img {
+      width: 45%;
+      margin-left: 5%;
+      float: left;
+    }
+    p {
+      margin-left: 5%;
+      float: left;
+      width: 45%;
+      margin-top: 6%;
+    }
+  }
+  dl.about-list {
+    font-size: 22px;
+    dt {
+      padding-left: 100px;
+      color: $darkAccentColour;
+      height: 90px;
+      margin-bottom: -50px;
+    }
+    dt.upvote { background: url(asset-path('about-upvote.png')) no-repeat 0 0; }
+    dt.calendar { background: url(asset-path('about-calendar.png')) no-repeat 0 0; }
+    dt.knowledge { background: url(asset-path('about-knowledge.png')) no-repeat 0 0; }
+    dt.subscribe { background: url(asset-path('about-subscribe.png')) no-repeat 0 0; }
+    dt.reminder { background: url(asset-path('about-reminder.png')) no-repeat 0 0; }
+    dt.double {
+      height: 120px;
+    }
+    dd {
+      padding-left: 100px;
+      margin-bottom: 50px;
+      font-size: 18px;
+    }
+  }
+  img {
+    width: 100%;
+    padding: 5px;
+  }
+  img.half { width: 50%; }
+  img.left { float: left; }
+  img.right { float: right; }
+  img.clear { clear: both; }
+  img.gaming {
+    width: 43.8%;
+  }
+  img.movies {
+    width: 56.2%;
+  }
+
+}
+@media (max-width:991px) {
+  body.dark .container dl.about-list dd {
+    font-size: 16px;
+  }
+  body.dark .container dl.about-list dt.double {
+    height: 138px;
+    font-size: 18px;
   }
 }
