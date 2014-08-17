@@ -50,9 +50,9 @@
   </div>
   <div class="form-group event_form_image">
     <div class="col-sm-3">
-      <label >Image</label>
+      <label>Image</label>
       <p>Choosing a great picture helps bring attention to your event.</p>
-      <p>Image support for Internet Explorer is coming soon. In the meantime, 
+      <p class="ie-warning">Image support for Internet Explorer is coming soon. In the meantime, 
       if you'd like to include an image, please try Chrome, Safari, or Firefox.</p>
     </div>
     <div class="col-sm-9">
