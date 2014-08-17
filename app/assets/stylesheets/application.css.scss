@@ -480,12 +480,8 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   right: 20px;
   width: 14px;
   height: 20px;
-    
-  .fa {
-    color:#888888;
-   }   
-    
-  .fa.highlight {
+
+  .glyphicon.highlight {
     color: $active;
   }
 }
