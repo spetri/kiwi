@@ -5,14 +5,14 @@ describe CommentMailer do
   let(:user2) { create :user }
   let(:user3) { create :user }
   let(:user4) { _user = create :user
-    _user.receive_comment_notifications = false 
+    _user.receive_comment_notifications = false
     _user.save
     return _user
   }
 
   let(:event1) { create :event, user: user1.username }
   let(:event2) { create :event, user: user4.username }
-  
+
   let(:comment1) { create :comment, event: event1, authored_by: user2, parent: nil }
   let(:comment2) { create :comment, event: event1, authored_by: user1, parent: nil }
   let(:comment3) { create :comment, event: event2, authored_by: user1, parent: nil }

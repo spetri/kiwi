@@ -54,6 +54,10 @@ class Comment
     parent.present?
   end
 
+  def event_owner
+    User.where(username: event.user).first
+  end
+
   def setup_params(params)
     self.message = params[:message]
     self.parent_id = params[:parent_id]
