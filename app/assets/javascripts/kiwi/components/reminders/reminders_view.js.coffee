@@ -12,7 +12,7 @@ FK.App.module "Reminders", (Reminders, App, Backbone, Marionette, $, _) ->
       @event = options.event
       @user = App.request('currentUser')
 
-      @reminders = @event.reminders
+      @reminders = @event.remindersCollection()
 
       @region = new Marionette.Region
         el: options.container

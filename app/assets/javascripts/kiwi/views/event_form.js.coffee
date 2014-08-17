@@ -51,7 +51,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     return if not @event.isValid()
 
     @showSpinner()
-    @event.add(@event, merge: true)
+    @events.add(@event, merge: true)
 
   @getBaseView = () =>
     if @event.editAllowed(@user.get('username'))
