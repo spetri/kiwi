@@ -20,10 +20,16 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @listenTo @event, 'change:user', @showBaseView
     @showBaseView()
 
+    @userSetsCountry()
+
     if event
       Backbone.history.navigate 'events/edit/' + event.id, trigger: false
     else
       Backbone.history.navigate 'events/new/', trigger: false
+
+  @userSetsCountry = () =>
+    if @user.hasLastPostedCountry() and @event.isNew()
+      @view.setCountry(@user.lastPostedCountry())
 
   @showBaseView = () =>
     FK.App.mainRegion.show @view
@@ -49,6 +55,10 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @event.save(params, { silent: true })
 
     return if not @event.isValid()
+
+    #TODO: Find a happy home for this that is more concerned with what happens to users
+    if @event.isNational()
+      @user.setLastPostedCountry(@event.get('country'))
 
     @showSpinner()
     @events.add(@event, merge: true)

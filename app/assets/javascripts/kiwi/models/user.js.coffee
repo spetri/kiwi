@@ -8,6 +8,7 @@ class FK.Models.User extends Backbone.Model
     username: ''
     country: 'US'
     moderator: false
+    last_posted_country: null
 
   sync: (method, model, options) =>
 
@@ -26,3 +27,12 @@ class FK.Models.User extends Backbone.Model
 
   userId: () =>
     @get('_id')["$oid"]
+
+  hasLastPostedCountry: () =>
+    !! @get('last_posted_country')
+
+  lastPostedCountry: () =>
+    @get('last_posted_country')
+
+  setLastPostedCountry: (country) =>
+    @save({ last_posted_country: country })
