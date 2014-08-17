@@ -30,6 +30,6 @@ class CommentMailer < ActionMailer::Base
 
   def reply_notice(comment)
     @comment = comment
-    mail(to: comment.parent_author, subject: "#{comment.authored_by.username} replied to your comment", template_name: "reply_notice")
+    mail(to: comment.parent_author.email, subject: "#{comment.authored_by.username} replied to your comment", template_name: "reply_notice")
   end
 end
