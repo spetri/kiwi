@@ -473,14 +473,25 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   color: red;
 }
 
+.event {
+  .reminder-container {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    width: 14px;
+    height: 20px;
+  }
+}
+
+.event-card {
+  .reminder-container {
+    display: inline-block;
+    margin: 0 8px;
+  }
+}
+
 .reminder-container {
   cursor: pointer;
-  position: absolute;
-  top: 25px;
-  right: 20px;
-  width: 14px;
-  height: 20px;
-
   .glyphicon.highlight {
     color: $active;
   }
@@ -979,7 +990,6 @@ form.event_form {
 
     .event-upvotes {
       font-weight: bold;
-      margin-right: 30px;
       cursor: pointer;
       #upvotes-icon {
         color: #48C9B0;
