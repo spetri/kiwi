@@ -101,6 +101,9 @@ class FK.Models.Event extends Backbone.GSModel
   isOnDate: (date) =>
     @get('fk_datetime').diff(date, 'days') == 0 && date.date() == @get('fk_datetime').date()
 
+  isNational: () =>
+    @get('location_type') is 'national'
+
   getters:
     fk_datetime: () ->
       return @datetimeRecurring() if @get('time_format') is 'recurring'
