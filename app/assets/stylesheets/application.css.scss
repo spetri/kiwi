@@ -601,6 +601,43 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       }
     }
   }
+  
+  #sidebar-social {
+   width: 145px;
+   height: 150px;
+   margin-left: 20px;
+   ul { 
+    list-style: none;
+    padding: 0;
+    li {
+     a:hover { 
+      background: #D3CEC9;
+     }
+     a {
+      float: left;
+      padding: 0;
+      width: 70px;
+      height: 70px;
+      margin:0 auto;
+      background:#dad5d1;
+      color:#fff;
+      font-size:40px;
+      line-height: 70px;
+      text-align: center;
+     }
+    }
+     li:nth-child(3) a,
+     li:nth-child(4) a { 
+       margin-top: 5px;
+     }
+     
+     li:first-child a,
+     li:nth-child(3) a { 
+      margin-right: 5px;
+     }
+   }
+  }
+  
 
   #country-filter {
     padding-bottom: 20px;
@@ -1180,8 +1217,14 @@ form.event_form {
     border-bottom: none;
     margin-bottom: 0px;
   }
+  
+  #sidebar-social {
+   display:none;
+  }
   display: none;
 }
+
+
 
 #footer {
   position: fixed;
