@@ -30,9 +30,12 @@ class FK.Models.Event extends Backbone.GSModel
     @url = Backbone.Model.prototype.url
     @remainder_count = 100
 
-
     @on 'change:time_format', @update_tv_time
     @on 'change:_id', @updateCommentsEvent
+
+  remindersCollection: () =>
+    @reminders = new FK.Collections.Reminders() unless @reminders
+    @reminders
 
   sync: (action, model, options) =>
     methodMap =
@@ -60,10 +63,10 @@ class FK.Models.Event extends Backbone.GSModel
 
     Backbone.sync(action, model, options)
 
-  parse: (resp) ->
+  parse: (resp) =>
     resp.haveIUpvoted = false if resp.haveIUpvoted is "false"
     resp.is_all_day = false if resp.is_all_day is "false" || resp.is_all_day is "undefined"
-    @reminders = new FK.Collections.Reminders(resp.reminders)
+    @remindersCollection().set(resp.reminders)
     resp
 
   validate: (attrs, options) =>
@@ -97,6 +100,9 @@ class FK.Models.Event extends Backbone.GSModel
 
   isOnDate: (date) =>
     @get('fk_datetime').diff(date, 'days') == 0 && date.date() == @get('fk_datetime').date()
+
+  isNational: () =>
+    @get('location_type') is 'national'
 
   getters:
     fk_datetime: () ->
@@ -294,7 +300,10 @@ class FK.Models.EventBlock extends Backbone.Model
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
     howManyOver = events.length + @events.length - @get('event_limit')
-    events = _.take(events, events.length - howManyOver) if howManyOver > 0
+    if howManyOver > 0
+      @set('event_max_count', events.length + @events.length)
+      events = _.take(events, events.length - howManyOver)
+
     @events.add(events)
 
   checkLimit: () =>

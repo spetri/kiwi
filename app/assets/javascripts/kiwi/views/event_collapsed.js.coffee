@@ -17,11 +17,11 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     ui:
       upvotesIcon: '.upvote-container i'
       upvotesContainer: '.upvote-container'
-      remindersIcon: '.reminder-container .fa'
+      remindersIcon: '.reminder-container .glyphicon'
       remindersContainer: '.reminder-container .sub-container'
 
     triggers:
-      'click .reminder-container .fa': 'click:reminders'
+      'click .reminder-container .glyphicon': 'click:reminders'
       'click .event-name': 'click:open'
       'click .event-image': 'click:open'
 
@@ -46,7 +46,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesIcon.addClass('glyphicon-ok')
 
     initialize: () =>
-      @listenTo @model.reminders, 'add remove', @refreshReminderHighlight
+      @listenTo @model.remindersCollection(), 'add remove', @refreshReminderHighlight
 
     modelEvents:
       'change:upvotes': 'refreshUpvotes'

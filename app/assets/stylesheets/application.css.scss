@@ -176,7 +176,7 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
 
 .navbar-title {
   color: white;
-  padding-right: 200px;
+  padding-right: 315px;
   margin-top: 16px;
   display: none;
   text-align: center;
@@ -473,19 +473,27 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   color: red;
 }
 
+.event {
+  .reminder-container {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    width: 14px;
+    height: 20px;
+  }
+}
+
+.event-card {
+  .reminder-container {
+    position: relative;
+    display: inline-block;
+    margin: 0 8px;
+  }
+}
+
 .reminder-container {
   cursor: pointer;
-  position: absolute;
-  top: 25px;
-  right: 20px;
-  width: 14px;
-  height: 20px;
-    
-  .fa {
-    color:#888888;
-   }   
-    
-  .fa.highlight {
+  .glyphicon.highlight {
     color: $active;
   }
 }
@@ -549,13 +557,6 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   }
 }
 
-
-/* NAVBAR Edit Page */
-#main_body {
-  margin-top: 90px;
-}
-
-
 /* SIDEBAR */
 
 .sidebar {
@@ -600,6 +601,43 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
       }
     }
   }
+  
+  #sidebar-social {
+   width: 145px;
+   height: 150px;
+   margin-left: 20px;
+   ul { 
+    list-style: none;
+    padding: 0;
+    li {
+     a:hover { 
+      background: #D3CEC9;
+     }
+     a {
+      float: left;
+      padding: 0;
+      width: 70px;
+      height: 70px;
+      margin:0 auto;
+      background:#dad5d1;
+      color:#fff;
+      font-size:40px;
+      line-height: 70px;
+      text-align: center;
+     }
+    }
+     li:nth-child(3) a,
+     li:nth-child(4) a { 
+       margin-top: 5px;
+     }
+     
+     li:first-child a,
+     li:nth-child(3) a { 
+      margin-right: 5px;
+     }
+   }
+  }
+  
 
   #country-filter {
     padding-bottom: 20px;
@@ -898,6 +936,10 @@ form.event_form {
     }
   }
 
+  .navbar-title {
+    display: none !important;
+  }
+
   form.event_form {
     .form-group {
       min-height: 40px;
@@ -986,7 +1028,6 @@ form.event_form {
 
     .event-upvotes {
       font-weight: bold;
-      margin-right: 30px;
       cursor: pointer;
       #upvotes-icon {
         color: #48C9B0;
@@ -1176,8 +1217,14 @@ form.event_form {
     border-bottom: none;
     margin-bottom: 0px;
   }
+  
+  #sidebar-social {
+   display:none;
+  }
   display: none;
 }
+
+
 
 #footer {
   position: fixed;

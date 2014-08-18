@@ -14,10 +14,12 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
       ui:
         upvotesIcon: '#upvotes-icon'
+        remindersContainer: '.reminder-container .sub-container'
+        remindersIcon: '.reminder-container .glyphicon'
 
       triggers:
         'click [data-action="edit"]': 'click:edit'
-        'click [data-tool="reminders"] .event-tool': 'click:reminders'
+        'click .reminder-container .glyphicon': 'click:reminders'
 
       events:
         'click .event-upvotes': 'upvoteToggle'
@@ -38,6 +40,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       resetDelete: () =>
         @$('[data-action="destroy"]').removeClass('btn btn-xs btn-danger')
         @refreshDeleteEventText()
+
+      initialize: () =>
+        @listenTo @model.remindersCollection(), 'add remove', @refreshReminderHighlight
 
       modelEvents:
         'change:upvotes': 'refreshUpvotes'
@@ -66,6 +71,12 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         text = "(Delete my event)" if @myEvent()
         @$('[data-action="destroy"]').text(text)
 
+      refreshReminderHighlight: (model, collection) =>
+        if collection.length > 0
+          @ui.remindersIcon.addClass('highlight')
+        else
+          @ui.remindersIcon.removeClass('highlight')
+
       myEvent: =>
         @username == @model.get('user')
 
@@ -80,3 +91,4 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         @refreshUpvoted(@model)
         @refreshUpvoteAllowed(@model)
         @refreshDeleteEventText()
+        @refreshReminderHighlight null, @model.remindersCollection()

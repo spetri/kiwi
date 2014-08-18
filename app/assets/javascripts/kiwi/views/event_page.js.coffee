@@ -16,6 +16,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
     @eventCardView.setModeratorMode(App.request('currentUser').get('moderator'))
 
     @listenTo @eventCardView, 'click:edit', @triggerEditEvent
+    @listenTo @eventCardView, 'click:reminders', @showReminders
     @listenTo @event, 'destroy', @triggerEventList
 
     @eventCardView.on 'show', () =>
@@ -42,6 +43,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
 
   @triggerEventList = () =>
     App.vent.trigger 'container:all'
+
+  @showReminders = (args) =>
+    @remindersComponent = FK.App.Reminders.create({event: args.model, container: args.view.ui.remindersContainer })
 
   @loadSocialNetworking = () ->
     @googleApi = $.Deferred()

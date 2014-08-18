@@ -44,7 +44,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
 
     refreshLocation: (event) ->
       @$('[name="location_type"][value="' + event.get('location_type') + '"]').attr('checked', 'checked')
-      @$('[name="country"] [value="' + event.get('country') + '"]').attr('selected', 'selected')
+      @setCountry(event.get('country'))
 
     refreshDescription: (event) ->
       @$('[name="description"]').val(event.get('description'))
@@ -89,6 +89,13 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
         @$('[name="subkast"]').append('<option value="' + option.code + '">' + option.name + '</option>')
       )
 
+    ie_warning: () =>
+      if (!$('html').is('.ie6, .ie7, .ie8, .ie9'))
+        this.$('p.ie-warning').addClass('hide')
+
+    setCountry: (countryCode) =>
+      @$('[name="country"] [value="' + countryCode + '"]').attr('selected', 'selected')
+
     onRender: =>
       FK.Utils.RenderHelpers.populate_select_getter(@, 'country', FK.Data.countries, 'en_name')
       @renderSubkastOptions()
@@ -97,4 +104,5 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @refreshLocation @model
       @refreshDescription @model
       @refreshAllDay @model
+      @ie_warning()
       @renderLocation()

@@ -226,9 +226,9 @@ FK.App.module "Comments", (Comments, App, Backbone, Marionette, $, _) ->
     onShow: () =>
       if not @username
         @$('.reply').tooltip(title: 'Login to reply.')
-        @$('.fa-caret-up').tooltip(title: 'Login to upvote.') 
+        @$('.fa-caret-up').tooltip(title: 'Login to upvote.')
         @$('.fa-caret-down').tooltip(title: 'Login to downvote.')
-      @$('.mute-delete:first').text(@muteDeleteText())
+      @$('.tools > .mute-delete').text(@muteDeleteText())
 
     setCurrentUser: (username) =>
       @username = username

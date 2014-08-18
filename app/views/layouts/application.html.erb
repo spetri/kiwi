@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class=""> <!--<![endif]-->
   <head>
   <%= render :partial => 'layouts/head_section' %>
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
@@ -49,6 +53,7 @@
       <%= link_to 'About', about_path %> |
       <%= link_to 'FAQ', faq_path %> |
       <a href="http://blog.forekast.com" target="_blank">Blog</a> |
+      <%= link_to 'Terms', termsofservice_path %> |
       Follow Us:
       <a href="https://twitter.com/theforekast" target="_blank" ><i class="fa fa-twitter"></i></a>
       <a href="https://www.facebook.com/TheForekast" target="_blank"><i class="fa fa-facebook"></i></a>

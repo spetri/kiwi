@@ -1,6 +1,6 @@
 <div class="event-image-container col-sm-7">
   <img src="<%=mediumUrl%>" />
-  <div class="event-likes-container" style="display: none;">
+  <div class="event-likes-container">
     <div class="fb-like" data-layout="button_count" data-action="like" data-width="98" data-height="20" style="width:98px; float: left;"></div>
     <div style="float: left;">
       <a href="https://twitter.com/share" class="twitter-share-button" data-via="theforekast">Tweet</a>
@@ -16,6 +16,10 @@
 
   <div class="event-tools-container">
     <span class="event-upvotes"><i id="upvotes-icon" class="glyphicon glyphicon-chevron-up"></i> <span class="upvote-counter"></span> upvotes</span>
+    <div class="reminder-container">
+      <span class="glyphicon glyphicon-bell"></span>
+      <div class="sub-container"></div>
+    </div>
     <% if (myEvent()) { %>
       <div class="event-tool-container">
          <span class="event-tool" data-action="edit">(Edit my event)</span>
