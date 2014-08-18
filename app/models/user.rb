@@ -73,6 +73,8 @@ class User
 
   field :my_subkasts,                   :type => Array
 
+  field :last_posted_country,           :type => String
+
   include Mongoid::Timestamps
 
   def defaults
