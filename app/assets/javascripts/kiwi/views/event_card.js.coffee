@@ -91,4 +91,4 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         @refreshUpvoted(@model)
         @refreshUpvoteAllowed(@model)
         @refreshDeleteEventText()
-        @refreshReminderHighlight null, @model.reminders
+        @refreshReminderHighlight null, @model.remindersCollection()
