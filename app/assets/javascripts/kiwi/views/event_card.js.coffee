@@ -41,7 +41,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
         @$('[data-action="destroy"]').removeClass('btn btn-xs btn-danger')
         @refreshDeleteEventText()
 
-      initilize: () =>
+      initialize: () =>
         @listenTo @model.remindersCollection(), 'add remove', @refreshReminderHighlight
 
       modelEvents:
