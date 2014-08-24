@@ -59,13 +59,9 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       () =>
         @twitterApi.resolve()
     )
-    $.getScript('//connect.facebook.net/en_US/all.js#xfbml=1',
-      () =>
-        @facebookApi.resolve()
-    )
 
   @renderSocialNetworking = () =>
-    $.when(@googleApi, @facebookApi, @twitterApi).then =>
+    $.when(@googleApi, @twitterApi).then =>
       gapi.plusone.go()
       FB.XFBML.parse()
       twttr.widgets.load()
