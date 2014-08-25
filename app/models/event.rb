@@ -38,6 +38,7 @@ class Event
       :thumb => "80x60^",
       :medium => "400x300^"
     },
+    :s3_protocol => :https,
     :processors => [:cropper]
 
   after_create do |event|
