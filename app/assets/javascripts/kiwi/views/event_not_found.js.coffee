@@ -4,7 +4,9 @@ FK.App.module "Events.NotFound", (NotFound, App, Backbone, Marionette, $, _) ->
     @view = new NotFoundView()
     @view.onClose = () =>
       @stop()
+      $("body").removeClass('not-found')
     App.mainRegion.show @view
+    $("body").addClass('not-found')
 
   @addFinalizer () ->
     @view.close()
@@ -12,4 +14,4 @@ FK.App.module "Events.NotFound", (NotFound, App, Backbone, Marionette, $, _) ->
 
   class NotFoundView extends Marionette.ItemView
     template: FK.Template('not_found')
-    className: 'event-page col-md-12'
+    className: 'container'
