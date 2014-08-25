@@ -55,7 +55,7 @@ FK.App.module "Events.EventPage", (EventPage, App, Backbone, Marionette, $, _) -
       () =>
         @googleApi.resolve()
     )
-    $.getScript('http://platform.twitter.com/widgets.js',
+    $.getScript('https://platform.twitter.com/widgets.js',
       () =>
         @twitterApi.resolve()
     )
