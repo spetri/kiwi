@@ -82,18 +82,18 @@ class FK.EventStoreConfig extends Backbone.Model
     return {
       country: 'US'
       countryName: 'United States'
-      subkasts: FK.Data.Subkasts.codes()
+      subkasts: FK.Data.MySubkasts.codes()
     }
 
   getSingleSubkast: () =>
-    return 'ALL' if @get('subkasts').length == FK.Data.Subkasts.length
+    return 'ALL' if @get('subkasts').length == FK.Data.MySubkasts.length
     if @get('subkasts').length == 1
       return @get('subkasts')[0]
     else
       return false
 
   setSubkast: (subkast) =>
-    subkast = FK.Data.Subkasts.codes() if subkast is 'ALL'
+    subkast = FK.Data.MySubkasts.codes() if subkast is 'ALL'
     subkast = [ subkast ] unless _.isArray(subkast)
     @set 'subkasts', subkast
 

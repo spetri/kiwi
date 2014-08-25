@@ -21,5 +21,6 @@
     links: [],
     user: {username: 'jasmine', logged_in: 'true' },
     subkasts: <%= raw Subkast.all.to_json() %>
+    mySubkasts: <%= raw Subkast.all.to_json() %> }
   });
 </script>

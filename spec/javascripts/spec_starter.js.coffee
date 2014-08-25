@@ -96,3 +96,4 @@ FK.SpecHelpers =
 # STARTUP
 
 FK.Data.Subkasts = new FK.Collections.SubkastList(FK.SpecHelpers.Subkasts.SimpleSubkasts)
+FK.Data.MySubkasts = new FK.Collections.SubkastList(FK.SpecHelpers.Subkasts.SimpleSubkasts)
