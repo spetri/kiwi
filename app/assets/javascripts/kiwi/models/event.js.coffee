@@ -300,7 +300,9 @@ class FK.Models.EventBlock extends Backbone.Model
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
     howManyOver = events.length + @events.length - @get('event_limit')
-    events = _.take(events, events.length - howManyOver) if howManyOver > 0
+    if howManyOver > 0
+      @set('event_max_count', events.length + @events.length)
+      events = _.take(events, events.length - howManyOver)
 
     @events.add(events)
 
