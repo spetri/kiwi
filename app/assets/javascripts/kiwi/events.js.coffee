@@ -4,6 +4,7 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
     @listenTo App.vent, 'container:new', @startForm
     @listenTo App.vent, 'container:show', @startPage
     @listenTo App.vent, 'container:all', @startList
+    @listenTo App.vent, 'notfound', @startNotFound
 
   @addFinalizer () ->
     @stopListening()
@@ -16,6 +17,11 @@ FK.App.module "Events", (Events, App, Backbone, Marionette, $, _) ->
       config: App.request('eventConfig')
       topRanked: App.request('eventStore').topRanked
     }
+
+  @startNotFound = () ->
+    Events.stop()
+    Events.start()
+    Events.NotFound.start()
 
   @startForm = (event) ->
     Events.stop()

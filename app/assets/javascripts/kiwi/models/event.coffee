@@ -35,7 +35,6 @@ class FK.Models.Event extends Backbone.GSModel
 
   remindersCollection: () =>
     @reminders = new FK.Collections.Reminders() unless @reminders
-    console.log(@reminders)
     @reminders
 
   sync: (action, model, options) =>
