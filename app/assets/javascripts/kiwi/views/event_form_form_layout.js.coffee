@@ -89,10 +89,6 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
         @$('[name="subkast"]').append('<option value="' + option.code + '">' + option.name + '</option>')
       )
 
-    ie_warning: () =>
-      if (!$('html').is('.ie6, .ie7, .ie8, .ie9'))
-        this.$('p.ie-warning').addClass('hide')
-
     setCountry: (countryCode) =>
       @$('[name="country"] [value="' + countryCode + '"]').attr('selected', 'selected')
 
@@ -104,5 +100,4 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @refreshLocation @model
       @refreshDescription @model
       @refreshAllDay @model
-      @ie_warning()
       @renderLocation()

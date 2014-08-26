@@ -52,8 +52,7 @@
     <div class="col-sm-3">
       <label>Image</label>
       <p>Choosing a great picture helps bring attention to your event.</p>
-      <p class="ie-warning">Image support for Internet Explorer is coming soon. In the meantime, 
-      if you'd like to include an image, please try Chrome, Safari, or Firefox.</p>
+      <p class="ie-warning">Image support for Internet Explorer is coming soon.</p>
     </div>
     <div class="col-sm-9">
       <div id="image-region"></div>
