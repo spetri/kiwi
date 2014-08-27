@@ -300,9 +300,7 @@ class FK.Models.EventBlock extends Backbone.Model
   addEvents: (events) =>
     events = [events] if not _.isArray(events)
     howManyOver = events.length + @events.length - @get('event_limit')
-    if howManyOver > 0
-      @set('event_max_count', events.length + @events.length)
-      events = _.take(events, events.length - howManyOver)
+    events = _.take(events, events.length - howManyOver) if howManyOver > 0
 
     @events.add(events)
 
@@ -423,6 +421,13 @@ class FK.Collections.EventBlockList extends Backbone.Collection
     return 0 if date1 == date2
     return -1 if date1 < date2
 
+  getBlockForEvent: (findEvent) =>
+    @find((block) =>
+      block.events.find((event) =>
+        event.get("_id") == findEvent.get("_id")
+      )
+    )
+
   addEventToBlock: (date, country, subkasts, event, events) =>
     return if not (event.inFuture() or event.isOnDate(moment()))
     block = @find( (block) => block.isDate(date))
@@ -434,3 +439,4 @@ class FK.Collections.EventBlockList extends Backbone.Collection
       block.observeEvents events
       @add block
     block.addEvents event
+    block

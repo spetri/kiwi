@@ -6,6 +6,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @user = App.request('currentUser')
     return App.execute('signInPage') if @user.get('logged_in') == false
 
+    @eventStore = App.request('eventStore')
     @events = App.request('events')
     @subkasts = App.request('subkasts')
 
@@ -52,7 +53,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
     @event.clearImage()
 
     @event.initialUpvote() if @event.isNew()
-    @event.save(params, { silent: true })
+    saving = @event.save(params, { silent: true })
 
     return if not @event.isValid()
 
@@ -61,7 +62,7 @@ FK.App.module "Events.EventForm", (EventForm, App, Backbone, Marionette, $, _) -
       @user.setLastPostedCountry(@event.get('country'))
 
     @showSpinner()
-    @events.add(@event, merge: true)
+    @eventStore.addNewEventToBlock(@event)
 
   @getBaseView = () =>
     if @event.editAllowed(@user.get('username'))
