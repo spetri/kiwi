@@ -85,6 +85,8 @@ task :setup => :environment do
   queue  %{ echo "daemonize true" >> #{deploy_to}/shared/config/puma.rb }
   queue  %{ echo "environment \\"#{rails_env}\\"" >> #{deploy_to}/shared/config/puma.rb }
   queue  %{ echo "activate_control_app" >> #{deploy_to}/shared/config/puma.rb }
+  queue  %{ echo "workers 1" >> #{deploy_to}/shared/config/puma.rb }
+  queue  %{ echo "threads 2,6" >> #{deploy_to}/shared/config/puma.rb }
 
   queue  %{ echo "Adding to puma.conf" }
   queue  %{ sudo sh -c "echo \"#{app_path},#{user},#{app_path}/config/puma.rb,#{app_path}/log/puma.log\" > /etc/puma.conf "}

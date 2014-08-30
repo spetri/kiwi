@@ -18,6 +18,7 @@ gem 'cancan'
 
 #Server
 gem 'puma'
+gem 'puma_worker_killer'
 
 # External APIs:
 gem 'mailchimp-api', require: 'mailchimp'
