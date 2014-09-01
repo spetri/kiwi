@@ -46,8 +46,7 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
         @ui.upvotesIcon.addClass('glyphicon-ok')
 
     initialize: () =>
-      if @model.reminders.length > 0
-        @listenTo @model.remindersCollection(), 'add remove', @refreshReminderHighlight
+      @listenTo @model.remindersCollection(), 'add remove', @refreshReminderHighlight
 
     modelEvents:
       'change:upvotes': 'refreshUpvotes'
