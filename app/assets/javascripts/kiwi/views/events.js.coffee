@@ -42,14 +42,18 @@ FK.App.module "Events.EventList", (EventList, App, Backbone, Marionette, $, _) -
     @setUrl()
 
     #TODO this spams on the MAC when scrolling the bottom of the pags
-    $(document).scroll (e) =>
-      @savePosition()
-      $doc = $(e.target)
-      $window = $(window)
+    $(document).scroll(_.throttle(@fetchMoreAfterScroll, 1000))
 
-      percentage = $doc.scrollTop() / ($doc.height() - $window.height())
 
-      @fetchMoreBlocks() if percentage > 0.8
+  @fetchMoreAfterScroll = (e) =>
+    @savePosition()
+    $doc = $(e.target)
+    $window = $(window)
+
+    percentage = $doc.scrollTop() / ($doc.height() - $window.height())
+
+    @fetchMoreBlocks() if percentage > 0.8
+
 
   @sidebarStartupData = () =>
     {

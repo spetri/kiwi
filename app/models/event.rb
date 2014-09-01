@@ -200,10 +200,12 @@ class Event
     dates.sort_by! { |date| date }
     dates = dates.uniq
 
+    each_day_min_events = 0
     dates.each do |date|
       eventsOnDate = sorted_possible_events.select { |event| event.relative_date(zone_offset) == date }
-      events.concat eventsOnDate.take(eventsPerDay)
-      break if events.length >= minimum
+      events.concat eventsOnDate
+      each_day_min_events += eventsOnDate.take(eventsPerDay).size
+      break if each_day_min_events >= minimum
     end
 
     return events
@@ -214,7 +216,7 @@ class Event
     endDate = (endDatetime - zone_offset.minutes).beginning_of_day
 
     events = self.any_of(
-      { is_all_day: false, time_format: '', datetime: (startDatetime..endDatetime), location_type: 'international', country: country },
+      { is_all_day: false, time_format: '', datetime: ((startDatetime)..(endDatetime)), location_type: 'international' },
       { is_all_day: false, time_format: '', datetime: (startDatetime..endDatetime), location_type: 'national', country: country },
       { is_all_day: false, time_format: 'recurring', local_date: (startDate..endDate), location_type: 'international' },
       { is_all_day: false, time_format: 'recurring', local_date: (startDate..endDate), location_type: 'national', country: country },
