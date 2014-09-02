@@ -9,7 +9,7 @@ class HipChatNotification
   def self.new_event(event)
     return unless self.is_properly_configured?
     client = HipChat::Client.new(CONFIG['hipchat_api_token'])
-    uri = "http://beta.forekast.com/#events/show/#{event.id}"
+    uri = "http://forekast.com/#events/show/#{event.id}"
     message = "New event posted: #{event.name} - <a href='#{uri}'>#{uri}</a>"
     client[CONFIG['hipchat_notifications_room']].send('kiwibot', message, :color => 'yellow')
   end
@@ -17,7 +17,7 @@ class HipChatNotification
   def self.new_comment(comment)
     return unless self.is_properly_configured?
     client = HipChat::Client.new(CONFIG['hipchat_api_token'])
-    uri = "http://beta.forekast.com/#events/show/#{comment.event.id}"
+    uri = "http://forekast.com/#events/show/#{comment.event.id}"
 
     if comment.message.size > 30
       comment_message = "#{comment.message[0..29]}..."
