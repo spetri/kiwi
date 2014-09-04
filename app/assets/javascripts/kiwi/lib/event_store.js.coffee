@@ -24,9 +24,10 @@ class FK.EventStore extends Marionette.Controller
     @events.add options.events
 
   fetchStartupEvents: () =>
-    @events.fetchStartupEvents(@country(), @subkasts(), 10, 5, 12)
+    @events.fetchStartupEvents(@country(), @subkasts(), 10, 5, 50)
 
   loadNextEvents: (howManyMoreEvents) =>
+    return if @blocks.length == 0
     date = @blocks.last().relativeDate().add('days', 1)
     @events.fetchMoreEventsAfterDate(date, @country(), @subkasts(), howManyMoreEvents)
 
