@@ -167,6 +167,13 @@ GEM
       actionpack (>= 3.1)
       less (~> 2.5.0)
     libv8 (3.16.14.3)
+    license_finder (1.1.1)
+      bundler
+      httparty
+      sequel
+      sqlite3
+      thor
+      xml-simple
     listen (2.7.1)
       celluloid (>= 0.15.2)
       celluloid-io (>= 0.15.0)
@@ -310,6 +317,7 @@ GEM
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
+    sequel (4.14.0)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -367,6 +375,7 @@ GEM
     whenever (0.9.2)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
+    xml-simple (1.1.4)
 
 PLATFORMS
   ruby
@@ -396,6 +405,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   less-rails
+  license_finder
   mailcatcher
   mailchimp-api
   mina

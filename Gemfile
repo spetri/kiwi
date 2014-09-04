@@ -7,7 +7,7 @@ gem 'newrelic_rpm'
 gem 'mongoid', '4.0.0.beta1'
 gem 'bson_ext'
 gem 'mongoid-tree', branch: 'mongoid-4.0'
-
+gem 'license_finder'
 gem 'devise', '3.1.0.rc2'
 gem 'slim-rails'
 gem 'omniauth-facebook', '1.4.0'

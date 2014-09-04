@@ -12,6 +12,7 @@ Kiwi::Application.routes.draw do
   get '/about', :to => 'static#about', :as => 'about'
   get '/faq', :to => 'static#faq', :as => 'faq'
   get '/termsofservice', :to => 'static#termsofservice', :as => 'termsofservice'
+  get '/privacy', :to => 'static#privacy', :as => 'privacy'
 
   get '/change_password',        :to => 'passwords#change_password',  :as => 'change_password'
   get '/api/events/startupEvents',   :to => 'events#startup_events', :as => 'startup_events'
