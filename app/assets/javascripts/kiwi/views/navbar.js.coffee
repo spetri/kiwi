@@ -113,6 +113,9 @@ FK.App.module "Navbar", (Navbar, App, Backbone, Marionette, $, _) ->
     refreshHighlightNew: () =>
       @refreshHighlight 'new'
 
+    onRender: () =>
+      @$('.what-is-global').tooltip(title: 'Global events are those that aren\'t restricted by location - events people can watch, listen to, or take part in no matter where they live.', placement: 'bottom' )
+
 
   class Navbar.NavbarSeparatorView extends Marionette.ItemView
     className: "outer"

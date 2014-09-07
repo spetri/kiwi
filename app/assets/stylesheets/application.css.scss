@@ -181,7 +181,26 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   display: none;
   text-align: center;
 }
-
+.navbar-container { 
+  .navbar-collapse {
+    .tagline { 
+      color: #FFF;
+      font-size: 18px;
+      padding: 20px 20px 0 20px;
+    }
+    .nav .what-is-global > a { 
+      color: #FFF;
+      display: block;
+      padding-top: 20px;
+      font-size: 10px;
+      width: 80px;
+      line-height: 11px;
+    }
+    .nav .what-is-global > a:hover { 
+      background: none;
+    }
+  }
+}
 /* NAVBAR */
 
 .navbar-indom-container {
@@ -197,10 +216,10 @@ h3, .h3, , h4, .h4, h5, .h5, .upvote-counter, .event-title, .event-upvotes, .col
   a.logo {
     margin: -1px 0px 2px 20px;
     display: block;
-    width: 256px;
+    width: 205px;
     height: 52px;
     background: transparent url(asset-path('forekast_logo.png')) no-repeat;
-    background-size: 80%;
+    background-size: 100%;
     text-indent: -999px;
     overflow: hidden;
   }
@@ -1461,6 +1480,18 @@ body.dark {
 }
 body.dark .container {
   font-family: 'Nunito', Helvetica, arial, sans-serif;
+  .paradem, .doghouse { 
+    height: 100px;
+  }
+  .paradem { 
+    background: url(asset-path('paradem.png')) no-repeat 50% %50;
+    background-size: 100%;
+  }
+  .doghouse { 
+    background: url(asset-path('doghouse.png')) no-repeat 50% %50;
+    background-size: 100%;
+  }
+
   color: #FFF;
   p {
     font-size: 18px;
