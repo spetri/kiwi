@@ -84,7 +84,7 @@ class Event
     if time_format == 'recurring'
       return local_datetime
     end
-      
+
     return Time.parse(tz.utc_to_local(datetime).strftime("%Y-%m-%d %H:%M:%S"))
   end
 
@@ -94,7 +94,16 @@ class Event
 
   def image_from_url(url)
     if url
-      self.image = open(url)
+      if url.start_with?('data:image/jpeg;base64')
+         StringIO.open(Base64.strict_decode64(url.split(',')[1])) do |data|
+            data.class.class_eval { attr_accessor :original_filename, :content_type }
+            data.original_filename = "temp#{DateTime.now.to_i}.png"
+            data.content_type = "image/png" #TODO: get content type from file
+            self.image = data
+        end
+      else
+        self.image = open(url)
+      end
     else
       self.image = self.no_image()
     end

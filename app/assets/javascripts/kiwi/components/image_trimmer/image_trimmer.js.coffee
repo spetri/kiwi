@@ -48,17 +48,17 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
     ['image/jpeg', 'image/png', 'image/pjpeg']
 
   class ImageTrimmer.ImageTrimmerController extends Marionette.Controller
- 
+
     initialize: () ->
       @model = new ImageTrimmer.ImageCalculator()
-      
+
       @listenTo @model, 'new:image:ready', () => @trigger 'new:image:ready'
       @listenTo @model, 'new:image:ready', () => @imageReady.resolve()
       @imageReady = $.Deferred()
 
     newImage: (url, source, file) ->
       @imageReady = $.Deferred()
-      
+
       if source is 'remote'
         @model.newRemoteImage url
       else if source is 'uploaded'
@@ -158,7 +158,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
     resetSlider: ->
       @set 'slider_factor', 0
-    
+
     started: ->
       @get('source') != 'none'
 
@@ -196,7 +196,7 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
         left: @get('crop_x')
         top: @get('crop_y')
       )
-  
+
       @set('image_start_size',
         width: @get('width')
         height: @get('height')
@@ -236,9 +236,9 @@ FK.App.module "ImageTrimmer", (ImageTrimmer, App, Backbone, Marionette, $, _) ->
 
       outFlowWidth = 0 if outFlowWidth < 0
       outFlowHeight = 0 if outFlowHeight < 0
-   
+
       @positionImage Math.floor(newLeft + outFlowWidth), Math.floor(newTop + outFlowHeight)
-  
+
     limitImageHorizontalPosition: (width, x) =>
       return @get('border_left') if x > @get('border_left')
       return -width + @get('border_left') + @get('trim_width') if x + width < @get('trim_width') + @get('border_left')

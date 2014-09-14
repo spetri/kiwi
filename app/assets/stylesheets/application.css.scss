@@ -1480,15 +1480,11 @@ body.dark {
 }
 body.dark .container {
   font-family: 'Nunito', Helvetica, arial, sans-serif;
-  .paradem, .doghouse { 
+  .paradem {
     height: 100px;
   }
   .paradem { 
     background: url(asset-path('paradem.png')) no-repeat 50% %50;
-    background-size: 100%;
-  }
-  .doghouse { 
-    background: url(asset-path('doghouse.png')) no-repeat 50% %50;
     background-size: 100%;
   }
 
