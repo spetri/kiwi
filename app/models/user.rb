@@ -36,6 +36,7 @@ class User
 
   validates :username, uniqueness: true, :length => { :minimum => 3, :maximum => 200 }
   validates :email, uniqueness: true
+  validates_format_of :username, :with => /\A[a-zA-Z0-9_]+\z/, :message => "can only contain letters, numbers, and underscores."
 
   before_create do |user|
     user.defaults
